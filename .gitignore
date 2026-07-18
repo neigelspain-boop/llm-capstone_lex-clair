@@ -11,6 +11,8 @@ notebooks/.ipynb_checkpoints/
 
 # Local persisted data volumes if bind-mounted
 data/
+!data/corpus_manifest.yaml
+!data/articles.csv
 *.db
 
 .DS_Store

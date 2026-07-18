@@ -1,0 +1,83 @@
+# lex-clair corpus manifest — Phase 1 final
+# Fetch strategy per source:
+#   section : LEGISCTA within a CODE — uses /consult/getSectionByCid
+#   loda    : whole LODA text          — uses /consult/lawDecree
+#   jorf    : raw Journal Officiel text — uses /consult/jorf
+#   article : single article           — uses /consult/getArticle (fallback)
+
+sources:
+
+  # ---------- Code civil ----------
+  cc_successions:
+    label: "Code civil"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006070721
+    section_id: LEGISCTA000006117929
+    note: "Livre III, Titre I — Des successions (art. 718 à 892)"
+
+  cc_usufruit:
+    label: "Code civil"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006070721
+    section_id: LEGISCTA000006117905
+    note: "Livre II, Titre III — Usufruit, usage, habitation (art. 578 à 710)"
+
+  cc_responsabilite:
+    label: "Code civil"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006070721
+    section_id: LEGISCTA000032021486
+    note: "Livre III, Sous-titre II — Responsabilité extracontractuelle (art. 1240 à 1252)"
+
+  # ---------- CGI ----------
+  cgi_dettes_defunt:
+    label: "CGI"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006069577
+    section_id: LEGISCTA000006199543
+    note: "Dettes du défunt (art. 768 à 774 bis) — anti-abus quasi-usufruit"
+
+  # ---------- Code des assurances ----------
+  ca_assurances_responsabilite:
+    label: "Code des assurances"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006073984
+    section_id: LEGISCTA000006157248
+    note: "Titre II, Chap. IV — Assurances de responsabilité (L.124-1 à L.124-5), action directe"
+
+  # ---------- Code pénal ----------
+  cp_appropriations_frauduleuses:
+    label: "Code pénal"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006070719
+    section_id: LEGISCTA000006136042
+    note: "Livre III, Titre I — Appropriations frauduleuses (311-1 à 314-13), abus de confiance"
+
+  # ---------- LODA texts (whole décrets/ordonnances) ----------
+  ord_45_2590:
+    label: "Ordonnance n° 45-2590"
+    fetch_strategy: loda
+    text_id: JORFTEXT000000699572
+    note: "Statut du notariat"
+
+  decret_73_609:
+    label: "Décret n° 73-609"
+    fetch_strategy: loda
+    text_id: JORFTEXT000000681478
+    note: "Règles professionnelles notariales"
+
+  decret_74_737:
+    label: "Décret n° 74-737"
+    fetch_strategy: article
+    article_id: LEGIARTI000021663188
+    note: "Discipline notariat — TEMPORAIRE, remplacer par LODA quand JORFTEXT connu"
+
+  decret_2023_1297:
+    label: "Décret n° 2023-1297"
+    fetch_strategy: jorf
+    text_id: JORFTEXT000048706693
+    note: "Non consolidé dans un code — via /consult/jorf"
+
+# TODO Phase 1b — CGI additional sections (add when time permits):
+#   art. 641 (délai déclaration), art. 1133 (exonération extinction usufruit),
+#   art. 1727 (intérêts de retard) — grab LEGISCTA of each parent section
