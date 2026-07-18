@@ -29,6 +29,7 @@ CHUNK_ID_PREFIX = {
     "cc_successions": "cc",
     "cc_usufruit": "cc",
     "cc_responsabilite": "cc",
+    "cc_liberalites": "cc",
     "cgi_dettes_defunt": "cgi",
     "ca_assurances_responsabilite": "ca",
     "cp_appropriations_frauduleuses": "cp",
