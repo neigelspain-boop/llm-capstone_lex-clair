@@ -33,7 +33,6 @@ SANDBOX = {
 
 
 class RateLimiter:
-    """Simple thread-safe req/sec limiter."""
     def __init__(self, per_second: float = 5.0):
         self.min_interval = 1.0 / per_second
         self._last = 0.0
@@ -51,8 +50,8 @@ class RateLimiter:
 class PisteClient:
     client_id: str
     client_secret: str
-    env: str = "production"
-    rate_per_sec: float = 5.0
+    env: str = "sandbox"
+    rate_per_sec: float = 3.0
     timeout_s: float = 30.0
 
     _token: str | None = field(default=None, init=False)
@@ -98,6 +97,7 @@ class PisteClient:
             self._refresh_token()
         return {
             "Authorization": f"Bearer {self._token}",
+            "apiKey": self.client_id,
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
@@ -123,13 +123,18 @@ class PisteClient:
                 headers=self._auth_headers(),
                 json=payload,
             )
+        if r.status_code >= 400:
+            log.error("PISTE %s → %d: %s", path, r.status_code, r.text[:500])
         r.raise_for_status()
         return r.json()
 
+    # --------------------------------------------------------- endpoints
     def get_article(self, legiarti_id: str) -> dict[str, Any]:
         return self.post("/consult/getArticle", {"id": legiarti_id})
 
-    def list_articles_in_section(self, section_id: str, parent_text_id: str) -> list[str]:
+    def list_articles_in_section(
+        self, section_id: str, parent_text_id: str
+    ) -> list[str]:
         payload = {
             "cid": section_id,
             "textCid": parent_text_id,
@@ -160,6 +165,7 @@ def _today_ms() -> int:
 
 
 def _collect_article_ids(node, acc: list[str]) -> None:
+    """Recurse any nested dict/list and collect LEGIARTI ids."""
     if isinstance(node, dict):
         aid = node.get("id") or node.get("cid")
         if isinstance(aid, str) and aid.startswith("LEGIARTI"):
