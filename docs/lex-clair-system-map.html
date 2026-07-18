@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>lex-clair · carte du système</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #F7F3EA;
+    --paper: #FDFBF5;
+    --ink: #1C1A17;
+    --ink-soft: #6E675C;
+    --red: #B02A1F;
+    --red-wash: #F6E7E3;
+    --hairline: #DDD5C6;
+    --gold: #8A6D2F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ivory);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 28px 18px 60px;
+  }
+
+  /* ── docker-compose outer frame ───────────────────── */
+  .compose-frame {
+    max-width: 1180px;
+    margin: 0 auto;
+    border: 1.5px dashed var(--ink-soft);
+    border-radius: 4px;
+    position: relative;
+    padding: 44px 34px 34px;
+    background: var(--paper);
+  }
+  .compose-label {
+    position: absolute;
+    top: -11px;
+    right: 28px;
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+  .compose-label b { color: var(--ink); font-weight: 500; }
+
+  /* ── header ───────────────────────────────────────── */
+  header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 18px; margin-bottom: 8px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 4.5vw, 44px);
+    letter-spacing: -0.01em;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--ink-soft); font-size: 0.62em; letter-spacing: 0; }
+  .legend {
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: grid;
+    gap: 5px;
+    padding-bottom: 4px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .swatch { width: 26px; height: 14px; border-radius: 3px; display: inline-block; flex-shrink: 0; }
+  .sw-const { border: 1.5px solid var(--ink); background: var(--paper); }
+  .sw-var { border: 1.5px dashed var(--red); background: var(--paper); }
+  .sw-step { background: var(--ink); color: var(--ivory); font-family:'JetBrains Mono',monospace; font-size: 9px; display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ── plane sections ───────────────────────────────── */
+  .plane { margin-top: 34px; }
+  .plane-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+  .plane-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--hairline);
+    -webkit-text-stroke: 1px var(--ink-soft);
+  }
+  .plane-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  .plane-mode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-left: auto;
+  }
+  .plane-mode.hot { color: var(--red); }
+
+  /* ── flow lanes ───────────────────────────────────── */
+  .lane {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .node {
+    flex: 1 1 150px;
+    min-width: 150px;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    background: var(--paper);
+    padding: 12px 13px 11px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .node.var { border-style: dashed; border-color: var(--red); }
+  .node h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 15.5px;
+    line-height: 1.2;
+    padding-right: 26px;
+  }
+  .node p { font-size: 12px; color: var(--ink-soft); line-height: 1.45; flex-grow: 1; }
+  .node p b { color: var(--ink); font-weight: 600; }
+  .step {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--ink);
+    color: var(--ivory);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .step.hot { background: var(--red); }
+  .tagrow { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    padding: 1px 6px;
+  }
+  .unk {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    border: 1px solid var(--red);
+    border-radius: 3px;
+    padding: 1px 6px;
+  }
+  .artifact {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink);
+    background: var(--ivory);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 2px 6px;
+    align-self: flex-start;
+  }
+  .arrow {
+    flex: 0 0 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    font-size: 17px;
+    position: relative;
+  }
+  .arrow.hot { color: var(--red); }
+  .arrow::before { content: "→"; }
+  .arrow small {
+    position: absolute;
+    top: calc(50% + 12px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  /* dual representation split */
+  .split {
+    flex: 1.4 1 210px;
+    min-width: 210px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .split .node { min-width: 0; flex: 1 1 auto; }
+
+  /* ── seam : knowledge base ────────────────────────── */
+  .seam {
+    margin: 26px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .seam::before, .seam::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--hairline);
+  }
+  .seam-box {
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    background: var(--ivory);
+    padding: 9px 22px;
+    text-align: center;
+  }
+  .seam-box h3 { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; }
+  .seam-box p { font-size: 11px; color: var(--ink-soft); }
+  .seam-box code { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink); }
+
+  /* ── signature : inequality band ──────────────────── */
+  .inequality {
+    margin: 42px 0 10px;
+    background: var(--red-wash);
+    border-top: 2px solid var(--red);
+    border-bottom: 2px solid var(--red);
+    padding: 30px 20px 24px;
+    text-align: center;
+  }
+  .inequality .formula {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(17px, 2.9vw, 29px);
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .inequality .formula .op { color: var(--red); font-style: normal; padding: 0 6px; }
+  .measured {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 8vw, 120px);
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .measured span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+  }
+  .measured span::before { content: "↑ "; }
+  .inequality .moral {
+    margin-top: 16px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .inequality .moral b { color: var(--ink); }
+
+  /* ── measurement plane extras ─────────────────────── */
+  .loopback {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    border: 1px dashed var(--red);
+    border-radius: 4px;
+    padding: 8px 14px;
+    display: inline-block;
+  }
+
+  /* ── operations grid ──────────────────────────────── */
+  .ops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── rubric strip ─────────────────────────────────── */
+  .rubric {
+    margin-top: 40px;
+    border-top: 1px solid var(--hairline);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .rubric .sum {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .rubric .sum b { color: var(--red); }
+  .rubric .detail { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); }
+  .rubric .deadline { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--red); }
+
+  /* ── responsive : vertical flow on narrow screens ── */
+  @media (max-width: 700px) {
+    .compose-frame { padding: 40px 16px 24px; }
+    .lane { flex-direction: column; }
+    .node { min-width: 0; }
+    .arrow { flex: 0 0 30px; }
+    .arrow::before { content: "↓"; }
+    .arrow small { top: 50%; left: calc(50% + 16px); transform: translateY(-50%); }
+    .plane-mode { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .node { transition: transform 120ms ease, box-shadow 120ms ease; }
+    .node:hover { transform: translateY(-2px); box-shadow: 0 3px 0 var(--hairline); }
+  }
+</style>
+</head>
+<body>
+
+<div class="compose-frame">
+  <span class="compose-label"><b>docker-compose.yaml</b> — app · postgres · grafana · étape 09 · 2 pts</span>
+
+  <header>
+    <div>
+      <div class="eyebrow">Code civil · Livre III · Titres I–II · succession</div>
+      <h1>lex-clair <em>— carte du système, V1</em></h1>
+    </div>
+    <div class="legend">
+      <span><span class="swatch sw-const"></span> constante — fixée, ne pas rediscuter</span>
+      <span><span class="swatch sw-var"></span> variable — réglée par la mesure, jamais à l'intuition</span>
+      <span><span class="swatch sw-step">04</span> ordre de construction (01 → 09)</span>
+    </div>
+  </header>
+
+  <!-- ═══════════ PLANE 1 : INGESTION ═══════════ -->
+  <section class="plane">
+    <div class="plane-head">
+      <span class="plane-num">I</span>
+      <span class="plane-title">Ingestion</span>
+      <span class="plane-mode">hors ligne · relancée à chaque changement du corpus</span>
+    </div>
+    <div class="lane">
+      <div class="node">
+        <span class="step">01</span>
+        <h4>Corpus</h4>
+        <p>Légifrance — <b>~150 articles</b> de droit des successions. Texte dense, registre juridique, renvois croisés.</p>
+        <span class="artifact">légifrance / PISTE API</span>
+      </div>
+      <div class="arrow"><small>parse</small></div>
+      <div class="node">
+        <span class="step">01</span>
+        <h4>Extraction</h4>
+        <p>n° d'article, titre, section, texte. Script, pas notebook — c'est ce qui vaut les 2 pts.</p>
+        <div class="tagrow"><span class="pts">ingestion · 2 pts</span></div>
+        <span class="artifact">data/articles.csv</span>
+      </div>
+      <div class="arrow"><small>chunk</small></div>
+      <div class="node var">
+        <span class="step">01</span>
+        <h4>Découpage</h4>
+        <p><b>1 article = 1 chunk</b> — le législateur a déjà découpé. Granularité alinéa : à tester si les évals le justifient.</p>
+        <div class="tagrow"><span class="unk">granularité ?</span></div>
+      </div>
+      <div class="arrow"><small>représenter ×2</small></div>
+      <div class="split">
+        <div class="node">
+          <span class="step">01</span>
+          <h4>Lexical — BM25</h4>
+          <p>Termes exacts : <b>«art. 913»</b>, «réserve héréditaire». minsearch, en mémoire.</p>
+        </div>
+        <div class="node">
+          <span class="step">01</span>
+          <h4>Sémantique — vecteurs</h4>
+          <p>Paraphrase : <b>«qui hérite de la maison ?»</b> ≈ art. 734 sans mot commun.</p>
+          <span class="artifact">chroma/</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEAM : KNOWLEDGE BASE ═══════════ -->
+  <div class="seam">
+    <div class="seam-box">
+      <h3>Base de connaissances</h3>
+      <p>l'unique interface entre le plan hors ligne et le chemin chaud — <code>ingest.load_index()</code></p>
+    </div>
+  </div>
+
+  <!-- ═══════════ PLANE 2 : QUERY (HOT PATH) ═══════════ -->
+  <section class="plane">
+    <div class="plane-head">
+      <span class="plane-num">II</span>
+      <span class="plane-title">Requête</span>
+      <span class="plane-mode hot">en ligne · chemin chaud · chaque question le traverse</span>
+    </div>
+    <div class="lane">
+      <div class="node">
+        <span class="step hot">07</span>
+        <h4>Question</h4>
+        <p>Français courant, vocabulaire d'héritier — <b>pas</b> de juriste. Le décalage de registre est LE problème.</p>
+      </div>
+      <div class="arrow hot"></div>
+      <div class="node var">
+        <span class="step hot">04</span>
+        <h4>Réécriture</h4>
+        <p>Un LLM traduit vers le registre juridique avant la recherche. Attaque le décalage côté question.</p>
+        <div class="tagrow"><span class="pts">+1 pt</span></div>
+      </div>
+      <div class="arrow hot"><small>top-20</small></div>
+      <div class="node var">
+        <span class="step hot">04</span>
+        <h4>Recherche hybride</h4>
+        <p>BM25 + vecteurs fusionnés. Poids et boosts = variables réglées à l'étape 04.</p>
+        <div class="tagrow"><span class="pts">+1 pt</span><span class="pts">retrieval flow · 2 pts</span></div>
+      </div>
+      <div class="arrow hot"><small>top-5</small></div>
+      <div class="node var">
+        <span class="step hot">04</span>
+        <h4>Rerank</h4>
+        <p>Cross-encoder <b>bge-reranker-v2-m3</b> lit question + article ensemble. Cher mais sur 20 candidats seulement.</p>
+        <div class="tagrow"><span class="pts">+1 pt</span><span class="unk">gain ?</span></div>
+      </div>
+      <div class="arrow hot"></div>
+      <div class="node var">
+        <span class="step hot">05</span>
+        <h4>Prompt</h4>
+        <p>«Réponds <b>uniquement</b> depuis le CONTEXTE, cite chaque n° d'article.» ≥2 variantes pour l'éval 06.</p>
+      </div>
+      <div class="arrow hot"></div>
+      <div class="node">
+        <span class="step hot">05</span>
+        <h4>Génération</h4>
+        <p>Claude + GPT — deux fournisseurs, exigés par l'éval comparative.</p>
+      </div>
+      <div class="arrow hot"></div>
+      <div class="node">
+        <span class="step hot">05</span>
+        <h4>Réponse citée</h4>
+        <p>Français clair + <b>art. n° sourcés</b>. La citation est vérifiable car chaque chunk porte son numéro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SIGNATURE : INEQUALITY ═══════════ -->
+  <div class="inequality">
+    <div class="formula">
+      P(bonne réponse) <span class="op">≤</span> P(bon article retrouvé) <span class="op">×</span> P(synthèse fidèle&nbsp;|&nbsp;bon article)
+    </div>
+    <div class="measured">
+      <span>mesuré par Hit Rate / MRR — étape 03</span>
+      <span>mesuré par LLM-juge — étape 06</span>
+    </div>
+    <p class="moral">Un échec de retrieval est <b>irrécupérable en aval</b> — le LLM ne peut pas citer un article qu'il n'a jamais vu. D'où l'ordre : mesurer et régler le facteur gauche avant de toucher au facteur droit.</p>
+  </div>
+
+  <!-- ═══════════ PLANE 3 : MEASUREMENT ═══════════ -->
+  <section class="plane">
+    <div class="plane-head">
+      <span class="plane-num">III</span>
+      <span class="plane-title">Mesure</span>
+      <span class="plane-mode">les chiffres décident — pas l'intuition</span>
+    </div>
+    <div class="lane">
+      <div class="node">
+        <span class="step">03</span>
+        <h4>Vérité terrain</h4>
+        <p>Un LLM génère des paires <b>(question, article source connu)</b> — ~2 questions par article. Split validation / test.</p>
+        <span class="artifact">data/ground-truth.csv</span>
+      </div>
+      <div class="arrow"></div>
+      <div class="node">
+        <span class="step">03</span>
+        <h4>Éval retrieval</h4>
+        <p><b>Hit Rate@k</b> : le bon article est-il dans le top-k ? <b>MRR</b> : à quelle position ? Comparer BM25 seul / vecteurs / hybride / +rerank.</p>
+        <div class="tagrow"><span class="pts">2 pts — approches multiples</span></div>
+      </div>
+      <div class="arrow"></div>
+      <div class="node">
+        <span class="step">06</span>
+        <h4>Éval RAG — LLM-juge</h4>
+        <p>RELEVANT / PARTLY / NON_RELEVANT sur ~200 échantillons. Comparer ≥2 prompts ou modèles, garder le meilleur.</p>
+        <div class="tagrow"><span class="pts">2 pts — approches multiples</span></div>
+        <span class="artifact">data/rag-eval-*.csv</span>
+      </div>
+    </div>
+    <span class="loopback">boucle de réglage — étape 04 : les résultats reconfigurent les variables du chemin chaud (poids, boosts, rerank on/off, prompts) ↰</span>
+  </section>
+
+  <!-- ═══════════ PLANE 4 : OPERATIONS ═══════════ -->
+  <section class="plane">
+    <div class="plane-head">
+      <span class="plane-num">IV</span>
+      <span class="plane-title">Opérations</span>
+      <span class="plane-mode">la mesure déplacée au runtime, sur du trafic réel</span>
+    </div>
+    <div class="ops-grid">
+      <div class="node">
+        <span class="step">07</span>
+        <h4>Interface — Streamlit</h4>
+        <p>Question entrée, réponse citée en sortie, boutons feedback <b>+1 / −1</b> par conversation.</p>
+        <div class="tagrow"><span class="pts">interface · 2 pts</span></div>
+      </div>
+      <div class="node">
+        <span class="step">08</span>
+        <h4>Journal — Postgres</h4>
+        <p>Tables <b>conversations</b> (question, réponse, pertinence LLM-juge, tokens, coût, latence) + <b>feedback</b>.</p>
+        <span class="artifact">db.py</span>
+      </div>
+      <div class="node">
+        <span class="step">08</span>
+        <h4>Tableau de bord — Grafana</h4>
+        <p><b>≥5 graphiques</b> sur les deux tables : pertinence, feedback, coût, latence, volume. Provisioning scripté.</p>
+        <div class="tagrow"><span class="pts">monitoring · 2 pts</span></div>
+      </div>
+      <div class="node">
+        <span class="step">09</span>
+        <h4>Reproductibilité</h4>
+        <p>Versions épinglées (<b>uv.lock</b>), README testé clone-and-run, données accessibles. Bonus : déploiement cloud.</p>
+        <div class="tagrow"><span class="pts">repro · 2 pts</span><span class="pts">cloud · +2 pts</span></div>
+        <span class="artifact">uv.lock · README.md</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ RUBRIC STRIP ═══════════ -->
+  <div class="rubric">
+    <span class="sum">Potentiel : 18 cœur + 3 best practices + 2 cloud = <b>23 pts</b></span>
+    <span class="detail">ordre : 01 ingérer → 02 retrouver → 03 mesurer retrieval → 04 régler → 05 générer → 06 mesurer RAG → 07 interface → 08 monitorer → 09 conteneuriser</span>
+    <span class="deadline">tentative 1 · 28 juillet 2026</span>
+  </div>
+
+</div>
+</body>
+</html>

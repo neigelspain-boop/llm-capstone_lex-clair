@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-capstone}
+      POSTGRES_USER: ${POSTGRES_USER:-capstone}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-capstone}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-capstone}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # --- Vector store: pick one with `docker compose --profile qdrant up` etc. ---
+  qdrant:
+    image: qdrant/qdrant:latest
+    profiles: ["qdrant"]
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  chroma:
+    image: chromadb/chroma:latest
+    profiles: ["chroma"]
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  # --- Interface: pick one with `docker compose --profile fastapi up` etc. ---
+  app-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    profiles: ["fastapi"]
+    command: uv run uvicorn src.interface.api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app-streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    profiles: ["streamlit"]
+    command: uv run streamlit run src/interface/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ingest:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    profiles: ["ingest"]
+    command: uv run python -m ingestion.ingest --source /app/data
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  chroma_data:
+  grafana_data:
