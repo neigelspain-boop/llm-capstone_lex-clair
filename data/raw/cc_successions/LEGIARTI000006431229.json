@@ -1,0 +1,209 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431229",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "En l'absence d'enfants ou de descendants du défunt et de ses père et mère, le conjoint survivant recueille toute la succession.",
+    "texteHtml": "<p></p>   En l'absence d'enfants ou de descendants du défunt et de ses père et mère, le conjoint survivant recueille toute la succession.<p></p><p></p>",
+    "num": "757-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1025481600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des droits du conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150139",
+          "id": "LEGISCTA000006150139",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165517",
+          "id": "LEGISCTA000006165517",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431229",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165517",
+    "sectionParentId": "LEGISCTA000006165517",
+    "sectionParentTitre": "Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 2 : Des droits du conjoint successible. &gt; Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006431229",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000582185",
+        "textTitle": "Loi n°2001-1135 du 3 décembre 2001 - art. 1 () JORF 4 décembre 2001 en vigueur le 1er juillet 2002",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000006284665",
+        "natureText": "LOI",
+        "datePubliTexte": "2001-12-04",
+        "dateSignaTexte": "2001-12-03",
+        "dateDebutCible": "2002-07-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 757-3 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "757-3",
+        "articleId": "LEGIARTI000006431238",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil 752-3 (dérogations)",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "LEGITEXT000006070721",
+        "natureText": "CODE"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431229",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "757-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

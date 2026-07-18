@@ -1,0 +1,187 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000020616197",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les fruits naturels et industriels, pendants par branches ou par racines au moment où l'usufruit est ouvert, appartiennent à l'usufruitier. Ceux qui sont dans le même état au moment où finit l'usufruit appartiennent au propriétaire, sans récompense de part ni d'autre des labours et des semences, mais aussi sans préjudice de la portion des fruits qui pourrait être acquise au métayer, s'il en existait un au commencement ou à la cessation de l'usufruit.",
+    "texteHtml": "<p>Les fruits naturels et industriels, pendants par branches ou par racines au moment où l'usufruit est ouvert, appartiennent à l'usufruitier.</p><p>Ceux qui sont dans le même état au moment où finit l'usufruit appartiennent au propriétaire, sans récompense de part ni d'autre des labours et des semences, mais aussi sans préjudice de la portion des fruits qui pourrait être acquise au métayer, s'il en existait un au commencement ou à la cessation de l'usufruit.</p><p></p>",
+    "num": "585",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1242259200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits de l'usufruitier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150117",
+          "id": "LEGISCTA000006150117",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429313",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150117",
+    "sectionParentId": "LEGISCTA000006150117",
+    "sectionParentTitre": "Section 1 : Des droits de l'usufruitier",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 1 : Des droits de l'usufruitier",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000020616197",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n°2009-526\n du 12 mai 2009 - art. 10",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "10",
+        "articleId": "LEGIARTI000020606392",
+        "natureText": "LOI",
+        "datePubliTexte": "2009-05-13",
+        "dateSignaTexte": "2009-05-12",
+        "dateDebutCible": "2009-05-14"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000029784129",
+        "textTitle": "DÉCISION n°2014-7 LOM du 19 novembre 2014, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFTEXT000029784129",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2014-7 LOM",
+        "datePubli": 1416528000000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429313",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020616197",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "585"
+    ],
+    "versionPrecedente": "LEGIARTI000006429313",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

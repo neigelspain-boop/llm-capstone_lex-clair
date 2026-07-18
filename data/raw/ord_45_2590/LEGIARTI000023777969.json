@@ -1,0 +1,201 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000023777969",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La responsabilité civile professionnelle des notaires est garantie par un contrat d'assurance souscrit par le Conseil supérieur du notariat. Les conseils régionaux de notaires peuvent souscrire des garanties complémentaires.",
+    "texteHtml": "<p></p>   La responsabilité civile professionnelle des notaires est garantie par un contrat d'assurance souscrit par le Conseil supérieur du notariat.<p></p><p></p>   Les conseils régionaux de notaires peuvent souscrire des garanties complémentaires.<p></p>",
+    "num": "6-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1301443200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 536862,
+    "context": {
+      "titresTM": [],
+      "nombreVersionParent": 0,
+      "longeurChemin": 0,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Ordonnance n° 45-2590 du 2 novembre 1945 relative au statut du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000699572",
+          "id": "JORFTEXT000000699572",
+          "etat": ""
+        },
+        {
+          "debut": "1945-11-03",
+          "fin": "2999-01-01",
+          "titre": "Ordonnance n° 45-2590 du 2 novembre 1945 relative au statut du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000699572",
+          "id": "LEGITEXT000006069175",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000023777969",
+    "cidTexte": null,
+    "sectionParentCid": null,
+    "sectionParentId": null,
+    "sectionParentTitre": null,
+    "fullSectionsTitre": null,
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000023777969",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000699572",
+        "titre": "Ordonnance n° 45-2590 du 2 novembre 1945",
+        "titreLong": "Ordonnance n° 45-2590 du 2 novembre 1945 relative au statut du notariat",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000699572",
+        "datePubli": -762480000000,
+        "datePubliComputed": -762480000000,
+        "dateTexte": -762566400000,
+        "dateTexteComputed": -762566400000,
+        "nature": "ORDONNANCE",
+        "nor": "",
+        "num": "45-2590",
+        "numParution": "",
+        "originePubli": "JORF du 03 novembre 1945",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006069175",
+        "titre": "Ordonnance n° 45-2590 du 2 novembre 1945",
+        "titreLong": "Ordonnance n° 45-2590 du 2 novembre 1945 relative au statut du notariat",
+        "etat": "VIGUEUR",
+        "dateDebut": -762480000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000699572",
+        "datePubli": -762480000000,
+        "datePubliComputed": -762480000000,
+        "dateTexte": -762566400000,
+        "dateTexteComputed": -762566400000,
+        "nature": "ORDONNANCE",
+        "nor": "",
+        "num": "45-2590",
+        "numParution": "",
+        "originePubli": "JORF du 03 novembre 1945",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000023776687",
+        "textTitle": "LOI n°2011-331\n du 28 mars 2011 - art. 16",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "16",
+        "articleId": "LEGIARTI000023777237",
+        "natureText": "LOI",
+        "datePubliTexte": "2011-03-29",
+        "dateSignaTexte": "2011-03-28",
+        "dateDebutCible": "2011-03-30"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000034602076",
+        "textTitle": "Décret n°2017-800 du 5 mai 2017 - art. 3",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000034627812",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2017-800",
+        "datePubli": 1494115200000,
+        "dateDebut": 1494201600000
+      },
+      {
+        "textCid": "JORFTEXT000050101308",
+        "textTitle": "Décret n°2024-873 du 14 août 2024 - art. 204 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "204",
+        "articleId": "LEGIARTI000050106315",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2024-873",
+        "datePubli": 1723852800000,
+        "dateDebut": 1723939200000
+      }
+    ],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000699572",
+        "textTitle": "Ordonnance n°45-2590 du 2 novembre 1945 - art. 6-1 (T)",
+        "linkType": "CONCORDE",
+        "linkOrientation": "cible",
+        "articleNum": "6-1",
+        "articleId": "LEGIARTI000006915261",
+        "natureText": "ORDONNANCE"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000023777969",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1301443200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "6-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

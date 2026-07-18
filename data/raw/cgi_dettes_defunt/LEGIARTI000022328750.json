@@ -1,0 +1,329 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000022328750",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Par dérogation aux dispositions du 2° de l'article 773, l'existence et la sincérité des dettes résultant de l'application des articles L. 321-13 et suivants du code rural et de la pêche maritime sont suffisamment prouvées à l'égard de l'administration par tous actes et écrits, même postérieurs au décès d'un exploitant agricole, susceptibles de faire preuve en justice entre les cohéritiers ou représentants de l'exploitant. L'héritier créancier de la succession est toutefois tenu de fournir, dans les formes et suivant les règles déterminées par l' article L. 20 du livre des procédures fiscales , une attestation, datée et signée par lui, mentionnant le montant de sa créance sur la succession de l'exploitant.",
+    "texteHtml": "<p>Par dérogation aux dispositions du 2° de l'article 773, l'existence et la sincérité des dettes résultant de l'application des <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006071367&idArticle=LEGIARTI000006583367&dateTexte=&categorieLien=cid\" title=\"Code rural - art. L321-13 (V)\">articles L. 321-13 et suivants du code rural et de la pêche maritime</a> sont suffisamment prouvées à l'égard de l'administration par tous actes et écrits, même postérieurs au décès d'un exploitant agricole, susceptibles de faire preuve en justice entre les cohéritiers ou représentants de l'exploitant. L'héritier créancier de la succession est toutefois tenu de fournir, dans les formes et suivant les règles déterminées par l'<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006069583&idArticle=LEGIARTI000006315649&dateTexte=&categorieLien=cid\" title=\"Livre des procédures fiscales - art. L20\">article L. 20 du livre des procédures fiscales</a>, une attestation, datée et signée par lui, mentionnant le montant de sa créance sur la succession de l'exploitant.</p>",
+    "num": "774",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "8.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1273276800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 35790,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Livre premier : Assiette et liquidation de l'impôt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006084232",
+          "id": "LEGISCTA000006084232",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Première Partie : Impôts d'État",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006114494",
+          "id": "LEGISCTA000006114494",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2018-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000006133850",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière, timbre, impôt sur la fortune, immobilière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000036611615",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Chapitre premier : Droits d'enregistrement et taxe de publicité foncière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006147066",
+          "id": "LEGISCTA000006147066",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Section II : Les tarifs et leur application",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006162631",
+          "id": "LEGISCTA000006162631",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "VI : Mutations à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006179724",
+          "id": "LEGISCTA000006179724",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "B : Assiette des droits de mutation à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006191747",
+          "id": "LEGISCTA000006191747",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2 : Dispositions spéciales aux successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006197324",
+          "id": "LEGISCTA000006197324",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "b : Passif déductible",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199105",
+          "id": "LEGISCTA000006199105",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2° : Dettes du défunt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199543",
+          "id": "LEGISCTA000006199543",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 62,
+      "titreTxt": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Code général des impôts",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006069577",
+          "id": "LEGITEXT000006069577",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006310339",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006199543",
+    "sectionParentId": "LEGISCTA000006199543",
+    "sectionParentTitre": "2° : Dettes du défunt",
+    "fullSectionsTitre": "Livre premier : Assiette et liquidation de l'impôt &gt; Première Partie : Impôts d'État &gt; Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre &gt; Chapitre premier : Droits d'enregistrement et taxe de publicité foncière &gt; Section II : Les tarifs et leur application &gt; VI : Mutations à titre gratuit &gt; B : Assiette des droits de mutation à titre gratuit &gt; 2 : Dispositions spéciales aux successions &gt; b : Passif déductible &gt; 2° : Dettes du défunt",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000022328750",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006069577",
+        "titre": "Code général des impôts, CGI.",
+        "titreLong": "Code général des impôts",
+        "etat": "VIGUEUR",
+        "dateDebut": -564278400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006069577",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000022176680",
+        "textTitle": "Ordonnance n°2010-462 du 6 mai 2010 - art. 1",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000022195080",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2010-05-07",
+        "dateSignaTexte": "2010-05-06",
+        "dateDebutCible": "2010-05-08"
+      },
+      {
+        "textCid": "JORFTEXT000024152033",
+        "textTitle": "Décret n°2011-645\r\n du 9 juin 2011 - art. 1 (V)",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000024154164",
+        "natureText": "DECRET",
+        "datePubliTexte": "2011-06-11",
+        "dateSignaTexte": "2011-06-09",
+        "dateDebutCible": "2011-06-12"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006069583",
+        "textTitle": "Livre des procédures fiscales - art. L20",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "L20",
+        "articleId": "LEGIARTI000006315649",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 378691200000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural - art. L321-13 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "L321-13",
+        "articleId": "LEGIARTI000006583367",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 743385600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000049438058",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -559008000000,
+        "dateFin": -485395200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000049589507",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": -485395200000,
+        "dateFin": 299635200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310339",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 299635200000,
+        "dateFin": 378691200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310340",
+        "etat": "MODIFIE_MORT_NE",
+        "version": "4.0",
+        "dateDebut": 378691200000,
+        "dateFin": 331603200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310341",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 331603200000,
+        "dateFin": 745632000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310342",
+        "etat": "MODIFIE",
+        "version": "6.0",
+        "dateDebut": 745632000000,
+        "dateFin": 814752000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310343",
+        "etat": "MODIFIE",
+        "version": "7.0",
+        "dateDebut": 814752000000,
+        "dateFin": 1273276800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000022328750",
+        "etat": "VIGUEUR",
+        "version": "8.0",
+        "dateDebut": 1273276800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "774"
+    ],
+    "versionPrecedente": "LEGIARTI000006310343",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

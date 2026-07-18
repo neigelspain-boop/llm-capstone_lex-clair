@@ -1,0 +1,206 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006418220",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les dispositions de l' article 311-12 sont applicables au délit d'abus de confiance.",
+    "texteHtml": "<p></p>Les dispositions de l'<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418151&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 311-12 (V)\">article 311-12</a> sont applicables au délit d'abus de confiance.<p></p><p></p>",
+    "num": "314-4",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 762480000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des détournements",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149836",
+          "id": "LEGISCTA000006149836",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De l'abus de confiance",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165334",
+          "id": "LEGISCTA000006165334",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418220",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165334",
+    "sectionParentId": "LEGISCTA000006165334",
+    "sectionParentTitre": "Section 1 : De l'abus de confiance",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre IV : Des détournements &gt; Section 1 : De l'abus de confiance",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006418220",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 311-12 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "311-12",
+        "articleId": "LEGIARTI000006418151",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22 art. 1",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI"
+      },
+      {
+        "textCid": "JORFTEXT000000177662",
+        "textTitle": "Loi 92-1336 1992-12-16 art. 373",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000177662",
+        "natureText": "LOI"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418220",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "314-4"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

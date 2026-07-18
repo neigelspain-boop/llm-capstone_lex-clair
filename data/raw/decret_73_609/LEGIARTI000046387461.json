@@ -1,0 +1,229 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046387461",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les membres du personnel des offices de notaire titulaires de l'un des diplômes mentionnés à l'article 3 (5°) et se préparant soit au diplôme d'études supérieures de notariat, soit au diplôme de notaire, soit au diplôme supérieur de notariat, reçoivent la formation professionnelle prévue au chapitre II du titre Ier. Les membres du personnel des offices de notaire titulaires du diplôme de premier clerc de notaire ou du diplôme des métiers du notariat et se préparant à l'examen de contrôle des connaissances prévu à l'article 7 suivent la préparation obligatoire prévue au même article. Les autres membres du personnel ainsi que les personnes qui se destinent aux emplois de la profession notariale reçoivent la formation professionnelle dispensée soit par l'Institut national des formations notariales, soit par les instituts universitaires de technologie, dans les conditions définies au présent titre.",
+    "texteHtml": "<p>Les membres du personnel des offices de notaire titulaires de l'un des diplômes mentionnés à l'article 3 (5°) et se préparant soit au diplôme d'études supérieures de notariat, soit au diplôme de notaire, soit au diplôme supérieur de notariat, reçoivent la formation professionnelle prévue au chapitre II du titre Ier.</p><p>Les membres du personnel des offices de notaire titulaires du diplôme de premier clerc de notaire ou du diplôme des métiers du notariat et se préparant à l'examen de contrôle des connaissances prévu à l'article 7 suivent la préparation obligatoire prévue au même article.</p><p>Les autres membres du personnel ainsi que les personnes qui se destinent aux emplois de la profession notariale reçoivent la formation professionnelle dispensée soit par l'Institut national des formations notariales, soit par les instituts universitaires de technologie, dans les conditions définies au présent titre.</p>",
+    "num": "59",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "6.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1665273600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2009-09-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113048",
+          "id": "LEGISCTA000006113048",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920763",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006113048",
+    "sectionParentId": "LEGISCTA000006113048",
+    "sectionParentTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+    "fullSectionsTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000046387461",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.",
+    "notaHtml": "<p>Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 6",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "6",
+        "articleId": "LEGIARTI000046384983",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-10-08",
+        "dateSignaTexte": "2022-10-07",
+        "dateDebutCible": "2022-10-09"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-1 (VD)",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "86-1",
+        "articleId": "LEGIARTI000006920836",
+        "natureText": "DECRET"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920763",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920764",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 652147200000,
+        "dateFin": 1251763200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920765",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1251763200000,
+        "dateFin": 1363392000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027179526",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1363392000000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256581",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1665273600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387461",
+        "etat": "VIGUEUR",
+        "version": "6.0",
+        "dateDebut": 1665273600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "59"
+    ],
+    "versionPrecedente": "LEGIARTI000037256581",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

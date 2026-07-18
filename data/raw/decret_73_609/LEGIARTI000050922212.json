@@ -1,0 +1,251 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000050922212",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'Institut national des formations notariales est chargé d'exercer, outre les attributions particulières énoncées aux titres Ier, II, III et V, les attributions générales ci-après : 1° Assurer, diriger, coordonner et contrôler les actions de formation initiale des étudiants qui se destinent aux métiers du notariat ; 2° Participer aux concertations relatives à la formation notariale avec les pouvoirs publics, la profession notariale, les universités et les professions dont les activités sont en rapport avec celles de la profession notariale ; 3° Délivrer les diplômes et assurer les enseignements conduisant à la délivrance des diplômes nationaux ; 4° Développer l'enseignement à distance et le recours à de nouveaux modes de formation ; 5° Organiser et contrôler le stage prévu à l'article 20 en liaison avec les employeurs des stagiaires ; 6° Proposer, en accord avec le Conseil supérieur du notariat, les mesures propres à améliorer la formation et l'enseignement professionnel ; 7° Organiser l'enseignement professionnel en vue de la préparation à l'examen de contrôle des connaissances prévu aux articles 5 et 7, soit directement, soit par convention avec d'autres organismes d'enseignement ou de formation, publics ou privés ; 8° Dispenser des formations en droit notarial et techniques professionnelles notariales au profit des notaires et collaborateurs en exercice ainsi que de tout public extérieur à la profession ; 9° Définir et conduire des actions de recherche scientifique et technologique donnant lieu à des publications et à des productions scientifiques et pédagogiques ; 10° Entreprendre des actions de collaboration avec des organismes de recherche ou d'enseignement supérieur français ou étrangers. L'Institut national des formations notariales peut passer toutes conventions utiles en application de la loi du 16 juillet 1971 susvisée.",
+    "texteHtml": "<p>L'Institut national des formations notariales est chargé d'exercer, outre les attributions particulières énoncées aux titres Ier, II, III et V, les attributions générales ci-après :<br/><br/>\n 1° Assurer, diriger, coordonner et contrôler les actions de formation initiale des étudiants qui se destinent aux métiers du notariat ;<br/><br/>\n 2° Participer aux concertations relatives à la formation notariale avec les pouvoirs publics, la profession notariale, les universités et les professions dont les activités sont en rapport avec celles de la profession notariale ;<br/><br/>\n 3° Délivrer les diplômes et assurer les enseignements conduisant à la délivrance des diplômes nationaux ;<br/><br/>\n 4° Développer l'enseignement à distance et le recours à de nouveaux modes de formation ;<br/><br/>\n 5° Organiser et contrôler le stage prévu à l'article 20 en liaison avec les employeurs des stagiaires ;<br/><br/>\n 6° Proposer, en accord avec le Conseil supérieur du notariat, les mesures propres à améliorer la formation et l'enseignement professionnel ;<br/><br/>\n 7° Organiser l'enseignement professionnel en vue de la préparation à l'examen de contrôle des connaissances prévu aux articles 5 et 7, soit directement, soit par convention avec d'autres organismes d'enseignement ou de formation, publics ou privés ;<br/><br/>\n 8° Dispenser des formations en droit notarial et techniques professionnelles notariales au profit des notaires et collaborateurs en exercice ainsi que de tout public extérieur à la profession ;<br/><br/>\n 9° Définir et conduire des actions de recherche scientifique et technologique donnant lieu à des publications et à des productions scientifiques et pédagogiques ;<br/><br/>\n 10° Entreprendre des actions de collaboration avec des organismes de recherche ou d'enseignement supérieur français ou étrangers.<br/><br/>\n L'Institut national des formations notariales peut passer toutes conventions utiles en application de la loi du 16 juillet 1971 susvisée.</p>",
+    "num": "94",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "7.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1735689600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2018-10-01",
+          "titre": "Titre IV : Le centre national de l'enseignement professionnel notarial.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113044",
+          "id": "LEGISCTA000006113044",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : L'Institut national des formations notariales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113044",
+          "id": "LEGISCTA000037256637",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920873",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006113044",
+    "sectionParentId": "LEGISCTA000037256637",
+    "sectionParentTitre": "Titre IV : L'Institut national des formations notariales",
+    "fullSectionsTitre": "Titre IV : L'Institut national des formations notariales",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000050922212",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025. Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.",
+    "notaHtml": "<p>Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025.</p><p>Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000050870858",
+        "textTitle": "Décret n°2024-1227 du 30 décembre 2024 - art. 3",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000050918790",
+        "natureText": "DECRET",
+        "datePubliTexte": "2024-12-31",
+        "dateSignaTexte": "2024-12-30",
+        "dateDebutCible": "2025-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 15 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "15",
+        "articleId": "LEGIARTI000047697447",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2022-1298",
+        "datePubli": 1665187200000,
+        "dateDebut": 1687046400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920873",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920874",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 652147200000,
+        "dateFin": 813715200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920875",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 813542400000,
+        "dateFin": 1187740800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920876",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1187740800000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256639",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1725148800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387467",
+        "etat": "MODIFIE",
+        "version": "6.0",
+        "dateDebut": 1725148800000,
+        "dateFin": 1735689600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000050922212",
+        "etat": "VIGUEUR",
+        "version": "7.0",
+        "dateDebut": 1735689600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "94"
+    ],
+    "versionPrecedente": "LEGIARTI000046387467",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

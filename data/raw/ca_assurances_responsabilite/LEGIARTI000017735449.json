@@ -1,0 +1,272 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000017735449",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le tiers lésé dispose d'un droit d'action directe à l'encontre de l'assureur garantissant la responsabilité civile de la personne responsable. L'assureur ne peut payer à un autre que le tiers lésé tout ou partie de la somme due par lui, tant que ce tiers n'a pas été désintéressé, jusqu'à concurrence de ladite somme, des conséquences pécuniaires du fait dommageable ayant entraîné la responsabilité de l'assuré.",
+    "texteHtml": "<p>Le tiers lésé dispose d'un droit d'action directe à l'encontre de l'assureur garantissant la responsabilité civile de la personne responsable. </p><p>L'assureur ne peut payer à un autre que le tiers lésé tout ou partie de la somme due par lui, tant que ce tiers n'a pas été désintéressé, jusqu'à concurrence de ladite somme, des conséquences pécuniaires du fait dommageable ayant entraîné la responsabilité de l'assuré.</p>",
+    "num": "L124-3",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1198022400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1976-07-16",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006107964",
+          "id": "LEGISCTA000006107964",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Livre Ier : Le contrat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006128391",
+          "id": "LEGISCTA000006128391",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2012-07-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages non maritimes",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000006142679",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2012-07-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000024376800",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Les assurances de responsabilité.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006157248",
+          "id": "LEGISCTA000006157248",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1976-07-11",
+          "fin": "2999-01-01",
+          "titre": "Code des assurances",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006073984",
+          "id": "LEGITEXT000006073984",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006792607",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006157248",
+    "sectionParentId": "LEGISCTA000006157248",
+    "sectionParentTitre": "Chapitre IV : Les assurances de responsabilité.",
+    "fullSectionsTitre": "Partie législative &gt; Livre Ier : Le contrat &gt; Titre II : Règles relatives aux assurances de dommages non maritimes &gt; Chapitre IV : Les assurances de responsabilité.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000017735449",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006073984",
+        "titre": "Code des assurances",
+        "titreLong": "Code des assurances",
+        "etat": "VIGUEUR",
+        "dateDebut": 205891200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006073984",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000017661897",
+        "textTitle": "LOI n°2007-1774 du 17 décembre 2007 - art. 1",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000017726078",
+        "natureText": "LOI",
+        "datePubliTexte": "2007-12-18",
+        "dateSignaTexte": "2007-12-17",
+        "dateDebutCible": "2007-12-19"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000022125509",
+        "textTitle": "Avis n°333627  du 31 mars 2010 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000022125510",
+        "natureText": "AVIS",
+        "parentCid": null,
+        "numTexte": "333627",
+        "datePubli": 1271894400000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000031912641",
+        "textTitle": "LOI n°2016-41 du 26 janvier 2016 - art. 184, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "184",
+        "articleId": "JORFARTI000031914412",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2016-41",
+        "datePubli": 1453852800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000051538879",
+        "textTitle": "LOI n°2025-391 du 30 avril 2025 - art. 16",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "16",
+        "articleId": "JORFARTI000051539065",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2025-391",
+        "datePubli": 1746144000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070933",
+        "textTitle": "Code de justice administrative - art. L77-10-24 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L77-10-24",
+        "articleId": "LEGIARTI000033437550",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1479600000000
+      },
+      {
+        "textCid": "LEGITEXT000006072665",
+        "textTitle": "Code de la santé publique - art. L1143-20 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L1143-20",
+        "articleId": "LEGIARTI000031926045",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1467331200000
+      },
+      {
+        "textCid": "LEGITEXT000006073984",
+        "textTitle": "Code des assurances - art. L171-5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L171-5",
+        "articleId": "LEGIARTI000024376813",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1341100800000
+      }
+    ],
+    "lienConcordes": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1930-07-13 art. 53",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006792607",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 206755200000,
+        "dateFin": 1198022400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000017735449",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1198022400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "L124-3",
+      "124-3"
+    ],
+    "versionPrecedente": "LEGIARTI000006792607",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

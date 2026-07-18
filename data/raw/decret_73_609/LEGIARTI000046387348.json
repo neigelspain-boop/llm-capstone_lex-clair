@@ -1,0 +1,321 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046387348",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les épreuves de l'examen de contrôle sont subies devant un jury national composé ainsi qu'il suit : Un magistrat de l'ordre judiciaire en activité ou honoraire, président ; Un professeur des universités ou un maître de conférences chargé d'un enseignement juridique, en activité ou émérite ; Deux notaires exerçant à titre individuel ou en qualité d'associé ; Un notaire salarié ou un collaborateur des offices de notaire, qu'il soit ou non en activité, remplissant les conditions d'aptitude exigées pour être nommé notaire. En cas de partage égal des voix, celle du président est prépondérante. Les membres du jury sont désignés par arrêté du garde des sceaux, ministre de la justice, sur proposition, en ce qui concerne le professeur ou le maître de conférences, du ministre chargé de l'enseignement supérieur et après avis, en ce qui concerne respectivement les notaires exerçant à titre individuel ou en qualité d'associé, le notaire salarié ou le collaborateur, du conseil supérieur du notariat et des organisations syndicales les plus représentatives. Des membres suppléants sont désignés en nombre égal dans les mêmes conditions. Le président et les membres du jury sont nommés pour une durée de trois ans, renouvelable deux fois. Toutefois, si un membre du jury vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement. En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé.",
+    "texteHtml": "<p>Les épreuves de l'examen de contrôle sont subies devant un jury national composé ainsi qu'il suit :</p><p>Un magistrat de l'ordre judiciaire en activité ou honoraire, président ;</p><p>Un professeur des universités ou un maître de conférences chargé d'un enseignement juridique, en activité ou émérite ;</p><p>Deux notaires exerçant à titre individuel ou en qualité d'associé ;</p><p>Un notaire salarié ou un collaborateur des offices de notaire, qu'il soit ou non en activité, remplissant les conditions d'aptitude exigées pour être nommé notaire.</p><p>En cas de partage égal des voix, celle du président est prépondérante.</p><p>Les membres du jury sont désignés par arrêté du garde des sceaux, ministre de la justice, sur proposition, en ce qui concerne le professeur ou le maître de conférences, du ministre chargé de l'enseignement supérieur et après avis, en ce qui concerne respectivement les notaires exerçant à titre individuel ou en qualité d'associé, le notaire salarié ou le collaborateur, du conseil supérieur du notariat et des organisations syndicales les plus représentatives.</p><p>Des membres suppléants sont désignés en nombre égal dans les mêmes conditions.</p><p>Le président et les membres du jury sont nommés pour une durée de trois ans, renouvelable deux fois. Toutefois, si un membre du jury vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement. En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé.</p>",
+    "num": "6",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "9.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1665273600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 730133,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132462",
+          "id": "LEGISCTA000006132462",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920599",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132462",
+    "sectionParentId": "LEGISCTA000006132462",
+    "sectionParentTitre": "Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000046387348",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.",
+    "notaHtml": "<p>Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 2",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "2",
+        "articleId": "LEGIARTI000046384989",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-10-08",
+        "dateSignaTexte": "2022-10-07",
+        "dateDebutCible": "2022-10-09"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 7 (AbD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "7",
+        "articleId": "LEGIARTI000006920607",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 933379200000
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 7-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "7-1",
+        "articleId": "LEGIARTI000046387351",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 1665273600000
+      },
+      {
+        "textCid": "JORFTEXT000017770899",
+        "textTitle": "Arrêté du 20 décembre 2007 - art. 5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "5",
+        "articleId": "LEGIARTI000039116295",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1199318400000,
+        "dateDebut": 1567209600000
+      },
+      {
+        "textCid": "JORFTEXT000038843243",
+        "textTitle": "Arrêté du 23 juillet 2019 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000038843244",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1564444800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000050976732",
+        "textTitle": "Arrêté du 14 janvier 2025 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000050976733",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1736899200000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920599",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 377308800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920600",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 377308800000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920601",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 652147200000,
+        "dateFin": 749606400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920602",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 749606400000,
+        "dateFin": 933379200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920603",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 933379200000,
+        "dateFin": 1187740800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920604",
+        "etat": "MODIFIE",
+        "version": "6.0",
+        "dateDebut": 1187740800000,
+        "dateFin": 1363392000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027179471",
+        "etat": "MODIFIE",
+        "version": "7.0",
+        "dateDebut": 1363392000000,
+        "dateFin": 1464220800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000032586296",
+        "etat": "MODIFIE",
+        "version": "8.0",
+        "dateDebut": 1464220800000,
+        "dateFin": 1665273600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387348",
+        "etat": "VIGUEUR",
+        "version": "9.0",
+        "dateDebut": 1665273600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "6"
+    ],
+    "versionPrecedente": "LEGIARTI000032586296",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

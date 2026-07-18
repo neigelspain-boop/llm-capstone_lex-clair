@@ -1,0 +1,265 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000019203069",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le vol est puni de sept ans d'emprisonnement et de 100 000 € d'amende lorsqu'il porte sur : 1° Un objet mobilier classé ou inscrit en application des dispositions du code du patrimoine ou un document d'archives privées classé en application des dispositions du même code ; 2° Une découverte archéologique faite au cours de fouilles ou fortuitement ; 3° Un bien culturel qui relève du domaine public mobilier ou qui est exposé, conservé ou déposé, même de façon temporaire, soit dans un musée de France, une bibliothèque, une médiathèque ou un service d'archives, soit dans un lieu dépendant d'une personne publique ou d'une personne privée assurant une mission d'intérêt général, soit dans un édifice affecté au culte. Les peines sont portées à dix ans d'emprisonnement et 150 000 € d'amende lorsque l'infraction prévue au présent article est commise avec l'une des circonstances prévues à l'article 311-4 . Les peines d'amende mentionnées au présent article peuvent être élevées jusqu'à la moitié de la valeur du bien volé.",
+    "texteHtml": "<p>Le vol est puni de sept ans d'emprisonnement et de 100 000 € d'amende lorsqu'il porte sur :</p><p>1° Un objet mobilier classé ou inscrit en application des dispositions du code du patrimoine ou un document d'archives privées classé en application des dispositions du même code ;</p><p>2° Une découverte archéologique faite au cours de fouilles ou fortuitement ;</p><p>3° Un bien culturel qui relève du domaine public mobilier ou qui est exposé, conservé ou déposé, même de façon temporaire, soit dans un musée de France, une bibliothèque, une médiathèque ou un service d'archives, soit dans un lieu dépendant d'une personne publique ou d'une personne privée assurant une mission d'intérêt général, soit dans un édifice affecté au culte.</p><p>Les peines sont portées à dix ans d'emprisonnement et 150 000 € d'amende lorsque l'infraction prévue au présent article est commise avec l'une des circonstances prévues à <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418132&dateTexte=&categorieLien=cid\">l'article 311-4</a>.</p><p>Les peines d'amende mentionnées au présent article peuvent être élevées jusqu'à la moitié de la valeur du bien volé.</p>",
+    "num": "311-4-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1216252800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 386541,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : Du vol",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149833",
+          "id": "LEGISCTA000006149833",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Du vol simple et des vols aggravés",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165324",
+          "id": "LEGISCTA000006165324",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000019201121",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165324",
+    "sectionParentId": "LEGISCTA000006165324",
+    "sectionParentTitre": "Section 1 : Du vol simple et des vols aggravés",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre Ier : Du vol &gt; Section 1 : Du vol simple et des vols aggravés",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000019203069",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000019198529",
+        "textTitle": "LOI n°2008-696 \n du 15 juillet 2008 - art. 34",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "34",
+        "articleId": "LEGIARTI000019200086",
+        "natureText": "LOI",
+        "datePubliTexte": "2008-07-16",
+        "dateSignaTexte": "2008-07-15",
+        "dateDebutCible": "2008-07-17"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000032854341",
+        "textTitle": "LOI n°2016-925 du 7 juillet 2016 - art. 99, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "99",
+        "articleId": "JORFARTI000032854881",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2016-925",
+        "datePubli": 1467936000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000049608213",
+        "textTitle": "Délibération n°2024-028 du 4 avril 2024 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000049608214",
+        "natureText": "DELIBERATION",
+        "parentCid": null,
+        "numTexte": "2024-028",
+        "datePubli": 1716940800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. 2-21 (VT)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "2-21",
+        "articleId": "LEGIARTI000033460444",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1479600000000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. D8-2-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "D8-2-1",
+        "articleId": "LEGIARTI000050096715",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1723680000000
+      },
+      {
+        "textCid": "LEGITEXT000006074236",
+        "textTitle": "Code du patrimoine - art. L214-10 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L214-10",
+        "articleId": "LEGIARTI000032860065",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1468022400000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 311-15 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "311-15",
+        "articleId": "LEGIARTI000037398851",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1536710400000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 311-4",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "311-4",
+        "articleId": "LEGIARTI000006418132",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000019203069",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1216252800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "311-4-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

@@ -26,17 +26,20 @@ from ingestion.piste import PisteClient
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
+# Manifest, raw output directory, and fetch timestamp marker.
 MANIFEST_PATH = Path("data/corpus_manifest.yaml")
 RAW_DIR = Path("data/raw")
 STAMP = RAW_DIR / "fetched_at.txt"
 
 
 def load_manifest(path: Path = MANIFEST_PATH) -> dict:
+    """Read corpus manifest YAML and return parsed manifest data."""
     with path.open() as f:
         return yaml.safe_load(f)
 
 
 def enumerate_ids(client: PisteClient, source_key: str, spec: dict) -> list[str]:
+    """Choose the fetch strategy for a source and return article ids."""
     strategy = spec["fetch_strategy"]
     if strategy == "section":
         ids = client.list_articles_in_section(spec["section_id"], spec["parent_text_id"])
@@ -59,6 +62,7 @@ def fetch_source(
     out_dir: Path,
     limit: int | None = None,
 ) -> None:
+    """Fetch articles by id and save each response as a raw JSON file."""
     src_dir = out_dir / source_key
     src_dir.mkdir(parents=True, exist_ok=True)
     to_fetch = ids[:limit] if limit else ids
@@ -75,6 +79,7 @@ def fetch_source(
 
 
 def main() -> None:
+    """CLI entrypoint: load env, manifest, enumerate ids, fetch raw articles, and write a stamp."""
     load_dotenv()
     ap = argparse.ArgumentParser()
     ap.add_argument("--sources", nargs="*", help="subset of manifest keys")

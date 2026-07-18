@@ -1,0 +1,285 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006435678",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Toutes donations entre vifs faites par personnes qui n'avaient point d'enfants ou de descendants actuellement vivants dans le temps de la donation, de quelque valeur que ces donations puissent être, et à quelque titre qu'elles aient été faites, et encore qu'elles fussent mutuelles ou rémunératoires, même celles qui auraient été faites en faveur de mariage par autres que par les conjoints l'un à l'autre, peuvent être révoquées, si l'acte de donation le prévoit, par la survenance d'un enfant issu du donateur, même après son décès, ou adopté par lui dans les formes et conditions prévues au chapitre Ier du titre VIII du livre Ier.",
+    "texteHtml": "<p></p>   Toutes donations entre vifs faites par personnes qui n'avaient point d'enfants ou de descendants actuellement vivants dans le temps de la donation, de quelque valeur que ces donations puissent être, et à quelque titre qu'elles aient été faites, et encore qu'elles fussent mutuelles ou rémunératoires, même celles qui auraient été faites en faveur de mariage par autres que par les conjoints l'un à l'autre, peuvent être révoquées, si l'acte de donation le prévoit, par la survenance d'un enfant issu du donateur, même après son décès, ou adopté par lui dans les formes et conditions prévues au chapitre Ier du titre VIII du livre Ier.<p></p><p></p>",
+    "num": "960",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136550",
+          "id": "LEGISCTA000006136550",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150546",
+          "id": "LEGISCTA000006150546",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006435676",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150546",
+    "sectionParentId": "LEGISCTA000006150546",
+    "sectionParentTitre": "Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre IV : Des donations entre vifs. &gt; Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006435678",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 15 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "15",
+        "articleId": "LEGIARTI000006284849",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 9 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000006284843",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000848306",
+        "textTitle": "Décret du 18 novembre 1924 - art. 25 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "25",
+        "articleId": "LEGIARTI000006285616",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -1423699200000,
+        "dateDebut": -1438387200000
+      },
+      {
+        "textCid": "JORFTEXT000000451869",
+        "textTitle": "Ordonnance n°2005-759 du 4 juillet 2005 - art. 20 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "20",
+        "articleId": "LEGIARTI000020123569",
+        "natureText": "ORDONNANCE",
+        "parentCid": null,
+        "numTexte": "2005-759",
+        "datePubli": 1120608000000,
+        "dateDebut": 1232323200000
+      },
+      {
+        "textCid": "JORFTEXT000036740015",
+        "textTitle": "Décret n°2018-200 du 23 mars 2018 - art. 8",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000036740874",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2018-200",
+        "datePubli": 1521936000000,
+        "dateDebut": 1522022400000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 964 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "964",
+        "articleId": "LEGIARTI000006433974",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000005634379",
+        "textTitle": "Code de commerce - art. A444-163-6 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "A444-163-6",
+        "articleId": "LEGIARTI000041684614",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1583020800000
+      },
+      {
+        "textCid": "LEGITEXT000005634379",
+        "textTitle": "Code de commerce - art. Annexe 4-7 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "Annexe 4-7",
+        "articleId": "LEGIARTI000047053448",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1674691200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006435676",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1151712000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006435677",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1151712000000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006435678",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "960"
+    ],
+    "versionPrecedente": "LEGIARTI000006435677",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

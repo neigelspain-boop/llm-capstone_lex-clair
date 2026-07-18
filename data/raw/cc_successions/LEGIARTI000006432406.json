@@ -1,0 +1,208 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006432406",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le président du tribunal peut aussi interdire le déplacement des meubles corporels sauf à spécifier ceux dont il attribue l'usage personnel à l'un ou à l'autre des ayants droit, à charge pour ceux-ci de donner caution s'il l'estime nécessaire.",
+    "texteHtml": "<p></p>   Le président du tribunal peut aussi interdire le déplacement des meubles corporels sauf à spécifier ceux dont il attribue l'usage personnel à l'un ou à l'autre des ayants droit, à charge pour ceux-ci de donner caution s'il l'estime nécessaire.<p></p><p></p>",
+    "num": "815-7",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VII : Du régime légal de l'indivision.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136538",
+          "id": "LEGISCTA000006136538",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des actes relatifs aux biens indivis.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150538",
+          "id": "LEGISCTA000006150538",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : Des actes autorisés en justice.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165768",
+          "id": "LEGISCTA000006165768",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006432405",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165768",
+    "sectionParentId": "LEGISCTA000006165768",
+    "sectionParentTitre": "Paragraphe 2 : Des actes autorisés en justice.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VII : Du régime légal de l'indivision. &gt; Section 1 : Des actes relatifs aux biens indivis. &gt; Paragraphe 2 : Des actes autorisés en justice.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006432406",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 2 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "2",
+        "articleId": "LEGIARTI000006284836",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1380 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1380",
+        "articleId": "LEGIARTI000039725909",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006432405",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 236563200000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006432406",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "815-7"
+    ],
+    "versionPrecedente": "LEGIARTI000006432405",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

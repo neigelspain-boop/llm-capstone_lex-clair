@@ -1,0 +1,312 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431591",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'inventaire est déposé au tribunal dans le délai de deux mois à compter de la déclaration. L'héritier peut solliciter du juge un délai supplémentaire s'il justifie de motifs sérieux et légitimes qui retardent le dépôt de l'inventaire. En ce cas, le délai de deux mois est suspendu à compter de la demande de prorogation. Le dépôt de l'inventaire est soumis à la même publicité que la déclaration. Faute d'avoir déposé l'inventaire dans le délai prévu, l'héritier est réputé acceptant pur et simple. Les créanciers successoraux et légataires de sommes d'argent peuvent, sur justification de leur titre, consulter l'inventaire et en obtenir copie. Ils peuvent demander à être avisés de toute nouvelle publicité.",
+    "texteHtml": "<p></p>   L'inventaire est déposé au tribunal dans le délai de deux mois à compter de la déclaration.<p></p><p></p>   L'héritier peut solliciter du juge un délai supplémentaire s'il justifie de motifs sérieux et légitimes qui retardent le dépôt de l'inventaire. En ce cas, le délai de deux mois est suspendu à compter de la demande de prorogation.<p></p><p></p>   Le dépôt de l'inventaire est soumis à la même publicité que la déclaration.<p></p><p></p>   Faute d'avoir déposé l'inventaire dans le délai prévu, l'héritier est réputé acceptant pur et simple.<p></p><p></p>   Les créanciers successoraux et légataires de sommes d'argent peuvent, sur justification de leur titre, consulter l'inventaire et en obtenir copie. Ils peuvent demander à être avisés de toute nouvelle publicité.<p></p>",
+    "num": "790",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 34356,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : De l'option de l'héritier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136273",
+          "id": "LEGISCTA000006136273",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : De l'acceptation de la succession à concurrence de l'actif net.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150144",
+          "id": "LEGISCTA000006150144",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165766",
+          "id": "LEGISCTA000006165766",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431590",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165766",
+    "sectionParentId": "LEGISCTA000006165766",
+    "sectionParentTitre": "Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre IV : De l'option de l'héritier &gt; Section 3 : De l'acceptation de la succession à concurrence de l'actif net. &gt; Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006431591",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 1 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000006284835",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000021245437",
+        "textTitle": "Arrêté du 9 novembre 2009 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000021246455",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1257811200000,
+        "dateDebut": 1259625600000
+      },
+      {
+        "textCid": "JORFTEXT000021245437",
+        "textTitle": "Arrêté du 9 novembre 2009, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFTEXT000021245437",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1257811200000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000043771628",
+        "textTitle": "Arrêté du 1er juillet 2021 - art. 5, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "5",
+        "articleId": "JORFARTI000043771660",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1625788800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006071164",
+        "textTitle": "CODE DE L'ORGANISATION JUDICIAIRE. - art. R*814-5 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R*814-5",
+        "articleId": "LEGIARTI000018846505",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1211673600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 773 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "773",
+        "articleId": "LEGIARTI000006431386",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006071164",
+        "textTitle": "Code de l'organisation judiciaire - art. R123-24 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R123-24",
+        "articleId": "LEGIARTI000051930978",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1756684800000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1335 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1335",
+        "articleId": "LEGIARTI000033748027",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1509494400000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1338 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1338",
+        "articleId": "LEGIARTI000006412495",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1379 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1379",
+        "articleId": "LEGIARTI000039725953",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431590",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431591",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "790"
+    ],
+    "versionPrecedente": "LEGIARTI000006431590",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

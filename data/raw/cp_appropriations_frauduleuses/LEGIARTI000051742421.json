@@ -1,0 +1,208 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000051742421",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Toute personne qui a tenté de commettre une extorsion en bande organisée prévue par l' article 312-6 est exempte de peine si, ayant averti l'autorité administrative ou judiciaire, elle a permis d'éviter la réalisation de l'infraction. La peine privative de liberté encourue par l'auteur ou le complice d'une extorsion en bande organisée est réduite des deux tiers si, ayant averti l'autorité administrative ou judiciaire, il a permis de faire cesser l'infraction ou d'éviter que l'infraction n'entraîne mort d'homme ou infirmité permanente ou d'identifier, le cas échéant, les autres auteurs ou complices. Lorsque la peine encourue est la réclusion criminelle à perpétuité, celle-ci est ramenée à vingt ans de réclusion criminelle.",
+    "texteHtml": "<p>Toute personne qui a tenté de commettre une extorsion en bande organisée prévue par l'<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418170&dateTexte=&categorieLien=cid\">article 312-6</a> est exempte de peine si, ayant averti l'autorité administrative ou judiciaire, elle a permis d'éviter la réalisation de l'infraction.</p><p>La peine privative de liberté encourue par l'auteur ou le complice d'une extorsion en bande organisée est réduite des deux tiers si, ayant averti l'autorité administrative ou judiciaire, il a permis de faire cesser l'infraction ou d'éviter que l'infraction n'entraîne mort d'homme ou infirmité permanente ou d'identifier, le cas échéant, les autres auteurs ou complices. Lorsque la peine encourue est la réclusion criminelle à perpétuité, celle-ci est ramenée à vingt ans de réclusion criminelle.</p>",
+    "num": "312-6-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1749945600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 601286,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : De l'extorsion",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149834",
+          "id": "LEGISCTA000006149834",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De l'extorsion",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165327",
+          "id": "LEGISCTA000006165327",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418172",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165327",
+    "sectionParentId": "LEGISCTA000006165327",
+    "sectionParentTitre": "Section 1 : De l'extorsion",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre II : De l'extorsion &gt; Section 1 : De l'extorsion",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000051742421",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi n°92-685 du 22 juillet 1992",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000051734851",
+        "textTitle": "LOI n°2025-532 du 13 juin 2025 - art. 31 (V)",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "31",
+        "articleId": "LEGIARTI000051736676",
+        "natureText": "LOI",
+        "datePubliTexte": "2025-06-14",
+        "dateSignaTexte": "2025-06-13",
+        "dateDebutCible": "2025-06-15"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-6",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "312-6",
+        "articleId": "LEGIARTI000006418170",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418172",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1078876800000,
+        "dateFin": 1749945600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000051742421",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1749945600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "312-6-1"
+    ],
+    "versionPrecedente": "LEGIARTI000006418172",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

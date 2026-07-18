@@ -1,0 +1,212 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006430795",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "N'est pas exclu de la succession le successible frappé d'une cause d'indignité prévue aux articles 726 et 727 , lorsque le défunt, postérieurement aux faits et à la connaissance qu'il en a eue, a précisé, par une déclaration expresse de volonté en la forme testamentaire, qu'il entend le maintenir dans ses droits héréditaires ou lui a fait une libéralité universelle ou à titre universel.",
+    "texteHtml": "<p></p>N'est pas exclu de la succession le successible frappé d'une cause d'indignité prévue aux articles <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006430774&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 726 (V)\">726 </a>et <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006430785&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 727 (V)\">727</a>, lorsque le défunt, postérieurement aux faits et à la connaissance qu'il en a eue, a précisé, par une déclaration expresse de volonté en la forme testamentaire, qu'il entend le maintenir dans ses droits héréditaires ou lui a fait une libéralité universelle ou à titre universel.<p></p><p></p>",
+    "num": "728",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1025481600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : Des qualités requises pour succéder - De la preuve de la qualité d'héritier.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136267",
+          "id": "LEGISCTA000006136267",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des qualités requises pour succéder.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165513",
+          "id": "LEGISCTA000006165513",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006430794",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165513",
+    "sectionParentId": "LEGISCTA000006165513",
+    "sectionParentTitre": "Section 1 : Des qualités requises pour succéder.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre II : Des qualités requises pour succéder - De la preuve de la qualité d'héritier. &gt; Section 1 : Des qualités requises pour succéder.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006430795",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000582185",
+        "textTitle": "Loi n°2001-1135 du 3 décembre 2001 - art. 19 () JORF 4 décembre 2001 en vigueur le 1er juillet 2002",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "19",
+        "articleId": "LEGIARTI000006284683",
+        "natureText": "LOI",
+        "datePubliTexte": "2001-12-04",
+        "dateSignaTexte": "2001-12-03",
+        "dateDebutCible": "2002-07-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 726 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "726",
+        "articleId": "LEGIARTI000006430774",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 727 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "727",
+        "articleId": "LEGIARTI000006430785",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006430794",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1025481600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006430795",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "728"
+    ],
+    "versionPrecedente": "LEGIARTI000006430794",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431280",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les libéralités reçues du défunt par le conjoint survivant s'imputent sur les droits de celui-ci dans la succession. Lorsque les libéralités ainsi reçues sont inférieures aux droits définis aux articles 757 et 757-1 , le conjoint survivant peut en réclamer le complément, sans jamais recevoir une portion des biens supérieure à la quotité définie à l'article 1094-1 .",
+    "texteHtml": "<p></p>Les libéralités reçues du défunt par le conjoint survivant s'imputent sur les droits de celui-ci dans la succession. Lorsque les libéralités ainsi reçues sont inférieures aux droits définis aux articles <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006431086&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 757 (V)\">757 </a>et <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006431219&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 757-1 (V)\">757-1</a>, le conjoint survivant peut en réclamer le complément, sans jamais recevoir une portion des biens supérieure à la quotité définie à l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006435798&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 1094-1 (V)\">1094-1</a>.<p></p><p></p>",
+    "num": "758-6",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 558337,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des droits du conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150139",
+          "id": "LEGISCTA000006150139",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165517",
+          "id": "LEGISCTA000006165517",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431280",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165517",
+    "sectionParentId": "LEGISCTA000006165517",
+    "sectionParentTitre": "Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 2 : Des droits du conjoint successible. &gt; Paragraphe 1 : De la nature des droits, de leur montant et de leur exercice",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006431280",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 29 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "29",
+        "articleId": "LEGIARTI000006284863",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1094-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "1094-1",
+        "articleId": "LEGIARTI000006435798",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 81475200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 757 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "757",
+        "articleId": "LEGIARTI000006431086",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 81475200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 757-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "757-1",
+        "articleId": "LEGIARTI000006431219",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1025481600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431280",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "758-6"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429647",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "En cas de vente simultanée de l'usufruit et de la nue-propriété d'un bien, le prix se répartit entre l'usufruit et la nue-propriété selon la valeur respective de chacun de ces droits, sauf accord des parties pour reporter l'usufruit sur le prix. La vente du bien grevé d'usufruit, sans l'accord de l'usufruitier, ne modifie pas le droit de ce dernier, qui continue à jouir de son usufruit sur le bien s'il n'y a pas expressément renoncé.",
+    "texteHtml": "<p></p>   En cas de vente simultanée de l'usufruit et de la nue-propriété d'un bien, le prix se répartit entre l'usufruit et la nue-propriété selon la valeur respective de chacun de ces droits, sauf accord des parties pour reporter l'usufruit sur le prix.<p></p><p></p>   La vente du bien grevé d'usufruit, sans l'accord de l'usufruitier, ne modifie pas le droit de ce dernier, qui continue à jouir de son usufruit sur le bien s'il n'y a pas expressément renoncé.<p></p>",
+    "num": "621",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 214745,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : Comment l'usufruit prend fin",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150119",
+          "id": "LEGISCTA000006150119",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429646",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150119",
+    "sectionParentId": "LEGISCTA000006150119",
+    "sectionParentTitre": "Section 3 : Comment l'usufruit prend fin",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 3 : Comment l'usufruit prend fin",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006429647",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 29 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "29",
+        "articleId": "LEGIARTI000006284863",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429646",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006429647",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "621"
+    ],
+    "versionPrecedente": "LEGIARTI000006429646",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

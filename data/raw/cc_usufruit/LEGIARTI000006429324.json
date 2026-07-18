@@ -1,0 +1,188 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429324",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Si l'usufruit comprend des choses dont on ne peut faire usage sans les consommer, comme l'argent, les grains, les liqueurs, l'usufruitier a le droit de s'en servir, mais à la charge de rendre, à la fin de l'usufruit, soit des choses de même quantité et qualité soit leur valeur estimée à la date de la restitution.",
+    "texteHtml": "<p></p>   Si l'usufruit comprend des choses dont on ne peut faire usage sans les consommer, comme l'argent, les grains, les liqueurs, l'usufruitier a le droit de s'en servir, mais à la charge de rendre, à la fin de l'usufruit, soit des choses de même quantité et qualité soit leur valeur estimée à la date de la restitution.<p></p><p></p>",
+    "num": "587",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -303696000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits de l'usufruitier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150117",
+          "id": "LEGISCTA000006150117",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429324",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150117",
+    "sectionParentId": "LEGISCTA000006150117",
+    "sectionParentTitre": "Section 1 : Des droits de l'usufruitier",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 1 : Des droits de l'usufruitier",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006429324",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000874685",
+        "textTitle": "Loi 60-464 1960-05-17 art. 1 JORF 18 mai 1960",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000874685",
+        "natureText": "LOI",
+        "datePubliTexte": "1960-05-18",
+        "dateSignaTexte": "1960-05-17",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429324",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -303696000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "587"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

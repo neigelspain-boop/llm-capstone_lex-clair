@@ -1,0 +1,222 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000039367291",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les testaments faits dans un lieu avec lequel toute communication est impossible à cause d'une maladie contagieuse peuvent être faits par toute personne atteinte de cette maladie ou située dans des lieux qui en sont infectés, devant le juge du tribunal judiciaire ou devant l'un des officiers municipaux de la commune, en présence de deux témoins.",
+    "texteHtml": "<p>Les testaments faits dans un lieu avec lequel toute communication est impossible à cause d'une maladie contagieuse peuvent être faits par toute personne atteinte de cette maladie ou située dans des lieux qui en sont infectés, devant le juge du tribunal judiciaire ou devant l'un des officiers municipaux de la commune, en présence de deux témoins.</p>",
+    "num": "985",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1577836800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 214745,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Des dispositions testamentaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136338",
+          "id": "LEGISCTA000006136338",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des règles particulières sur la forme de certains testaments.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150548",
+          "id": "LEGISCTA000006150548",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006434293",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150548",
+    "sectionParentId": "LEGISCTA000006150548",
+    "sectionParentTitre": "Section 2 : Des règles particulières sur la forme de certains testaments.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre V : Des dispositions testamentaires. &gt; Section 2 : Des règles particulières sur la forme de certains testaments.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000039367291",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.",
+    "notaHtml": "<p>Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000039110186",
+        "textTitle": "Ordonnance n°2019-964 du 18 septembre 2019 - art. 35 (VD)",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "35",
+        "articleId": "LEGIARTI000039110945",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2019-09-19",
+        "dateSignaTexte": "2019-09-18",
+        "dateDebutCible": "2020-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000039003187",
+        "textTitle": "Décret n°2019-914 du 30 août 2019 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGIARTI000039026332",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2019-914",
+        "datePubli": 1567296000000,
+        "dateDebut": 1567382400000
+      },
+      {
+        "textCid": "JORFTEXT000048449197",
+        "textTitle": "Décret n°2023-1071 du 20 novembre 2023 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGIARTI000048450281",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2023-1071",
+        "datePubli": 1700697600000,
+        "dateDebut": 1700784000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 986 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "986",
+        "articleId": "LEGIARTI000039367604",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006434293",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -1717718400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006434294",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1577836800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000039367291",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1577836800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "985"
+    ],
+    "versionPrecedente": "LEGIARTI000006434294",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

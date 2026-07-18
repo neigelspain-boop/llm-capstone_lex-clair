@@ -1,0 +1,218 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000020628231",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Sous réserve des dispositions des deuxième et troisième alinéas de l'article 910 , les donations faites au profit d'établissements d'utilité publique sont acceptées par les administrateurs de ces établissements, après y avoir été dûment autorisés.",
+    "texteHtml": "<p>Sous réserve des dispositions des deuxième et troisième alinéas de l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006435516&dateTexte=&categorieLien=cid\">910</a>, les donations faites au profit d'établissements d'utilité publique sont acceptées par les administrateurs de ces établissements, après y avoir été dûment autorisés.</p>",
+    "num": "937",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1242259200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136550",
+          "id": "LEGISCTA000006136550",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De la forme des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150545",
+          "id": "LEGISCTA000006150545",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006435656",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150545",
+    "sectionParentId": "LEGISCTA000006150545",
+    "sectionParentTitre": "Section 1 : De la forme des donations entre vifs.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre IV : Des donations entre vifs. &gt; Section 1 : De la forme des donations entre vifs.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000020628231",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n° 2009-526 du 12 mai 2009 - art. 111 (V)",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "111",
+        "articleId": "LEGIARTI000043982925",
+        "natureText": "LOI",
+        "datePubliTexte": "2009-05-13",
+        "dateSignaTexte": "2009-05-12",
+        "dateDebutCible": "2021-08-26"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n° 2009-526 du 12 mai 2009 - art. 111 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "111",
+        "articleId": "LEGIARTI000043982925",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2009-526",
+        "datePubli": 1242172800000,
+        "dateDebut": 1629936000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 910",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "910",
+        "articleId": "LEGIARTI000006435516",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006435656",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1136073600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006435657",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1136073600000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006435658",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020628231",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "937"
+    ],
+    "versionPrecedente": "LEGIARTI000006435658",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

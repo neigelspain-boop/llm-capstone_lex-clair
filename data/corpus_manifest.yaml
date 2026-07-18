@@ -35,6 +35,7 @@ sources:
     parent_text_id: LEGITEXT000006070721
     section_id: LEGISCTA000006118022
     note: "Livre III, Titre II — Des libéralités (893-1099, incl. réserve héréditaire 912-930-5)"
+  
   # ---------- CGI ----------
   cgi_dettes_defunt:
     label: "CGI"

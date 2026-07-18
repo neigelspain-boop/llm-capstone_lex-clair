@@ -10,13 +10,7 @@ uv.lock.tmp
 notebooks/.ipynb_checkpoints/
 
 # Local persisted data volumes if bind-mounted
-data/
-!data/
-!data/corpus_manifest.yaml
-!data/articles.csv
-data/raw/
 *.db
 
 .DS_Store
 .env
-data/private/

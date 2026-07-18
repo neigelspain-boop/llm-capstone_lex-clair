@@ -1,0 +1,332 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006305392",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Pour la liquidation des droits de mutation par décès, les dettes à la charge du défunt sont déduites lorsque leur existence au jour de l'ouverture de la succession est dûment justifiée par tous modes de preuve compatibles avec la procédure écrite.",
+    "texteHtml": "<p></p>   Pour la liquidation des droits de mutation par décès, les dettes à la charge du défunt sont déduites lorsque leur existence au jour de l'ouverture de la succession est dûment justifiée par tous modes de preuve compatibles avec la procédure écrite.<p></p><p></p>",
+    "num": "768",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 299635200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 7158,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Livre premier : Assiette et liquidation de l'impôt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006084232",
+          "id": "LEGISCTA000006084232",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Première Partie : Impôts d'État",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006114494",
+          "id": "LEGISCTA000006114494",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2018-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000006133850",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière, timbre, impôt sur la fortune, immobilière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000036611615",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Chapitre premier : Droits d'enregistrement et taxe de publicité foncière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006147066",
+          "id": "LEGISCTA000006147066",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Section II : Les tarifs et leur application",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006162631",
+          "id": "LEGISCTA000006162631",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "VI : Mutations à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006179724",
+          "id": "LEGISCTA000006179724",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "B : Assiette des droits de mutation à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006191747",
+          "id": "LEGISCTA000006191747",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2 : Dispositions spéciales aux successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006197324",
+          "id": "LEGISCTA000006197324",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "b : Passif déductible",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199105",
+          "id": "LEGISCTA000006199105",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2° : Dettes du défunt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199543",
+          "id": "LEGISCTA000006199543",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 62,
+      "titreTxt": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Code général des impôts",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006069577",
+          "id": "LEGITEXT000006069577",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006305392",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006199543",
+    "sectionParentId": "LEGISCTA000006199543",
+    "sectionParentTitre": "2° : Dettes du défunt",
+    "fullSectionsTitre": "Livre premier : Assiette et liquidation de l'impôt &gt; Première Partie : Impôts d'État &gt; Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre &gt; Chapitre premier : Droits d'enregistrement et taxe de publicité foncière &gt; Section II : Les tarifs et leur application &gt; VI : Mutations à titre gratuit &gt; B : Assiette des droits de mutation à titre gratuit &gt; 2 : Dispositions spéciales aux successions &gt; b : Passif déductible &gt; 2° : Dettes du défunt",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006305392",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006069577",
+        "titre": "Code général des impôts, CGI.",
+        "titreLong": "Code général des impôts",
+        "etat": "VIGUEUR",
+        "dateDebut": -564278400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006069577",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000036127735",
+        "textTitle": "Décision n°2017-676 QPC du 1er décembre 2017 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000036127736",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2017-676 QPC",
+        "datePubli": 1512172800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000038486062",
+        "textTitle": "Décision n°2019-782 QPC du 17 mai 2019 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000038486063",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2019-782 QPC",
+        "datePubli": 1558137600000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "",
+        "textTitle": "Instruction 2000-03-06 7G-5-00",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Instruction 2000-07-07 7G-8-00",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1995-01-06 7G-1-95",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1997-12-04 7G-6-97",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1998-05-07 7S-2-98",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1999-06-11 7S-7-99",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1999-08-09 7S-10-99",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 1999-09-14 7S-11-99",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      },
+      {
+        "textCid": "",
+        "textTitle": "Jurisprudence 2000-02-16 7G-4-00",
+        "linkType": "TXT_ASSOCIE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": ""
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000048488779",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -620870400000,
+        "dateFin": 299635200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006305392",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 299635200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "768"
+    ],
+    "versionPrecedente": "LEGIARTI000048488779",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

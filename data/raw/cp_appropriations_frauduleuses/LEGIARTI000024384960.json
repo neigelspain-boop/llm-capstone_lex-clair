@@ -1,0 +1,304 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000024384960",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le fait, dans une adjudication publique, par dons, promesses, ententes ou tout autre moyen frauduleux, d'écarter un enchérisseur ou de limiter les enchères ou les soumissions, est puni de six mois d'emprisonnement et de 22 500 euros d'amende. Est puni des mêmes peines le fait d'accepter de tels dons ou promesses. Est puni des mêmes peines : 1° Le fait, dans une adjudication publique, d'entraver ou de troubler la liberté des enchères ou des soumissions, par violences, voies de fait ou menaces ; 2° Le fait de procéder ou de participer, après une adjudication publique, à une remise aux enchères sans le concours de l'officier ministériel ou du courtier de marchandises assermenté compétent ou d'un opérateur de ventes volontaires de meubles aux enchères publiques déclaré. La tentative des infractions prévues au présent article est punie des mêmes peines.",
+    "texteHtml": "<p>Le fait, dans une adjudication publique, par dons, promesses, ententes ou tout autre moyen frauduleux, d'écarter un enchérisseur ou de limiter les enchères ou les soumissions, est puni de six mois d'emprisonnement et de 22 500 euros d'amende. Est puni des mêmes peines le fait d'accepter de tels dons ou promesses.</p><p>Est puni des mêmes peines :</p><p>1° Le fait, dans une adjudication publique, d'entraver ou de troubler la liberté des enchères ou des soumissions, par violences, voies de fait ou menaces ;</p><p>2° Le fait de procéder ou de participer, après une adjudication publique, à une remise aux enchères sans le concours de l'officier ministériel ou du courtier de marchandises assermenté compétent ou d'un opérateur de ventes volontaires de meubles aux enchères publiques déclaré.</p><p>La tentative des infractions prévues au présent article est punie des mêmes peines.</p>",
+    "num": "313-6",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1314835200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : De l'escroquerie et des infractions voisines",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149835",
+          "id": "LEGISCTA000006149835",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des infractions voisines de l'escroquerie",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165332",
+          "id": "LEGISCTA000006165332",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418200",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165332",
+    "sectionParentId": "LEGISCTA000006165332",
+    "sectionParentTitre": "Section 2 : Des infractions voisines de l'escroquerie",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre III : De l'escroquerie et des infractions voisines &gt; Section 2 : Des infractions voisines de l'escroquerie",
+    "refInjection": "MD-20260629_204142_921_BDJQUOT",
+    "idTechInjection": "index_DATA_NEXT_ARTICLE_LEGIARTI000024384960",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi n°92-685 du 22 juillet 1992",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000024381671",
+        "textTitle": "LOI n°2011-850\n du 20 juillet 2011 - art. 48",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "48",
+        "articleId": "LEGIARTI000024382738",
+        "natureText": "LOI",
+        "datePubliTexte": "2011-07-21",
+        "dateSignaTexte": "2011-07-20",
+        "dateDebutCible": "2011-09-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000049608213",
+        "textTitle": "Délibération n°2024-028 du 4 avril 2024 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000049608214",
+        "natureText": "DELIBERATION",
+        "parentCid": null,
+        "numTexte": "2024-028",
+        "datePubli": 1716940800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006074220",
+        "textTitle": "Code de l'environnement - art. L435-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L435-2",
+        "articleId": "LEGIARTI000006834146",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 969494400000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. 704 (VT)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "704",
+        "articleId": "LEGIARTI000049531736",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1715472000000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. D8-2-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "D8-2-1",
+        "articleId": "LEGIARTI000050096715",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1723680000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 313-7 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "313-7",
+        "articleId": "LEGIARTI000054334685",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1782518400000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 313-8 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "313-8",
+        "articleId": "LEGIARTI000006418208",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1048032000000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural - art. L235-2 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L235-2",
+        "articleId": "LEGIARTI000006582746",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418200",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 963273600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418201",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 963273600000,
+        "dateFin": 1009843200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418202",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1009843200000,
+        "dateFin": 1314835200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000024384960",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1314835200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "313-6"
+    ],
+    "versionPrecedente": "LEGIARTI000006418202",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

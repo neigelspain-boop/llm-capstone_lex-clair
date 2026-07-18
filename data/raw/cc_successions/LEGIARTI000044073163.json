@@ -1,0 +1,256 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000044073163",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les créanciers du défunt et les légataires de sommes d'argent peuvent demander à être préférés sur l'actif successoral à tout créancier personnel de l'héritier. Réciproquement, les créanciers personnels de l'héritier peuvent demander à être préférés à tout créancier du défunt sur les biens de l'héritier non recueillis au titre de la succession. Le droit de préférence donne lieu à hypothèque légale spéciale prévue au 5° de l'article 2402 et il est sujet à inscription conformément à l'article 2418 .",
+    "texteHtml": "<p>Les créanciers du défunt et les légataires de sommes d'argent peuvent demander à être préférés sur l'actif successoral à tout créancier personnel de l'héritier. </p><p>Réciproquement, les créanciers personnels de l'héritier peuvent demander à être préférés à tout créancier du défunt sur les biens de l'héritier non recueillis au titre de la succession. </p><p>Le droit de préférence donne lieu à hypothèque légale spéciale prévue au 5° de l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006449421&dateTexte=&categorieLien=cid\">2402 </a>et il est sujet à inscription conformément à l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006449578&dateTexte=&categorieLien=cid\">2418</a>.</p>",
+    "num": "878",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1640995200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 386541,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VIII : Du partage.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136288",
+          "id": "LEGISCTA000006136288",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : Du paiement des dettes",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150542",
+          "id": "LEGISCTA000006150542",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : Des autres dettes",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165771",
+          "id": "LEGISCTA000006165771",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433060",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165771",
+    "sectionParentId": "LEGISCTA000006165771",
+    "sectionParentTitre": "Paragraphe 2 : Des autres dettes",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VIII : Du partage. &gt; Section 3 : Du paiement des dettes &gt; Paragraphe 2 : Des autres dettes",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000044073163",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l’article 37 de l’ordonnance n° 2021-1192 du 15 septembre 2021, ces dispositions entreront en vigueur le 1er janvier 2022.",
+    "notaHtml": "<p>Conformément au I de l’article 37 de l’ordonnance n° 2021-1192 du 15 septembre 2021, ces dispositions entreront en vigueur le 1er janvier 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000044044441",
+        "textTitle": "Ordonnance n°2021-1192 du 15 septembre 2021 - art. 34",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "34",
+        "articleId": "LEGIARTI000044045494",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2021-09-16",
+        "dateSignaTexte": "2021-09-15",
+        "dateDebutCible": "2021-09-17"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 2103 (T)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "2103",
+        "articleId": "LEGIARTI000006445854",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 788918400000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 2374 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "2374",
+        "articleId": "LEGIARTI000043977305",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1672531200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 2402 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "2402",
+        "articleId": "LEGIARTI000044072139",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1640995200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 2418",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "2418",
+        "articleId": "LEGIARTI000006449578",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1143158400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433060",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433061",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1640995200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000044073163",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1640995200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "878"
+    ],
+    "versionPrecedente": "LEGIARTI000006433061",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

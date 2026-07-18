@@ -1,0 +1,194 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429783",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Si l'usager absorbe tous les fruits du fonds ou s'il occupe la totalité de la maison, il est assujetti aux frais de culture, aux réparations d'entretien et au paiement des contributions, comme l'usufruitier. S'il ne prend qu'une partie des fruits ou s'il n'occupe qu'une partie de la maison, il contribue au prorata de ce dont il jouit.",
+    "texteHtml": "<p></p>   Si l'usager absorbe tous les fruits du fonds ou s'il occupe la totalité de la maison, il est assujetti aux frais de culture, aux réparations d'entretien et au paiement des contributions, comme l'usufruitier.<p></p><p></p>   S'il ne prend qu'une partie des fruits ou s'il n'occupe qu'une partie de la maison, il contribue au prorata de ce dont il jouit.<p></p>",
+    "num": "635",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -5231606400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 472439,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : De l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136247",
+          "id": "LEGISCTA000006136247",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429783",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006136247",
+    "sectionParentId": "LEGISCTA000006136247",
+    "sectionParentTitre": "Chapitre II : De l'usage et de l'habitation",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre II : De l'usage et de l'habitation",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006429783",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 629 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "629",
+        "articleId": "LEGIARTI000006429729",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 764 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "764",
+        "articleId": "LEGIARTI000006431120",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1025481600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429783",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "635"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000020630809",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les personnes morales déclarées responsables pénalement, dans les conditions prévues par l'article 121-2, des infractions définies aux articles 314-5 , 314-6 et 314-7 encourent, outre l'amende suivant les modalités prévues par l 'article 131-38 , les peines prévues par les 8° et 9° de l'article 131-39 .",
+    "texteHtml": "<p>Les personnes morales déclarées responsables pénalement, dans les conditions prévues par l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417202&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 121-2 (V)\">121-2, </a>des infractions définies aux articles <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418221&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-5 (V)\">314-5</a>,<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418223&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-6 (V)\">314-6 </a>et <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418225&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-7 (V)\">314-7</a> encourent, outre l'amende suivant les modalités prévues par l<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417333&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 131-38 (V)\">'article 131-38</a>, les peines prévues par les 8° et 9° de l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417335&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 131-39 (V)\">131-39</a>.</p><p></p>",
+    "num": "314-13",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1242259200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des détournements",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149836",
+          "id": "LEGISCTA000006149836",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165337",
+          "id": "LEGISCTA000006165337",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418232",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165337",
+    "sectionParentId": "LEGISCTA000006165337",
+    "sectionParentTitre": "Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre IV : Des détournements &gt; Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000020630809",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n°2009-526\n du 12 mai 2009 - art. 124",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "124",
+        "articleId": "LEGIARTI000020606638",
+        "natureText": "LOI",
+        "datePubliTexte": "2009-05-13",
+        "dateSignaTexte": "2009-05-12",
+        "dateDebutCible": "2009-05-14"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 121-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "121-2",
+        "articleId": "LEGIARTI000006417202",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 131-38 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "131-38",
+        "articleId": "LEGIARTI000006417333",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 131-39 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "131-39",
+        "articleId": "LEGIARTI000006417335",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-5",
+        "articleId": "LEGIARTI000006418221",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-6 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-6",
+        "articleId": "LEGIARTI000006418223",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-7 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-7",
+        "articleId": "LEGIARTI000006418225",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418232",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020630809",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "314-13"
+    ],
+    "versionPrecedente": "LEGIARTI000006418232",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

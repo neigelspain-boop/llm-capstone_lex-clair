@@ -1,0 +1,176 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429618",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'usufruit peut aussi cesser par l'abus que l'usufruitier fait de sa jouissance, soit en commettant des dégradations sur le fonds, soit en le laissant dépérir faute d'entretien. Les créanciers de l'usufruitier peuvent intervenir dans les contestations pour la conservation de leurs droits ; ils peuvent offrir la réparation des dégradations commises et des garanties pour l'avenir. Les juges peuvent, suivant la gravité des circonstances, ou prononcer l'extinction absolue de l'usufruit, ou n'ordonner la rentrée du propriétaire dans la jouissance de l'objet qui en est grevé, que sous la charge de payer annuellement à l'usufruitier, ou à ses ayants cause, une somme déterminée, jusqu'à l'instant où l'usufruit aurait dû cesser.",
+    "texteHtml": "<p></p>   L'usufruit peut aussi cesser par l'abus que l'usufruitier fait de sa jouissance, soit en commettant des dégradations sur le fonds, soit en le laissant dépérir faute d'entretien.<p></p><p></p>   Les créanciers de l'usufruitier peuvent intervenir dans les contestations pour la conservation de leurs droits ; ils peuvent offrir la réparation des dégradations commises et des garanties pour l'avenir.<p></p><p></p>   Les juges peuvent, suivant la gravité des circonstances, ou prononcer l'extinction absolue de l'usufruit, ou n'ordonner la rentrée du propriétaire dans la jouissance de l'objet qui en est grevé, que sous la charge de payer annuellement à l'usufruitier, ou à ses ayants cause, une somme déterminée, jusqu'à l'instant où l'usufruit aurait dû cesser.<p></p>",
+    "num": "618",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -5231606400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : Comment l'usufruit prend fin",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150119",
+          "id": "LEGISCTA000006150119",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429618",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150119",
+    "sectionParentId": "LEGISCTA000006150119",
+    "sectionParentTitre": "Section 3 : Comment l'usufruit prend fin",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 3 : Comment l'usufruit prend fin",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006429618",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429618",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "618"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

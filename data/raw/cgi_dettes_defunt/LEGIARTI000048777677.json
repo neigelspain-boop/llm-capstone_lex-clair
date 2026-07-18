@@ -1,0 +1,228 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000048777677",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "I.-Ne sont pas déductibles de l'actif successoral les dettes de restitution exigibles qui portent sur une somme d'argent dont le défunt s'était réservé l'usufruit. Le présent I ne s'applique ni aux dettes de restitution contractées sur le prix de cession d'un bien dont le défunt s'était réservé l'usufruit, sous réserve qu'il soit justifié que ces dettes n'ont pas été contractées dans un objectif principalement fiscal, ni aux usufruits qui résultent de l'application des articles 757 ou 1094-1 du code civil. II.-Par dérogation à l'article 1133 du présent code, la valeur correspondant à la dette de restitution non-déductible de l'actif successoral mentionnée au I du présent article donne lieu à la perception de droits de mutation par décès dus par le nu-propriétaire et calculés d'après le degré de parenté existant entre ce dernier et l'usufruitier, au moment de la succession ou de la constitution de l'usufruit, si les droits dus sont inférieurs. Pour la liquidation des droits dus lors de la succession, en application du présent II, l'article 784 ne s'applique ni sur la valeur des sommes d'argent dont le défunt s'était réservé l'usufruit ni sur celle des biens dont le défunt s'était réservé l'usufruit du prix de cession. Les droits acquittés lors de la constitution de l'usufruit sont imputés sur les droits dus par le nu-propriétaire, sans pouvoir donner lieu à restitution.",
+    "texteHtml": "<p>I.-Ne sont pas déductibles de l'actif successoral les dettes de restitution exigibles qui portent sur une somme d'argent dont le défunt s'était réservé l'usufruit.</p><p> Le présent I ne s'applique ni aux dettes de restitution contractées sur le prix de cession d'un bien dont le défunt s'était réservé l'usufruit, sous réserve qu'il soit justifié que ces dettes n'ont pas été contractées dans un objectif principalement fiscal, ni aux usufruits qui résultent de l'application des articles 757 ou 1094-1 du code civil.</p><p> II.-Par dérogation à l'article 1133 du présent code, la valeur correspondant à la dette de restitution non-déductible de l'actif successoral mentionnée au I du présent article donne lieu à la perception de droits de mutation par décès dus par le nu-propriétaire et calculés d'après le degré de parenté existant entre ce dernier et l'usufruitier, au moment de la succession ou de la constitution de l'usufruit, si les droits dus sont inférieurs.</p><p> Pour la liquidation des droits dus lors de la succession, en application du présent II, l'article 784 ne s'applique ni sur la valeur des sommes d'argent dont le défunt s'était réservé l'usufruit ni sur celle des biens dont le défunt s'était réservé l'usufruit du prix de cession.</p><p> Les droits acquittés lors de la constitution de l'usufruit sont imputés sur les droits dus par le nu-propriétaire, sans pouvoir donner lieu à restitution.</p>",
+    "num": "774 bis",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1703980800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1073759718,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Livre premier : Assiette et liquidation de l'impôt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006084232",
+          "id": "LEGISCTA000006084232",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Première Partie : Impôts d'État",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006114494",
+          "id": "LEGISCTA000006114494",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2018-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000006133850",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière, timbre, impôt sur la fortune, immobilière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000036611615",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Chapitre premier : Droits d'enregistrement et taxe de publicité foncière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006147066",
+          "id": "LEGISCTA000006147066",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Section II : Les tarifs et leur application",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006162631",
+          "id": "LEGISCTA000006162631",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "VI : Mutations à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006179724",
+          "id": "LEGISCTA000006179724",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "B : Assiette des droits de mutation à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006191747",
+          "id": "LEGISCTA000006191747",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2 : Dispositions spéciales aux successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006197324",
+          "id": "LEGISCTA000006197324",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "b : Passif déductible",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199105",
+          "id": "LEGISCTA000006199105",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2° : Dettes du défunt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199543",
+          "id": "LEGISCTA000006199543",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 62,
+      "titreTxt": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Code général des impôts",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006069577",
+          "id": "LEGITEXT000006069577",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000048777674",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006199543",
+    "sectionParentId": "LEGISCTA000006199543",
+    "sectionParentTitre": "2° : Dettes du défunt",
+    "fullSectionsTitre": "Livre premier : Assiette et liquidation de l'impôt &gt; Première Partie : Impôts d'État &gt; Titre IV : Enregistrement, publicité foncière, timbre, impôt sur la fortune, immobilière &gt; Chapitre premier : Droits d'enregistrement et taxe de publicité foncière &gt; Section II : Les tarifs et leur application &gt; VI : Mutations à titre gratuit &gt; B : Assiette des droits de mutation à titre gratuit &gt; 2 : Dispositions spéciales aux successions &gt; b : Passif déductible &gt; 2° : Dettes du défunt",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000048777677",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006069577",
+        "titre": "Code général des impôts, CGI.",
+        "titreLong": "Code général des impôts",
+        "etat": "VIGUEUR",
+        "dateDebut": -564278400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006069577",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au II de l’article 26 de la loi n° 2023-1322 du 29 décembre 2023, ces dispositions s'appliquent aux successions ouvertes à compter de la promulgation de ladite loi, à savoir du 29 décembre 2023.",
+    "notaHtml": "<p>Conformément au II de l’article 26 de la loi n° 2023-1322 du 29 décembre 2023, ces dispositions s'appliquent aux successions ouvertes à compter de la promulgation de ladite loi, à savoir du 29 décembre 2023.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000048727345",
+        "textTitle": "LOI n°2023-1322 du 29 décembre 2023 - art. 26 (V)",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "26",
+        "articleId": "LEGIARTI000048769497",
+        "natureText": "LOI",
+        "datePubliTexte": "2023-12-30",
+        "dateSignaTexte": "2023-12-29",
+        "dateDebutCible": "2023-12-31"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000048777677",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1703980800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "774 bis",
+      "774"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

@@ -1,6 +1,4 @@
-"""Writes queries and user feedback to Postgres. Grafana reads from the
-same tables to build the monitoring dashboard (see monitoring/grafana/).
-"""
+"""Write user queries and feedback into Postgres for dashboard monitoring."""
 import uuid
 
 import psycopg
@@ -25,15 +23,18 @@ CREATE TABLE IF NOT EXISTS feedback (
 
 
 def _connect():
+    """Open a new database connection using configured Postgres DSN."""
     return psycopg.connect(settings.postgres_dsn)
 
 
 def init_schema() -> None:
+    """Create monitoring tables if they do not already exist."""
     with _connect() as conn:
         conn.execute(SCHEMA)
 
 
 def record_query(question: str, answer: str) -> str:
+    """Store a user query and its answer, returning the generated query id."""
     query_id = str(uuid.uuid4())
     with _connect() as conn:
         conn.execute(
@@ -44,6 +45,7 @@ def record_query(question: str, answer: str) -> str:
 
 
 def record_feedback(query_id: str, is_positive: bool) -> None:
+    """Store positive/negative feedback linked to a previously recorded query."""
     with _connect() as conn:
         conn.execute(
             "INSERT INTO feedback (query_id, is_positive) VALUES (%s, %s)",

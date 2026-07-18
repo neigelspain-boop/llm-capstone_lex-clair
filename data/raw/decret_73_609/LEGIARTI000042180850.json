@@ -1,0 +1,206 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000042180850",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les demandes de dispense et d'admission prévues aux articles 4, 5, 7 et 7-1 sont adressées à l'Institut national des formations notariales, par téléprocédure. L'Institut national des formations notariales en informe le bureau du Conseil supérieur du notariat qui peut formuler des observations.",
+    "texteHtml": "<p>Les demandes de dispense et d'admission prévues aux articles 4, 5, 7 et 7-1 sont adressées à l'Institut national des formations notariales, par téléprocédure. L'Institut national des formations notariales en informe le bureau du Conseil supérieur du notariat qui peut formuler des observations.</p>",
+    "num": "7-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1609459200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1074343109,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132462",
+          "id": "LEGISCTA000006132462",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000032842217",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132462",
+    "sectionParentId": "LEGISCTA000006132462",
+    "sectionParentTitre": "Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre I : Conditions générales d'aptitude aux fonctions de notaire.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000042180850",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l'article 17 du décret n° 2020-931 du 29 juillet 2020, ces dispositions entrent en vigueur le 1er janvier 2021. Elles s'appliquent aux déclarations déposées à compter de cette date.",
+    "notaHtml": "<p>Conformément à l'article 17 du décret n° 2020-931 du 29 juillet 2020, ces dispositions entrent en vigueur le 1er janvier 2021. Elles s'appliquent aux déclarations déposées à compter de cette date.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000042170186",
+        "textTitle": "Décret n°2020-931 du 29 juillet 2020 - art. 8",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000042173446",
+        "natureText": "DECRET",
+        "datePubliTexte": "2020-07-30",
+        "dateSignaTexte": "2020-07-29",
+        "dateDebutCible": "2021-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000033369823",
+        "textTitle": "Arrêté du 10 novembre 2016 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000033372910",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1478995200000,
+        "dateDebut": 1479081600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000032842380",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1467331200000,
+        "dateFin": 1609459200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000042180850",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1609459200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "7-2"
+    ],
+    "versionPrecedente": "LEGIARTI000032842380",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

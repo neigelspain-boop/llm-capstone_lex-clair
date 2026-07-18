@@ -1,0 +1,221 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000043972470",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les libéralités consenties directement ou indirectement à des associations cultuelles au sens des articles 18 et 19 de la loi du 9 décembre 1905 concernant la séparation des Eglises et de l'Etat, à des congrégations et, dans les départements du Bas-Rhin, du Haut-Rhin et de la Moselle, à des établissements publics du culte et à des associations inscrites de droit local à objet cultuel par des Etats étrangers, des personnes morales étrangères ou des personnes physiques non résidentes sont acceptées librement par ces associations et ces établissements, sauf opposition formée par l'autorité administrative compétente, après mise en œuvre d'une procédure contradictoire, pour le motif mentionné au III de l'article 19-3 de la loi du 9 décembre 1905 précitée . L'opposition à la libéralité, formée dans des conditions fixées par décret en Conseil d'Etat, prive celle-ci d'effet.",
+    "texteHtml": "<p>Les libéralités consenties directement ou indirectement à des associations cultuelles au sens des articles <a href=\"/affichTexteArticle.do?cidTexte=JORFTEXT000000508749&idArticle=LEGIARTI000006340345&dateTexte=&categorieLien=cid\" title=\"Loi du 9 décembre 1905 - art. 18 (V)\">18</a> et <a href=\"/affichTexteArticle.do?cidTexte=JORFTEXT000000508749&idArticle=LEGIARTI000006340346&dateTexte=&categorieLien=cid\" title=\"Loi du 9 décembre 1905 - art. 19 (M)\">19</a> de la loi du 9 décembre 1905 concernant la séparation des Eglises et de l'Etat, à des congrégations et, dans les départements du Bas-Rhin, du Haut-Rhin et de la Moselle, à des établissements publics du culte et à des associations inscrites de droit local à objet cultuel par des Etats étrangers, des personnes morales étrangères ou des personnes physiques non résidentes sont acceptées librement par ces associations et ces établissements, sauf opposition formée par l'autorité administrative compétente, après mise en œuvre d'une procédure contradictoire, pour le motif mentionné au <a href=\"/affichTexteArticle.do?cidTexte=JORFTEXT000000508749&idArticle=LEGIARTI000043972458&dateTexte=&categorieLien=cid\" title=\"Loi du 9 décembre 1905 - art. 19-3 (V)\">III de l'article 19-3 de la loi du 9 décembre 1905 précitée</a>.<br/><br/>\nL'opposition à la libéralité, formée dans des conditions fixées par décret en Conseil d'Etat, prive celle-ci d'effet.</p>",
+    "num": "910-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1629936000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 450964,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : De la capacité de disposer ou de recevoir par donation entre vifs ou par testament.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136540",
+          "id": "LEGISCTA000006136540",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000043972470",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006136540",
+    "sectionParentId": "LEGISCTA000006136540",
+    "sectionParentTitre": "Chapitre II : De la capacité de disposer ou de recevoir par donation entre vifs ou par testament.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre II : De la capacité de disposer ou de recevoir par donation entre vifs ou par testament.",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000043972470",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000043964778",
+        "textTitle": "LOI n°2021-1109 du 24 août 2021 - art. 78",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "78",
+        "articleId": "LEGIARTI000043968841",
+        "natureText": "LOI",
+        "datePubliTexte": "2021-08-25",
+        "dateSignaTexte": "2021-08-24",
+        "dateDebutCible": "2021-08-26"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000508749",
+        "textTitle": "Loi du 9 décembre 1905 - art. 18 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "18",
+        "articleId": "LEGIARTI000006340345",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -2021500800000,
+        "dateDebut": -2021500800000
+      },
+      {
+        "textCid": "JORFTEXT000000508749",
+        "textTitle": "Loi du 9 décembre 1905 - art. 19 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "19",
+        "articleId": "LEGIARTI000006340346",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -2021500800000,
+        "dateDebut": -851990400000
+      },
+      {
+        "textCid": "JORFTEXT000000508749",
+        "textTitle": "Loi du 9 décembre 1905 - art. 19-3 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "19-3",
+        "articleId": "LEGIARTI000043972458",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -2021500800000,
+        "dateDebut": 1629936000000
+      },
+      {
+        "textCid": "JORFTEXT000045640484",
+        "textTitle": "Décret n°2022-619 du 22 avril 2022 - art. 8 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000045643557",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2022-619",
+        "datePubli": 1650758400000,
+        "dateDebut": 1650844800000
+      },
+      {
+        "textCid": "JORFTEXT000046081990",
+        "textTitle": "Décision n°2022-1004 QPC du 22 juillet 2022 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000046081991",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2022-1004 QPC",
+        "datePubli": 1658534400000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000043972470",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1629936000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "910-1"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000039367468",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Sauf en cas de démembrement de la propriété du bien ou si l'un des indivisaires se trouve dans l'un des cas prévus à l'article 836 , l'aliénation d'un bien indivis peut être autorisée par le tribunal judiciaire, à la demande de l'un ou des indivisaires titulaires d'au moins deux tiers des droits indivis, suivant les conditions et modalités définies aux alinéas suivants. Le ou les indivisaires titulaires d'au moins deux tiers des droits indivis expriment devant un notaire, à cette majorité, leur intention de procéder à l'aliénation du bien indivis. Dans le délai d'un mois suivant son recueil, le notaire fait signifier cette intention aux autres indivisaires. Si l'un ou plusieurs des indivisaires s'opposent à l'aliénation du bien indivis ou ne se manifestent pas dans un délai de trois mois à compter de la signification, le notaire le constate par procès-verbal. Dans ce cas, le tribunal judiciaire peut autoriser l'aliénation du bien indivis si celle-ci ne porte pas une atteinte excessive aux droits des autres indivisaires. Cette aliénation s'effectue par licitation. Les sommes qui en sont retirées ne peuvent faire l'objet d'un remploi sauf pour payer les dettes et charges de l'indivision. L'aliénation effectuée dans les conditions fixées par l'autorisation du tribunal judiciaire est opposable à l'indivisaire dont le consentement a fait défaut, sauf si l'intention d'aliéner le bien du ou des indivisaires titulaires d'au moins deux tiers des droits indivis ne lui avait pas été signifiée selon les modalités prévues au troisième alinéa.",
+    "texteHtml": "<p>Sauf en cas de démembrement de la propriété du bien ou si l'un des indivisaires se trouve dans l'un des cas prévus à <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006432689&dateTexte=&categorieLien=cid\">l'article 836</a>, l'aliénation d'un bien indivis peut être autorisée par le tribunal judiciaire, à la demande de l'un ou des indivisaires titulaires d'au moins deux tiers des droits indivis, suivant les conditions et modalités définies aux alinéas suivants.</p><p>Le ou les indivisaires titulaires d'au moins deux tiers des droits indivis expriment devant un notaire, à cette majorité, leur intention de procéder à l'aliénation du bien indivis.</p><p>Dans le délai d'un mois suivant son recueil, le notaire fait signifier cette intention aux autres indivisaires.</p><p>Si l'un ou plusieurs des indivisaires s'opposent à l'aliénation du bien indivis ou ne se manifestent pas dans un délai de trois mois à compter de la signification, le notaire le constate par procès-verbal.</p><p>Dans ce cas, le tribunal judiciaire peut autoriser l'aliénation du bien indivis si celle-ci ne porte pas une atteinte excessive aux droits des autres indivisaires.</p><p>Cette aliénation s'effectue par licitation. Les sommes qui en sont retirées ne peuvent faire l'objet d'un remploi sauf pour payer les dettes et charges de l'indivision.</p><p>L'aliénation effectuée dans les conditions fixées par l'autorisation du tribunal judiciaire est opposable à l'indivisaire dont le consentement a fait défaut, sauf si l'intention d'aliéner le bien du ou des indivisaires titulaires d'au moins deux tiers des droits indivis ne lui avait pas été signifiée selon les modalités prévues au troisième alinéa.</p>",
+    "num": "815-5-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1577836800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 107372,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VII : Du régime légal de l'indivision.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136538",
+          "id": "LEGISCTA000006136538",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des actes relatifs aux biens indivis.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150538",
+          "id": "LEGISCTA000006150538",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : Des actes autorisés en justice.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165768",
+          "id": "LEGISCTA000006165768",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000020607404",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165768",
+    "sectionParentId": "LEGISCTA000006165768",
+    "sectionParentTitre": "Paragraphe 2 : Des actes autorisés en justice.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VII : Du régime légal de l'indivision. &gt; Section 1 : Des actes relatifs aux biens indivis. &gt; Paragraphe 2 : Des actes autorisés en justice.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000039367468",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.",
+    "notaHtml": "<p>Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000039110186",
+        "textTitle": "Ordonnance n°2019-964 du 18 septembre 2019 - art. 35 (VD)",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "35",
+        "articleId": "LEGIARTI000039110945",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2019-09-19",
+        "dateSignaTexte": "2019-09-18",
+        "dateDebutCible": "2020-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000029573022",
+        "textTitle": "LOI n° 2014-1170 du 13 octobre 2014 - art. 85",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "85",
+        "articleId": "LEGIARTI000029575259",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2014-1170",
+        "datePubli": 1413244800000,
+        "dateDebut": 1413331200000
+      },
+      {
+        "textCid": "JORFTEXT000032325397",
+        "textTitle": "Ordonnance n°2016-391 du 31 mars 2016 - art. 3, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "JORFARTI000032325422",
+        "natureText": "ORDONNANCE",
+        "parentCid": null,
+        "numTexte": "2016-391",
+        "datePubli": 1459468800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000039295482",
+        "textTitle": "Rapport - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000039295523",
+        "natureText": "RAPPORT",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1572480000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 836",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "836",
+        "articleId": "LEGIARTI000006432689",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural et de la pêche maritime - art. L181-14-2 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L181-14-2",
+        "articleId": "LEGIARTI000029587898",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1413331200000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural et de la pêche maritime - art. L181-30 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L181-30",
+        "articleId": "LEGIARTI000038791126",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural et de la pêche maritime - art. L183-25 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L183-25",
+        "articleId": "LEGIARTI000038791116",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000020614550",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 1577836800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000039367468",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1577836800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "815-5-1"
+    ],
+    "versionPrecedente": "LEGIARTI000020614550",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

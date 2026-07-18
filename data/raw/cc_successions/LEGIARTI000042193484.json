@@ -1,0 +1,234 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000042193484",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Peuvent être déclarés indignes de succéder : 1° Celui qui est condamné, comme auteur ou complice, à une peine correctionnelle pour avoir volontairement donné ou tenté de donner la mort au défunt ; 2° Celui qui est condamné, comme auteur ou complice, à une peine correctionnelle pour avoir volontairement commis des violences ayant entraîné la mort du défunt sans intention de la donner ; 2° bis Celui qui est condamné, comme auteur ou complice, à une peine criminelle ou correctionnelle pour avoir commis des tortures et actes de barbarie, des violences volontaires, un viol ou une agression sexuelle envers le défunt ; 3° Celui qui est condamné pour témoignage mensonger porté contre le défunt dans une procédure criminelle ; 4° Celui qui est condamné pour s'être volontairement abstenu d'empêcher soit un crime soit un délit contre l'intégrité corporelle du défunt d'où il est résulté la mort, alors qu'il pouvait le faire sans risque pour lui ou pour les tiers ; 5° Celui qui est condamné pour dénonciation calomnieuse contre le défunt lorsque, pour les faits dénoncés, une peine criminelle était encourue. Peuvent également être déclarés indignes de succéder ceux qui ont commis les actes mentionnés aux 1° et 2° et à l'égard desquels, en raison de leur décès, l'action publique n'a pas pu être exercée ou s'est éteinte.",
+    "texteHtml": "<p>Peuvent être déclarés indignes de succéder :</p><p>1° Celui qui est condamné, comme auteur ou complice, à une peine correctionnelle pour avoir volontairement donné ou tenté de donner la mort au défunt ;</p><p>2° Celui qui est condamné, comme auteur ou complice, à une peine correctionnelle pour avoir volontairement commis des violences ayant entraîné la mort du défunt sans intention de la donner ;</p><p>2° bis Celui qui est condamné, comme auteur ou complice, à une peine criminelle ou correctionnelle pour avoir commis des tortures et actes de barbarie, des violences volontaires, un viol ou une agression sexuelle envers le défunt ;</p><p>3° Celui qui est condamné pour témoignage mensonger porté contre le défunt dans une procédure criminelle ;</p><p>4° Celui qui est condamné pour s'être volontairement abstenu d'empêcher soit un crime soit un délit contre l'intégrité corporelle du défunt d'où il est résulté la mort, alors qu'il pouvait le faire sans risque pour lui ou pour les tiers ;</p><p>5° Celui qui est condamné pour dénonciation calomnieuse contre le défunt lorsque, pour les faits dénoncés, une peine criminelle était encourue.</p><p>Peuvent également être déclarés indignes de succéder ceux qui ont commis les actes mentionnés aux 1° et 2° et à l'égard desquels, en raison de leur décès, l'action publique n'a pas pu être exercée ou s'est éteinte.</p>",
+    "num": "727",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1596240000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : Des qualités requises pour succéder - De la preuve de la qualité d'héritier.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136267",
+          "id": "LEGISCTA000006136267",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des qualités requises pour succéder.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165513",
+          "id": "LEGISCTA000006165513",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006430785",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165513",
+    "sectionParentId": "LEGISCTA000006165513",
+    "sectionParentTitre": "Section 1 : Des qualités requises pour succéder.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre II : Des qualités requises pour succéder - De la preuve de la qualité d'héritier. &gt; Section 1 : Des qualités requises pour succéder.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000042193484",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000042176652",
+        "textTitle": "LOI n°2020-936 du 30 juillet 2020 - art. 8",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000042181440",
+        "natureText": "LOI",
+        "datePubliTexte": "2020-07-31",
+        "dateSignaTexte": "2020-07-30",
+        "dateDebutCible": "2020-08-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000582185",
+        "textTitle": "Loi n°2001-1135 du 3 décembre 2001 - art. 25 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "25",
+        "articleId": "LEGIARTI000006284690",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2001-1135",
+        "datePubli": 1007424000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 727-1 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "727-1",
+        "articleId": "LEGIARTI000039367188",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1577836800000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 728 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "728",
+        "articleId": "LEGIARTI000006430795",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1025481600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006430785",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1025481600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006430786",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 1596240000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000042193484",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1596240000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "727"
+    ],
+    "versionPrecedente": "LEGIARTI000006430786",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

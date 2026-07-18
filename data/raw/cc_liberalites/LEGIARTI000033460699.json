@@ -1,0 +1,277 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000033460699",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Lorsque le testament a revêtu la forme authentique, l'envoi en possession n'est pas requis pour l'exécution des pouvoirs mentionnés aux articles 1030 et 1030-1 .",
+    "texteHtml": "<p>Lorsque le testament a revêtu la forme authentique, l'envoi en possession n'est pas requis pour l'exécution des pouvoirs mentionnés aux articles <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006434763&dateTexte=&categorieLien=cid\">1030 </a>et <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006436017&dateTexte=&categorieLien=cid\">1030-1</a>.</p>",
+    "num": "1030-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1509494400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Des dispositions testamentaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136338",
+          "id": "LEGISCTA000006136338",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 7 : Des exécuteurs testamentaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150233",
+          "id": "LEGISCTA000006150233",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006436026",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150233",
+    "sectionParentId": "LEGISCTA000006150233",
+    "sectionParentTitre": "Section 7 : Des exécuteurs testamentaires.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre V : Des dispositions testamentaires. &gt; Section 7 : Des exécuteurs testamentaires.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000033460699",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Loi n° 2016-1547 du 18 novembre 2016, article 114 III : Ces dispositions sont applicables aux successions ouvertes à partir du premier jour du douzième mois suivant la promulgation de la présente loi. Les instances introduites antérieurement sont régies par les dispositions applicables avant cette date.",
+    "notaHtml": "<p>Loi n° 2016-1547 du 18 novembre 2016, article 114 III : Ces dispositions sont applicables aux successions ouvertes à partir du premier jour du douzième mois suivant la promulgation de la présente loi. Les instances introduites antérieurement sont régies par les dispositions applicables avant cette date.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000033418805",
+        "textTitle": "LOI n°2016-1547 du 18 novembre 2016 - art. 44",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "44",
+        "articleId": "LEGIARTI000033423832",
+        "natureText": "LOI",
+        "datePubliTexte": "2016-11-19",
+        "dateSignaTexte": "2016-11-18",
+        "dateDebutCible": "2016-11-20"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000028410209",
+        "textTitle": "Arrêté du 20 décembre 2013 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000028410216",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1388448000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000036619470",
+        "textTitle": "Arrêté du 31 janvier 2018 - art. (VT)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGIARTI000042168415",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1519084800000,
+        "dateDebut": 1596067200000
+      },
+      {
+        "textCid": "JORFTEXT000043502610",
+        "textTitle": "Arrêté du 5 mai 2021 - art. Annexe (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "Annexe",
+        "articleId": "LEGIARTI000052847696",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1621123200000,
+        "dateDebut": 1861920000000
+      },
+      {
+        "textCid": "JORFTEXT000043519221",
+        "textTitle": "Arrêté du 5 mai 2021 - art. (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGIARTI000051916174",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1621555200000,
+        "dateDebut": 1752883200000
+      },
+      {
+        "textCid": "JORFTEXT000045571638",
+        "textTitle": "Arrêté du 10 février 2022 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGIARTI000045578047",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1649894400000,
+        "dateDebut": 1649980800000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1030",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "1030",
+        "articleId": "LEGIARTI000006434763",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1030-1",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "1030-1",
+        "articleId": "LEGIARTI000006436017",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006436026",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1509494400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000033460699",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1509494400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "1030-2"
+    ],
+    "versionPrecedente": "LEGIARTI000006436026",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

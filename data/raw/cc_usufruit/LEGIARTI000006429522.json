@@ -1,0 +1,203 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429522",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'usufruitier est tenu, pendant sa jouissance, de toutes les charges annuelles de l'héritage, telles que les contributions et autres qui dans l'usage sont censées charges des fruits.",
+    "texteHtml": "<p></p>   L'usufruitier est tenu, pendant sa jouissance, de toutes les charges annuelles de l'héritage, telles que les contributions et autres qui dans l'usage sont censées charges des fruits.<p></p><p></p>",
+    "num": "608",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -5231606400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 386541,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des obligations de l'usufruitier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150118",
+          "id": "LEGISCTA000006150118",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429522",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150118",
+    "sectionParentId": "LEGISCTA000006150118",
+    "sectionParentTitre": "Section 2 : Des obligations de l'usufruitier",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 2 : Des obligations de l'usufruitier",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006429522",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000538149",
+        "textTitle": "Décret n°91-1158 du 8 novembre 1991 - art. ANNEXE (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "ANNEXE",
+        "articleId": "LEGIARTI000006424368",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "91-1158",
+        "datePubli": 689731200000,
+        "dateDebut": 689731200000
+      },
+      {
+        "textCid": "JORFTEXT000000387854",
+        "textTitle": "Décret n°98-222 du 20 mars 1998 - art. ANNEXE (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "ANNEXE",
+        "articleId": "LEGIARTI000042983059",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "98-222",
+        "datePubli": 891043200000,
+        "dateDebut": 1609545600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429522",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "608"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

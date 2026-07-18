@@ -1,0 +1,196 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000042780074",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les peines prévues à l'article 314-1 sont portées à sept ans d'emprisonnement et à 750 000 € d'amende lorsque l'infraction est commise en bande organisée. La tentative des infractions prévues à la présente section est punie des mêmes peines.",
+    "texteHtml": "<p>Les peines prévues à l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418212&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-1 (V)\">314-1</a> sont portées à sept ans d'emprisonnement et à 750 000 € d'amende lorsque l'infraction est commise en bande organisée. <br/><br/>La tentative des infractions prévues à la présente section est punie des mêmes peines.</p>",
+    "num": "314-1-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1609027200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 128847,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des détournements",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149836",
+          "id": "LEGISCTA000006149836",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De l'abus de confiance",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165334",
+          "id": "LEGISCTA000006165334",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000039112180",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165334",
+    "sectionParentId": "LEGISCTA000006165334",
+    "sectionParentTitre": "Section 1 : De l'abus de confiance",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre IV : Des détournements &gt; Section 1 : De l'abus de confiance",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000042780074",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000042737977",
+        "textTitle": "LOI n°2020-1672 du 24 décembre 2020 - art. 30 (V)",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "30",
+        "articleId": "LEGIARTI000042743843",
+        "natureText": "LOI",
+        "datePubliTexte": "2020-12-26",
+        "dateSignaTexte": "2020-12-24",
+        "dateDebutCible": "2020-12-27"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-1",
+        "articleId": "LEGIARTI000006418212",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000039112195",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1568937600000,
+        "dateFin": 1609027200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000042780074",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1609027200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "314-1-1"
+    ],
+    "versionPrecedente": "LEGIARTI000039112195",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

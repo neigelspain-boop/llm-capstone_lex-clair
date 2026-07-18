@@ -1,0 +1,173 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000051541660",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Lorsqu'une personne est reconnue responsable d'un manquement aux obligations légales ou contractuelles afférentes à son activité professionnelle, le juge peut, à la demande du ministère public, devant les juridictions de l'ordre judiciaire, ou du Gouvernement, devant les juridictions de l'ordre administratif, et par une décision spécialement motivée, la condamner au paiement d'une sanction civile, dont le produit est affecté à un fonds consacré au financement des actions de groupe. La condamnation au paiement de la sanction civile ne peut intervenir que si les conditions suivantes sont remplies : 1° L'auteur du dommage a délibérément commis une faute en vue d'obtenir un gain ou une économie indu ; 2° Le manquement constaté a causé un ou plusieurs dommages à plusieurs personnes physiques ou morales placées dans une situation similaire. Le montant de la sanction est proportionné à la gravité de la faute commise et au profit que l'auteur de la faute en a retiré. Si celui-ci est une personne physique, ce montant ne peut être supérieur au double du profit réalisé. Si l'auteur est une personne morale, ce montant ne peut être supérieur au quintuple du montant du profit réalisé. Lorsqu'une sanction civile est susceptible d'être cumulée avec une amende administrative ou pénale infligée en raison des mêmes faits à l'auteur du manquement, le montant global des amendes prononcées ne dépasse pas le maximum légal le plus élevé. Le risque d'une condamnation à la sanction civile n'est pas assurable.",
+    "texteHtml": "<p align=\"left\">Lorsqu'une personne est reconnue responsable d'un manquement aux obligations légales ou contractuelles afférentes à son activité professionnelle, le juge peut, à la demande du ministère public, devant les juridictions de l'ordre judiciaire, ou du Gouvernement, devant les juridictions de l'ordre administratif, et par une décision spécialement motivée, la condamner au paiement d'une sanction civile, dont le produit est affecté à un fonds consacré au financement des actions de groupe.</p><p align=\"left\">La condamnation au paiement de la sanction civile ne peut intervenir que si les conditions suivantes sont remplies :</p><p align=\"left\">1° L'auteur du dommage a délibérément commis une faute en vue d'obtenir un gain ou une économie indu ;</p><p align=\"left\">2° Le manquement constaté a causé un ou plusieurs dommages à plusieurs personnes physiques ou morales placées dans une situation similaire.</p><p align=\"left\">Le montant de la sanction est proportionné à la gravité de la faute commise et au profit que l'auteur de la faute en a retiré. Si celui-ci est une personne physique, ce montant ne peut être supérieur au double du profit réalisé. Si l'auteur est une personne morale, ce montant ne peut être supérieur au quintuple du montant du profit réalisé.</p><p align=\"left\">Lorsqu'une sanction civile est susceptible d'être cumulée avec une amende administrative ou pénale infligée en raison des mêmes faits à l'auteur du manquement, le montant global des amendes prononcées ne dépasse pas le maximum légal le plus élevé.</p><p align=\"left\">Le risque d'une condamnation à la sanction civile n'est pas assurable.</p>",
+    "num": "1254",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1746230400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1073741823,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2016-10-01",
+          "titre": "Titre III : Des contrats ou des obligations conventionnelles en général",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118032",
+          "id": "LEGISCTA000006118032",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2016-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre III : Des sources d'obligations",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118032",
+          "id": "LEGISCTA000032040794",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2016-10-01",
+          "fin": "2999-01-01",
+          "titre": "Sous-titre II : La responsabilité extracontractuelle   ",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000032021486",
+          "id": "LEGISCTA000032021486",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2025-05-03",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Sanction civile en cas de faute dolosive ayant causé des dommages sériels",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000051541658",
+          "id": "LEGISCTA000051541658",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000051541660",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000051541658",
+    "sectionParentId": "LEGISCTA000051541658",
+    "sectionParentTitre": "Chapitre V : Sanction civile en cas de faute dolosive ayant causé des dommages sériels",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre III : Des sources d'obligations &gt; Sous-titre II : La responsabilité extracontractuelle    &gt; Chapitre V : Sanction civile en cas de faute dolosive ayant causé des dommages sériels",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000051541660",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000051538879",
+        "textTitle": "LOI n°2025-391 du 30 avril 2025 - art. 16 (V)",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "16",
+        "articleId": "LEGIARTI000051540827",
+        "natureText": "LOI",
+        "datePubliTexte": "2025-05-02",
+        "dateSignaTexte": "2025-04-30",
+        "dateDebutCible": "2025-05-03"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000051541660",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1746230400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "1254"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

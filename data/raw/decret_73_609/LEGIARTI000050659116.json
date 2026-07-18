@@ -1,0 +1,224 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000050659116",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Avant d'entrer en fonctions, les notaires déposent leur signature et leur paraphe au secrétariat-greffe de la cour d'appel du siège de l'office.",
+    "texteHtml": "<p>Avant d'entrer en fonctions, les notaires déposent leur signature et leur paraphe au secrétariat-greffe de la cour d'appel du siège de l'office.</p>",
+    "num": "58",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1732406400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Nomination aux offices de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132464",
+          "id": "LEGISCTA000006132464",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Section III : Entrée en fonctions.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145559",
+          "id": "LEGISCTA000006145559",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920758",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006145559",
+    "sectionParentId": "LEGISCTA000006145559",
+    "sectionParentTitre": "Section III : Entrée en fonctions.",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre III : Nomination aux offices de notaire. &gt; Section III : Entrée en fonctions.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000050659116",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000050654129",
+        "textTitle": "Décret n°2024-1049 du 21 novembre 2024 - art. 12",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "12",
+        "articleId": "LEGIARTI000050656459",
+        "natureText": "DECRET",
+        "datePubliTexte": "2024-11-23",
+        "dateSignaTexte": "2024-11-21",
+        "dateDebutCible": "2024-11-24"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000702622",
+        "textTitle": "Décret n°67-868 du 2 octobre 1967 - art. 97 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "97",
+        "articleId": "LEGIARTI000006919922",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "67-868",
+        "datePubli": -70675200000,
+        "dateDebut": -70675200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920758",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1577836800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000039345493",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1577836800000,
+        "dateFin": 1732406400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000050659116",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1732406400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "58"
+    ],
+    "versionPrecedente": "LEGIARTI000039345493",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

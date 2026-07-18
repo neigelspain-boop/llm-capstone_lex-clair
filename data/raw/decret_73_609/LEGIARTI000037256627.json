@@ -1,0 +1,192 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000037256627",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'Institut national des formations notariales peut admettre à suivre certains de ses enseignements à distance les membres et le personnel des autres professions judiciaires et juridiques ainsi que les membres et le personnel d'autres professions dont les activités sont en rapport avec celles de la profession notariale.",
+    "texteHtml": "<p>L'Institut national des formations notariales peut admettre à suivre certains de ses enseignements à distance les membres et le personnel des autres professions judiciaires et juridiques ainsi que les membres et le personnel d'autres professions dont les activités sont en rapport avec celles de la profession notariale.</p>",
+    "num": "91",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1538352000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 472439,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2018-10-01",
+          "titre": "Titre III : L'enseignement par correspondance.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113043",
+          "id": "LEGISCTA000006113043",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre III : L'enseignement à distance",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113043",
+          "id": "LEGISCTA000037256620",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920867",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006113043",
+    "sectionParentId": "LEGISCTA000037256620",
+    "sectionParentTitre": "Titre III : L'enseignement à distance",
+    "fullSectionsTitre": "Titre III : L'enseignement à distance",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000037256627",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 42",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "42",
+        "articleId": "LEGIARTI000037253073",
+        "natureText": "DECRET",
+        "datePubliTexte": "2018-07-27",
+        "dateSignaTexte": "2018-07-25",
+        "dateDebutCible": "2018-10-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920867",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256627",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "91"
+    ],
+    "versionPrecedente": "LEGIARTI000006920867",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

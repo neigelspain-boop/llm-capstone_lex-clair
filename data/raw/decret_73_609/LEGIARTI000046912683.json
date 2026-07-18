@@ -1,0 +1,246 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046912683",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Dans le mois de leur nomination, les notaires prêtent serment, devant la cour d'appel, en ces termes : \" Je jure de loyalement remplir mes fonctions avec exactitude et probité et d'observer en tout les devoirs qu'elles m'imposent \". Ils ne peuvent exercer leurs fonctions qu'à compter du jour de leur prestation de serment. Le conseil régional ou interrégional des notaires du ressort informe le Conseil supérieur du notariat de cette prestation de serment.",
+    "texteHtml": "<p>Dans le mois de leur nomination, les notaires prêtent serment, devant la cour d'appel, en ces termes :</p><p>\" Je jure de loyalement remplir mes fonctions avec exactitude et probité et d'observer en tout les devoirs qu'elles m'imposent \".</p><p>Ils ne peuvent exercer leurs fonctions qu'à compter du jour de leur prestation de serment.</p><p>Le conseil régional ou interrégional des notaires du ressort informe le Conseil supérieur du notariat de cette prestation de serment.</p>",
+    "num": "57",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1672531200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Nomination aux offices de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132464",
+          "id": "LEGISCTA000006132464",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Section III : Entrée en fonctions.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145559",
+          "id": "LEGISCTA000006145559",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920757",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006145559",
+    "sectionParentId": "LEGISCTA000006145559",
+    "sectionParentTitre": "Section III : Entrée en fonctions.",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre III : Nomination aux offices de notaire. &gt; Section III : Entrée en fonctions.",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000046912683",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l’article 12 du décret n° 2022-1743 du 29 décembre 2022, ces dispositions entrent en vigueur le 1er janvier 2023. Se reporter aux modalités d’application prévues audit article 12.",
+    "notaHtml": "<p>Conformément au I de l’article 12 du décret n° 2022-1743 du 29 décembre 2022, ces dispositions entrent en vigueur le 1er janvier 2023. Se reporter aux modalités d’application prévues audit article 12.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046846725",
+        "textTitle": "Décret n°2022-1743 du 29 décembre 2022 - art. 9",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000046859029",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-12-31",
+        "dateSignaTexte": "2022-12-29",
+        "dateDebutCible": "2023-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000725216",
+        "textTitle": "Décret n°93-82 du 15 janvier 1993 - art. 13 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "13",
+        "articleId": "LEGIARTI000050659119",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "93-82",
+        "datePubli": 727660800000,
+        "dateDebut": 1732406400000
+      },
+      {
+        "textCid": "JORFTEXT000000725216",
+        "textTitle": "Décret n°93-82 du 15 janvier 1993 - art. 17 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "17",
+        "articleId": "LEGIARTI000024596403",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "93-82",
+        "datePubli": 727660800000,
+        "dateDebut": 1316995200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920757",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1577836800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000039345495",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1577836800000,
+        "dateFin": 1672531200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000045937313",
+        "etat": "MODIFIE_MORT_NE",
+        "version": "3.0",
+        "dateDebut": 1672531200000,
+        "dateFin": 1672444800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046912683",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1672531200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "57"
+    ],
+    "versionPrecedente": "LEGIARTI000045937313",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

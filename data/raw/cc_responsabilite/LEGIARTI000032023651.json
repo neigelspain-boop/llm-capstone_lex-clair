@@ -1,0 +1,173 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000032023651",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La responsabilité du producteur peut être réduite ou supprimée, compte tenu de toutes les circonstances, lorsque le dommage est causé conjointement par un défaut du produit et par la faute de la victime ou d'une personne dont la victime est responsable.",
+    "texteHtml": "<p>La responsabilité du producteur peut être réduite ou supprimée, compte tenu de toutes les circonstances, lorsque le dommage est causé conjointement par un défaut du produit et par la faute de la victime ou d'une personne dont la victime est responsable.</p>",
+    "num": "1245-12",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1475280000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 2147221503,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2016-10-01",
+          "titre": "Titre III : Des contrats ou des obligations conventionnelles en général",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118032",
+          "id": "LEGISCTA000006118032",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2016-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre III : Des sources d'obligations",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118032",
+          "id": "LEGISCTA000032040794",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2016-10-01",
+          "fin": "2999-01-01",
+          "titre": "Sous-titre II : La responsabilité extracontractuelle   ",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000032021486",
+          "id": "LEGISCTA000032021486",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2016-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : La responsabilité du fait des produits défectueux ",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000032021490",
+          "id": "LEGISCTA000032021490",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000032023651",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000032021490",
+    "sectionParentId": "LEGISCTA000032021490",
+    "sectionParentTitre": "Chapitre II : La responsabilité du fait des produits défectueux ",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre III : Des sources d'obligations &gt; Sous-titre II : La responsabilité extracontractuelle    &gt; Chapitre II : La responsabilité du fait des produits défectueux ",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000032023651",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000032004939",
+        "textTitle": "Ordonnance n°2016-131 du 10 février 2016 - art. 2",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "2",
+        "articleId": "LEGIARTI000032006591",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2016-02-11",
+        "dateSignaTexte": "2016-02-10",
+        "dateDebutCible": "2016-10-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000032023651",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1475280000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "1245-12"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

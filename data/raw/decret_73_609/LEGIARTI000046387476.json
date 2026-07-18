@@ -1,0 +1,215 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046387476",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les conditions dans lesquelles sont financées les activités d'enseignement assurées par les établissements publics d'enseignement supérieur en vue de la délivrance d'un diplôme dont l'une des finalités est l'exercice de fonctions notariales, tels que le master mention ou spécialité \"droit notarial\", la licence professionnelle \"métiers du notariat\" et le diplôme d'études supérieures de notariat sont définies par voie de conventions passées entre l'établissement public d'enseignement supérieur intéressé et l'Institut national des formations notariales. Les conditions dans lesquelles sont financées les activités d'enseignement assurées par les universités ou par des organismes d'enseignement ou de formation professionnelle, publics ou privés, sont définies par voie de conventions passées entre l'université et les organismes intéressés et l'Institut national des formations notariales.",
+    "texteHtml": "<p>Les conditions dans lesquelles sont financées les activités d'enseignement assurées par les établissements publics d'enseignement supérieur en vue de la délivrance d'un diplôme dont l'une des finalités est l'exercice de fonctions notariales, tels que le master mention ou spécialité \"droit notarial\", la licence professionnelle \"métiers du notariat\" et le diplôme d'études supérieures de notariat sont définies par voie de conventions passées entre l'établissement public d'enseignement supérieur intéressé et l'Institut national des formations notariales.</p><p>Les conditions dans lesquelles sont financées les activités d'enseignement assurées par les universités ou par des organismes d'enseignement ou de formation professionnelle, publics ou privés, sont définies par voie de conventions passées entre l'université et les organismes intéressés et l'Institut national des formations notariales.</p>",
+    "num": "109",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1665273600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 515388,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre V : Financement de la formation professionnelle.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113045",
+          "id": "LEGISCTA000006113045",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920905",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006113045",
+    "sectionParentId": "LEGISCTA000006113045",
+    "sectionParentTitre": "Titre V : Financement de la formation professionnelle.",
+    "fullSectionsTitre": "Titre V : Financement de la formation professionnelle.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000046387476",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.",
+    "notaHtml": "<p>Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 12",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "12",
+        "articleId": "LEGIARTI000046384999",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-10-08",
+        "dateSignaTexte": "2022-10-07",
+        "dateDebutCible": "2022-10-09"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 100 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "100",
+        "articleId": "LEGIARTI000006920887",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 118281600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920905",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1363392000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027179542",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1363392000000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256674",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1665273600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387476",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1665273600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "109"
+    ],
+    "versionPrecedente": "LEGIARTI000037256674",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000037256486",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les travaux de pratique professionnelle, réalisés sous la direction et la responsabilité d'un maître de stage et dans les conditions définies par l'Institut national des formations notariales, après consultation du Conseil supérieur du notariat, doivent correspondre à la durée normale du travail, telle qu'elle résulte des règlements, conventions collectives, accords ou usages en vigueur pour la catégorie professionnelle considérée. Pour être pris en considération, les travaux de pratique professionnelle doivent avoir été rémunérés conformément aux règlements, conventions collectives, accords ou usages mentionnés à l'alinéa précédent, sous réserve des dispositions du code du travail relatives à la promotion individuelle et au congé de formation des salariés. La pratique est d'une durée d'un an. Ces travaux de pratique professionnelle peuvent être accomplis à mi-temps. La période durant laquelle ils ont été ainsi accomplis ne compte que pour la moitié de sa durée. La pratique professionnelle est acquise à concurrence de huit mois au moins dans un office de notaire. Elle peut être acquise pour le reste de la durée exigée : - soit auprès d'un avocat, d'un expert-comptable, d'un commissaire aux comptes, d'un administrateur judiciaire ou d'un mandataire judiciaire ; - soit auprès d'une administration publique ou dans le service juridique ou fiscal d'une entreprise ; - soit dans un organisme professionnel notarial d'enseignement, de documentation, de recherche ou d'assistance technique ; - soit dans un pays étranger, auprès d'un membre d'une profession réglementée correspondant à celle de notaire.",
+    "texteHtml": "<p>Les travaux de pratique professionnelle, réalisés sous la direction et la responsabilité d'un maître de stage et dans les conditions définies par l'Institut national des formations notariales, après consultation du Conseil supérieur du notariat, doivent correspondre à la durée normale du travail, telle qu'elle résulte des règlements, conventions collectives, accords ou usages en vigueur pour la catégorie professionnelle considérée.</p><p>Pour être pris en considération, les travaux de pratique professionnelle doivent avoir été rémunérés conformément aux règlements, conventions collectives, accords ou usages mentionnés à l'alinéa précédent, sous réserve des dispositions du code du travail relatives à la promotion individuelle et au congé de formation des salariés.</p><p>La pratique est d'une durée d'un an. Ces travaux de pratique professionnelle peuvent être accomplis à mi-temps. La période durant laquelle ils ont été ainsi accomplis ne compte que pour la moitié de sa durée.</p><p>La pratique professionnelle est acquise à concurrence de huit mois au moins dans un office de notaire. Elle peut être acquise pour le reste de la durée exigée :</p><p>- soit auprès d'un avocat, d'un expert-comptable, d'un commissaire aux comptes, d'un administrateur judiciaire ou d'un mandataire judiciaire ;</p><p>- soit auprès d'une administration publique ou dans le service juridique ou fiscal d'une entreprise ;</p><p>- soit dans un organisme professionnel notarial d'enseignement, de documentation, de recherche ou d'assistance technique ;</p><p>- soit dans un pays étranger, auprès d'un membre d'une profession réglementée correspondant à celle de notaire.</p>",
+    "num": "76",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1538352000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 128847,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2009-09-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113048",
+          "id": "LEGISCTA000006113048",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2009-09-01",
+          "fin": "2018-10-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme de l'institut des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000006132481",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000037256607",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920827",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132481",
+    "sectionParentId": "LEGISCTA000037256607",
+    "sectionParentTitre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "fullSectionsTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire &gt; Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000037256486",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 2",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "2",
+        "articleId": "LEGIARTI000037253083",
+        "natureText": "DECRET",
+        "datePubliTexte": "2018-07-27",
+        "dateSignaTexte": "2018-07-25",
+        "dateDebutCible": "2018-10-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-18 (VD)",
+        "linkType": "CONCORDE",
+        "linkOrientation": "cible",
+        "articleNum": "86-18",
+        "articleId": "LEGIARTI000006920853",
+        "natureText": "DECRET"
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-18 (VD)",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "86-18",
+        "articleId": "LEGIARTI000006920853",
+        "natureText": "DECRET"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920827",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1251763200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920828",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1251763200000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256486",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "76"
+    ],
+    "versionPrecedente": "LEGIARTI000006920828",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006433755",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La réduction se détermine en formant une masse de tous les biens existant au décès du donateur ou testateur. Les biens dont il a été disposé par donation entre vifs sont fictivement réunis à cette masse, d'après leur état à l'époque de la donation et leur valeur à l'ouverture de la succession, après qu'en ont été déduites les dettes ou les charges les grevant. Si les biens ont été aliénés, il est tenu compte de leur valeur à l'époque de l'aliénation. S'il y a eu subrogation, il est tenu compte de la valeur des nouveaux biens au jour de l'ouverture de la succession, d'après leur état à l'époque de l'acquisition. Toutefois, si la dépréciation des nouveaux biens était, en raison de leur nature, inéluctable au jour de leur acquisition, il n'est pas tenu compte de la subrogation. On calcule sur tous ces biens, eu égard à la qualité des héritiers qu'il laisse, quelle est la quotité dont le défunt a pu disposer.",
+    "texteHtml": "<p></p>   La réduction se détermine en formant une masse de tous les biens existant au décès du donateur ou testateur.<p></p><p></p>   Les biens dont il a été disposé par donation entre vifs sont fictivement réunis à cette masse, d'après leur état à l'époque de la donation et leur valeur à l'ouverture de la succession, après qu'en ont été déduites les dettes ou les charges les grevant. Si les biens ont été aliénés, il est tenu compte de leur valeur à l'époque de l'aliénation. S'il y a eu subrogation, il est tenu compte de la valeur des nouveaux biens au jour de l'ouverture de la succession, d'après leur état à l'époque de l'acquisition. Toutefois, si la dépréciation des nouveaux biens était, en raison de leur nature, inéluctable au jour de leur acquisition, il n'est pas tenu compte de la subrogation.<p></p><p></p>   On calcule sur tous ces biens, eu égard à la qualité des héritiers qu'il laisse, quelle est la quotité dont le défunt a pu disposer.<p></p>",
+    "num": "922",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : De la réserve héréditaire, de la quotité disponible et de la réduction.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136335",
+          "id": "LEGISCTA000006136335",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : De la réduction des libéralités excessives",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150231",
+          "id": "LEGISCTA000006150231",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : De l'exercice de la réduction",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165578",
+          "id": "LEGISCTA000006165578",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433754",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165578",
+    "sectionParentId": "LEGISCTA000006165578",
+    "sectionParentTitre": "Paragraphe 2 : De l'exercice de la réduction",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre III : De la réserve héréditaire, de la quotité disponible et de la réduction. &gt; Section 2 : De la réduction des libéralités excessives &gt; Paragraphe 2 : De l'exercice de la réduction",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006433755",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 11 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "11",
+        "articleId": "LEGIARTI000006284845",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 13 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "13",
+        "articleId": "LEGIARTI000006284847",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 9 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000006284843",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000026426322",
+        "textTitle": "Décision n°2012-274 QPC  du 28 septembre 2012 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000026426323",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2012-274 QPC",
+        "datePubli": 1348876800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 860 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "860",
+        "articleId": "LEGIARTI000006432904",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006074236",
+        "textTitle": "Code du patrimoine - art. L621-28 (MMN)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L621-28",
+        "articleId": "LEGIARTI000034510969",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1514764800000
+      },
+      {
+        "textCid": "LEGITEXT000006074236",
+        "textTitle": "Code du patrimoine - art. L621-29-7 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L621-29-7",
+        "articleId": "LEGIARTI000006845856",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433754",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 63072000000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433755",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "922"
+    ],
+    "versionPrecedente": "LEGIARTI000006433754",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

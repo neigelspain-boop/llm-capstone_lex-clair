@@ -1,0 +1,253 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006418182",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Lorsque l'auteur du chantage a mis sa menace à exécution, la peine est portée à sept ans d'emprisonnement et à 100 000 euros d'amende.",
+    "texteHtml": "<p>Lorsque l'auteur du chantage a mis sa menace à exécution, la peine est portée à sept ans d'emprisonnement et à 100 000 euros d'amende.</p><p></p><p></p>",
+    "num": "312-11",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1009843200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : De l'extorsion",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149834",
+          "id": "LEGISCTA000006149834",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Du chantage",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165328",
+          "id": "LEGISCTA000006165328",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418181",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165328",
+    "sectionParentId": "LEGISCTA000006165328",
+    "sectionParentTitre": "Section 2 : Du chantage",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre II : De l'extorsion &gt; Section 2 : Du chantage",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006418182",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000219672",
+        "textTitle": "Ordonnance n°2000-916 du 19 septembre 2000 - art. 3 (V) JORF 22 septembre 2000 en vigueur le 1er janvier 2002",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000006716442",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2000-09-22",
+        "dateSignaTexte": "2000-09-19",
+        "dateDebutCible": "2002-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "KALITEXT000022968933",
+        "textTitle": "Incivilités et violences au sein des relations ... - art. 1.2 (VNE)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1.2",
+        "articleId": "KALIARTI000022968938",
+        "natureText": "Accord",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1288224000000,
+        "dateDebut": 1262304000000
+      },
+      {
+        "textCid": "JORFTEXT000049563969",
+        "textTitle": "Décision n°2024-866 DC du 17 mai 2024 - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000049563970",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2024-866 DC",
+        "datePubli": 1716336000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "KALITEXT000051150100",
+        "textTitle": "Incivilités, agressions et violences à l'encont... - art. 1.2 (VE)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1.2",
+        "articleId": "KALIARTI000051150106",
+        "natureText": "Accord",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1739145600000,
+        "dateDebut": 1733788800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22 art. 1",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI"
+      },
+      {
+        "textCid": "JORFTEXT000000177662",
+        "textTitle": "Loi 92-1336 1992-12-16 art. 373",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000177662",
+        "natureText": "LOI"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418181",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 1009843200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418182",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1009843200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "312-11"
+    ],
+    "versionPrecedente": "LEGIARTI000006418181",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

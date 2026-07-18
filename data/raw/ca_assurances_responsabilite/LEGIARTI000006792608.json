@@ -1,0 +1,201 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006792608",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Dans le cas prévu par l'article L. 25-1 du Code de la route, comme il est dit à cet article, \"l'assureur du propriétaire du véhicule est tenu de garantir dans les limites du contrat la réparation du dommage causé au tiers sauf recours, s'il y a lieu, contre la collectivité publique qui, par son fait, a causé le dommage ayant donné lieu à la responsabilité de l'assureur et sans qu'une majoration de prime puisse en résulter pour le propriétaire. Il est statué sur ce recours ainsi que sur toute action en responsabilité en cas de non-assurance du véhicule dans les conditions prévues par l' article 1er de la loi n° 57-1424 du 31 décembre 1957 \".",
+    "texteHtml": "<p></p>   Dans le cas prévu par l'article L. 25-1 du Code de la route, comme il est dit à cet article, \"l'assureur du propriétaire du véhicule est tenu de garantir dans les limites du contrat la réparation du dommage causé au tiers sauf recours, s'il y a lieu, contre la collectivité publique qui, par son fait, a causé le dommage ayant donné lieu à la responsabilité de l'assureur et sans qu'une majoration de prime puisse en résulter pour le propriétaire. Il est statué sur ce recours ainsi que sur toute action en responsabilité en cas de non-assurance du véhicule dans les conditions prévues par l'<a href=\"/affichTexteArticle.do?cidTexte=JORFTEXT000000310046&idArticle=LEGIARTI000006451425&dateTexte=&categorieLien=cid\" title=\"Loi n° 57-1424 du 31 décembre 1957 - art. 1 (V)\">article 1er de la loi n° 57-1424 du 31 décembre 1957</a>\".<p></p><p></p>",
+    "num": "L124-4",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 206755200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 214745,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1976-07-16",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006107964",
+          "id": "LEGISCTA000006107964",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Livre Ier : Le contrat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006128391",
+          "id": "LEGISCTA000006128391",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2012-07-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages non maritimes",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000006142679",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2012-07-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000024376800",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Les assurances de responsabilité.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006157248",
+          "id": "LEGISCTA000006157248",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1976-07-11",
+          "fin": "2999-01-01",
+          "titre": "Code des assurances",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006073984",
+          "id": "LEGITEXT000006073984",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006792608",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006157248",
+    "sectionParentId": "LEGISCTA000006157248",
+    "sectionParentTitre": "Chapitre IV : Les assurances de responsabilité.",
+    "fullSectionsTitre": "Partie législative &gt; Livre Ier : Le contrat &gt; Titre II : Règles relatives aux assurances de dommages non maritimes &gt; Chapitre IV : Les assurances de responsabilité.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006792608",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006073984",
+        "titre": "Code des assurances",
+        "titreLong": "Code des assurances",
+        "etat": "VIGUEUR",
+        "dateDebut": 205891200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006073984",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000305911",
+        "textTitle": "Décret 76-666 1976-07-16",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000305911",
+        "natureText": "DECRET",
+        "datePubliTexte": "1976-07-21",
+        "dateSignaTexte": "1976-07-16",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000310046",
+        "textTitle": "Loi n° 57-1424 du 31 décembre 1957 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000006451425",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "57-1424",
+        "datePubli": -378345600000,
+        "dateDebut": -378345600000
+      },
+      {
+        "textCid": "LEGITEXT000006073984",
+        "textTitle": "Code des assurances - art. L111-5 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L111-5",
+        "articleId": "LEGIARTI000006791855",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 994982400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006792608",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 206755200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "L124-4",
+      "124-4"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

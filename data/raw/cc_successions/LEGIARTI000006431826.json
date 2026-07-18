@@ -1,0 +1,273 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431826",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Toute personne peut donner à une ou plusieurs autres personnes, physiques ou morales, mandat d'administrer ou de gérer, sous réserve des pouvoirs confiés à l'exécuteur testamentaire, tout ou partie de sa succession pour le compte et dans l'intérêt d'un ou de plusieurs héritiers identifiés. Le mandataire peut être un héritier. Il doit jouir de la pleine capacité civile et ne pas être frappé d'une interdiction de gérer lorsque des biens professionnels sont compris dans le patrimoine successoral. Le mandataire ne peut être le notaire chargé du règlement de la succession.",
+    "texteHtml": "<p></p>   Toute personne peut donner à une ou plusieurs autres personnes, physiques ou morales, mandat d'administrer ou de gérer, sous réserve des pouvoirs confiés à l'exécuteur testamentaire, tout ou partie de sa succession pour le compte et dans l'intérêt d'un ou de plusieurs héritiers identifiés.<p></p><p></p>   Le mandataire peut être un héritier.<p></p><p></p>   Il doit jouir de la pleine capacité civile et ne pas être frappé d'une interdiction de gérer lorsque des biens professionnels sont compris dans le patrimoine successoral.<p></p><p></p>   Le mandataire ne peut être le notaire chargé du règlement de la succession.<p></p>",
+    "num": "812",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VI : De l'administration de la succession par un mandataire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136283",
+          "id": "LEGISCTA000006136283",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Du mandat à effet posthume.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150155",
+          "id": "LEGISCTA000006150155",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Des conditions du mandat à effet posthume.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165525",
+          "id": "LEGISCTA000006165525",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431825",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165525",
+    "sectionParentId": "LEGISCTA000006165525",
+    "sectionParentTitre": "Paragraphe 1 : Des conditions du mandat à effet posthume.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VI : De l'administration de la succession par un mandataire. &gt; Section 1 : Du mandat à effet posthume. &gt; Paragraphe 1 : Des conditions du mandat à effet posthume.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006431826",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 1 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000006284835",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000305770",
+        "textTitle": "Décret n°67-223 du 17 mars 1967 - art. 32 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "32",
+        "articleId": "LEGIARTI000053191325",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "67-223",
+        "datePubli": -87782400000,
+        "dateDebut": 1766620800000
+      },
+      {
+        "textCid": "JORFTEXT000022122587",
+        "textTitle": "Décret n°2010-391  du 20 avril 2010 - art. 15, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "15",
+        "articleId": "JORFARTI000022122653",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2010-391",
+        "datePubli": 1271808000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000026638757",
+        "textTitle": "Décret n°2012-1267  du 16 novembre 2012 - art. 1, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "JORFARTI000026638763",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2012-1267",
+        "datePubli": 1353196800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 813-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "813-2",
+        "articleId": "LEGIARTI000006432258",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006072665",
+        "textTitle": "Code de la santé publique - art. R4322-90 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R4322-90",
+        "articleId": "LEGIARTI000042795858",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1608854400000
+      },
+      {
+        "textCid": "LEGITEXT000006070680",
+        "textTitle": "Code de procédure civile - art. 998 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "998",
+        "articleId": "LEGIARTI000006404287",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5143824000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431825",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5259859200000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431826",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "812"
+    ],
+    "versionPrecedente": "LEGIARTI000006431825",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000020616255",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "En ligne directe, on compte autant de degrés qu'il y a de générations entre les personnes : ainsi, l'enfant est, à l'égard du père et de la mère, au premier degré, le petit-fils ou la petite-fille au second ; et réciproquement du père et de la mère à l'égard de l'enfant et des aïeuls à l'égard du petit-fils ou de la petite-fille ; ainsi de suite. En ligne collatérale, les degrés se comptent par génération, depuis l'un des parents jusques et non compris l'auteur commun, et depuis celui-ci jusqu'à l'autre parent. Ainsi, les frères et sœurs sont au deuxième degré ; l'oncle ou la tante et le neveu ou la nièce sont au troisième degré ; les cousins germains et cousines germaines au quatrième ; ainsi de suite.",
+    "texteHtml": "<p>En ligne directe, on compte autant de degrés qu'il y a de générations entre les personnes : ainsi, l'enfant est, à l'égard du père et de la mère, au premier degré, le petit-fils ou la petite-fille au second ; et réciproquement du père et de la mère à l'égard de l'enfant et des aïeuls à l'égard du petit-fils ou de la petite-fille ; ainsi de suite. </p><p>En ligne collatérale, les degrés se comptent par génération, depuis l'un des parents jusques et non compris l'auteur commun, et depuis celui-ci jusqu'à l'autre parent.</p><p>Ainsi, les frères et sœurs sont au deuxième degré ; l'oncle ou la tante et le neveu ou la nièce sont au troisième degré ; les cousins germains et cousines germaines au quatrième ; ainsi de suite. </p>",
+    "num": "743",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1242259200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 128847,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits des parents en l'absence de conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150138",
+          "id": "LEGISCTA000006150138",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : Des degrés.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165763",
+          "id": "LEGISCTA000006165763",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431030",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165763",
+    "sectionParentId": "LEGISCTA000006165763",
+    "sectionParentTitre": "Paragraphe 2 : Des degrés.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 1 : Des droits des parents en l'absence de conjoint successible. &gt; Paragraphe 2 : Des degrés.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000020616255",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n°2009-526\n du 12 mai 2009 - art. 10",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "10",
+        "articleId": "LEGIARTI000020606392",
+        "natureText": "LOI",
+        "datePubliTexte": "2009-05-13",
+        "dateSignaTexte": "2009-05-12",
+        "dateDebutCible": "2009-05-14"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000033659650",
+        "textTitle": "Décret n°2016-1791 du 19 décembre 2016 - art. 2",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "2",
+        "articleId": "LEGIARTI000033660878",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2016-1791",
+        "datePubli": 1482278400000,
+        "dateDebut": 1482364800000
+      },
+      {
+        "textCid": "JORFTEXT000033659650",
+        "textTitle": "Décret n°2016-1791 du 19 décembre 2016 - art. 3",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000033660874",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2016-1791",
+        "datePubli": 1482278400000,
+        "dateDebut": 1482364800000
+      },
+      {
+        "textCid": "JORFTEXT000043715443",
+        "textTitle": "Décret n°2021-845 du 28 juin 2021 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000043720205",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2021-845",
+        "datePubli": 1625011200000,
+        "dateDebut": 1625097600000
+      },
+      {
+        "textCid": "JORFTEXT000044271440",
+        "textTitle": "Décret n°2021-1402 du 29 octobre 2021 - art. 3",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000044274677",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2021-1402",
+        "datePubli": 1635552000000,
+        "dateDebut": 1635638400000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. R53-10 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R53-10",
+        "articleId": "LEGIARTI000044278210",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1635638400000
+      },
+      {
+        "textCid": "LEGITEXT000023086525",
+        "textTitle": "Code des transports - art. D1803-12 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "D1803-12",
+        "articleId": "LEGIARTI000036671619",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1520121600000
+      },
+      {
+        "textCid": "LEGITEXT000023086525",
+        "textTitle": "Code des transports - art. D1803-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "D1803-2",
+        "articleId": "LEGIARTI000052208977",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1757289600000
+      },
+      {
+        "textCid": "LEGITEXT000023086525",
+        "textTitle": "Code des transports - art. L1803-4 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L1803-4",
+        "articleId": "LEGIARTI000034110374",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1488412800000
+      },
+      {
+        "textCid": "LEGITEXT000023086525",
+        "textTitle": "Code des transports - art. L1803-4-1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L1803-4-1",
+        "articleId": "LEGIARTI000042915845",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1609372800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431030",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1025481600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431031",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020616255",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "743"
+    ],
+    "versionPrecedente": "LEGIARTI000006431031",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

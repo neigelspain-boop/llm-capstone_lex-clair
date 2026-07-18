@@ -1,0 +1,237 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000037256537",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Pour être prise en considération, la pratique professionnelle doit avoir été effective et accomplie dans les conditions suivantes : 1° Correspondre à une durée normale de travail, telle qu'elle résulte des règlements, conventions collectives, accords ou usages en vigueur pour la catégorie professionnelle considérée ; 2° Avoir été rémunérée conformément aux règlements, conventions collectives, accords ou usages visés au 1° du présent article ; 3° Ne pas avoir été suspendue pendant plus de trois mois, sauf exception admise par le conseil d'administration de l'Institut national des formations notariales. L'exercice de la pratique professionnelle doit être justifiée par une ou plusieurs attestations mentionnant la durée des activités exercées et la nature des fonctions occupées.",
+    "texteHtml": "<p>Pour être prise en considération, la pratique professionnelle doit avoir été effective et accomplie dans les conditions suivantes :</p><p>1° Correspondre à une durée normale de travail, telle qu'elle résulte des règlements, conventions collectives, accords ou usages en vigueur pour la catégorie professionnelle considérée ;</p><p>2° Avoir été rémunérée conformément aux règlements, conventions collectives, accords ou usages visés au 1° du présent article ;</p><p>3° Ne pas avoir été suspendue pendant plus de trois mois, sauf exception admise par le conseil d'administration de l'Institut national des formations notariales.</p><p>L'exercice de la pratique professionnelle doit être justifiée par une ou plusieurs attestations mentionnant la durée des activités exercées et la nature des fonctions occupées.</p>",
+    "num": "43-4",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1538352000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : Formation professionnelle aux fonctions de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132463",
+          "id": "LEGISCTA000006132463",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1995-10-13",
+          "fin": "2024-09-01",
+          "titre": "Section VII : Les certificats de spécialisation.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145556",
+          "id": "LEGISCTA000006145556",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2024-09-01",
+          "fin": "2999-01-01",
+          "titre": "Section II : Les certificats de spécialisation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145556",
+          "id": "LEGISCTA000046387357",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920716",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006145556",
+    "sectionParentId": "LEGISCTA000046387357",
+    "sectionParentTitre": "Section II : Les certificats de spécialisation",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre II : Formation professionnelle aux fonctions de notaire. &gt; Section VII : Les certificats de spécialisation.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000037256537",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 12",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "12",
+        "articleId": "LEGIARTI000037253039",
+        "natureText": "DECRET",
+        "datePubliTexte": "2018-07-27",
+        "dateSignaTexte": "2018-07-25",
+        "dateDebutCible": "2018-10-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 43-6 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "43-6",
+        "articleId": "LEGIARTI000037256572",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 1538352000000
+      },
+      {
+        "textCid": "JORFTEXT000000199360",
+        "textTitle": "Arrêté du 15 avril 1997 - art. 5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "5",
+        "articleId": "LEGIARTI000006204128",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 861840000000,
+        "dateDebut": 861840000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920716",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 813542400000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256537",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "43-4"
+    ],
+    "versionPrecedente": "LEGIARTI000006920716",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

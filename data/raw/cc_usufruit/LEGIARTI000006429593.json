@@ -1,0 +1,215 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429593",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Si le troupeau sur lequel un usufruit a été établi périt entièrement par accident ou par maladie et sans la faute de l'usufruitier, celui-ci n'est tenu envers le propriétaire que de lui rendre compte des cuirs, ou de leur valeur estimée à la date de la restitution. Si le troupeau ne périt pas entièrement, l'usufruitier est tenu de remplacer, jusqu'à concurrence du croît, les têtes des animaux qui ont péri.",
+    "texteHtml": "<p></p>   Si le troupeau sur lequel un usufruit a été établi périt entièrement par accident ou par maladie et sans la faute de l'usufruitier, celui-ci n'est tenu envers le propriétaire que de lui rendre compte des cuirs, ou de leur valeur estimée à la date de la restitution.<p></p><p></p>   Si le troupeau ne périt pas entièrement, l'usufruitier est tenu de remplacer, jusqu'à concurrence du croît, les têtes des animaux qui ont péri.<p></p>",
+    "num": "616",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -303696000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 730133,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des obligations de l'usufruitier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150118",
+          "id": "LEGISCTA000006150118",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429593",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150118",
+    "sectionParentId": "LEGISCTA000006150118",
+    "sectionParentTitre": "Section 2 : Des obligations de l'usufruitier",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 2 : Des obligations de l'usufruitier",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006429593",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000874685",
+        "textTitle": "Loi 60-464 1960-05-17 art. 1 JORF 18 mai 1960",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000874685",
+        "natureText": "LOI",
+        "datePubliTexte": "1960-05-18",
+        "dateSignaTexte": "1960-05-17",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "KALITEXT000024565858",
+        "textTitle": "relatif à la prévoyance - art. (VNE)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "KALIARTI000024565861",
+        "natureText": "Avenant",
+        "parentCid": null,
+        "numTexte": "17",
+        "datePubli": 1316390400000,
+        "dateDebut": 1297900800000
+      },
+      {
+        "textCid": "KALITEXT000048437053",
+        "textTitle": "Modification des dispositions de la CCN - art. 1er (VE)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1er",
+        "articleId": "KALIARTI000048437057",
+        "natureText": "Avenant",
+        "parentCid": null,
+        "numTexte": "4",
+        "datePubli": 1700524800000,
+        "dateDebut": 1696550400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429593",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -303696000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "616"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

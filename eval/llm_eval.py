@@ -15,16 +15,19 @@ EVAL_SET: list[dict] = []
 
 
 def judge(question: str, generated: str, reference: str) -> float:
+    """Score generated output against the reference answer for one example."""
     # TODO: LLM-as-judge call, or a simpler similarity metric
     raise NotImplementedError
 
 
 def approach_claude(item: dict) -> str:
+    """Run one example through Claude using the shared prompt builder."""
     prompt = build_prompt(item["question"], item["contexts"])
     return call_llm(prompt, provider="claude")
 
 
 def approach_openai(item: dict) -> str:
+    """Run one example through OpenAI using the shared prompt builder."""
     prompt = build_prompt(item["question"], item["contexts"])
     return call_llm(prompt, provider="openai")
 
@@ -36,6 +39,7 @@ APPROACHES: dict[str, Callable[[dict], str]] = {
 
 
 def main():
+    """Evaluate each configured approach on the labeled eval set and print average scores."""
     for name, approach in APPROACHES.items():
         scores = []
         for item in EVAL_SET:

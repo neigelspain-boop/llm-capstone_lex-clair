@@ -1,0 +1,230 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431079",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "On représente les prédécédés, on ne représente les renonçants que dans les successions dévolues en ligne directe ou collatérale. Les enfants du renonçant conçus avant l'ouverture de la succession dont le renonçant a été exclu rapportent à la succession de ce dernier les biens dont ils ont hérité en son lieu et place, s'ils viennent en concours avec d'autres enfants conçus après l'ouverture de la succession. Le rapport se fait selon les dispositions énoncées à la section 2 du chapitre VIII du présent titre. Sauf volonté contraire du disposant, en cas de représentation d'un renonçant, les donations faites à ce dernier s'imputent, le cas échéant, sur la part de réserve qui aurait dû lui revenir s'il n'avait pas renoncé. On peut représenter celui à la succession duquel on a renoncé.",
+    "texteHtml": "<p></p>On représente les prédécédés, on ne représente les renonçants que dans les successions dévolues en ligne directe ou collatérale. <p></p><p></p>Les enfants du renonçant conçus avant l'ouverture de la succession dont le renonçant a été exclu rapportent à la succession de ce dernier les biens dont ils ont hérité en son lieu et place, s'ils viennent en concours avec d'autres enfants conçus après l'ouverture de la succession. Le rapport se fait selon les dispositions énoncées à la <a href=\"/affichCode.do?cidTexte=LEGITEXT000006070721&idSectionTA=LEGISCTA000006150166&dateTexte=&categorieLien=cid\" title=\"Code civil -  Section 2 : Du rapport des libéralités. (V)\">section 2</a> du chapitre VIII du présent titre. <p></p><p></p>Sauf volonté contraire du disposant, en cas de représentation d'un renonçant, les donations faites à ce dernier s'imputent, le cas échéant, sur la part de réserve qui aurait dû lui revenir s'il n'avait pas renoncé. <p></p><p></p>On peut représenter celui à la succession duquel on a renoncé.<p></p>",
+    "num": "754",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits des parents en l'absence de conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150138",
+          "id": "LEGISCTA000006150138",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 4 : De la représentation.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165516",
+          "id": "LEGISCTA000006165516",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431077",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165516",
+    "sectionParentId": "LEGISCTA000006165516",
+    "sectionParentTitre": "Paragraphe 4 : De la représentation.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 1 : Des droits des parents en l'absence de conjoint successible. &gt; Paragraphe 4 : De la représentation.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006431079",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 29 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "29",
+        "articleId": "LEGIARTI000006284863",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil -  Section 2 : Du rapport des libéralités. (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "LEGISCTA000006150166",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 755 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "755",
+        "articleId": "LEGIARTI000006431083",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431077",
+        "etat": "ABROGE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": -402883200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431078",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431079",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "754"
+    ],
+    "versionPrecedente": "LEGIARTI000006431078",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

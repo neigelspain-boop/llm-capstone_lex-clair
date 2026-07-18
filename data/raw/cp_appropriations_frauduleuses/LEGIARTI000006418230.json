@@ -1,0 +1,270 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006418230",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les personnes physiques coupables de l'un des délits prévus aux articles 314-5 , 314-6 et 314-7 encourent également les peines complémentaires suivantes : 1° La confiscation de la chose qui a servi ou était destinée à commettre l'infraction ou de la chose qui en est le produit, à l'exception des objets susceptibles de restitution ; 2° L'affichage ou la diffusion de la décision prononcée dans les conditions prévues par l'article 131-35 .",
+    "texteHtml": "<p>Les personnes physiques coupables de l'un des délits prévus aux articles <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418221&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-5 (V)\">314-5</a>,<a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418223&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-6 (V)\">314-6 </a>et <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418225&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 314-7 (V)\">314-7</a> encourent également les peines complémentaires suivantes : 1° La confiscation de la chose qui a servi ou était destinée à commettre l'infraction ou de la chose qui en est le produit, à l'exception des objets susceptibles de restitution ; 2° L'affichage ou la diffusion de la décision prononcée dans les conditions prévues par l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417308&dateTexte=&categorieLien=cid\" title=\"Code pénal - art. 131-35 (V)\">131-35</a>.</p>",
+    "num": "314-11",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 762480000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des détournements",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149836",
+          "id": "LEGISCTA000006149836",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165337",
+          "id": "LEGISCTA000006165337",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418230",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165337",
+    "sectionParentId": "LEGISCTA000006165337",
+    "sectionParentTitre": "Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre IV : Des détournements &gt; Section 4 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006418230",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22 JORF 23 juillet 1992 rectificatif JORF 23 décembre 1992 en vigueur le 1er mars 1994",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000038184686",
+        "textTitle": "Décret n°2019-146 du 27 février 2019 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000038184694",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2019-146",
+        "datePubli": 1551398400000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 131-35 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "131-35",
+        "articleId": "LEGIARTI000006417308",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-5",
+        "articleId": "LEGIARTI000006418221",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-6 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-6",
+        "articleId": "LEGIARTI000006418223",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-7 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "314-7",
+        "articleId": "LEGIARTI000006418225",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22 art. 1",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI"
+      },
+      {
+        "textCid": "JORFTEXT000000177662",
+        "textTitle": "Loi 92-1336 1992-12-16 art. 373",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000177662",
+        "natureText": "LOI"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418230",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "314-11"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

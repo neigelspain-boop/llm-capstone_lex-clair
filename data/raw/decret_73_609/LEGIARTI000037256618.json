@@ -1,0 +1,283 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000037256618",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'organisation matérielle des épreuves du diplôme des métiers du notariat est assurée par l'Institut national des formations notariales. Le succès à l'examen donne droit à la délivrance du diplôme des métiers du notariat par l'Institut national des formations notariales.",
+    "texteHtml": "<p>L'organisation matérielle des épreuves du diplôme des métiers du notariat est assurée par l'Institut national des formations notariales.</p><p>Le succès à l'examen donne droit à la délivrance du diplôme des métiers du notariat par l'Institut national des formations notariales.</p>",
+    "num": "79",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "6.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1538352000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2009-09-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113048",
+          "id": "LEGISCTA000006113048",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2009-09-01",
+          "fin": "2018-10-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme de l'institut des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000006132481",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000037256607",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920792",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132481",
+    "sectionParentId": "LEGISCTA000037256607",
+    "sectionParentTitre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "fullSectionsTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire &gt; Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000037256618",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 38",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "38",
+        "articleId": "LEGIARTI000037253143",
+        "natureText": "DECRET",
+        "datePubliTexte": "2018-07-27",
+        "dateSignaTexte": "2018-07-25",
+        "dateDebutCible": "2018-10-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 84 (AbD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "84",
+        "articleId": "LEGIARTI000006920806",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 749606400000
+      },
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 66 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "66",
+        "articleId": "LEGIARTI000037253165",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2018-659",
+        "datePubli": 1532649600000,
+        "dateDebut": 1538352000000
+      }
+    ],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-21 (VD)",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "86-21",
+        "articleId": "LEGIARTI000006920856",
+        "natureText": "DECRET"
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-21 (VD)",
+        "linkType": "CONCORDE",
+        "linkOrientation": "cible",
+        "articleNum": "86-21",
+        "articleId": "LEGIARTI000006920856",
+        "natureText": "DECRET"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920792",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920793",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 652147200000,
+        "dateFin": 749606400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920794",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 749606400000,
+        "dateFin": 933379200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920795",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 933379200000,
+        "dateFin": 1251763200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920796",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 1251763200000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256618",
+        "etat": "VIGUEUR",
+        "version": "6.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "79"
+    ],
+    "versionPrecedente": "LEGIARTI000006920796",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

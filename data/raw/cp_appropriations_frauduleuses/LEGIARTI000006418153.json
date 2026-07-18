@@ -1,0 +1,271 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006418153",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La tentative des délits prévus au présent chapitre est punie des mêmes peines.",
+    "texteHtml": "<p></p>   La tentative des délits prévus au présent chapitre est punie des mêmes peines.<p></p><p></p>",
+    "num": "311-13",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 762480000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 128847,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : Du vol",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149833",
+          "id": "LEGISCTA000006149833",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Dispositions générales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165325",
+          "id": "LEGISCTA000006165325",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418153",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165325",
+    "sectionParentId": "LEGISCTA000006165325",
+    "sectionParentTitre": "Section 2 : Dispositions générales",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre Ier : Du vol &gt; Section 2 : Dispositions générales",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006418153",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000648362",
+        "textTitle": "Décret n°2007-1167 du 2 août 2007 - art. 23 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "23",
+        "articleId": "LEGIARTI000006885176",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2007-1167",
+        "datePubli": 1186099200000,
+        "dateDebut": 1186099200000
+      },
+      {
+        "textCid": "LEGITEXT000006074947",
+        "textTitle": "Code de la route - art. R243-2 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R243-2",
+        "articleId": "LEGIARTI000006876023",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 978134400000
+      },
+      {
+        "textCid": "LEGITEXT000006074228",
+        "textTitle": "Code de la route. - art. R212-4 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R212-4",
+        "articleId": "LEGIARTI000037411327",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1537315200000
+      },
+      {
+        "textCid": "LEGITEXT000025244092",
+        "textTitle": "Code forestier (nouveau) - art. L163-10 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L163-10",
+        "articleId": "LEGIARTI000025246329",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1341100800000
+      },
+      {
+        "textCid": "LEGITEXT000025244092",
+        "textTitle": "Code forestier (nouveau) - art. L163-11 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L163-11",
+        "articleId": "LEGIARTI000025246332",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1341100800000
+      },
+      {
+        "textCid": "LEGITEXT000025244092",
+        "textTitle": "Code forestier (nouveau) - art. L163-7 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L163-7",
+        "articleId": "LEGIARTI000025246322",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1341100800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22 art. 1",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI"
+      },
+      {
+        "textCid": "JORFTEXT000000177662",
+        "textTitle": "Loi 92-1336 1992-12-16 art. 373",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000177662",
+        "natureText": "LOI"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418153",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "311-13"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

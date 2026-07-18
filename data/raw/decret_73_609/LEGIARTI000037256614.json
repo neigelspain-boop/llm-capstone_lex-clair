@@ -1,0 +1,252 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000037256614",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les épreuves du diplôme des métiers du notariat ont lieu au moins une fois par an dans le site d'enseignement où les enseignements ont été suivis ou dans un site situé à proximité désigné comme centre d'examen par le conseil d'administration de l'Institut national des formations notariales. Les personnes ayant suivi la formation à distance, en application de l'article 89, subissent l'examen dans le centre d'examen désigné par le conseil d'administration de l'Institut national des formations notariales. Le programme et les modalités de ces épreuves sont fixés par l'Institut national des formations notariales sous réserve de l'approbation du garde des sceaux, ministre de la justice. Dans chaque centre d'examen, les épreuves sont subies devant un jury prévu à l'article 78.",
+    "texteHtml": "<p>Les épreuves du diplôme des métiers du notariat ont lieu au moins une fois par an dans le site d'enseignement où les enseignements ont été suivis ou dans un site situé à proximité désigné comme centre d'examen par le conseil d'administration de l'Institut national des formations notariales.</p><p>Les personnes ayant suivi la formation à distance, en application de l'article 89, subissent l'examen dans le centre d'examen désigné par le conseil d'administration de l'Institut national des formations notariales.</p><p>Le programme et les modalités de ces épreuves sont fixés par l'Institut national des formations notariales sous réserve de l'approbation du garde des sceaux, ministre de la justice.</p><p>Dans chaque centre d'examen, les épreuves sont subies devant un jury prévu à l'article 78.</p>",
+    "num": "77",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1538352000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2009-09-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113048",
+          "id": "LEGISCTA000006113048",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2009-09-01",
+          "fin": "2018-10-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme de l'institut des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000006132481",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000037256607",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920829",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132481",
+    "sectionParentId": "LEGISCTA000037256607",
+    "sectionParentTitre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "fullSectionsTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire &gt; Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000037256614",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000037252155",
+        "textTitle": "Décret n°2018-659 du 25 juillet 2018 - art. 36",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "36",
+        "articleId": "LEGIARTI000037253139",
+        "natureText": "DECRET",
+        "datePubliTexte": "2018-07-27",
+        "dateSignaTexte": "2018-07-25",
+        "dateDebutCible": "2018-10-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000425936",
+        "textTitle": "Décret n°2007-1232 du 20 août 2007 - art. 16 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "16",
+        "articleId": "LEGIARTI000018942469",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2007-1232",
+        "datePubli": 1187740800000,
+        "dateDebut": 1213228800000
+      }
+    ],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret 73-609 1973-07-05 art. 86-193",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000681478",
+        "natureText": "DECRET"
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-19 (VD)",
+        "linkType": "CONCORDE",
+        "linkOrientation": "cible",
+        "articleNum": "86-19",
+        "articleId": "LEGIARTI000006920854",
+        "natureText": "DECRET"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920829",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1251763200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920830",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1251763200000,
+        "dateFin": 1363392000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027179538",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1363392000000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256614",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "77"
+    ],
+    "versionPrecedente": "LEGIARTI000027179538",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

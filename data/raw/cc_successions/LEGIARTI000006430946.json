@@ -1,0 +1,218 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006430946",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La loi ne distingue pas selon les modes d'établissement de la filiation pour déterminer les parents appelés à succéder. Les droits résultant de la filiation adoptive sont réglés au titre de l'adoption.",
+    "texteHtml": "<p></p>   La loi ne distingue pas selon les modes d'établissement de la filiation pour déterminer les parents appelés à succéder.<p></p><p></p>   Les droits résultant de la filiation adoptive sont réglés au titre de l'adoption.<p></p>",
+    "num": "733",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1151712000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits des parents en l'absence de conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150138",
+          "id": "LEGISCTA000006150138",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006430944",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150138",
+    "sectionParentId": "LEGISCTA000006150138",
+    "sectionParentTitre": "Section 1 : Des droits des parents en l'absence de conjoint successible.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 1 : Des droits des parents en l'absence de conjoint successible.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006430946",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000451869",
+        "textTitle": "Ordonnance n°2005-759 du 4 juillet 2005 - art. 17 () JORF 6 juillet 2005 en vigueur le 1er juillet 2006",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "17",
+        "articleId": "LEGIARTI000006285067",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2005-07-06",
+        "dateSignaTexte": "2005-07-04",
+        "dateDebutCible": "2006-07-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000036339652",
+        "textTitle": "Saisine du 22 décembre 2017 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000036339653",
+        "natureText": "SAISINE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1514678400000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [
+      {
+        "textCid": "JORFTEXT000000451869",
+        "textTitle": "Ordonnance 2005-759 2005-07-04 art. 20 : Spécificité d'application",
+        "linkType": "SPEC_APPLI",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000451869",
+        "natureText": "ORDONNANCE"
+      }
+    ],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006430944",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 81475200000,
+        "dateFin": 1025481600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006430945",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1025481600000,
+        "dateFin": 1151712000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006430946",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1151712000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "733"
+    ],
+    "versionPrecedente": "LEGIARTI000006430945",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,358 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000027517853",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Toutefois ne sont pas déductibles : 1° Les dettes échues depuis plus de trois mois avant l'ouverture de la succession, à moins qu'il ne soit produit une attestation du créancier en certifiant l'existence à cette époque, dans la forme et suivant les règles déterminées à l'article L. 20 du livre des procédures fiscales ; 2° Les dettes consenties par le défunt au profit de ses héritiers ou de personnes interposées. Sont réputées personnes interposées les personnes désignées dans l'article 911 , dernier alinéa, du code civil. Néanmoins, lorsque la dette a été consentie par un acte authentique ou par un acte sous-seing privé ayant date certaine avant l'ouverture de la succession autrement que par le décès d'une des parties contractantes, les héritiers, donataires et légataires, et les personnes réputées interposées ont le droit de prouver la sincérité de cette dette et son existence au jour de l'ouverture de la succession ; 3° Les dettes reconnues par testament ; 4° Les dettes hypothécaires garanties par une inscription périmée depuis plus de trois mois, à moins qu'il ne s'agisse d'une dette non échue et que l'existence n'en soit attestée par le créancier dans les formes prévues à l'article L. 20 du livre des procédures fiscales ; si l'inscription n'est pas périmée, mais si le chiffre en a été réduit, l'excédent est seul déduit, s'il y a lieu ; 5° Les dettes en capital et intérêts pour lesquelles le délai de prescription est accompli, à moins qu'il ne soit justifié que la prescription a été interrompue.",
+    "texteHtml": "<p>Toutefois ne sont pas déductibles : </p><p>1° Les dettes échues depuis plus de trois mois avant l'ouverture de la succession, à moins qu'il ne soit produit une attestation du créancier en certifiant l'existence à cette époque, dans la forme et suivant les règles déterminées à <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006069583&idArticle=LEGIARTI000006315649&dateTexte=&categorieLien=cid\">l'article L. 20 </a>du livre des procédures fiscales ; </p><p>2° Les dettes consenties par le défunt au profit de ses héritiers ou de personnes interposées. Sont réputées personnes interposées les personnes désignées dans <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006433677&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 911 (V)\">l'article 911</a>, dernier alinéa, du code civil. </p><p>Néanmoins, lorsque la dette a été consentie par un acte authentique ou par un acte sous-seing privé ayant date certaine avant l'ouverture de la succession autrement que par le décès d'une des parties contractantes, les héritiers, donataires et légataires, et les personnes réputées interposées ont le droit de prouver la sincérité de cette dette et son existence au jour de l'ouverture de la succession ; </p><p>3° Les dettes reconnues par testament ; </p><p>4° Les dettes hypothécaires garanties par une inscription périmée depuis plus de trois mois, à moins qu'il ne s'agisse d'une dette non échue et que l'existence n'en soit attestée par le créancier dans les formes prévues à l'article L. 20 du livre des procédures fiscales ; si l'inscription n'est pas périmée, mais si le chiffre en a été réduit, l'excédent est seul déduit, s'il y a lieu ; </p><p>5° Les dettes en capital et intérêts pour lesquelles le délai de prescription est accompli, à moins qu'il ne soit justifié que la prescription a été interrompue.</p>",
+    "num": "773",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1370563200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 28632,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Livre premier : Assiette et liquidation de l'impôt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006084232",
+          "id": "LEGISCTA000006084232",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Première Partie : Impôts d'État",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006114494",
+          "id": "LEGISCTA000006114494",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1952-02-14",
+          "fin": "2018-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000006133850",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : Enregistrement, publicité foncière, timbre, impôt sur la fortune, immobilière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006133850",
+          "id": "LEGISCTA000036611615",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Chapitre premier : Droits d'enregistrement et taxe de publicité foncière",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006147066",
+          "id": "LEGISCTA000006147066",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "Section II : Les tarifs et leur application",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006162631",
+          "id": "LEGISCTA000006162631",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1965-07-14",
+          "fin": "2999-01-01",
+          "titre": "VI : Mutations à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006179724",
+          "id": "LEGISCTA000006179724",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "B : Assiette des droits de mutation à titre gratuit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006191747",
+          "id": "LEGISCTA000006191747",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2 : Dispositions spéciales aux successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006197324",
+          "id": "LEGISCTA000006197324",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "b : Passif déductible",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199105",
+          "id": "LEGISCTA000006199105",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1979-07-01",
+          "fin": "2999-01-01",
+          "titre": "2° : Dettes du défunt",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006199543",
+          "id": "LEGISCTA000006199543",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 62,
+      "titreTxt": [
+        {
+          "debut": "1952-02-14",
+          "fin": "2999-01-01",
+          "titre": "Code général des impôts",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006069577",
+          "id": "LEGITEXT000006069577",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006310336",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006199543",
+    "sectionParentId": "LEGISCTA000006199543",
+    "sectionParentTitre": "2° : Dettes du défunt",
+    "fullSectionsTitre": "Livre premier : Assiette et liquidation de l'impôt &gt; Première Partie : Impôts d'État &gt; Titre IV : Enregistrement, publicité foncière. Impôt de solidarité sur la fortune, timbre &gt; Chapitre premier : Droits d'enregistrement et taxe de publicité foncière &gt; Section II : Les tarifs et leur application &gt; VI : Mutations à titre gratuit &gt; B : Assiette des droits de mutation à titre gratuit &gt; 2 : Dispositions spéciales aux successions &gt; b : Passif déductible &gt; 2° : Dettes du défunt",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000027517853",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006069577",
+        "titre": "Code général des impôts, CGI.",
+        "titreLong": "Code général des impôts",
+        "etat": "VIGUEUR",
+        "dateDebut": -564278400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006069577",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Modification effectuée en conséquence de l'article 10-II de la loi n° 2002-305 du 4 mars 2002.",
+    "notaHtml": "<p>Modification effectuée en conséquence de l'article 10-II de la loi n° 2002-305 du 4 mars 2002.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000701296",
+        "textTitle": "Décret n°81-866 du 15 septembre 1981",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000701296",
+        "natureText": "DECRET",
+        "datePubliTexte": "1981-09-20",
+        "dateSignaTexte": "1981-09-15",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000027506377",
+        "textTitle": "Décret n°2013-463\n du 3 juin 2013 - art. 1",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000027507241",
+        "natureText": "DECRET",
+        "datePubliTexte": "2013-06-06",
+        "dateSignaTexte": "2013-06-03",
+        "dateDebutCible": "2013-06-07"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000036127735",
+        "textTitle": "Décision n°2017-676 QPC du 1er décembre 2017 - art. 1, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "JORFARTI000036127756",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2017-676 QPC",
+        "datePubli": 1512172800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000036127735",
+        "textTitle": "Décision n°2017-676 QPC du 1er décembre 2017 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000036127736",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2017-676 QPC",
+        "datePubli": 1512172800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000038486062",
+        "textTitle": "Décision n°2019-782 QPC du 17 mai 2019 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000038486063",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2019-782 QPC",
+        "datePubli": 1558137600000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006069577",
+        "textTitle": "Code général des impôts, CGI. - art. 753 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "753",
+        "articleId": "LEGIARTI000048472910",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -620870400000
+      },
+      {
+        "textCid": "LEGITEXT000006069577",
+        "textTitle": "Code général des impôts, CGI. - art. 758 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "758",
+        "articleId": "LEGIARTI000006310326",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1104537600000
+      },
+      {
+        "textCid": "LEGITEXT000006069583",
+        "textTitle": "Livre des procédures fiscales - art. L20",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "L20",
+        "articleId": "LEGIARTI000006315649",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 378691200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 911 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "911",
+        "articleId": "LEGIARTI000006433677",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000048489997",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -620870400000,
+        "dateFin": 299635200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310336",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 299635200000,
+        "dateFin": 378691200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006310337",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 378691200000,
+        "dateFin": 1370563200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027517853",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1370563200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "773"
+    ],
+    "versionPrecedente": "LEGIARTI000006310337",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

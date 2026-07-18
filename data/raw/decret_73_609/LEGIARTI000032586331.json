@@ -1,0 +1,268 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000032586331",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'appel à manifestation d'intérêt prévu au  deuxième alinéa du II de l'article 52 de la loi n° 2015-990 du 6 août 2015 susmentionnée est publié sur le site internet du ministère de la justice et transmis au Conseil supérieur du notariat en vue de sa diffusion aux conseils régionaux des notaires. L'enregistrement et l'instruction des demandes de création d'office dans les zones ainsi signalées sont réalisés dans les conditions prévues par les articles 49 et suivants du présent décret.",
+    "texteHtml": "<p>L'appel à manifestation d'intérêt prévu au  deuxième alinéa du II de l'article 52 de la loi n° 2015-990 du 6 août 2015 susmentionnée est publié sur le site internet du ministère de la justice et transmis au Conseil supérieur du notariat en vue de sa diffusion aux conseils régionaux des notaires. <br clear=\"none\" /><br clear=\"none\" /> L'enregistrement et l'instruction des demandes de création d'office dans les zones ainsi signalées sont réalisés dans les conditions prévues par les articles 49 et suivants du présent décret. </p>",
+    "num": "54",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1464220800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 858980,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Nomination aux offices de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132464",
+          "id": "LEGISCTA000006132464",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Section II : Nomination dans un office créé ou dans un office vacant",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145558",
+          "id": "LEGISCTA000006145558",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Nomination aux offices créés.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006161078",
+          "id": "LEGISCTA000006161078",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920747",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006161078",
+    "sectionParentId": "LEGISCTA000006161078",
+    "sectionParentTitre": "Paragraphe 1 : Nomination aux offices créés.",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre III : Nomination aux offices de notaire. &gt; Section II : Nomination dans un office créé ou dans un office vacant &gt; Paragraphe 1 : Nomination aux offices créés.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000032586331",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000032576285",
+        "textTitle": "Décret n°2016-661 du 20 mai 2016 - art. 3",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000032578892",
+        "natureText": "DECRET",
+        "datePubliTexte": "2016-05-25",
+        "dateSignaTexte": "2016-05-20",
+        "dateDebutCible": "2016-05-26"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000702622",
+        "textTitle": "Décret n°67-868 du 2 octobre 1967 - art. 4 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000006919726",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "67-868",
+        "datePubli": -70675200000,
+        "dateDebut": 542937600000
+      },
+      {
+        "textCid": "JORFTEXT000000649864",
+        "textTitle": "Arrêté du 27 août 2007 - art. 8 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000028093377",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1189036800000,
+        "dateDebut": 1382313600000
+      },
+      {
+        "textCid": "JORFTEXT000030978561",
+        "textTitle": "LOI n° 2015-990 du 6 août 2015 - art. 52",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "52",
+        "articleId": "JORFARTI000030978967",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2015-990",
+        "datePubli": 1438905600000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920747",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 515203200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920748",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 515203200000,
+        "dateFin": 1112486400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920749",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1112486400000,
+        "dateFin": 1464220800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000032586331",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1464220800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "54"
+    ],
+    "versionPrecedente": "LEGIARTI000006920749",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000021663188",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les inspecteurs ont les droits de recherche, de communication et de vérification les plus étendus sur les minutes, répertoires, registres, titres, valeurs, espèces, comptes bancaires ou postaux, pièces comptables, documents de toute nature dont ils jugent la représentation utile à leur mission. Le notaire inspecté doit déférer aux demandes des inspecteurs. Pour les vérifications effectuées en application du 10° de l'article 4 de l'ordonnance du 2 novembre 1945 susvisée, les inspecteurs se font communiquer, sur simple demande, les documents dont la conservation est prévue par l'article L. 561-12 du code monétaire et financier . Le notaire est tenu, sur la réquisition d'un inspecteur, de donner à tous établissements habilités à effectuer des opérations de banque l'ordre de communiquer à cet inspecteur le relevé de ces opérations réalisées pour son compte ou à sa demande ainsi que les justifications y afférentes. Le personnel de l'étude inspectée doit répondre aux questions qui lui sont posées par les inspecteurs et doit leur fournir toutes informations utiles à l'accomplissement de leur mission.",
+    "texteHtml": "<p>Les inspecteurs ont les droits de recherche, de communication et de vérification les plus étendus sur les minutes, répertoires, registres, titres, valeurs, espèces, comptes bancaires ou postaux, pièces comptables, documents de toute nature dont ils jugent la représentation utile à leur mission. <br clear=\"none\" />Le notaire inspecté doit déférer aux demandes des inspecteurs. Pour les vérifications effectuées en application du 10° de l'article 4 de l'ordonnance du 2 novembre 1945 susvisée, les inspecteurs se font communiquer, sur simple demande, les documents dont la conservation est prévue par l'article L. 561-12 du code monétaire et financier . </p><p>Le notaire est tenu, sur la réquisition d'un inspecteur, de donner à tous établissements habilités à effectuer des opérations de banque l'ordre de communiquer à cet inspecteur le relevé de ces opérations réalisées pour son compte ou à sa demande ainsi que les justifications y afférentes. <br clear=\"none\" />Le personnel de l'étude inspectée doit répondre aux questions qui lui sont posées par les inspecteurs et doit leur fournir toutes informations utiles à l'accomplissement de leur mission.</p>",
+    "num": "11",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "ABROGE",
+    "dateDebut": 1262995200000,
+    "dateFin": 1735689600000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1048574,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1975-01-01",
+          "fin": "2025-01-01",
+          "titre": " CHAPITRE I : Dispositions communes a toutes les inspections.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000019110961",
+          "id": "LEGISCTA000019110961",
+          "etat": "ABROGE"
+        },
+        {
+          "debut": "1975-01-01",
+          "fin": "2025-01-01",
+          "titre": " Section 2 : Modalités d'exécution.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000019110965",
+          "id": "LEGISCTA000019110965",
+          "etat": "ABROGE"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°74-737 du 12 août 1974 RELATIF AUX INSPECTIONS DES ETUDES DE NOTAIRE",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000679504",
+          "id": "JORFTEXT000000679504",
+          "etat": ""
+        },
+        {
+          "debut": "1975-01-01",
+          "fin": "2025-01-01",
+          "titre": "Décret n° 74-737 du 12 août 1974 relatif aux inspections des études de notaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000679504",
+          "id": "LEGITEXT000019110950",
+          "etat": "ABROGE"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000019110987",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000019110965",
+    "sectionParentId": "LEGISCTA000019110965",
+    "sectionParentTitre": " Section 2 : Modalités d'exécution.",
+    "fullSectionsTitre": null,
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000021663188",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000679504",
+        "titre": "Décret n°74-737 du 12 août 1974",
+        "titreLong": "Décret n°74-737 du 12 août 1974 RELATIF AUX INSPECTIONS DES ETUDES DE NOTAIRE",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000679504",
+        "datePubli": 146620800000,
+        "datePubliComputed": 146620800000,
+        "dateTexte": 145497600000,
+        "dateTexteComputed": 145497600000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "74-737",
+        "numParution": "",
+        "originePubli": "JORF du 25 août 1974",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000019110950",
+        "titre": "Décret n°74-737 du 12 août 1974 ",
+        "titreLong": "Décret n° 74-737 du 12 août 1974 relatif aux inspections des études de notaires.",
+        "etat": "ABROGE",
+        "dateDebut": 157766400000,
+        "dateFin": 1735689600000,
+        "cid": "JORFTEXT000000679504",
+        "datePubli": 146620800000,
+        "datePubliComputed": 146620800000,
+        "dateTexte": 145497600000,
+        "dateTexteComputed": 145497600000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "74-737",
+        "numParution": "",
+        "originePubli": "JORF du 25 août 1974",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000021637067",
+        "textTitle": "Décret n°2010-9\n du 6 janvier 2010 - art. 4",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000021657011",
+        "natureText": "DECRET",
+        "datePubliTexte": "2010-01-08",
+        "dateSignaTexte": "2010-01-06",
+        "dateDebutCible": "2010-01-09"
+      },
+      {
+        "textCid": "JORFTEXT000050329901",
+        "textTitle": "Décret n°2024-906 du 10 octobre 2024 - art. 31",
+        "linkType": "ABROGE",
+        "linkOrientation": "cible",
+        "articleNum": "31",
+        "articleId": "LEGIARTI000050331058",
+        "natureText": "DECRET",
+        "datePubliTexte": "2024-10-11",
+        "dateSignaTexte": "2024-10-10",
+        "dateDebutCible": "2024-10-12"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000699572",
+        "textTitle": "Ordonnance n° 45-2590 du 2 novembre 1945 - art. 4",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000006915221",
+        "natureText": "ORDONNANCE",
+        "parentCid": null,
+        "numTexte": "45-2590",
+        "datePubli": -762480000000,
+        "dateDebut": -762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006072026",
+        "textTitle": "Code monétaire et financier - art. L561-12",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "L561-12",
+        "articleId": "LEGIARTI000020180241",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1233446400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000019110987",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 157766400000,
+        "dateFin": 1262995200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000021663188",
+        "etat": "ABROGE",
+        "version": "2.0",
+        "dateDebut": 1262995200000,
+        "dateFin": 1735689600000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "11"
+    ],
+    "versionPrecedente": "LEGIARTI000019110987",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

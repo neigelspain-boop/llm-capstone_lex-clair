@@ -1,0 +1,260 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000053775748",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La vente a lieu soit par commissaire de justice ou notaire selon les lois et règlements applicables à ces professions, soit par le tribunal, soit dans les formes prévues par le code général de la propriété des personnes publiques pour l'aliénation, à titre onéreux, du domaine immobilier ou du domaine mobilier appartenant à l'Etat. Elle donne lieu à publicité. Lorsqu'il est envisagé une vente amiable, tout créancier peut exiger que la vente soit faite par adjudication. Si la vente par adjudication a lieu pour un prix inférieur au prix convenu dans le projet de vente amiable, le créancier qui a demandé l'adjudication est tenu, à l'égard des autres créanciers, de la perte qu'ils ont subie.",
+    "texteHtml": "<p>La vente a lieu soit par commissaire de justice ou notaire selon les lois et règlements applicables à ces professions, soit par le tribunal, soit dans les formes prévues par le code général de la propriété des personnes publiques pour l'aliénation, à titre onéreux, du domaine immobilier ou du domaine mobilier appartenant à l'Etat.</p><p>Elle donne lieu à publicité.</p><p>Lorsqu'il est envisagé une vente amiable, tout créancier peut exiger que la vente soit faite par adjudication. Si la vente par adjudication a lieu pour un prix inférieur au prix convenu dans le projet de vente amiable, le créancier qui a demandé l'adjudication est tenu, à l'égard des autres créanciers, de la perte qu'ils ont subie.</p>",
+    "num": "810-3",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1775692800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Des successions vacantes et des successions en déshérence",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136274",
+          "id": "LEGISCTA000006136274",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des successions vacantes.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150145",
+          "id": "LEGISCTA000006150145",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 2 : Des pouvoirs du curateur.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165522",
+          "id": "LEGISCTA000006165522",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431971",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165522",
+    "sectionParentId": "LEGISCTA000006165522",
+    "sectionParentTitre": "Paragraphe 2 : Des pouvoirs du curateur.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre V : Des successions vacantes et des successions en déshérence &gt; Section 1 : Des successions vacantes. &gt; Paragraphe 2 : Des pouvoirs du curateur.",
+    "refInjection": "MD-20260408_194752_933_BDJQUOT",
+    "idTechInjection": "index_DATA_NEXT_ARTICLE_LEGIARTI000053775748",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000053773159",
+        "textTitle": "LOI n°2026-248 du 7 avril 2026 - art. 4",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000053774406",
+        "natureText": "LOI",
+        "datePubliTexte": "2026-04-08",
+        "dateSignaTexte": "2026-04-07",
+        "dateDebutCible": "2026-04-09"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000024879866",
+        "textTitle": "Décret n°2011-1612  du 22 novembre 2011 - art. R2222-26, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R2222-26",
+        "articleId": "JORFARTI000024880603",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2011-1612",
+        "datePubli": 1322092800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000036684292",
+        "textTitle": "Arrêté du 23 février 2018 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGITEXT000036686798",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1520553600000,
+        "dateDebut": 1520640000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 810-8 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "810-8",
+        "articleId": "LEGIARTI000006432036",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1349 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1349",
+        "articleId": "LEGIARTI000006412508",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070299",
+        "textTitle": "Code général de la propriété des personnes publ... - art. R2222-26 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R2222-26",
+        "articleId": "LEGIARTI000024885396",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1322179200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431971",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1775692800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000053775748",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1775692800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "810-3"
+    ],
+    "versionPrecedente": "LEGIARTI000006431971",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

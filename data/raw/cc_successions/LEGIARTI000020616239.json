@@ -1,0 +1,235 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000020616239",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Sans préjudice de dommages et intérêts, l'héritier qui a recelé des biens ou des droits d'une succession ou dissimulé l'existence d'un cohéritier est réputé accepter purement et simplement la succession, nonobstant toute renonciation ou acceptation à concurrence de l'actif net, sans pouvoir prétendre à aucune part dans les biens ou les droits détournés ou recelés. Les droits revenant à l'héritier dissimulé et qui ont ou auraient pu augmenter ceux de l'auteur de la dissimulation sont réputés avoir été recelés par ce dernier. Lorsque le recel a porté sur une donation rapportable ou réductible, l'héritier doit le rapport ou la réduction de cette donation sans pouvoir y prétendre à aucune part. L'héritier receleur est tenu de rendre tous les fruits et revenus produits par les biens recelés dont il a eu la jouissance depuis l'ouverture de la succession.",
+    "texteHtml": "<p>Sans préjudice de dommages et intérêts, l'héritier qui a recelé des biens ou des droits d'une succession ou dissimulé l'existence d'un cohéritier est réputé accepter purement et simplement la succession, nonobstant toute renonciation ou acceptation à concurrence de l'actif net, sans pouvoir prétendre à aucune part dans les biens ou les droits détournés ou recelés. Les droits revenant à l'héritier dissimulé et qui ont ou auraient pu augmenter ceux de l'auteur de la dissimulation sont réputés avoir été recelés par ce dernier.</p><p>Lorsque le recel a porté sur une donation rapportable ou réductible, l'héritier doit le rapport ou la réduction de cette donation sans pouvoir y prétendre à aucune part.</p><p>L'héritier receleur est tenu de rendre tous les fruits et revenus produits par les biens recelés dont il a eu la jouissance depuis l'ouverture de la succession.</p><p></p>",
+    "num": "778",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1242259200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 31493,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : De l'option de l'héritier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136273",
+          "id": "LEGISCTA000006136273",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Dispositions générales.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150534",
+          "id": "LEGISCTA000006150534",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431465",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150534",
+    "sectionParentId": "LEGISCTA000006150534",
+    "sectionParentTitre": "Section 1 : Dispositions générales.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre IV : De l'option de l'héritier &gt; Section 1 : Dispositions générales.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000020616239",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000020604162",
+        "textTitle": "LOI n°2009-526\n du 12 mai 2009 - art. 10",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "10",
+        "articleId": "LEGIARTI000020606392",
+        "natureText": "LOI",
+        "datePubliTexte": "2009-05-13",
+        "dateSignaTexte": "2009-05-12",
+        "dateDebutCible": "2009-05-14"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000491272",
+        "textTitle": "Décret n°55-1350 du 14 octobre 1955 - art. 69 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "69",
+        "articleId": "LEGIARTI000026854920",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "55-1350",
+        "datePubli": -448588800000,
+        "dateDebut": 1356998400000
+      },
+      {
+        "textCid": "JORFTEXT000019681916",
+        "textTitle": "Décret n°2008-1086\n du 23 octobre 2008 - art. 91 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "91",
+        "articleId": "LEGIARTI000019683082",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2008-1086",
+        "datePubli": 1224892800000,
+        "dateDebut": 1224979200000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 730-5 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "730-5",
+        "articleId": "LEGIARTI000006430909",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 773 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "773",
+        "articleId": "LEGIARTI000006431386",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431465",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431466",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020616239",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "778"
+    ],
+    "versionPrecedente": "LEGIARTI000006431466",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

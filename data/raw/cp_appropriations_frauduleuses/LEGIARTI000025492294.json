@@ -1,0 +1,212 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000025492294",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le fait de vendre, d'offrir à la vente ou d'exposer en vue de la vente ou de la cession ou de fournir les moyens en vue de la vente ou de la cession des titres d'accès à une manifestation sportive, culturelle ou commerciale ou à un spectacle vivant, de manière habituelle et sans l'autorisation du producteur, de l'organisateur ou du propriétaire des droits d'exploitation de cette manifestation ou de ce spectacle, est puni de 15 000 € d'amende. Cette peine est portée à 30 000 € d'amende en cas de récidive. Pour l'application du premier alinéa, est considéré comme titre d'accès tout billet, document, message ou code, quels qu'en soient la forme et le support, attestant de l'obtention auprès du producteur, de l'organisateur ou du propriétaire des droits d'exploitation du droit d'assister à la manifestation ou au spectacle.",
+    "texteHtml": "<p>Le fait de vendre, d'offrir à la vente ou d'exposer en vue de la vente ou de la cession ou de fournir les moyens en vue de la vente ou de la cession des titres d'accès à une manifestation sportive, culturelle ou commerciale ou à un spectacle vivant, de manière habituelle et sans l'autorisation du producteur, de l'organisateur ou du propriétaire des droits d'exploitation de cette manifestation ou de ce spectacle, est puni de 15 000 € d'amende. Cette peine est portée à 30 000 € d'amende en cas de récidive.</p><p>  Pour l'application du premier alinéa, est considéré comme titre d'accès tout billet, document, message ou code, quels qu'en soient la forme et le support, attestant de l'obtention auprès du producteur, de l'organisateur ou du propriétaire des droits d'exploitation du droit d'assister à la manifestation ou au spectacle.</p>",
+    "num": "313-6-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1331683200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1073892145,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : De l'escroquerie et des infractions voisines",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149835",
+          "id": "LEGISCTA000006149835",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des infractions voisines de l'escroquerie",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165332",
+          "id": "LEGISCTA000006165332",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000025492294",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165332",
+    "sectionParentId": "LEGISCTA000006165332",
+    "sectionParentTitre": "Section 2 : Des infractions voisines de l'escroquerie",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre III : De l'escroquerie et des infractions voisines &gt; Section 2 : Des infractions voisines de l'escroquerie",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000025492294",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000025490406",
+        "textTitle": "LOI n°2012-348\n du 12 mars 2012 - art. 3",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000025492131",
+        "natureText": "LOI",
+        "datePubliTexte": "2012-03-13",
+        "dateSignaTexte": "2012-03-12",
+        "dateDebutCible": "2012-03-14"
+      },
+      {
+        "textCid": "JORFTEXT000025540967",
+        "textTitle": "LOI n°2012-348\r\n du 12 mars 2012, v. init.",
+        "linkType": "RECTIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000025540967",
+        "natureText": "LOI",
+        "datePubliTexte": "2012-03-20",
+        "dateSignaTexte": "2012-03-12",
+        "dateDebutCible": "2999-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000037815248",
+        "textTitle": "Décision n°2018-754 QPC du 14 décembre 2018 - art. 1, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "JORFARTI000037815257",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2018-754 QPC",
+        "datePubli": 1544832000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000037815248",
+        "textTitle": "Décision n°2018-754 QPC du 14 décembre 2018 - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000037815249",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2018-754 QPC",
+        "datePubli": 1544832000000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000025492294",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1331683200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "313-6-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

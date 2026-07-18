@@ -37,12 +37,15 @@ SANDBOX = {
 
 
 class RateLimiter:
+    """Simple rate limiter to keep API requests below a fixed rate."""
+
     def __init__(self, per_second: float = 5.0):
         self.min_interval = 1.0 / per_second
         self._last = 0.0
         self._lock = threading.Lock()
 
     def wait(self) -> None:
+        """Block until the next allowed request time has arrived."""
         with self._lock:
             elapsed = time.monotonic() - self._last
             if elapsed < self.min_interval:
@@ -52,6 +55,8 @@ class RateLimiter:
 
 @dataclass
 class PisteClient:
+    """Client for PISTE OAuth2 authentication and Legifrance data calls."""
+
     client_id: str
     client_secret: str
     env: str = "sandbox"
@@ -64,6 +69,7 @@ class PisteClient:
     _http: httpx.Client = field(init=False)
 
     def __post_init__(self):
+        """Set endpoint URLs, rate limiter, and HTTP client after object creation."""
         cfg = PROD if self.env == "production" else SANDBOX
         self.token_url = cfg["token_url"]
         self.api_base = cfg["api_base"]
@@ -72,6 +78,7 @@ class PisteClient:
 
     @classmethod
     def from_env(cls) -> "PisteClient":
+        """Create a client using credentials read from environment variables."""
         env = os.getenv("PISTE_ENV", "sandbox")
         if env == "sandbox":
             cid = os.environ["PISTE_SANDBOX_CLIENT_ID"]
@@ -82,6 +89,7 @@ class PisteClient:
         return cls(client_id=cid, client_secret=secret, env=env)
 
     def _refresh_token(self) -> None:
+        """Fetch a new OAuth2 access token and cache its expiry time."""
         r = self._http.post(
             self.token_url,
             data={
@@ -97,6 +105,7 @@ class PisteClient:
         self._token_expires_at = time.monotonic() + body["expires_in"] - 60
 
     def _auth_headers(self) -> dict[str, str]:
+        """Return bearer headers, refreshing token first if expired."""
         if self._token is None or time.monotonic() >= self._token_expires_at:
             self._refresh_token()
         return {
@@ -113,6 +122,7 @@ class PisteClient:
         reraise=True,
     )
     def post(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
+        """Post JSON to a PISTE endpoint, with auth, retry, and rate limiting."""
         self._limiter.wait()
         r = self._http.post(
             f"{self.api_base}{path}",
@@ -133,6 +143,7 @@ class PisteClient:
 
     # --------------------------------------------------------- endpoints
     def get_article(self, legiarti_id: str) -> dict[str, Any]:
+        """Fetch one article object from PISTE by its LEGIARTI id."""
         return self.post("/consult/getArticle", {"id": legiarti_id})
 
     def list_articles_in_section(
@@ -142,11 +153,7 @@ class PisteClient:
         _depth: int = 0,
         _visited: set[str] | None = None,
     ) -> list[str]:
-        """Enumerate all LEGIARTI ids under a section.
-
-        Recursively fetches child LEGISCTA subsections when the current response
-        only returns their IDs (parent sections don't inline articles for large trees).
-        """
+        """Collect all article ids under a section, following nested subsections."""
         if _visited is None:
             _visited = set()
         if section_id in _visited:
@@ -187,6 +194,7 @@ class PisteClient:
         return [a for a in articles if not (a in seen or seen.add(a))]
 
     def list_articles_in_loda(self, text_id: str) -> list[str]:
+        """Fetch all article ids from a law or decree text by its text identifier."""
         payload = {"textId": text_id, "date": _today_ms()}
         data = self.post("/consult/lawDecree", payload)
         articles: list[str] = []
@@ -195,6 +203,7 @@ class PisteClient:
         return articles
 
     def list_articles_in_jorf(self, text_id: str) -> list[str]:
+        """Fetch article ids from Journal Officiel raw text, trying alternate request keys."""
         # PISTE /consult/jorf expects "textCid" per Swagger; try alternate keys on 400
         for key in ("textCid", "id", "textId"):
             try:
@@ -212,6 +221,7 @@ class PisteClient:
 
 
 def _today_ms() -> int:
+    """Return the current epoch time in milliseconds for API payloads."""
     return int(time.time() * 1000)
 
 

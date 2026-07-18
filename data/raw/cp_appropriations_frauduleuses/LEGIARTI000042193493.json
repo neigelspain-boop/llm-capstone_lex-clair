@@ -1,0 +1,317 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000042193493",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Ne peut donner lieu à des poursuites pénales le vol commis par une personne : 1° Au préjudice de son ascendant ou de son descendant ; 2° Au préjudice de son conjoint, sauf lorsque les époux sont séparés de corps ou autorisés à résider séparément. Le présent article n'est pas applicable : a) Lorsque le vol porte sur des objets ou des documents indispensables à la vie quotidienne de la victime, tels que des documents d'identité, relatifs au titre de séjour ou de résidence d'un étranger, ou des moyens de paiement ou de télécommunication ; b) Lorsque l'auteur des faits est le tuteur, le curateur, le mandataire spécial désigné dans le cadre d'une sauvegarde de justice, la personne habilitée dans le cadre d'une habilitation familiale ou le mandataire exécutant un mandat de protection future de la victime.",
+    "texteHtml": "<p>Ne peut donner lieu à des poursuites pénales le vol commis par une personne :</p><p>1° Au préjudice de son ascendant ou de son descendant ;</p><p>2° Au préjudice de son conjoint, sauf lorsque les époux sont séparés de corps ou autorisés à résider séparément.</p><p>Le présent article n'est pas applicable :</p><p>a) Lorsque le vol porte sur des objets ou des documents indispensables à la vie quotidienne de la victime, tels que des documents d'identité, relatifs au titre de séjour ou de résidence d'un étranger, ou des moyens de paiement ou de télécommunication ;</p><p>b) Lorsque l'auteur des faits est le tuteur, le curateur, le mandataire spécial désigné dans le cadre d'une sauvegarde de justice, la personne habilitée dans le cadre d'une habilitation familiale ou le mandataire exécutant un mandat de protection future de la victime.</p>",
+    "num": "311-12",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1596240000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : Du vol",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149833",
+          "id": "LEGISCTA000006149833",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Dispositions générales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165325",
+          "id": "LEGISCTA000006165325",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418151",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165325",
+    "sectionParentId": "LEGISCTA000006165325",
+    "sectionParentTitre": "Section 2 : Dispositions générales",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre Ier : Du vol &gt; Section 2 : Dispositions générales",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000042193493",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi n°92-685 du 22 juillet 1992",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000042176652",
+        "textTitle": "LOI n°2020-936 du 30 juillet 2020 - art. 10",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "10",
+        "articleId": "LEGIARTI000042181394",
+        "natureText": "LOI",
+        "datePubliTexte": "2020-07-31",
+        "dateSignaTexte": "2020-07-30",
+        "dateDebutCible": "2020-08-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000027778812",
+        "textTitle": "Avis du  - art., v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000027778814",
+        "natureText": "AVIS",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1375228800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000031700731",
+        "textTitle": "LOI n°2015-1776 du 28 décembre 2015 - art. 36",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "36",
+        "articleId": "LEGIARTI000031706370",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2015-1776",
+        "datePubli": 1451347200000,
+        "dateDebut": 1451433600000
+      },
+      {
+        "textCid": "JORFTEXT000051401754",
+        "textTitle": "Avis - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000051401755",
+        "natureText": "AVIS",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1743465600000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070633",
+        "textTitle": "Code général des collectivités territoriales - art. L1874-3 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L1874-3",
+        "articleId": "LEGIARTI000020630462",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1242259200000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-12 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "312-12",
+        "articleId": "LEGIARTI000006418183",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-9 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "312-9",
+        "articleId": "LEGIARTI000006418178",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 313-3 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "313-3",
+        "articleId": "LEGIARTI000006418196",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-4 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "314-4",
+        "articleId": "LEGIARTI000006418220",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418151",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 1144195200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418152",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1144195200000,
+        "dateFin": 1451433600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000031727575",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1451433600000,
+        "dateFin": 1596240000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000042193493",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1596240000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "311-12"
+    ],
+    "versionPrecedente": "LEGIARTI000031727575",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

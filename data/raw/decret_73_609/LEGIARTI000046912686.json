@@ -1,0 +1,197 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046912686",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La demande d'autorisation de prolongation d'activité prévue à l'article 2 de la loi du 25 ventôse an XI susvisée est présentée au garde des sceaux, ministre de la justice, par téléprocédure sur le site internet du ministère de la justice, au plus tard deux mois avant le soixante-dixième anniversaire du demandeur, accompagnée de la copie d'une pièce justificative d'identité. En l'absence de décision expresse d'opposition ou de non-opposition du garde des sceaux, ministre de la justice, portée à la connaissance de l'intéressé avant l'expiration d'un délai de deux mois, la demande d'autorisation est réputée avoir fait l'objet d'une décision de non-opposition et l'autorisation est accordée à la date d'expiration de ce délai. Ce délai court à compter de la réception d'une demande dûment complétée et accompagnée de la pièce mentionnée au premier alinéa. Le délai de douze mois prévu pour la prolongation d'activité court à compter du soixante-dixième anniversaire de l'intéressé.",
+    "texteHtml": "<p>La demande d'autorisation de prolongation d'activité prévue à l'article 2 de la loi du 25 ventôse an XI susvisée est présentée au garde des sceaux, ministre de la justice, par téléprocédure sur le site internet du ministère de la justice, au plus tard deux mois avant le soixante-dixième anniversaire du demandeur, accompagnée de la copie d'une pièce justificative d'identité.</p><p>En l'absence de décision expresse d'opposition ou de non-opposition du garde des sceaux, ministre de la justice, portée à la connaissance de l'intéressé avant l'expiration d'un délai de deux mois, la demande d'autorisation est réputée avoir fait l'objet d'une décision de non-opposition et l'autorisation est accordée à la date d'expiration de ce délai. Ce délai court à compter de la réception d'une demande dûment complétée et accompagnée de la pièce mentionnée au premier alinéa.</p><p>Le délai de douze mois prévu pour la prolongation d'activité court à compter du soixante-dixième anniversaire de l'intéressé.</p>",
+    "num": "58-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1677628800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1073741823,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2016-08-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I bis : Prolongation d'activité",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000032581071",
+          "id": "LEGISCTA000032581092",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000032581102",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000032581071",
+    "sectionParentId": "LEGISCTA000032581092",
+    "sectionParentTitre": "Titre I bis : Prolongation d'activité",
+    "fullSectionsTitre": "Titre I bis : Prolongation d'activité",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000046912686",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l’article 12 du décret n° 2022-1743 du 29 décembre 2022, ces dispositions entrent en vigueur le 1er mars 2023. Se reporter aux modalités d’application prévues audit article 12.",
+    "notaHtml": "<p>Conformément à l’article 12 du décret n° 2022-1743 du 29 décembre 2022, ces dispositions entrent en vigueur le 1er mars 2023. Se reporter aux modalités d’application prévues audit article 12.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046846725",
+        "textTitle": "Décret n°2022-1743 du 29 décembre 2022 - art. 9",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000046859029",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-12-31",
+        "dateSignaTexte": "2022-12-29",
+        "dateDebutCible": "2023-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000033369823",
+        "textTitle": "Arrêté du 10 novembre 2016 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000033372910",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1478995200000,
+        "dateDebut": 1479081600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000032581118",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 1470009600000,
+        "dateFin": 1677628800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046912686",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1677628800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "58-1"
+    ],
+    "versionPrecedente": "LEGIARTI000032581118",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

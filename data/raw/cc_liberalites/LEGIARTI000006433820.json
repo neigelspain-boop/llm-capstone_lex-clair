@@ -1,0 +1,251 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006433820",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le défaut de publication pourra être opposé par toutes personnes ayant intérêt, excepté toutefois celles qui sont chargées de faire faire la publication, ou leurs ayants cause, et le donateur.",
+    "texteHtml": "<p></p>   Le défaut de publication pourra être opposé par toutes personnes ayant intérêt, excepté toutefois celles qui sont chargées de faire faire la publication, ou leurs ayants cause, et le donateur.<p></p><p></p>",
+    "num": "941",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 429490,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136550",
+          "id": "LEGISCTA000006136550",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De la forme des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150545",
+          "id": "LEGISCTA000006150545",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433819",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150545",
+    "sectionParentId": "LEGISCTA000006150545",
+    "sectionParentTitre": "Section 1 : De la forme des donations entre vifs.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre IV : Des donations entre vifs. &gt; Section 1 : De la forme des donations entre vifs.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006433820",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 9 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000006284843",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000869867",
+        "textTitle": "Loi n°1924-06-01 du 1 juin 1924 - art. 38-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "38-2",
+        "articleId": "LEGIARTI000006284050",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -1438387200000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "JORFTEXT000000869867",
+        "textTitle": "Loi n°1924-06-01 du 1 juin 1924 - art. 40 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "40",
+        "articleId": "LEGIARTI000006284056",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -1438387200000,
+        "dateDebut": 662860800000
+      },
+      {
+        "textCid": "JORFTEXT000000850274",
+        "textTitle": "Décret n°55-22 du 4 janvier 1955 - art. 30 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "30",
+        "articleId": "LEGIARTI000022336523",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "55-22",
+        "datePubli": -472867200000,
+        "dateDebut": 1356998400000
+      },
+      {
+        "textCid": "JORFTEXT000049746356",
+        "textTitle": "Ordonnance n°2024-562 du 19 juin 2024 - art. 10",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "10",
+        "articleId": "LEGIARTI000049749037",
+        "natureText": "ORDONNANCE",
+        "parentCid": null,
+        "numTexte": "2024-562",
+        "datePubli": 1718841600000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000049746294",
+        "textTitle": "Rapport - art.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFARTI000049746306",
+        "natureText": "RAPPORT",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1718841600000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433819",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433820",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "941"
+    ],
+    "versionPrecedente": "LEGIARTI000006433819",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

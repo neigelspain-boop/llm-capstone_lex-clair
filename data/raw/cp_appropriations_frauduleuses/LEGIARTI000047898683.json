@@ -1,0 +1,164 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000047898683",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le maintien sans droit ni titre dans un local à usage d'habitation en violation d'une décision de justice définitive et exécutoire ayant donné lieu à un commandement régulier de quitter les lieux depuis plus de deux mois est puni de 7 500 euros d'amende. Le présent article n'est pas applicable lorsque l'occupant bénéficie des dispositions de l'article L. 412-6 du code des procédures civiles d'exécution, lorsque le juge de l'exécution est saisi sur le fondement de l'article L. 412-3 du même code, jusqu'à la décision rejetant la demande ou jusqu'à l'expiration des délais accordés par le juge à l'occupant, ou lorsque le logement appartient à un bailleur social ou à une personne morale de droit public.",
+    "texteHtml": "<p>Le maintien sans droit ni titre dans un local à usage d'habitation en violation d'une décision de justice définitive et exécutoire ayant donné lieu à un commandement régulier de quitter les lieux depuis plus de deux mois est puni de 7 500 euros d'amende.<br/><br/>\n Le présent article n'est pas applicable lorsque l'occupant bénéficie des dispositions de l'article L. 412-6 du code des procédures civiles d'exécution, lorsque le juge de l'exécution est saisi sur le fondement de l'article L. 412-3 du même code, jusqu'à la décision rejetant la demande ou jusqu'à l'expiration des délais accordés par le juge à l'occupant, ou lorsque le logement appartient à un bailleur social ou à une personne morale de droit public.</p>",
+    "num": "315-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1690588800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 1610612735,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2023-07-29",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : De l'occupation frauduleuse d'un local à usage d'habitation ou à usage commercial, agricole ou professionnel",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000047898679",
+          "id": "LEGISCTA000047898679",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000047898683",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000047898679",
+    "sectionParentId": "LEGISCTA000047898679",
+    "sectionParentTitre": "Chapitre V : De l'occupation frauduleuse d'un local à usage d'habitation ou à usage commercial, agricole ou professionnel",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre V : De l'occupation frauduleuse d'un local à usage d'habitation ou à usage commercial, agricole ou professionnel",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000047898683",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000047897040",
+        "textTitle": "LOI n°2023-668 du 27 juillet 2023 - art. 1",
+        "linkType": "CREE",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000047898589",
+        "natureText": "LOI",
+        "datePubliTexte": "2023-07-28",
+        "dateSignaTexte": "2023-07-27",
+        "dateDebutCible": "2023-07-29"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000047898683",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1690588800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "315-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

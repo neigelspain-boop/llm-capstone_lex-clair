@@ -1,0 +1,264 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006433094",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Chaque cohéritier est censé avoir succédé seul et immédiatement à tous les effets compris dans son lot, ou à lui échus sur licitation, et n'avoir jamais eu la propriété des autres effets de la succession. Il en est de même des biens qui lui sont advenus par tout autre acte ayant pour effet de faire cesser l'indivision. Il n'est pas distingué selon que l'acte fait cesser l'indivision en tout ou partie, à l'égard de certains biens ou de certains héritiers seulement. Toutefois, les actes valablement accomplis soit en vertu d'un mandat des coïndivisaires, soit en vertu d'une autorisation judiciaire, conservent leurs effets quelle que soit, lors du partage, l'attribution des biens qui en ont fait l'objet.",
+    "texteHtml": "<p></p>   Chaque cohéritier est censé avoir succédé seul et immédiatement à tous les effets compris dans son lot, ou à lui échus sur licitation, et n'avoir jamais eu la propriété des autres effets de la succession.<p></p><p></p>   Il en est de même des biens qui lui sont advenus par tout autre acte ayant pour effet de faire cesser l'indivision. Il n'est pas distingué selon que l'acte fait cesser l'indivision en tout ou partie, à l'égard de certains biens ou de certains héritiers seulement.<p></p><p></p>   Toutefois, les actes valablement accomplis soit en vertu d'un mandat des coïndivisaires, soit en vertu d'une autorisation judiciaire, conservent leurs effets quelle que soit, lors du partage, l'attribution des biens qui en ont fait l'objet.<p></p>",
+    "num": "883",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 42949,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VIII : Du partage.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136288",
+          "id": "LEGISCTA000006136288",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 4 : Des effets du partage et de la garantie des lots",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150543",
+          "id": "LEGISCTA000006150543",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433093",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150543",
+    "sectionParentId": "LEGISCTA000006150543",
+    "sectionParentTitre": "Section 4 : Des effets du partage et de la garantie des lots",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VIII : Du partage. &gt; Section 4 : Des effets du partage et de la garantie des lots",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006433094",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 3 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000006284837",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000313972",
+        "textTitle": "Loi n°62-933 du 8 août 1962 - art. 7 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "7",
+        "articleId": "LEGIARTI000006600070",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "62-933",
+        "datePubli": -233366400000,
+        "dateDebut": 633225600000
+      },
+      {
+        "textCid": "JORFTEXT000000878026",
+        "textTitle": "Loi n°67-5 du 3 janvier 1967 - art. 56 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "56",
+        "articleId": "LEGIARTI000006878367",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "67-5",
+        "datePubli": -94435200000,
+        "dateDebut": -60220800000
+      },
+      {
+        "textCid": "JORFTEXT000000317285",
+        "textTitle": "Loi n°68-1 du 2 janvier 1968 - art. 42 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "42",
+        "articleId": "LEGIARTI000006281127",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "68-1",
+        "datePubli": -62985600000,
+        "dateDebut": 299635200000
+      },
+      {
+        "textCid": "JORFTEXT000029574297",
+        "textTitle": "DÉCISION n°2014-701 DC du 9 octobre 2014, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFTEXT000029574297",
+        "natureText": "DECISION",
+        "parentCid": null,
+        "numTexte": "2014-701 DC",
+        "datePubli": 1413244800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006069414",
+        "textTitle": "Code de la propriété intellectuelle - art. L613-30 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L613-30",
+        "articleId": "LEGIARTI000006279516",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 710121600000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural et de la pêche maritime - art. L143-4 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L143-4",
+        "articleId": "LEGIARTI000029594354",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1413331200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433093",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 236563200000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433094",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "883"
+    ],
+    "versionPrecedente": "LEGIARTI000006433093",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000025494719",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les personnes morales déclarées responsables pénalement, dans les conditions prévues par l'article 121-2 , des infractions définies aux articles 313-1 à 313-3 et aux articles 313-6-1 et 313-6-2 encourent, outre l'amende suivant les modalités prévues par l'article 131-38 , les peines prévues par l'article 131-39 . L'interdiction mentionnée au 2° de l'article 131-39 porte sur l'activité dans l'exercice ou à l'occasion de l'exercice de laquelle l'infraction a été commise.",
+    "texteHtml": "<p>Les personnes morales déclarées responsables pénalement, dans les conditions prévues par <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417202&dateTexte=&categorieLien=cid\">l'article 121-2</a>, des infractions définies aux <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418191&dateTexte=&categorieLien=cid\">articles 313-1 à 313-3 </a>et aux <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418203&dateTexte=&categorieLien=cid\">articles 313-6-1 et 313-6-2 </a>encourent, outre l'amende suivant les modalités prévues par <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417333&dateTexte=&categorieLien=cid\">l'article 131-38</a>, les peines prévues par <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006417335&dateTexte=&categorieLien=cid\">l'article 131-39</a>. </p><p>L'interdiction mentionnée au 2° de l'article 131-39 porte sur l'activité dans l'exercice ou à l'occasion de l'exercice de laquelle l'infraction a été commise.</p><p></p>",
+    "num": "313-9",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "6.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1331683200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : De l'escroquerie et des infractions voisines",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149835",
+          "id": "LEGISCTA000006149835",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165333",
+          "id": "LEGISCTA000006165333",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418209",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165333",
+    "sectionParentId": "LEGISCTA000006165333",
+    "sectionParentTitre": "Section 3 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre III : De l'escroquerie et des infractions voisines &gt; Section 3 : Peines complémentaires applicables aux personnes physiques et responsabilité des personnes morales",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000025494719",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000025490406",
+        "textTitle": "LOI n°2012-348\n du 12 mars 2012 - art. 3",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000025492131",
+        "natureText": "LOI",
+        "datePubliTexte": "2012-03-13",
+        "dateSignaTexte": "2012-03-12",
+        "dateDebutCible": "2012-03-14"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 121-2",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "121-2",
+        "articleId": "LEGIARTI000006417202",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 131-38",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "131-38",
+        "articleId": "LEGIARTI000006417333",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 131-39",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "131-39",
+        "articleId": "LEGIARTI000006417335",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 313-1",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "313-1",
+        "articleId": "LEGIARTI000006418191",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 313-6-1",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "313-6-1",
+        "articleId": "LEGIARTI000006418203",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1048032000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418209",
+        "etat": "MODIFIE_MORT_NE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 712627200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418210",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 992390400000,
+        "dateFin": 1048032000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418211",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1048032000000,
+        "dateFin": 1242259200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000020630829",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1242259200000,
+        "dateFin": 1259193600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000021342936",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 1259193600000,
+        "dateFin": 1331683200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000025494719",
+        "etat": "VIGUEUR",
+        "version": "6.0",
+        "dateDebut": 1331683200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "313-9"
+    ],
+    "versionPrecedente": "LEGIARTI000021342936",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

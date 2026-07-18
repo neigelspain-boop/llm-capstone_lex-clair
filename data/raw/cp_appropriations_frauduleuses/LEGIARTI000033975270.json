@@ -1,0 +1,323 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000033975270",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'extorsion est punie de dix ans d'emprisonnement et de 150 000 euros d'amende : 1° Lorsqu'elle est précédée, accompagnée ou suivie de violences sur autrui ayant entraîné une incapacité totale de travail pendant huit jours au plus ; 2° Lorsqu'elle est commise au préjudice d'une personne dont la particulière vulnérabilité, due à son âge, à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse, est apparente ou connue de son auteur ; 3° (abrogé) 4° Lorsqu'elle est commise par une personne dissimulant volontairement en tout ou partie son visage afin de ne pas être identifiée ; 5° Lorsqu'elle est commise dans les établissements d'enseignement ou d'éducation ainsi que, lors des entrées ou sorties des élèves ou dans un temps très voisin de celles-ci, aux abords de ces établissements.",
+    "texteHtml": "<p>L'extorsion est punie de dix ans d'emprisonnement et de 150 000 euros d'amende : </p><p>1° Lorsqu'elle est précédée, accompagnée ou suivie de violences sur autrui ayant entraîné une incapacité totale de travail pendant huit jours au plus ; </p><p>2° Lorsqu'elle est commise au préjudice d'une personne dont la particulière vulnérabilité, due à son âge, à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse, est apparente ou connue de son auteur ; </p><p>3° (abrogé)</p><p>4° Lorsqu'elle est commise par une personne dissimulant volontairement en tout ou partie son visage afin de ne pas être identifiée ; </p><p>5° Lorsqu'elle est commise dans les établissements d'enseignement ou d'éducation ainsi que, lors des entrées ou sorties des élèves ou dans un temps très voisin de celles-ci, aux abords de ces établissements.</p>",
+    "num": "312-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "6.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1485648000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : De l'extorsion",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149834",
+          "id": "LEGISCTA000006149834",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De l'extorsion",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165327",
+          "id": "LEGISCTA000006165327",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418161",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165327",
+    "sectionParentId": "LEGISCTA000006165327",
+    "sectionParentTitre": "Section 1 : De l'extorsion",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre II : De l'extorsion &gt; Section 1 : De l'extorsion",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000033975270",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000033934948",
+        "textTitle": "LOI n°2017-86 du 27 janvier 2017 - art. 171",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "171",
+        "articleId": "LEGIARTI000033938301",
+        "natureText": "LOI",
+        "datePubliTexte": "2017-01-28",
+        "dateSignaTexte": "2017-01-27",
+        "dateDebutCible": "2017-01-29"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000648362",
+        "textTitle": "Décret n°2007-1167 du 2 août 2007 - art. 23 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "23",
+        "articleId": "LEGIARTI000006885176",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2007-1167",
+        "datePubli": 1186099200000,
+        "dateDebut": 1186099200000
+      },
+      {
+        "textCid": "JORFTEXT000051528207",
+        "textTitle": "LOI n°2025-379 du 28 avril 2025 - art. 17",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "17",
+        "articleId": "JORFARTI000051528262",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2025-379",
+        "datePubli": 1745884800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006074947",
+        "textTitle": "Code de la route - art. R243-2 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R243-2",
+        "articleId": "LEGIARTI000006876023",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 978134400000
+      },
+      {
+        "textCid": "LEGITEXT000006074228",
+        "textTitle": "Code de la route. - art. R212-4 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R212-4",
+        "articleId": "LEGIARTI000037411327",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1537315200000
+      },
+      {
+        "textCid": "LEGITEXT000023086525",
+        "textTitle": "Code des transports - art. L1633-3 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L1633-3",
+        "articleId": "LEGIARTI000052851235",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1861920000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-13 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "312-13",
+        "articleId": "LEGIARTI000052849725",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1861920000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-14 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "312-14",
+        "articleId": "LEGIARTI000006418188",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 312-8 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "312-8",
+        "articleId": "LEGIARTI000006418176",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418161",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 1009843200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418162",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1009843200000,
+        "dateFin": 1078876800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418163",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1078876800000,
+        "dateFin": 1267660800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000021926091",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1267660800000,
+        "dateFin": 1344384000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000026268242",
+        "etat": "MODIFIE",
+        "version": "5.0",
+        "dateDebut": 1344384000000,
+        "dateFin": 1485648000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000033975270",
+        "etat": "VIGUEUR",
+        "version": "6.0",
+        "dateDebut": 1485648000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "312-2"
+    ],
+    "versionPrecedente": "LEGIARTI000026268242",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

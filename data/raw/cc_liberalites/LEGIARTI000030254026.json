@@ -1,0 +1,221 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000030254026",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Si le testament est reçu par deux notaires, il leur est dicté par le testateur ; l'un de ces notaires l'écrit lui-même ou le fait écrire à la main ou mécaniquement. S'il n'y a qu'un notaire, il doit également être dicté par le testateur ; le notaire l'écrit lui-même ou le fait écrire à la main ou mécaniquement. Dans tous les cas, il doit en être donné lecture au testateur. Lorsque le testateur ne peut s'exprimer en langue française, la dictée et la lecture peuvent être accomplies par un interprète que le testateur choisit sur la liste nationale des experts judiciaires dressée par la Cour de cassation ou sur la liste des experts judiciaires dressée par chaque cour d'appel. L'interprète veille à l'exacte traduction des propos tenus. Le notaire n'est pas tenu de recourir à un interprète lorsque lui-même ainsi que, selon le cas, l'autre notaire ou les témoins comprennent la langue dans laquelle s'exprime le testateur. Lorsque le testateur peut écrire en langue française mais ne peut parler, le notaire écrit lui-même le testament ou le fait écrire à la main ou mécaniquement d'après les notes rédigées devant lui par le testateur, puis en donne lecture à ce dernier. Lorsque le testateur ne peut entendre, il prend connaissance du testament en le lisant lui-même, après lecture faite par le notaire. Lorsque le testateur ne peut ni parler ou entendre, ni lire ou écrire, la dictée ou la lecture sont accomplies dans les conditions décrites au quatrième alinéa. Il est fait du tout mention expresse.",
+    "texteHtml": "<p>   Si le testament est reçu par deux notaires, il leur est dicté par le testateur ; l'un de ces notaires l'écrit lui-même ou le fait écrire à la main ou mécaniquement.</p><p></p><p>   S'il n'y a qu'un notaire, il doit également être dicté par le testateur ; le notaire l'écrit lui-même ou le fait écrire à la main ou mécaniquement.</p><p></p><p>   Dans tous les cas, il doit en être donné lecture au testateur.</p><p></p><p> Lorsque le testateur ne peut s'exprimer en langue française, la dictée et la lecture peuvent être accomplies par un interprète que le testateur choisit sur la liste nationale des experts judiciaires dressée par la Cour de cassation ou sur la liste des experts judiciaires dressée par chaque cour d'appel. L'interprète veille à l'exacte traduction des propos tenus. Le notaire n'est pas tenu de recourir à un interprète lorsque lui-même ainsi que, selon le cas, l'autre notaire ou les témoins comprennent la langue dans laquelle s'exprime le testateur.</p><p></p><p> Lorsque le testateur peut écrire en langue française mais ne peut parler, le notaire écrit lui-même le testament ou le fait écrire à la main ou mécaniquement d'après les notes rédigées devant lui par le testateur, puis en donne lecture à ce dernier. Lorsque le testateur ne peut entendre, il prend connaissance du testament en le lisant lui-même, après lecture faite par le notaire.</p><p></p><p> Lorsque le testateur ne peut ni parler ou entendre, ni lire ou écrire, la dictée ou la lecture sont accomplies dans les conditions décrites au quatrième alinéa.</p><p></p><p></p><p>   Il est fait du tout mention expresse.</p><p></p>",
+    "num": "972",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1424217600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Des dispositions testamentaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136338",
+          "id": "LEGISCTA000006136338",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des règles générales sur la forme des testaments.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150547",
+          "id": "LEGISCTA000006150547",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006434103",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150547",
+    "sectionParentId": "LEGISCTA000006150547",
+    "sectionParentTitre": "Section 1 : Des règles générales sur la forme des testaments.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre V : Des dispositions testamentaires. &gt; Section 1 : Des règles générales sur la forme des testaments.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000030254026",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000030248562",
+        "textTitle": "LOI n°2015-177 du 16 février 2015 - art. 3 (V)",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000030249595",
+        "natureText": "LOI",
+        "datePubliTexte": "2015-02-17",
+        "dateSignaTexte": "2015-02-16",
+        "dateDebutCible": "2015-02-18"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000030248562",
+        "textTitle": "LOI n°2015-177 du 16 février 2015 - art. 3, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "3",
+        "articleId": "JORFARTI000030248610",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2015-177",
+        "datePubli": 1424131200000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000000798634",
+        "textTitle": "Loi n°2004-193 du 27 février 2004 - art. 34 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "34",
+        "articleId": "LEGIARTI000030250485",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2004-193",
+        "datePubli": 1078185600000,
+        "dateDebut": 1424217600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006434103",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -601603200000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006434104",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1424217600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000030254026",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1424217600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "972"
+    ],
+    "versionPrecedente": "LEGIARTI000006434104",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

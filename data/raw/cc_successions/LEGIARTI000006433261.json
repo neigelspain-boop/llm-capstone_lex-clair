@@ -1,0 +1,268 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006433261",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "A défaut d'accord amiable, l'indivision de toute entreprise agricole, commerciale, industrielle, artisanale ou libérale, dont l'exploitation était assurée par le défunt ou par son conjoint, peut être maintenue dans les conditions fixées par le tribunal à la demande des personnes mentionnées à l'article 822 . S'il y a lieu, la demande de maintien de l'indivision peut porter sur des droits sociaux. Le tribunal statue en fonction des intérêts en présence et des moyens d'existence que la famille peut tirer des biens indivis. Le maintien de l'indivision demeure possible lors même que l'entreprise comprend des éléments dont l'héritier ou le conjoint était déjà propriétaire ou copropriétaire avant l'ouverture de la succession.",
+    "texteHtml": "<p></p>A défaut d'accord amiable, l'indivision de toute entreprise agricole, commerciale, industrielle, artisanale ou libérale, dont l'exploitation était assurée par le défunt ou par son conjoint, peut être maintenue dans les conditions fixées par le tribunal à la demande des personnes mentionnées à l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006432537&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 822 (V)\">822</a>.<p></p><p></p>S'il y a lieu, la demande de maintien de l'indivision peut porter sur des droits sociaux. <p></p><p></p>Le tribunal statue en fonction des intérêts en présence et des moyens d'existence que la famille peut tirer des biens indivis. <p></p><p></p>Le maintien de l'indivision demeure possible lors même que l'entreprise comprend des éléments dont l'héritier ou le conjoint était déjà propriétaire ou copropriétaire avant l'ouverture de la succession.<p></p>",
+    "num": "821",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre VIII : Du partage.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136288",
+          "id": "LEGISCTA000006136288",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des opérations de partage.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150165",
+          "id": "LEGISCTA000006150165",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Sous-section 1 : Dispositions communes.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165528",
+          "id": "LEGISCTA000006165528",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Des demandes en partage.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006181793",
+          "id": "LEGISCTA000006181793",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 50,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433260",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006181793",
+    "sectionParentId": "LEGISCTA000006181793",
+    "sectionParentTitre": "Paragraphe 1 : Des demandes en partage.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre VIII : Du partage. &gt; Section 1 : Des opérations de partage. &gt; Sous-section 1 : Dispositions communes. &gt; Paragraphe 1 : Des demandes en partage.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006433261",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 3 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000006284837",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 4 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000006284838",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 822 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "822",
+        "articleId": "LEGIARTI000006432537",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -963705600000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural - art. L323-6 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L323-6",
+        "articleId": "LEGIARTI000006583448",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006071367",
+        "textTitle": "Code rural - art. L411-2 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L411-2",
+        "articleId": "LEGIARTI000006583724",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Nouveau code de procédure civile - art. 1381 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1381",
+        "articleId": "LEGIARTI000006412550",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433260",
+        "etat": "ABROGE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 520560000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433261",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "821"
+    ],
+    "versionPrecedente": "LEGIARTI000006433260",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000022336269",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La révocation pour cause d'ingratitude ne préjudiciera ni aux aliénations faites par le donataire, ni aux hypothèques et autres charges réelles qu'il aura pu imposer sur l'objet de la donation, pourvu que le tout soit antérieur à la publication,        au fichier immobilier, de la demande en révocation. Dans le cas de révocation, le donataire sera condamné à restituer la valeur des objets aliénés, eu égard au temps de la demande, et les fruits, à compter du jour de cette demande.",
+    "texteHtml": "<p></p>La révocation pour cause d'ingratitude ne préjudiciera ni aux aliénations faites par le donataire, ni aux hypothèques et autres charges réelles qu'il aura pu imposer sur l'objet de la donation, pourvu que le tout soit antérieur à la publication,        au fichier immobilier, de la demande en révocation. <p></p><p></p>Dans le cas de révocation, le donataire sera condamné à restituer la valeur des objets aliénés, eu égard au temps de la demande, et les fruits, à compter du jour de cette demande.<p></p>",
+    "num": "958",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1356998400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136550",
+          "id": "LEGISCTA000006136550",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150546",
+          "id": "LEGISCTA000006150546",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006433922",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150546",
+    "sectionParentId": "LEGISCTA000006150546",
+    "sectionParentTitre": "Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre IV : Des donations entre vifs. &gt; Section 2 : Des exceptions à la règle de l'irrévocabilité des donations entre vifs.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000022336269",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000022330885",
+        "textTitle": "Ordonnance n°2010-638\n du 10 juin 2010 - art. 11",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "11",
+        "articleId": "LEGIARTI000022332015",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2010-06-11",
+        "dateSignaTexte": "2010-06-10",
+        "dateDebutCible": "2013-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000848306",
+        "textTitle": "Décret du 18 novembre 1924 - art. 25 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "25",
+        "articleId": "LEGIARTI000006285616",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": -1423699200000,
+        "dateDebut": -1438387200000
+      },
+      {
+        "textCid": "JORFTEXT000021125212",
+        "textTitle": "Décret n°2009-1193\n du 7 octobre 2009 - art. 75 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "75",
+        "articleId": "LEGIARTI000021126235",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2009-1193",
+        "datePubli": 1255046400000,
+        "dateDebut": 1255132800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006433922",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -346550400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006433923",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1356998400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000022336269",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1356998400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "958"
+    ],
+    "versionPrecedente": "LEGIARTI000006433923",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

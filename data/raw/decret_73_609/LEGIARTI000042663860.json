@@ -1,0 +1,228 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000042663860",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La liste des candidats admis à concourir est arrêtée par le garde des sceaux, ministre de la justice, et publiée au Journal officiel. Seuls peuvent être admis à se présenter au concours les candidats qui remplissent la condition prévue au 6° de l'article 3 ou qui en sont dispensés et qui ont en outre accompli les deux années de stage ou de pratique professionnelle dans un office de notaire des Cours d'appel de Colmar ou de Metz. Nul ne peut être admis à se présenter après trois échecs.",
+    "texteHtml": "<p>La liste des candidats admis à concourir est arrêtée par le garde des sceaux, ministre de la justice, et publiée au Journal officiel. Seuls peuvent être admis à se présenter au concours les candidats qui remplissent la condition prévue au 6° de l'article 3 ou qui en sont dispensés et qui ont en outre accompli les deux années de stage ou de pratique professionnelle dans un office de notaire des Cours d'appel de Colmar ou de Metz.</p><p>Nul ne peut être admis à se présenter après trois échecs.</p>",
+    "num": "113",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1607817600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 386541,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre VI : Préparation et nomination aux fonctions de notaire dans les départements du Haut-Rhin, du Bas-Rhin et de la Moselle",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113046",
+          "id": "LEGISCTA000006113046",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre I : Conditions d'aptitude.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132477",
+          "id": "LEGISCTA000006132477",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920913",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132477",
+    "sectionParentId": "LEGISCTA000006132477",
+    "sectionParentTitre": "Chapitre I : Conditions d'aptitude.",
+    "fullSectionsTitre": "Titre VI : Préparation et nomination aux fonctions de notaire dans les départements du Haut-Rhin, du Bas-Rhin et de la Moselle &gt; Chapitre I : Conditions d'aptitude.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000042663860",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000042658150",
+        "textTitle": "Décret n°2020-1568 du 11 décembre 2020 - art. 1",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000042660623",
+        "natureText": "DECRET",
+        "datePubliTexte": "2020-12-12",
+        "dateSignaTexte": "2020-12-11",
+        "dateDebutCible": "2020-12-13"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n° 73-609 du 5 juillet 1973 - art. 3",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "3",
+        "articleId": "LEGIARTI000006920583",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 118281600000
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 117 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "117",
+        "articleId": "LEGIARTI000006920918",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 118281600000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920913",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 749606400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920914",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 749606400000,
+        "dateFin": 1607817600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000042663860",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1607817600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "113"
+    ],
+    "versionPrecedente": "LEGIARTI000006920914",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

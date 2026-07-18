@@ -1,0 +1,209 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000052849694",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Lorsque le vol prévu à l'article 311-3 porte sur une chose dont la valeur est inférieure ou égale à 300 euros et qu'il apparaît au moment de la constatation de l'infraction que cette chose a été restituée à la victime ou que celle-ci a été indemnisée de son préjudice, l'action pénale peut être éteinte, y compris en cas de récidive, dans les conditions prévues aux articles L. 4223-1 à L. 4223-23 du code de procédure pénale, par le versement d'une amende forfaitaire d'un montant de 300 euros. Le montant de l'amende forfaitaire minorée est de 250 euros et le montant de l'amende forfaitaire majorée est de 600 euros.",
+    "texteHtml": "<p>Lorsque le vol prévu à l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070719&idArticle=LEGIARTI000006418130&dateTexte=&categorieLien=cid\">311-3 </a>porte sur une chose dont la valeur est inférieure ou égale à 300 euros et qu'il apparaît au moment de la constatation de l'infraction que cette chose a été restituée à la victime ou que celle-ci a été indemnisée de son préjudice, l'action pénale peut être éteinte, y compris en cas de récidive, dans les conditions prévues aux articles L. 4223-1 à L. 4223-23 du code de procédure pénale, par le versement d'une amende forfaitaire d'un montant de 300 euros. Le montant de l'amende forfaitaire minorée est de 250 euros et le montant de l'amende forfaitaire majorée est de 600 euros.</p>",
+    "num": "311-3-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR_DIFF",
+    "dateDebut": 1861920000000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 171796,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : Du vol",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149833",
+          "id": "LEGISCTA000006149833",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Du vol simple et des vols aggravés",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165324",
+          "id": "LEGISCTA000006165324",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000045070197",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165324",
+    "sectionParentId": "LEGISCTA000006165324",
+    "sectionParentTitre": "Section 1 : Du vol simple et des vols aggravés",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre Ier : Du vol &gt; Section 1 : Du vol simple et des vols aggravés",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000052849694",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l'article 57 de l'ordonnance n° 2025-1091 du 19 novembre 2025, ces dispositions, dans leur rédaction résultant de l'ordonnance précitée, entrent en vigueur le 1 er janvier 2029.",
+    "notaHtml": "<p>Conformément à l'article 57 de l'ordonnance n° 2025-1091 du 19 novembre 2025, ces dispositions, dans leur rédaction résultant de l'ordonnance précitée, entrent en vigueur le 1<sup>er</sup> janvier 2029.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000052650320",
+        "textTitle": "Ordonnance n°2025-1091 du 19 novembre 2025 - art. 31",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "31",
+        "articleId": "LEGIARTI000052660009",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2025-11-20",
+        "dateSignaTexte": "2025-11-19",
+        "dateDebutCible": "2025-11-21"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 311-3",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "311-3",
+        "articleId": "LEGIARTI000006418130",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. 495-17",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "495-17",
+        "articleId": "LEGIARTI000033429595",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1479600000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000045070197",
+        "etat": "ABROGE_DIFF",
+        "version": "1.0",
+        "dateDebut": 1643155200000,
+        "dateFin": 1861920000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000052849694",
+        "etat": "VIGUEUR_DIFF",
+        "version": "2.0",
+        "dateDebut": 1861920000000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "311-3-1"
+    ],
+    "versionPrecedente": "LEGIARTI000045070197",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

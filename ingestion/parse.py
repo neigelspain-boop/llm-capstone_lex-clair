@@ -18,6 +18,7 @@ from tqdm import tqdm
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
+# File paths for corpus manifest, raw JSON input, and output CSV.
 MANIFEST_PATH = Path("data/corpus_manifest.yaml")
 RAW_DIR = Path("data/raw")
 OUT_CSV = Path("data/articles.csv")
@@ -41,6 +42,7 @@ CHUNK_ID_PREFIX = {
 
 
 def _strip_html(s: str) -> str:
+    """Remove HTML markup and collapse whitespace from text fields."""
     if not s:
         return ""
     import html
@@ -50,6 +52,7 @@ def _strip_html(s: str) -> str:
 
 
 def _ms_to_iso(ms) -> str:
+    """Normalize millisecond timestamps to ISO date strings."""
     if ms in (None, "", 0, "0"):
         return ""
     try:
@@ -59,6 +62,7 @@ def _ms_to_iso(ms) -> str:
 
 
 def _slugify_num(num: str) -> str:
+    """Turn an article number into a compact lowercase identifier."""
     return re.sub(r"\s+", "", num or "").replace(".", "").lower()
 
 
@@ -99,6 +103,7 @@ def _titre(article: dict) -> str:
 
 
 def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
+    """Parse one raw JSON object into a normalized article row, or skip it."""
     article = raw.get("article") or raw
     if not isinstance(article, dict):
         return None
@@ -133,6 +138,7 @@ def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
 
 
 def parse_all(manifest_path=MANIFEST_PATH, raw_dir=RAW_DIR, out_csv=OUT_CSV) -> pd.DataFrame:
+    """Load manifest and raw JSON files, normalize articles, and write a CSV."""
     with manifest_path.open() as f:
         manifest = yaml.safe_load(f)
 
@@ -175,6 +181,7 @@ def parse_all(manifest_path=MANIFEST_PATH, raw_dir=RAW_DIR, out_csv=OUT_CSV) -> 
 
 
 def main() -> None:
+    """Command-line entrypoint for parsing raw JSON into the CSV output."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", type=Path, default=MANIFEST_PATH)
     ap.add_argument("--raw", type=Path, default=RAW_DIR)

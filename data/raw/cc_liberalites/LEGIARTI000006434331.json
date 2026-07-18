@@ -1,0 +1,225 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006434331",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Au cours d'un voyage maritime, soit en route, soit pendant un arrêt dans un port, lorsqu'il y aura impossibilité de communiquer avec la terre ou lorsqu'il n'existera pas dans le port, si l'on est à l'étranger, d'agent diplomatique ou consulaire français investi des fonctions de notaire, les testaments des personnes présentes à bord seront reçus, en présence de deux témoins : sur les bâtiments de l'Etat, par l'officier d'administration ou, à son défaut, par le commandant ou celui qui en remplit les fonctions, et sur les autres bâtiments, par le capitaine, maître ou patron, assisté du second du navire, ou, à leur défaut, par ceux qui les remplacent. L'acte indiquera celle des circonstances ci-dessus prévues dans laquelle il aura été reçu.",
+    "texteHtml": "<p></p>   Au cours d'un voyage maritime, soit en route, soit pendant un arrêt dans un port, lorsqu'il y aura impossibilité de communiquer avec la terre ou lorsqu'il n'existera pas dans le port, si l'on est à l'étranger, d'agent diplomatique ou consulaire français investi des fonctions de notaire, les testaments des personnes présentes à bord seront reçus, en présence de deux témoins : sur les bâtiments de l'Etat, par l'officier d'administration ou, à son défaut, par le commandant ou celui qui en remplit les fonctions, et sur les autres bâtiments, par le capitaine, maître ou patron, assisté du second du navire, ou, à leur défaut, par ceux qui les remplacent.<p></p><p></p>   L'acte indiquera celle des circonstances ci-dessus prévues dans laquelle il aura été reçu.<p></p>",
+    "num": "988",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "2.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 343592,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Des libéralités",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006118022",
+          "id": "LEGISCTA000006118022",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre V : Des dispositions testamentaires.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136338",
+          "id": "LEGISCTA000006136338",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 2 : Des règles particulières sur la forme de certains testaments.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150548",
+          "id": "LEGISCTA000006150548",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006434330",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150548",
+    "sectionParentId": "LEGISCTA000006150548",
+    "sectionParentTitre": "Section 2 : Des règles particulières sur la forme de certains testaments.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre II : Des libéralités &gt; Chapitre V : Des dispositions testamentaires. &gt; Section 2 : Des règles particulières sur la forme de certains testaments.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006434331",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 9 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "9",
+        "articleId": "LEGIARTI000006284843",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-05-03",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 994 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "994",
+        "articleId": "LEGIARTI000006434398",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 995 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "995",
+        "articleId": "LEGIARTI000006434420",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006071188",
+        "textTitle": "Code disciplinaire et pénal de la marine marchande - art. 43 (VT)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "43",
+        "articleId": "LEGIARTI000006523850",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 762480000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006434330",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -2416176000000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006434331",
+        "etat": "VIGUEUR",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "988"
+    ],
+    "versionPrecedente": "LEGIARTI000006434330",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

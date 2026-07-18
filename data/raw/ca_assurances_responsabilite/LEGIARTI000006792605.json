@@ -1,0 +1,212 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006792605",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Au sens du présent chapitre, constitue un sinistre tout dommage ou ensemble de dommages causés à des tiers, engageant la responsabilité de l'assuré, résultant d'un fait dommageable et ayant donné lieu à une ou plusieurs réclamations. Le fait dommageable est celui qui constitue la cause génératrice du dommage. Un ensemble de faits dommageables ayant la même cause technique est assimilé à un fait dommageable unique.",
+    "texteHtml": "<p></p>   Au sens du présent chapitre, constitue un sinistre tout dommage ou ensemble de dommages causés à des tiers, engageant la responsabilité de l'assuré, résultant d'un fait dommageable et ayant donné lieu à une ou plusieurs réclamations. Le fait dommageable est celui qui constitue la cause génératrice du dommage. Un ensemble de faits dommageables ayant la même cause technique est assimilé à un fait dommageable unique.<p></p><p></p>",
+    "num": "L124-1-1",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1059782400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1976-07-16",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006107964",
+          "id": "LEGISCTA000006107964",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Livre Ier : Le contrat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006128391",
+          "id": "LEGISCTA000006128391",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2012-07-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages non maritimes",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000006142679",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2012-07-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Règles relatives aux assurances de dommages",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006142679",
+          "id": "LEGISCTA000024376800",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1976-07-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Les assurances de responsabilité.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006157248",
+          "id": "LEGISCTA000006157248",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1976-07-11",
+          "fin": "2999-01-01",
+          "titre": "Code des assurances",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006073984",
+          "id": "LEGITEXT000006073984",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006792605",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006157248",
+    "sectionParentId": "LEGISCTA000006157248",
+    "sectionParentTitre": "Chapitre IV : Les assurances de responsabilité.",
+    "fullSectionsTitre": "Partie législative &gt; Livre Ier : Le contrat &gt; Titre II : Règles relatives aux assurances de dommages non maritimes &gt; Chapitre IV : Les assurances de responsabilité.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006792605",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006073984",
+        "titre": "Code des assurances",
+        "titreLong": "Code des assurances",
+        "etat": "VIGUEUR",
+        "dateDebut": 205891200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006073984",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Les dispositions du présent article entrent en vigueur à l'issue d'un délai de trois mois à compter de la publication de la présente loi (loi 2003-706 du 1er août 2003).",
+    "notaHtml": "<p></p>  Les dispositions du présent article entrent en vigueur à l'issue d'un délai de trois mois à compter de la publication de la présente loi (loi 2003-706 du 1er août 2003).<p></p><p></p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000305911",
+        "textTitle": "Décret 76-666 1976-07-16",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000305911",
+        "natureText": "DECRET",
+        "datePubliTexte": "1976-07-21",
+        "dateSignaTexte": "1976-07-16",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000428977",
+        "textTitle": "Loi 2003-706 2003-08-01 art. 80 I, VII JORF 2 août 2003",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000428977",
+        "natureText": "LOI",
+        "datePubliTexte": "2003-08-02",
+        "dateSignaTexte": "2003-08-01",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000428977",
+        "textTitle": "Loi n°2003-706 du 1 août 2003 - art. 80 (V) JORF 2 août 2003",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "80",
+        "articleId": "LEGIARTI000006713749",
+        "natureText": "LOI",
+        "datePubliTexte": "2003-08-02",
+        "dateSignaTexte": "2003-08-01",
+        "dateDebutCible": "2003-08-02"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000428977",
+        "textTitle": "Loi 2003-706 2003-08-01",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000428977",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2003-706",
+        "datePubli": 1059782400000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006792605",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1059782400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "L124-1-1",
+      "124-1-1"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

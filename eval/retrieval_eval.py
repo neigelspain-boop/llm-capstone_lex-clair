@@ -14,6 +14,7 @@ EVAL_SET: list[dict] = []
 
 
 def hit_rate_and_mrr(retriever: Callable[[str], list[dict]], eval_set: list[dict]) -> dict:
+    """Compute hit rate and mean reciprocal rank for a retriever over eval examples."""
     hits = 0
     reciprocal_ranks = []
     for item in eval_set:
@@ -30,10 +31,12 @@ def hit_rate_and_mrr(retriever: Callable[[str], list[dict]], eval_set: list[dict
 
 
 def approach_vector_only(question: str) -> list[dict]:
+    """Search only in the vector store using semantic similarity."""
     return get_vector_store().search(question, k=5)
 
 
 def approach_hybrid(question: str) -> list[dict]:
+    """Fallback hybrid retriever combining vector search with keyword signals."""
     # TODO: combine with keyword/BM25 search for a second approach to compare
     raise NotImplementedError
 
@@ -45,6 +48,7 @@ APPROACHES = {
 
 
 def main():
+    """Evaluate each retrieval approach on the labeled eval set and print metrics."""
     for name, retriever in APPROACHES.items():
         metrics = hit_rate_and_mrr(retriever, EVAL_SET)
         print(name, metrics)

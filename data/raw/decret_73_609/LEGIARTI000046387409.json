@@ -1,0 +1,251 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046387409",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les études supérieures de notariat sont assurées par l'Institut national des formations notariales et par les établissements publics d'enseignement supérieur qui ont conclu avec lui une convention à cette fin. Cette convention prévoit les modalités d'organisation et d'exercice des compétences partagées entre ces établissements dans des conditions fixées par arrêté du garde des sceaux, ministre de la justice, et du ministre chargé de l'enseignement supérieur.",
+    "texteHtml": "<p>Les études supérieures de notariat sont assurées par l'Institut national des formations notariales et par les établissements publics d'enseignement supérieur qui ont conclu avec lui une convention à cette fin. Cette convention prévoit les modalités d'organisation et d'exercice des compétences partagées entre ces établissements dans des conditions fixées par arrêté du garde des sceaux, ministre de la justice, et du ministre chargé de l'enseignement supérieur.</p>",
+    "num": "8",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1725148800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 153391689,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre I : Préparation et nomination aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113038",
+          "id": "LEGISCTA000006113038",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : Formation professionnelle aux fonctions de notaire.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132463",
+          "id": "LEGISCTA000006132463",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1990-09-01",
+          "fin": "2018-10-01",
+          "titre": "Section I : L'accès au centre de formation professionnelle.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145566",
+          "id": "LEGISCTA000006145566",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "1990-09-01",
+          "titre": "Section I : L'enseignement professionnel. ",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145566",
+          "id": "LEGISCTA000021010646",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2024-09-01",
+          "titre": "Section I : L'accès à la formation conduisant à la délivrance du diplôme de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145566",
+          "id": "LEGISCTA000037256502",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2024-09-01",
+          "fin": "2999-01-01",
+          "titre": "Section I : Les études supérieures de notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006145566",
+          "id": "LEGISCTA000046387419",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 4,
+      "longeurChemin": 41,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920612",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006145566",
+    "sectionParentId": "LEGISCTA000046387419",
+    "sectionParentTitre": "Section I : Les études supérieures de notariat",
+    "fullSectionsTitre": "Titre I : Préparation et nomination aux fonctions de notaire &gt; Chapitre II : Formation professionnelle aux fonctions de notaire. &gt; Section I : Les études supérieures de notariat",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000046387409",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l’article 15 du décret n° 2022-1298 du 7 octobre 2022 dans sa rédaction issue de l'article 37 du décret n° 2023-468 du 16 juin 2023, ces dispositions entrent en vigueur en vue de la rentrée universitaire 2024. Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.",
+    "notaHtml": "<p>Conformément à l’article 15 du décret n° 2022-1298 du 7 octobre 2022 dans sa rédaction issue de l'article 37 du décret n° 2023-468 du 16 juin 2023, ces dispositions entrent en vigueur en vue de la rentrée universitaire 2024.</p><p>Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 4",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000046384991",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-10-08",
+        "dateSignaTexte": "2022-10-07",
+        "dateDebutCible": "2022-10-09"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 15 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "15",
+        "articleId": "LEGIARTI000047697447",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2022-1298",
+        "datePubli": 1665187200000,
+        "dateDebut": 1687046400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920612",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920613",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 652147200000,
+        "dateFin": 1725148800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387409",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1725148800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "8"
+    ],
+    "versionPrecedente": "LEGIARTI000006920613",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

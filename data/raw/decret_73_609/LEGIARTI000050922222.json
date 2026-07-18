@@ -1,0 +1,255 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000050922222",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le conseil d'administration de l'Institut national des formations notariales adopte au nom de celui-ci les avis prévus par le présent décret. Il définit la politique générale de l'Institut et délibère sur : 1° Les projets en matière de formation initiale et continue ainsi que le projet de recherche scientifique de l'Institut ; 2° La création en son sein de comités spécialisés et de commissions consultatives ainsi que, le cas échéant, l'institution d'un comité scientifique ; 3° Les programmes d'investissement ; 4° Le rapport d'activité ; 5° Le budget et les décisions budgétaires modificatives ; 6° Les comptes financiers et les décisions d'affectation des résultats ; 7° L'organisation générale des services de l'Institut ; 8° L'approbation d'accords de coopération et de coordination avec d'autres établissements d'enseignement supérieur ; 9° Les acquisitions, aliénations, échanges d'immeubles et leur affectation et les conditions de conclusion des baux ; 10° Les emprunts, au-delà d'un seuil fixé par délibération du conseil d'administration ; 11° Le règlement intérieur de l'Institut, approuvé par arrêté du garde des sceaux, ministre de la justice ; 12° L'acceptation et le refus des dons et legs ; 13° Les actions en justice et les transactions, sans préjudice des compétences du directeur général mentionnées à l'article 104. Par dérogation aux dispositions prévues au premier alinéa de l'article 98, le conseil d'administration délibère à la majorité des deux tiers des membres présents ou représentés pour les décisions prises sur les sujets mentionnés aux 6°, 9° et 10° du présent article.",
+    "texteHtml": "<p>Le conseil d'administration de l'Institut national des formations notariales adopte au nom de celui-ci les avis prévus par le présent décret.</p><p>Il définit la politique générale de l'Institut et délibère sur :<br/><br/>\n 1° Les projets en matière de formation initiale et continue ainsi que le projet de recherche scientifique de l'Institut ;<br/><br/>\n 2° La création en son sein de comités spécialisés et de commissions consultatives ainsi que, le cas échéant, l'institution d'un comité scientifique ;<br/><br/>\n 3° Les programmes d'investissement ;<br/><br/>\n 4° Le rapport d'activité ;<br/><br/>\n 5° Le budget et les décisions budgétaires modificatives ;<br/><br/>\n 6° Les comptes financiers et les décisions d'affectation des résultats ;<br/><br/>\n 7° L'organisation générale des services de l'Institut ;<br/><br/>\n 8° L'approbation d'accords de coopération et de coordination avec d'autres établissements d'enseignement supérieur ;<br/><br/>\n 9° Les acquisitions, aliénations, échanges d'immeubles et leur affectation et les conditions de conclusion des baux ;<br/><br/>\n 10° Les emprunts, au-delà d'un seuil fixé par délibération du conseil d'administration ;<br/><br/>\n 11° Le règlement intérieur de l'Institut, approuvé par arrêté du garde des sceaux, ministre de la justice ;<br/><br/>\n 12° L'acceptation et le refus des dons et legs ;<br/><br/>\n 13° Les actions en justice et les transactions, sans préjudice des compétences du directeur général mentionnées à l'article 104.<br/><br/>\n Par dérogation aux dispositions prévues au premier alinéa de l'article 98, le conseil d'administration délibère à la majorité des deux tiers des membres présents ou représentés pour les décisions prises sur les sujets mentionnés aux 6°, 9° et 10° du présent article.</p>",
+    "num": "100",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1735689600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 85898,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2018-10-01",
+          "titre": "Titre IV : Le centre national de l'enseignement professionnel notarial.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113044",
+          "id": "LEGISCTA000006113044",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre IV : L'Institut national des formations notariales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113044",
+          "id": "LEGISCTA000037256637",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2018-10-01",
+          "titre": "Chapitre II : Fonctionnement du centre national.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132476",
+          "id": "LEGISCTA000006132476",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre II : Fonctionnement de l'Institut national des formations notariales",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132476",
+          "id": "LEGISCTA000037256644",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920887",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132476",
+    "sectionParentId": "LEGISCTA000037256644",
+    "sectionParentTitre": "Chapitre II : Fonctionnement de l'Institut national des formations notariales",
+    "fullSectionsTitre": "Titre IV : L'Institut national des formations notariales &gt; Chapitre II : Fonctionnement de l'Institut national des formations notariales",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000050922222",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025. Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.",
+    "notaHtml": "<p>Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025.</p><p>Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000050870858",
+        "textTitle": "Décret n°2024-1227 du 30 décembre 2024 - art. 8",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000050918800",
+        "natureText": "DECRET",
+        "datePubliTexte": "2024-12-31",
+        "dateSignaTexte": "2024-12-30",
+        "dateDebutCible": "2025-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n° 73-609 du 5 juillet 1973 - art. 106",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "106",
+        "articleId": "LEGIARTI000006920897",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 118281600000
+      },
+      {
+        "textCid": "JORFTEXT000052415757",
+        "textTitle": "Arrêté du 20 octobre 2025 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGITEXT000052416914",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1761177600000,
+        "dateDebut": 1761264000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920887",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 377308800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920888",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 377308800000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256652",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1735689600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000050922222",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1735689600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "100"
+    ],
+    "versionPrecedente": "LEGIARTI000037256652",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006429395",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "L'usufruitier peut jouir par lui-même, donner à bail à un autre, même vendre ou céder son droit à titre gratuit. Les baux que l'usufruitier seul a faits pour un temps qui excède neuf ans ne sont, en cas de cessation de l'usufruit, obligatoires à l'égard du nu-propriétaire que pour le temps qui reste à courir, soit de la première période de neuf ans, si les parties s'y trouvent encore, soit de la seconde, et ainsi de suite de manière que le preneur n'ait que le droit d'achever la jouissance de la période de neuf ans où il se trouve. Les baux de neuf ans ou au-dessous que l'usufruitier seul a passés ou renouvelés plus de trois ans avant l'expiration du bail courant s'il s'agit de biens ruraux, et plus de deux ans avant la même époque s'il s'agit de maisons, sont sans effet, à moins que leur exécution n'ait commencé avant la cessation de l'usufruit. L'usufruitier ne peut, sans le concours du nu-propriétaire, donner à bail un fonds rural ou un immeuble à usage commercial, industriel ou artisanal. A défaut d'accord du nu-propriétaire, l'usufruitier peut être autorisé par justice à passer seul cet acte.",
+    "texteHtml": "<p></p>   L'usufruitier peut jouir par lui-même, donner à bail à un autre, même vendre ou céder son droit à titre gratuit.<p></p><p></p>   Les baux que l'usufruitier seul a faits pour un temps qui excède neuf ans ne sont, en cas de cessation de l'usufruit, obligatoires à l'égard du nu-propriétaire que pour le temps qui reste à courir, soit de la première période de neuf ans, si les parties s'y trouvent encore, soit de la seconde, et ainsi de suite de manière que le preneur n'ait que le droit d'achever la jouissance de la période de neuf ans où il se trouve.<p></p><p></p>   Les baux de neuf ans ou au-dessous que l'usufruitier seul a passés ou renouvelés plus de trois ans avant l'expiration du bail courant s'il s'agit de biens ruraux, et plus de deux ans avant la même époque s'il s'agit de maisons, sont sans effet, à moins que leur exécution n'ait commencé avant la cessation de l'usufruit.<p></p><p></p>   L'usufruitier ne peut, sans le concours du nu-propriétaire, donner à bail un fonds rural ou un immeuble à usage commercial, industriel ou artisanal. A défaut d'accord du nu-propriétaire, l'usufruitier peut être autorisé par justice à passer seul cet acte.<p></p>",
+    "num": "595",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": -126230400000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 601286,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre II : Des biens et des différentes modifications de la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090204",
+          "id": "LEGISCTA000006090204",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre III : De l'usufruit, de l'usage et de l'habitation",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117905",
+          "id": "LEGISCTA000006117905",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Chapitre Ier : De l'usufruit",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136246",
+          "id": "LEGISCTA000006136246",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits de l'usufruitier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150117",
+          "id": "LEGISCTA000006150117",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 44,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006429395",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006150117",
+    "sectionParentId": "LEGISCTA000006150117",
+    "sectionParentTitre": "Section 1 : Des droits de l'usufruitier",
+    "fullSectionsTitre": "Livre II : Des biens et des différentes modifications de la propriété &gt; Titre III : De l'usufruit, de l'usage et de l'habitation &gt; Chapitre Ier : De l'usufruit &gt; Section 1 : Des droits de l'usufruitier",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006429395",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000503950",
+        "textTitle": "Loi n°65-570 du 13 juillet 1965 - art. 4 () JORF 14 juillet 1965 en vigueur le 1er janvier 1966",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "4",
+        "articleId": "LEGIARTI000006272714",
+        "natureText": "LOI",
+        "datePubliTexte": "1965-07-14",
+        "dateSignaTexte": "1965-07-13",
+        "dateDebutCible": "1966-02-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1804-01-30 promulguée le 9 février 1804",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000503950",
+        "textTitle": "Loi n°65-570 du 13 juillet 1965 - art. 22 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "22",
+        "articleId": "LEGIARTI000006472922",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "65-570",
+        "datePubli": -141004800000,
+        "dateDebut": -123552000000
+      },
+      {
+        "textCid": "JORFTEXT000020017088",
+        "textTitle": "Décret n°2008-1484\n du 22 décembre 2008 - art. Annexe 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "Annexe 1",
+        "articleId": "LEGIARTI000044929395",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2008-1484",
+        "datePubli": 1230681600000,
+        "dateDebut": 1640995200000
+      },
+      {
+        "textCid": "JORFTEXT000025179010",
+        "textTitle": "Décret n°2012-66  du 20 janvier 2012 - art. 41, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "41",
+        "articleId": "JORFARTI000025179078",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2012-66",
+        "datePubli": 1327190400000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1424 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1424",
+        "articleId": "LEGIARTI000006439576",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -123552000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1507 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1507",
+        "articleId": "LEGIARTI000006440417",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -123552000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 1718 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1718",
+        "articleId": "LEGIARTI000006442775",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -109468800000
+      },
+      {
+        "textCid": "LEGITEXT000006074096",
+        "textTitle": "Code de la construction et de l'habitation. - art. L253-4 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L253-4",
+        "articleId": "LEGIARTI000006824573",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1153008000000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1270 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1270",
+        "articleId": "LEGIARTI000025191519",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1327276800000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006429395",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": -126230400000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "595"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

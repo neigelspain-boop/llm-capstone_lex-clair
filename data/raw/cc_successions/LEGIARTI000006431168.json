@@ -1,0 +1,251 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006431168",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Lorsque les père et mère ou l'un d'eux survivent au défunt et que celui-ci n'a pas de postérité, ils peuvent dans tous les cas exercer un droit de retour, à concurrence des quote-parts fixées au premier alinéa de l'article 738 , sur les biens que le défunt avait reçus d'eux par donation. La valeur de la portion des biens soumise au droit de retour s'impute en priorité sur les droits successoraux des père et mère. Lorsque le droit de retour ne peut s'exercer en nature, il s'exécute en valeur, dans la limite de l'actif successoral.",
+    "texteHtml": "<p></p>Lorsque les père et mère ou l'un d'eux survivent au défunt et que celui-ci n'a pas de postérité, ils peuvent dans tous les cas exercer un droit de retour, à concurrence des quote-parts fixées au premier alinéa de l'article <a href=\"/affichCodeArticle.do?cidTexte=LEGITEXT000006070721&idArticle=LEGIARTI000006430984&dateTexte=&categorieLien=cid\" title=\"Code civil - art. 738 (V)\">738</a>, sur les biens que le défunt avait reçus d'eux par donation. <p></p><p></p>La valeur de la portion des biens soumise au droit de retour s'impute en priorité sur les droits successoraux des père et mère. <p></p><p></p>Lorsque le droit de retour ne peut s'exercer en nature, il s'exécute en valeur, dans la limite de l'actif successoral.<p></p>",
+    "num": "738-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "1.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1167609600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 300643,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2001-12-04",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Des héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136269",
+          "id": "LEGISCTA000006136269",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : Des droits des parents en l'absence de conjoint successible.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150138",
+          "id": "LEGISCTA000006150138",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2002-07-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Des ordres d'héritiers.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165515",
+          "id": "LEGISCTA000006165515",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431168",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165515",
+    "sectionParentId": "LEGISCTA000006165515",
+    "sectionParentTitre": "Paragraphe 1 : Des ordres d'héritiers.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre III : Des héritiers. &gt; Section 1 : Des droits des parents en l'absence de conjoint successible. &gt; Paragraphe 1 : Des ordres d'héritiers.",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000006431168",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000637158",
+        "textTitle": "Loi n°2006-728 du 23 juin 2006 - art. 29 () JORF 24 juin 2006 en vigueur le 1er janvier 2007",
+        "linkType": "CREATION",
+        "linkOrientation": "source",
+        "articleNum": "29",
+        "articleId": "LEGIARTI000006284863",
+        "natureText": "LOI",
+        "datePubliTexte": "2006-06-24",
+        "dateSignaTexte": "2006-06-23",
+        "dateDebutCible": "2007-01-01"
+      },
+      {
+        "textCid": "",
+        "textTitle": "Loi 1803-04-19",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "",
+        "natureText": "",
+        "datePubliTexte": null,
+        "dateSignaTexte": null,
+        "dateDebutCible": null
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000017839505",
+        "textTitle": "LOI n°2007-1824  du 25 décembre 2007 - art. 32, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "32",
+        "articleId": "JORFARTI000017839751",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2007-1824",
+        "datePubli": 1198800000000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000021557902",
+        "textTitle": "LOI n°2009-1673  du 30 décembre 2009 - art. 36, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "36",
+        "articleId": "JORFARTI000021558312",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "2009-1673",
+        "datePubli": 1262217600000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 738 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "738",
+        "articleId": "LEGIARTI000006430984",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": -5231606400000
+      },
+      {
+        "textCid": "LEGITEXT000006069577",
+        "textTitle": "Code général des impôts, CGI. - art. 763 bis (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "763 bis",
+        "articleId": "LEGIARTI000006305382",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167523200000
+      },
+      {
+        "textCid": "LEGITEXT000006069577",
+        "textTitle": "Code général des impôts, CGI. - art. 791 ter (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "791 ter",
+        "articleId": "LEGIARTI000021629743",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1262304000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431168",
+        "etat": "VIGUEUR",
+        "version": "1.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "738-2"
+    ],
+    "versionPrecedente": null,
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": false,
+    "comporteLiensSP": false
+  }
+}

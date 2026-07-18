@@ -1,0 +1,274 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000046387532",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le jury est composé comme suit : 1° Un magistrat de l'ordre judiciaire, président ; 2° Un professeur des universités ou un maître de conférences chargé d'un enseignement juridique, en activité ou émérite ; 3° Deux notaires exerçant à titre individuel ou en qualité d'associé ; 4° Deux notaires salariés ou collaborateurs des offices de notaire, qu'ils soient ou non en activité, titulaires du diplôme de premier clerc de notaire ou du diplôme des métiers du notariat ou d'un diplôme permettant l'accès aux fonctions de notaire. Le magistrat de l'ordre judiciaire est nommé sur proposition conjointe du premier président de la cour d'appel dans le ressort de laquelle est situé le site d'enseignement et du procureur général près cette même cour. Le professeur des universités en activité ou émérite ou le maître de conférences est nommé sur proposition du président de l'établissement public d'enseignement supérieur dans le ressort duquel se situe le site d'enseignement et avec lequel l'Institut national des formations notariales a passé convention. Lorsque, dans le ressort d'une académie, plusieurs conventions ont été passées avec l'Institut national des formations notariales, le professeur de droit ou le maître de conférences est nommé sur proposition conjointe des présidents des établissements publics d'enseignement supérieur signataires. Les notaires exerçant à titre individuel ou en qualité d'associé sont nommés parmi les notaires figurant sur la liste prévue au second alinéa de l'article 11. Les notaires salariés ou les collaborateurs des offices de notaire sont nommés sur proposition des organisations syndicales les plus représentatives. Le président et les membres du jury sont nommés par une délibération du conseil d'administration de l'Institut national des formations notariales pour une durée de trois ans, renouvelable deux fois. Toutefois, si un membre du jury vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement. En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé. Des suppléants sont désignés en nombre égal dans les mêmes conditions. En cas de partage égal des voix, celle du président est prépondérante. Le jury peut s'adjoindre, pour les épreuves orales, des examinateurs spécialisés avec voix consultative. Il peut être institué plusieurs jurys pour un même centre d'examen.",
+    "texteHtml": "<p>Le jury est composé comme suit :</p><p>1° Un magistrat de l'ordre judiciaire, président ;</p><p>2° Un professeur des universités ou un maître de conférences chargé d'un enseignement juridique, en activité ou émérite ;</p><p>3° Deux notaires exerçant à titre individuel ou en qualité d'associé ;</p><p>4° Deux notaires salariés ou collaborateurs des offices de notaire, qu'ils soient ou non en activité, titulaires du diplôme de premier clerc de notaire ou du diplôme des métiers du notariat ou d'un diplôme permettant l'accès aux fonctions de notaire.</p><p>Le magistrat de l'ordre judiciaire est nommé sur proposition conjointe du premier président de la cour d'appel dans le ressort de laquelle est situé le site d'enseignement et du procureur général près cette même cour. Le professeur des universités en activité ou émérite ou le maître de conférences est nommé sur proposition du président de l'établissement public d'enseignement supérieur dans le ressort duquel se situe le site d'enseignement et avec lequel l'Institut national des formations notariales a passé convention. Lorsque, dans le ressort d'une académie, plusieurs conventions ont été passées avec l'Institut national des formations notariales, le professeur de droit ou le maître de conférences est nommé sur proposition conjointe des présidents des établissements publics d'enseignement supérieur signataires. Les notaires exerçant à titre individuel ou en qualité d'associé sont nommés parmi les notaires figurant sur la liste prévue au second alinéa de l'article 11. Les notaires salariés ou les collaborateurs des offices de notaire sont nommés sur proposition des organisations syndicales les plus représentatives.</p><p>Le président et les membres du jury sont nommés par une délibération du conseil d'administration de l'Institut national des formations notariales pour une durée de trois ans, renouvelable deux fois. Toutefois, si un membre du jury vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement.</p><p>En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé.</p><p>Des suppléants sont désignés en nombre égal dans les mêmes conditions.</p><p>En cas de partage égal des voix, celle du président est prépondérante.</p><p>Le jury peut s'adjoindre, pour les épreuves orales, des examinateurs spécialisés avec voix consultative.</p><p>Il peut être institué plusieurs jurys pour un même centre d'examen.</p>",
+    "num": "78",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "5.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1725148800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 214745,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "2009-09-01",
+          "fin": "2999-01-01",
+          "titre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113048",
+          "id": "LEGISCTA000006113048",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2009-09-01",
+          "fin": "2018-10-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme de l'institut des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000006132481",
+          "etat": "MODIFIE"
+        },
+        {
+          "debut": "2018-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132481",
+          "id": "LEGISCTA000037256607",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 2,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920831",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132481",
+    "sectionParentId": "LEGISCTA000037256607",
+    "sectionParentTitre": "Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "fullSectionsTitre": "Titre II : Formation professionnelle des collaborateurs des offices de notaire &gt; Chapitre III : Régime des études sanctionnées par le diplôme des métiers du notariat",
+    "refInjection": "IG-20260122",
+    "idTechInjection": "LEGIARTI000046387532",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l’article 15 du décret n° 2022-1298 du 7 octobre 2022 dans sa rédaction issue de l'article 37 du décret n° 2023-468 du 16 juin 2023, ces dispositions entrent en vigueur en vue de la rentrée universitaire 2024. Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.",
+    "notaHtml": "<p>Conformément à l’article 15 du décret n° 2022-1298 du 7 octobre 2022 dans sa rédaction issue de l'article 37 du décret n° 2023-468 du 16 juin 2023, ces dispositions entrent en vigueur en vue de la rentrée universitaire 2024.</p><p>Se reporter aux conditions d'application prévues à l'article 15 du décret n° 2022-1298 du 7 octobre 2022.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000046382271",
+        "textTitle": "Décret n°2022-1298 du 7 octobre 2022 - art. 8",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "8",
+        "articleId": "LEGIARTI000046384993",
+        "natureText": "DECRET",
+        "datePubliTexte": "2022-10-08",
+        "dateSignaTexte": "2022-10-07",
+        "dateDebutCible": "2022-10-09"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 100 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "100",
+        "articleId": "LEGIARTI000006920887",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 118281600000
+      },
+      {
+        "textCid": "JORFTEXT000000425936",
+        "textTitle": "Décret n°2007-1232 du 20 août 2007 - art. 16 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "16",
+        "articleId": "LEGIARTI000018942469",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2007-1232",
+        "datePubli": 1187740800000,
+        "dateDebut": 1213228800000
+      }
+    ],
+    "lienConcordes": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-20 (VD)",
+        "linkType": "CONCORDANCE",
+        "linkOrientation": "source",
+        "articleNum": "86-20",
+        "articleId": "LEGIARTI000006920855",
+        "natureText": "DECRET"
+      },
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n°73-609 du 5 juillet 1973 - art. 86-20 (VD)",
+        "linkType": "CONCORDE",
+        "linkOrientation": "cible",
+        "articleNum": "86-20",
+        "articleId": "LEGIARTI000006920855",
+        "natureText": "DECRET"
+      }
+    ],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920831",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 1251763200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920832",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1251763200000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256616",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1665273600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387465",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1665273600000,
+        "dateFin": 1725148800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000046387532",
+        "etat": "VIGUEUR",
+        "version": "5.0",
+        "dateDebut": 1725148800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "78"
+    ],
+    "versionPrecedente": "LEGIARTI000046387465",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

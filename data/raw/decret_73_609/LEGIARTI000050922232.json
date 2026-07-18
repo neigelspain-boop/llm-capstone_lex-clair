@@ -1,0 +1,210 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000050922232",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Le Conseil supérieur du notariat se prononce sur le budget prévisionnel de l'Institut national des formations notariales et procède à son contrôle financier. Il adresse un rapport annuel au garde des sceaux, ministre de la justice.",
+    "texteHtml": "<p>Le Conseil supérieur du notariat se prononce sur le budget prévisionnel de l'Institut national des formations notariales et procède à son contrôle financier. Il adresse un rapport annuel au garde des sceaux, ministre de la justice.</p>",
+    "num": "107",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "5.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1735689600000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre V : Financement de la formation professionnelle.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113045",
+          "id": "LEGISCTA000006113045",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 35,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920899",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006113045",
+    "sectionParentId": "LEGISCTA000006113045",
+    "sectionParentTitre": "Titre V : Financement de la formation professionnelle.",
+    "fullSectionsTitre": "Titre V : Financement de la formation professionnelle.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000050922232",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025. Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.",
+    "notaHtml": "<p>Conformément au I de l’article 15 du décret n° 2024-1227 du 30 décembre 2024, ces dispositions entrent en vigueur le 1er janvier 2025.</p><p>Se reporter aux conditions d'application prévues aux II à V de l'article 15 dudit décret.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000050870858",
+        "textTitle": "Décret n°2024-1227 du 30 décembre 2024 - art. 12",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "12",
+        "articleId": "LEGIARTI000050918808",
+        "natureText": "DECRET",
+        "datePubliTexte": "2024-12-31",
+        "dateSignaTexte": "2024-12-30",
+        "dateDebutCible": "2025-01-01"
+      }
+    ],
+    "lienCitations": [],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920899",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 118281600000,
+        "dateFin": 652147200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920900",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 652147200000,
+        "dateFin": 1363392000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000027179540",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1363392000000,
+        "dateFin": 1538352000000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000037256670",
+        "etat": "MODIFIE",
+        "version": "4.0",
+        "dateDebut": 1538352000000,
+        "dateFin": 1735689600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000050922232",
+        "etat": "VIGUEUR",
+        "version": "5.0",
+        "dateDebut": 1735689600000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "107"
+    ],
+    "versionPrecedente": "LEGIARTI000037256670",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

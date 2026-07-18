@@ -1,0 +1,305 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000039368537",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "La déclaration doit être faite au greffe du tribunal judiciaire dans le ressort duquel la succession est ouverte ou devant notaire. Elle comporte élection d'un domicile unique, qui peut être le domicile de l'un des acceptants à concurrence de l'actif net, ou celui de la personne chargée du règlement de la succession. Le domicile doit être situé en France. La déclaration est enregistrée et fait l'objet d'une publicité nationale, qui peut être faite par voie électronique.",
+    "texteHtml": "<p>La déclaration doit être faite au greffe du tribunal judiciaire dans le ressort duquel la succession est ouverte ou devant notaire. Elle comporte élection d'un domicile unique, qui peut être le domicile de l'un des acceptants à concurrence de l'actif net, ou celui de la personne chargée du règlement de la succession. Le domicile doit être situé en France.</p><p>La déclaration est enregistrée et fait l'objet d'une publicité nationale, qui peut être faite par voie électronique.</p>",
+    "num": "788",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "4.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1577836800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 17178,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des différentes manières dont on acquiert la propriété",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006090271",
+          "id": "LEGISCTA000006090271",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des successions",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117929",
+          "id": "LEGISCTA000006117929",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : De l'option de l'héritier",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136273",
+          "id": "LEGISCTA000006136273",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Section 3 : De l'acceptation de la succession à concurrence de l'actif net.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006150144",
+          "id": "LEGISCTA000006150144",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "2007-01-01",
+          "fin": "2999-01-01",
+          "titre": "Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165766",
+          "id": "LEGISCTA000006165766",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1804-03-21",
+          "fin": "2999-01-01",
+          "titre": "Code civil",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070721",
+          "id": "LEGITEXT000006070721",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006431568",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165766",
+    "sectionParentId": "LEGISCTA000006165766",
+    "sectionParentTitre": "Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+    "fullSectionsTitre": "Livre III : Des différentes manières dont on acquiert la propriété &gt; Titre Ier : Des successions &gt; Chapitre IV : De l'option de l'héritier &gt; Section 3 : De l'acceptation de la succession à concurrence de l'actif net. &gt; Paragraphe 1 : Des modalités de l'acceptation de la succession à concurrence de l'actif net.",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000039368537",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070721",
+        "titre": "Code civil",
+        "titreLong": "Code civil",
+        "etat": "VIGUEUR",
+        "dateDebut": -5231606400000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070721",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.",
+    "notaHtml": "<p>Conformément à l'article 36 de l'ordonnance n° 2019-964 du 18 septembre 2019, ces dispositions entrent en vigueur au 1er janvier 2020.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000039110186",
+        "textTitle": "Ordonnance n°2019-964 du 18 septembre 2019 - art. 35 (VD)",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "35",
+        "articleId": "LEGIARTI000039110945",
+        "natureText": "ORDONNANCE",
+        "datePubliTexte": "2019-09-19",
+        "dateSignaTexte": "2019-09-18",
+        "dateDebutCible": "2020-01-01"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000018915156",
+        "textTitle": "Décret n°2008-522 du 2 juin 2008 - art. R123-24, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R123-24",
+        "articleId": "JORFARTI000018915463",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2008-522",
+        "datePubli": 1212537600000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000021245437",
+        "textTitle": "Arrêté du 9 novembre 2009 - art. 1 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1",
+        "articleId": "LEGIARTI000021246455",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1257811200000,
+        "dateDebut": 1259625600000
+      },
+      {
+        "textCid": "JORFTEXT000021245437",
+        "textTitle": "Arrêté du 9 novembre 2009, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "JORFTEXT000021245437",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1257811200000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000043771628",
+        "textTitle": "Arrêté du 1er juillet 2021 - art. 5, v. init.",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "5",
+        "articleId": "JORFARTI000043771660",
+        "natureText": "ARRETE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 1625788800000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "LEGITEXT000006071164",
+        "textTitle": "CODE DE L'ORGANISATION JUDICIAIRE. - art. R*814-5 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R*814-5",
+        "articleId": "LEGIARTI000018846505",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1211673600000
+      },
+      {
+        "textCid": "LEGITEXT000006070721",
+        "textTitle": "Code civil - art. 792 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "792",
+        "articleId": "LEGIARTI000006431611",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1167609600000
+      },
+      {
+        "textCid": "LEGITEXT000006071164",
+        "textTitle": "Code de l'organisation judiciaire - art. R123-24 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "R123-24",
+        "articleId": "LEGIARTI000051930978",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1756684800000
+      },
+      {
+        "textCid": "LEGITEXT000006070716",
+        "textTitle": "Code de procédure civile - art. 1335 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "1335",
+        "articleId": "LEGIARTI000033748027",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1509494400000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006431568",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": -5231606400000,
+        "dateFin": 1167609600000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006431569",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1167609600000,
+        "dateFin": 1509494400000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000033460714",
+        "etat": "MODIFIE",
+        "version": "3.0",
+        "dateDebut": 1509494400000,
+        "dateFin": 1577836800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000039368537",
+        "etat": "VIGUEUR",
+        "version": "4.0",
+        "dateDebut": 1577836800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "788"
+    ],
+    "versionPrecedente": "LEGIARTI000033460714",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000052490205",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les épreuves du concours prévu à l'article précédent sont subies devant un jury composé ainsi qu'il suit : 1° Un magistrat appartenant au moins au deuxième grade de la hiérarchie judiciaire, président ; 2° Un professeur de droit des universités ; 3° Un fonctionnaire de catégorie A des services déconcentrés de la direction générale des impôts (enregistrement) ; 4° Trois notaires du ressort de la Cour d'appel de Colmar ou du ressort de la Cour d'appel de Metz, dont un au moins établi dans le département de la Moselle. Les membres du jury sont désignés chaque année par arrêté du garde des sceaux, ministre de la justice. Des suppléants sont désignés en nombre égal dans les mêmes conditions. Toutefois, si un membre vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement. En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé.",
+    "texteHtml": "<p>Les épreuves du concours prévu à l'article précédent sont subies devant un jury composé ainsi qu'il suit :</p><p>1° Un magistrat appartenant au moins au deuxième grade de la hiérarchie judiciaire, président ;</p><p>2° Un professeur de droit des universités ;</p><p>3° Un fonctionnaire de catégorie A des services déconcentrés de la direction générale des impôts (enregistrement) ;</p><p>4° Trois notaires du ressort de la Cour d'appel de Colmar ou du ressort de la Cour d'appel de Metz, dont un au moins établi dans le département de la Moselle.</p><p>Les membres du jury sont désignés chaque année par arrêté du garde des sceaux, ministre de la justice. Des suppléants sont désignés en nombre égal dans les mêmes conditions. Toutefois, si un membre vient à cesser ses fonctions avant l'expiration de la durée normale de son mandat, il est pourvu, dans le délai de trois mois, à son remplacement. En ce cas, les fonctions du nouveau membre expirent à la date à laquelle auraient cessé celles du membre qu'il a remplacé.</p>",
+    "num": "111",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1764547200000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 257694,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Titre VI : Préparation et nomination aux fonctions de notaire dans les départements du Haut-Rhin, du Bas-Rhin et de la Moselle",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006113046",
+          "id": "LEGISCTA000006113046",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre I : Conditions d'aptitude.",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006132477",
+          "id": "LEGISCTA000006132477",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 38,
+      "titreTxt": [
+        {
+          "debut": "2999-01-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "JORFTEXT000000681478",
+          "etat": ""
+        },
+        {
+          "debut": "1973-10-01",
+          "fin": "2999-01-01",
+          "titre": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "JORFTEXT000000681478",
+          "id": "LEGITEXT000006062113",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006920910",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006132477",
+    "sectionParentId": "LEGISCTA000006132477",
+    "sectionParentTitre": "Chapitre I : Conditions d'aptitude.",
+    "fullSectionsTitre": "Titre VI : Préparation et nomination aux fonctions de notaire dans les départements du Haut-Rhin, du Bas-Rhin et de la Moselle &gt; Chapitre I : Conditions d'aptitude.",
+    "refInjection": "IG-20260113",
+    "idTechInjection": "LEGIARTI000052490205",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "JORFTEXT000000681478",
+        "titre": "Décret n° 73-609 du 5 juillet 1973",
+        "titreLong": "Décret n° 73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "",
+        "dateDebut": 32472144000000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      },
+      {
+        "id": "LEGITEXT000006062113",
+        "titre": "Décret n°73-609 du 5 juillet 1973",
+        "titreLong": "Décret n°73-609 du 5 juillet 1973 relatif à la formation professionnelle dans le notariat et aux conditions d'accès aux fonctions de notaire",
+        "etat": "VIGUEUR",
+        "dateDebut": 118281600000,
+        "dateFin": 32472144000000,
+        "cid": "JORFTEXT000000681478",
+        "datePubli": 110851200000,
+        "datePubliComputed": 110851200000,
+        "dateTexte": 110678400000,
+        "dateTexteComputed": 110678400000,
+        "nature": "DECRET",
+        "nor": "",
+        "num": "73-609",
+        "numParution": "",
+        "originePubli": "JORF du 07 juillet 1973",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "Conformément au I de l'article 39 du décret n° 2025-1032 du 31 octobre 2025, ces dispositions, dans leur rédaction issue de l'article 28 dudit décret, entrent en vigueur le 1 er décembre 2025.",
+    "notaHtml": "<p>Conformément au I de l'article 39 du décret n° 2025-1032 du 31 octobre 2025, ces dispositions, dans leur rédaction issue de l'article 28 dudit décret, entrent en vigueur le 1<sup>er</sup> décembre 2025.</p>",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000052472755",
+        "textTitle": "Décret n°2025-1032 du 31 octobre 2025 - art. 28",
+        "linkType": "MODIFIE",
+        "linkOrientation": "cible",
+        "articleNum": "28",
+        "articleId": "LEGIARTI000052475058",
+        "natureText": "DECRET",
+        "datePubliTexte": "2025-11-01",
+        "dateSignaTexte": "2025-10-31",
+        "dateDebutCible": "2025-11-02"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000681478",
+        "textTitle": "Décret n° 73-609 du 5 juillet 1973",
+        "linkType": "CITATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000681478",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "73-609",
+        "datePubli": 110851200000,
+        "dateDebut": 32472144000000
+      },
+      {
+        "textCid": "JORFTEXT000052472755",
+        "textTitle": "Décret n°2025-1032 du 31 octobre 2025 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "",
+        "articleId": "LEGITEXT000052474972",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2025-1032",
+        "datePubli": 1761955200000,
+        "dateDebut": 1762041600000
+      },
+      {
+        "textCid": "JORFTEXT000052472755",
+        "textTitle": "Décret n°2025-1032 du 31 octobre 2025 - art. 28",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "28",
+        "articleId": "JORFARTI000052472842",
+        "natureText": "DECRET",
+        "parentCid": null,
+        "numTexte": "2025-1032",
+        "datePubli": 1761955200000,
+        "dateDebut": 32472144000000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006920910",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 697507200000,
+        "dateFin": 1187740800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006920911",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1187740800000,
+        "dateFin": 1764547200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000052490205",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1764547200000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "111"
+    ],
+    "versionPrecedente": "LEGIARTI000006920911",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}

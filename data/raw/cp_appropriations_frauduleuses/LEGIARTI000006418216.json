@@ -1,0 +1,295 @@
+{
+  "executionTime": 0,
+  "dereferenced": false,
+  "article": {
+    "id": "LEGIARTI000006418216",
+    "idTexte": null,
+    "type": "AUTONOME",
+    "texte": "Les peines sont portées à sept ans d'emprisonnement et à 750 000 euros d'amende lorsque l'abus de confiance est réalisé : 1° Par une personne qui fait appel au public afin d'obtenir la remise de fonds ou de valeurs soit pour son propre compte, soit comme dirigeant ou préposé de droit ou de fait d'une entreprise industrielle ou commerciale ; 2° Par toute autre personne qui, de manière habituelle, se livre ou prête son concours, même à titre accessoire, à des opérations portant sur les biens des tiers pour le compte desquels elle recouvre des fonds ou des valeurs ; 3° Au préjudice d'une association qui fait appel au public en vue de la collecte de fonds à des fins d'entraide humanitaire ou sociale ; 4° Au préjudice d'une personne dont la particulière vulnérabilité, due à son âge, à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse, est apparente ou connue de son auteur.",
+    "texteHtml": "<p>Les peines sont portées à sept ans d'emprisonnement et à 750 000 euros d'amende lorsque l'abus de confiance est réalisé :</p><p></p><p>1° Par une personne qui fait appel au public afin d'obtenir la remise de fonds ou de valeurs soit pour son propre compte, soit comme dirigeant ou préposé de droit ou de fait d'une entreprise industrielle ou commerciale ;</p><p></p><p>2° Par toute autre personne qui, de manière habituelle, se livre ou prête son concours, même à titre accessoire, à des opérations portant sur les biens des tiers pour le compte desquels elle recouvre des fonds ou des valeurs ;</p><p></p><p>3° Au préjudice d'une association qui fait appel au public en vue de la collecte de fonds à des fins d'entraide humanitaire ou sociale ;</p><p></p><p>4° Au préjudice d'une personne dont la particulière vulnérabilité, due à son âge, à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse, est apparente ou connue de son auteur.</p><p></p>",
+    "num": "314-2",
+    "origine": "LEGI",
+    "nature": "Article",
+    "versionArticle": "3.0",
+    "etat": "VIGUEUR",
+    "dateDebut": 1078876800000,
+    "dateFin": 32472144000000,
+    "dateDebutExtension": 32472144000000,
+    "dateFinExtension": 32472144000000,
+    "inap": null,
+    "ordre": 214745,
+    "context": {
+      "titresTM": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Partie législative",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TITRE_TM",
+          "cid": "LEGISCTA000006089684",
+          "id": "LEGISCTA000006089684",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1992-07-23",
+          "fin": "2999-01-01",
+          "titre": "Livre III : Des crimes et délits contre les biens",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006117598",
+          "id": "LEGISCTA000006117598",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Titre Ier : Des appropriations frauduleuses",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006136042",
+          "id": "LEGISCTA000006136042",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Chapitre IV : Des détournements",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006149836",
+          "id": "LEGISCTA000006149836",
+          "etat": "VIGUEUR"
+        },
+        {
+          "debut": "1994-03-01",
+          "fin": "2999-01-01",
+          "titre": "Section 1 : De l'abus de confiance",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TM/TM/TM/TM/TM/TITRE_TM",
+          "cid": "LEGISCTA000006165334",
+          "id": "LEGISCTA000006165334",
+          "etat": "VIGUEUR"
+        }
+      ],
+      "nombreVersionParent": 1,
+      "longeurChemin": 47,
+      "titreTxt": [
+        {
+          "debut": "1990-09-01",
+          "fin": "2999-01-01",
+          "titre": "Code pénal",
+          "xPath": "/ARTICLE/CONTEXTE/TEXTE/TITRE_TXT",
+          "cid": "LEGITEXT000006070719",
+          "id": "LEGITEXT000006070719",
+          "etat": "VIGUEUR"
+        }
+      ]
+    },
+    "cid": "LEGIARTI000006418214",
+    "cidTexte": null,
+    "sectionParentCid": "LEGISCTA000006165334",
+    "sectionParentId": "LEGISCTA000006165334",
+    "sectionParentTitre": "Section 1 : De l'abus de confiance",
+    "fullSectionsTitre": "Partie législative &gt; Livre III : Des crimes et délits contre les biens &gt; Titre Ier : Des appropriations frauduleuses &gt; Chapitre IV : Des détournements &gt; Section 1 : De l'abus de confiance",
+    "refInjection": "IG-20260114",
+    "idTechInjection": "LEGIARTI000006418216",
+    "idEli": null,
+    "idEliAlias": null,
+    "calipsos": [],
+    "textTitles": [
+      {
+        "id": "LEGITEXT000006070719",
+        "titre": "Code pénal",
+        "titreLong": "Code pénal",
+        "etat": "VIGUEUR",
+        "dateDebut": 652147200000,
+        "dateFin": 32472144000000,
+        "cid": "LEGITEXT000006070719",
+        "datePubli": 32472144000000,
+        "datePubliComputed": null,
+        "dateTexte": 32472144000000,
+        "dateTexteComputed": null,
+        "nature": "CODE",
+        "nor": "",
+        "num": "",
+        "numParution": "",
+        "originePubli": "",
+        "appliGeo": null,
+        "codesNomenclatures": [],
+        "visas": null,
+        "nota": null,
+        "notice": null,
+        "travauxPreparatoires": null,
+        "signataires": null,
+        "dossiersLegislatifs": [],
+        "ancienId": null,
+        "appellations": null
+      }
+    ],
+    "nota": "",
+    "notaHtml": "",
+    "activitePro": [],
+    "numeroBrochure": [],
+    "numeroBo": null,
+    "conteneurs": [],
+    "lienModifications": [
+      {
+        "textCid": "JORFTEXT000000359433",
+        "textTitle": "Loi 92-685 1992-07-22",
+        "linkType": "CODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "",
+        "articleId": "JORFTEXT000000359433",
+        "natureText": "LOI",
+        "datePubliTexte": "1992-07-23",
+        "dateSignaTexte": "1992-07-22",
+        "dateDebutCible": "2999-01-01"
+      },
+      {
+        "textCid": "JORFTEXT000000249995",
+        "textTitle": "Loi n°2004-204 du 9 mars 2004 - art. 51 () JORF 10 mars 2004",
+        "linkType": "MODIFICATION",
+        "linkOrientation": "source",
+        "articleNum": "51",
+        "articleId": "LEGIARTI000006494320",
+        "natureText": "LOI",
+        "datePubliTexte": "2004-03-10",
+        "dateSignaTexte": "2004-03-09",
+        "dateDebutCible": "2004-03-10"
+      }
+    ],
+    "lienCitations": [
+      {
+        "textCid": "JORFTEXT000000693911",
+        "textTitle": "Loi n°85-98 du 25 janvier 1985 - art. 207 (Ab)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "207",
+        "articleId": "LEGIARTI000006401630",
+        "natureText": "LOI",
+        "parentCid": null,
+        "numTexte": "85-98",
+        "datePubli": 475545600000,
+        "dateDebut": 780969600000
+      },
+      {
+        "textCid": "LEGITEXT000005634379",
+        "textTitle": "Code de commerce - art. L654-12 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L654-12",
+        "articleId": "LEGIARTI000032626475",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1483228800000
+      },
+      {
+        "textCid": "LEGITEXT000005634379",
+        "textTitle": "Code de commerce. - art. L626-12 (M)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "L626-12",
+        "articleId": "LEGIARTI000006237217",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 969494400000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. 704 (VT)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "704",
+        "articleId": "LEGIARTI000049531736",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1715472000000
+      },
+      {
+        "textCid": "LEGITEXT000006071154",
+        "textTitle": "Code de procédure pénale - art. 706-74-2 (VD)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "706-74-2",
+        "articleId": "LEGIARTI000051751550",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1767571200000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-10 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "314-10",
+        "articleId": "LEGIARTI000019293056",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1217980800000
+      },
+      {
+        "textCid": "LEGITEXT000006070719",
+        "textTitle": "Code pénal - art. 314-12 (V)",
+        "linkType": "CITATION",
+        "linkOrientation": "cible",
+        "articleNum": "314-12",
+        "articleId": "LEGIARTI000020630822",
+        "natureText": "CODE",
+        "parentCid": null,
+        "numTexte": "",
+        "datePubli": 32472144000000,
+        "dateDebut": 1242259200000
+      }
+    ],
+    "lienConcordes": [],
+    "lienAutres": [],
+    "articleVersions": [
+      {
+        "id": "LEGIARTI000006418214",
+        "etat": "MODIFIE",
+        "version": "1.0",
+        "dateDebut": 762480000000,
+        "dateFin": 1009843200000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418215",
+        "etat": "MODIFIE",
+        "version": "2.0",
+        "dateDebut": 1009843200000,
+        "dateFin": 1078876800000,
+        "numero": null,
+        "ordre": null
+      },
+      {
+        "id": "LEGIARTI000006418216",
+        "etat": "VIGUEUR",
+        "version": "3.0",
+        "dateDebut": 1078876800000,
+        "dateFin": 32472144000000,
+        "numero": null,
+        "ordre": null
+      }
+    ],
+    "computedNums": [
+      "314-2"
+    ],
+    "versionPrecedente": "LEGIARTI000006418215",
+    "conditionDiffere": null,
+    "historique": null,
+    "surtitre": null,
+    "renvoi": null,
+    "infosComplementaires": null,
+    "infosComplementairesHtml": null,
+    "infosRestructurationBranche": null,
+    "infosRestructurationBrancheHtml": null,
+    "isMultipleVersions": true,
+    "comporteLiensSP": false
+  }
+}
