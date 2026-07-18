@@ -28,7 +28,13 @@ sources:
     parent_text_id: LEGITEXT000006070721
     section_id: LEGISCTA000032021486
     note: "Livre III, Sous-titre II — Responsabilité extracontractuelle (art. 1240 à 1252)"
-
+ 
+  cc_liberalites:
+    label: "Code civil"
+    fetch_strategy: section
+    parent_text_id: LEGITEXT000006070721
+    section_id: LEGISCTA000006118022
+    note: "Livre III, Titre II — Des libéralités (893-1099, incl. réserve héréditaire 912-930-5)"
   # ---------- CGI ----------
   cgi_dettes_defunt:
     label: "CGI"
@@ -77,6 +83,7 @@ sources:
     fetch_strategy: jorf
     text_id: JORFTEXT000048706693
     note: "Non consolidé dans un code — via /consult/jorf"
+
 
 # TODO Phase 1b — CGI additional sections (add when time permits):
 #   art. 641 (délai déclaration), art. 1133 (exonération extinction usufruit),

@@ -8,6 +8,7 @@ Endpoints used:
 """
 from __future__ import annotations
 import os
+import re
 import time
 import threading
 from dataclasses import dataclass, field
@@ -21,6 +22,9 @@ from tenacity import (
 import logging
 
 log = logging.getLogger(__name__)
+
+_VALID_ARTI = re.compile(r"^LEGIARTI\d{12}$")
+_VALID_SCTA = re.compile(r"^LEGISCTA\d{12}$")
 
 PROD = {
     "token_url": "https://oauth.piste.gouv.fr/api/oauth/token",
@@ -97,7 +101,6 @@ class PisteClient:
             self._refresh_token()
         return {
             "Authorization": f"Bearer {self._token}",
-            "apiKey": self.client_id,
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
@@ -133,45 +136,119 @@ class PisteClient:
         return self.post("/consult/getArticle", {"id": legiarti_id})
 
     def list_articles_in_section(
-        self, section_id: str, parent_text_id: str
+        self,
+        section_id: str,
+        parent_text_id: str,
+        _depth: int = 0,
+        _visited: set[str] | None = None,
     ) -> list[str]:
+        """Enumerate all LEGIARTI ids under a section.
+
+        Recursively fetches child LEGISCTA subsections when the current response
+        only returns their IDs (parent sections don't inline articles for large trees).
+        """
+        if _visited is None:
+            _visited = set()
+        if section_id in _visited:
+            return []
+        _visited.add(section_id)
+
+        if _depth > 8:
+            log.warning("max recursion depth on %s", section_id)
+            return []
+
         payload = {
             "cid": section_id,
             "textCid": parent_text_id,
             "date": _today_ms(),
         }
         data = self.post("/consult/getSectionByCid", payload)
-        ids: list[str] = []
-        _collect_article_ids(data, ids)
-        return ids
+
+        articles: list[str] = []
+        child_sections: list[str] = []
+        _collect_ids(data, articles, child_sections)
+
+        for sub_id in child_sections:
+            if sub_id in _visited:
+                continue
+            try:
+                articles.extend(
+                    self.list_articles_in_section(
+                        sub_id,
+                        parent_text_id,
+                        _depth + 1,
+                        _visited,
+                    )
+                )
+            except Exception as e:
+                log.warning("subsection %s failed: %s", sub_id, e)
+
+        seen = set()
+        return [a for a in articles if not (a in seen or seen.add(a))]
 
     def list_articles_in_loda(self, text_id: str) -> list[str]:
         payload = {"textId": text_id, "date": _today_ms()}
         data = self.post("/consult/lawDecree", payload)
-        ids: list[str] = []
-        _collect_article_ids(data, ids)
-        return ids
+        articles: list[str] = []
+        sections: list[str] = []
+        _collect_ids(data, articles, sections)
+        return articles
 
     def list_articles_in_jorf(self, text_id: str) -> list[str]:
-        payload = {"textCid": text_id, "date": _today_ms()}
-        data = self.post("/consult/jorf", payload)
-        ids: list[str] = []
-        _collect_article_ids(data, ids)
-        return ids
+        # PISTE /consult/jorf expects "textCid" per Swagger; try alternate keys on 400
+        for key in ("textCid", "id", "textId"):
+            try:
+                data = self.post("/consult/jorf", {key: text_id, "date": _today_ms()})
+                articles: list[str] = []
+                sections: list[str] = []
+                _collect_ids(data, articles, sections)
+                if articles:
+                    return articles
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code != 400:
+                    raise
+        log.warning("all jorf payload variants failed for %s", text_id)
+        return []
 
 
 def _today_ms() -> int:
     return int(time.time() * 1000)
 
 
-def _collect_article_ids(node, acc: list[str]) -> None:
-    """Recurse any nested dict/list and collect LEGIARTI ids."""
+# Keys that embed references to OTHER articles — not children of this section.
+_SKIP_KEYS = {
+    "articleVersions",     # historical versions of the same article
+    "lienCitations",       # articles cited by this one
+    "lienModifications",   # articles that modified this one
+    "lienConcordes",       # concordance links
+    "lienAutres",          # other links
+    "versionPrecedente",   # previous version id (bare string)
+    "textTitles",          # parent text metadata (may contain unrelated ids)
+    "context",             # ANCESTOR chain — walking this drags in grandparents & siblings
+    "titreTxt",            # parent text metadata inside context
+}
+
+
+def _collect_ids(node, articles: list[str], sections: list[str]) -> None:
+    """Walk any nested structure. Collect LEGIARTI into articles, LEGISCTA into sections.
+
+    Skips reference-embedding keys that point to articles/sections OUTSIDE the
+    current tree (citations, historical versions, cross-code links) so we
+    don't over-enumerate and don't mislabel foreign articles.
+    """
     if isinstance(node, dict):
         aid = node.get("id") or node.get("cid")
-        if isinstance(aid, str) and aid.startswith("LEGIARTI"):
-            acc.append(aid)
-        for value in node.values():
-            _collect_article_ids(value, acc)
+        etat = node.get("etat", "")
+        if isinstance(aid, str):
+            if _VALID_ARTI.match(aid):
+                if etat in ("", "VIGUEUR", "VIGUEUR_DIFF"):
+                    articles.append(aid)
+            elif _VALID_SCTA.match(aid):
+                sections.append(aid)
+        for k, v in node.items():
+            if k in _SKIP_KEYS:
+                continue
+            _collect_ids(v, articles, sections)
     elif isinstance(node, list):
         for item in node:
-            _collect_article_ids(item, acc)
+            _collect_ids(item, articles, sections)

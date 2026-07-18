@@ -62,9 +62,38 @@ def _slugify_num(num: str) -> str:
 
 
 def _section_path(article: dict) -> str:
-    trail = article.get("contexte") or article.get("path") or []
-    if isinstance(trail, list):
-        return " > ".join(x.get("titre", "") for x in trail if isinstance(x, dict))
+    """Build breadcrumb using PISTE's pre-computed fullSectionsTitre.
+
+    Falls back to walking context.titresTM if the pre-computed string is absent
+    (some LODA/JORF responses may not have it).
+    """
+    import html
+
+    fst = article.get("fullSectionsTitre")
+    if fst:
+        # decode &gt; → >, &amp; → & etc.
+        return html.unescape(fst).strip()
+
+    ctx = article.get("context")
+    if isinstance(ctx, dict):
+        trail = ctx.get("titresTM", [])
+        if isinstance(trail, list) and trail:
+            labels = [x.get("titre", "") for x in trail if isinstance(x, dict)]
+            return " > ".join(l for l in labels if l).strip()
+    return ""
+
+
+def _titre(article: dict) -> str:
+    """Article title — key varies by PISTE endpoint.
+
+    Code articles (Code civil, CGI, etc.) usually don't have titles — they're
+    identified by 'num'. LODA articles sometimes do. Empty is the right value
+    when neither key is populated.
+    """
+    for key in ("titre", "titreArt"):
+        val = article.get(key)
+        if val and isinstance(val, str):
+            return val.strip()
     return ""
 
 
@@ -92,7 +121,7 @@ def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
         "source_label": source_label,
         "num": num,
         "section_path": _section_path(article),
-        "titre": article.get("titre", "") or "",
+        "titre": _titre(article),
         "texte": texte,
         "etat": etat or "VIGUEUR",
         "date_debut": _ms_to_iso(article.get("dateDebut")),
