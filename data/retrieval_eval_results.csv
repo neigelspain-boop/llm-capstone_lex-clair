@@ -1,0 +1,5 @@
+config,hit_rate_at_10,mrr_at_10,n_queries,boost_distance,notes
+bm25_only,0.4164,0.2343,1484,0.0,baseline (lexical)
+vector_only,0.7695,0.5547,1484,0.0,baseline (semantic)
+hybrid,0.7224,0.4153,1484,0.0,"RRF fusion, uniform boosts"
+hybrid_tuned,0.7385,0.4531,1484,1.133,"boosts={'texte': 1.266, 'titre': 0.089, 'section_path': 0.656, 'num': 1.516}"
