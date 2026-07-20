@@ -21,6 +21,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 ARTICLES_CSV = ROOT / "data" / "articles.csv"
 CHUNKS_CSV = ROOT / "data" / "chunks.csv"
+GROUND_TRUTH_CSV = ROOT / "data" / "ground_truth.csv"
 
 # Exact article IDs that encode the core legal case domain for retrieval.
 # If any of these disappear, downstream eval cannot achieve target coverage.
@@ -146,3 +147,31 @@ def test_chunks_url_populated_where_expected(chunks: pd.DataFrame) -> None:
     assert with_url >= 0.9 * len(chunks), (
         f"only {with_url}/{len(chunks)} chunks have URLs — expected ≥90%"
     )
+
+# --- ground_truth.csv invariants ----------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def ground_truth() -> pd.DataFrame:
+    """Load ground_truth.csv with the canonical ingestion read config."""
+    assert GROUND_TRUTH_CSV.exists(), f"missing artifact: {GROUND_TRUTH_CSV}"
+    return pd.read_csv(GROUND_TRUTH_CSV, keep_default_na=False)
+
+
+def test_ground_truth_shape(ground_truth: pd.DataFrame) -> None:
+    """Ground truth CSV must satisfy retrieval_eval.py's input contract."""
+    assert len(ground_truth) > 0, "ground_truth.csv is empty"
+    required = {"chunk_id", "question"}
+    missing = required - set(ground_truth.columns)
+    assert not missing, f"ground_truth missing columns: {missing}"
+    assert (ground_truth["question"].str.len() > 0).all(), "empty questions present"
+
+
+def test_ground_truth_ids_valid(
+    chunks: pd.DataFrame, ground_truth: pd.DataFrame
+) -> None:
+    """Every chunk_id in ground_truth must resolve to a chunk. Orphans → silent Hit@k=0."""
+    valid_ids = set(chunks["chunk_id"])
+    gt_ids = set(ground_truth["chunk_id"])
+    orphans = gt_ids - valid_ids
+    assert not orphans, f"ground_truth chunk_ids not in chunks.csv: {sorted(orphans)[:5]}"
