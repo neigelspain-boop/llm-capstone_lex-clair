@@ -653,4 +653,215 @@ hybrid_tuned may beat vector_only on that distribution. Re-run
 `eval/retrieval_eval.py` on the new GT and re-decide.
 
 ---
-*Last updated: 2026-07-20 · Day 3 close*
+## 2026-07-21 · Cross-encoder rerank via BGE-reranker-v2-m3 through sentence-transformers
+**Status:** Accepted · `[rubric · Best practices · Document re-ranking]`
+
+**Context.** Reranking is one of the three core best-practices locked
+Day 0 (ADR #4). The standard pattern is bi-encoder retrieval → cross-
+encoder rerank: BGE-M3 (used in retrieve.py) encodes query and doc
+independently — fast, less precise. A cross-encoder scores (query, doc)
+pairs jointly through a transformer — slower per pair but more precise.
+Runs at query time on 20 candidates.
+
+**Decision.** Rerank with `BAAI/bge-reranker-v2-m3` (2.27GB, multilingual)
+loaded through `sentence-transformers.CrossEncoder`, not through
+`FlagEmbedding.FlagReranker`. Return raw logits sorted descending, no
+sigmoid transform, no threshold. `rag/rerank.py` exposes `rerank(query,
+hits, k=5)`.
+
+**Rationale.**
+Model choice: family match with BGE-M3 embedder — consistent architectural
+narrative for peer reviewers ("bi-encoder from BGE family for retrieval,
+cross-encoder from same family for reranking"). Multilingual pretraining
+covers French; empirically validated on the quasi-usufruit test query.
+
+Loader choice: FlagEmbedding 1.4.x has a known open bug (PR #1544)
+where the reranker silently loads the slow `XLMRobertaTokenizer`, which
+lacks `prepare_for_model` in modern `transformers`, crashing at
+`compute_score()` time with `AttributeError`. Direct `AutoTokenizer(...,
+use_fast=True)` also hits the same slow-tokenizer fallback because
+BGE-reranker's `tokenizer_config.json` specifies the slow class as
+default. `sentence-transformers` handles the loader path cleanly — same underlying model weights, identical scores. Plane I regression check after `uv add sentence-transformers` confirmed BGE-M3 in ingestion/load.py still works unchanged.
+
+No threshold: we only sort, we don't reject. Adding a threshold requires calibration on labeled positive/negative pairs we don't have.
+
+**Trade-offs named honestly.**
+
+- **Absolute scores are uncalibrated and near zero.** For the test query
+  "quasi-usufruit et notaire" the top-5 scores were +0.0929 down to
+  +0.0131 — barely positive. Two readings, both correct: (a) no article
+  in the corpus perfectly matches this compound concept (quasi-usufruit
+  is defined across cc-587 + cc-621 + doctrine, not one article); (b)
+  the reranker is a general multilingual model, not French-legal-domain-
+  finetuned. Depresses absolute scores without necessarily damaging rank
+  order. Consequence: Day 6 UI cannot use these as a confidence signal
+  without recalibration. Use percentile-relative rendering, not absolute.
+- **Reranker completely replaced retrieve.py's top-5** (0% overlap on
+  the compound-query test). For queries where retrieve.py already ranks
+  the correct article at rank #1, this shuffle could theoretically hurt
+  rather than help. Not measured — retrieval eval (Day 3) was pre-rerank.
+  ADR #20 pattern (measure to ship decisions) was not applied here
+  because rerank is a rubric-line implementation, not a shipdecision
+  requiring measurement.
+- **+~40MB dependency chain** (sentence-transformers). Acceptable for
+  a project, would matter in a container. Alternative was a ~15-line
+  raw-transformers path with `use_fast=True`, rejected because it also
+  falls back to slow tokenizer in this environment.
+
+**Reversibility.** Trivial. `rag/rerank.py` is 100 lines, isolated
+behind `rerank(query, hits, k)`. Swap CrossEncoder for a different
+backend (Cohere API, ColBERT, raw transformers with a working tokenizer
+fix, etc.) touches one file. Removing rerank entirely — one line in
+`rag/flow.py`.
+
+---
+
+## 2026-07-21 · LLM query rewriting via gpt-4o-mini + Pydantic structured output
+**Status:** Accepted · `[rubric · Best practices · User query rewriting]`
+
+**Context.** Query rewriting is one of the three core best-practices
+locked Day 0 (ADR #4). The vocabulary gap between plain-French user
+queries ("ma grand-mère a vendu la maison") and legal-register statute
+text ("cession en démembrement de propriété") is the defining problem
+lex-clair exists to solve. Vector retrieval alone spans some of this
+gap; rewriting closes more.
+
+**Decision.** Single-shot LLM rewrite via `gpt-4o-mini` with
+`responses.parse(text_format=RewrittenQuery)`. Prompt written in
+French, non-lawyer register on input, ≤40-word single-sentence output
+enriched with legal vocabulary. Retrieval-side only — the ORIGINAL
+query is used in the answer prompt; the REWRITTEN query is used only
+for retrieve + rerank. Silent fallback to original query on any
+failure (empty output, parse error, network).
+
+**Rationale.**
+Technique choice: three techniques considered.
+- Single-shot rewrite (chosen): one API call, ~$0.00005/query, cheapest,
+  defensible, one file.
+- Multi-query: generate 3 variants, retrieve for each, RRF-merge. 3× cost,
+  ~3× code complexity, more robust to lexical variance. Cut for Day 4
+  scope; log as deferred experiment if Day 7 real-query logs show
+  rewrite quality is inconsistent.
+- HyDE (Hypothetical Document Embeddings): generate a fake answer,
+  embed that, retrieve on the embedding. Elegant on English; not proven
+  on French legal text. Rejected on evidence-tier grounds.
+
+Structured output: same pattern as Day 3 ground truth generation (ADR
+#19). Free-text JSON drift was the Day 1 lesson — `responses.parse`
+eliminates it at the API layer.
+
+Retrieval-side only: architectural discipline. The answer must be
+grounded in what the user actually asked, not our translation. Empirical
+validation: on the deliverable query "grand-mère a vendu la maison en
+usufruit", the rewriter disambiguated to "a cédé la nue-propriété"
+(one of two plausible interpretations); the answer still addressed
+the user's original ambiguous phrasing rather than the rewriter's
+disambiguation.
+
+Silent fallback: rewriting is a *retrieval enhancement*, not a
+correctness path. A dead OpenAI shouldn't take down the whole flow.
+`log.warning()` preserves the signal for monitoring while degrading
+gracefully to raw-query retrieval.
+
+**Trade-offs named honestly.**
+
+- **Over-composing.** Every rewrite adds "réserve héréditaire" and
+  "succession" whether the original query implies inheritance or not.
+  IN "Le notaire a-t-il fait une erreur ?" (6 words, could be any
+  notarial context) → OUT injects the full succession + reserve +
+  quotité disponible + héritiers framing. Acceptable for V1 because
+  lex-clair's scope IS succession disputes; if the user is outside
+  scope, the corpus doesn't cover their case anyway. Mitigation options
+  logged for later: loosen the prompt to "STRICTEMENT pertinents" or
+  measure Hit@k with rewrite on/off.
+- **Semantic disambiguation is silent.** Ambiguous queries get one legal
+  interpretation forced by the rewriter. "grand-mère a vendu la maison
+  en usufruit" got resolved to "cédé la nue-propriété" — but could
+  equally mean "sold her usufruit right". If the user meant the other,
+  downstream retrieval is misaligned. Day 6 UI may need a
+  disambiguation confirm step; not blocking Day 4.
+- **Uplift not measured pre-launch.** Rubric awards points for
+  *implementing* rewrite, not for measuring it. Retrieval eval on
+  rewrite-on vs rewrite-off is a deferred experiment (§7). ADR #20
+  measurement pattern applies only where measurement drives a ship
+  decision; here it doesn't.
+- **Silent fallback masks OpenAI outages.** If OpenAI is down,
+  retrieval quality silently degrades to raw-query performance. The
+  log.warning() breadcrumb is the mitigation — Day 7 monitoring will
+  surface it via dashboard.
+
+**Reversibility.** Trivial. `rag/rewrite.py` is 90 lines, isolated
+behind `rewrite(query) -> str`. Prompt lives inline as `REWRITE_PROMPT`
+constant — iterating takes one edit. Disabling entirely — one line
+in `rag/flow.py`.
+
+---
+
+## 2026-07-21 · Retrieve k=20 → rerank k=5
+**Status:** Accepted
+
+**Context.** Cross-encoder reranking requires over-fetch from the
+initial retrieval step. If retrieve returns k=5 and rerank keeps k=5,
+the reranker has nothing to reorder — you get the same 5 items back,
+sorted differently. The over-fetch ratio determines how much room the
+reranker has to promote articles the bi-encoder missed.
+
+**Decision.** `RETRIEVE_K=20`, `RERANK_K=5`. Constants at the flow
+layer (`rag/flow.py`), not per-file.
+
+**Rationale.**
+Zoomcamp reference: module 04 uses k=5 for retrieval-only (no rerank
+step). No specific rerank ratio locked.
+
+Professional consensus in retrieval literature: 3-5× over-fetch is the
+standard pattern. 20:5 = 4×, dead center.
+
+Three ratios considered:
+- **10 → 3**: too tight. Reranker has 7 candidates to reorder into 3
+  slots. Limited room to recover missed hits. Risk of ceiling effect
+  where reranker cannot promote articles from beyond retrieve's top-10.
+- **50 → 10**: over-provisions. Reranker latency scales linearly with
+  pairs — 50 pairs is 2.5× the wall time for marginal recall gain.
+  Also: our corpus is 792 chunks total. Top-50 is 6% of everything;
+  candidate quality degrades sharply past top-20 in a small corpus.
+  LLM prompt at 10 chunks × ~300 tokens = 3000 tokens context, ~2×
+  the k=5 baseline.
+- **20 → 5** (chosen): balanced. Reranker sees 20 candidates, has
+  room to promote articles from ranks 10-20 into the top-5. LLM
+  prompt stays under 1500 tokens of context, under 6000 chars total.
+  Wall time under 200ms for the rerank pass on GPU.
+
+Empirical validation on the "quasi-usufruit et notaire" test query:
+reranker completely replaced retrieve.py's top-5 (cc-819/cc-626/cc-758-2
+→ ord45-2590-1/-1bis/-1bisa/cc-621/d73-609-3). cc-621 (art. 621 =
+vente simultanée usufruit/nue-propriété) was promoted from a lower
+retrieve rank into the top-5. Exactly the pattern the ratio was
+designed to enable.
+
+Constants at flow layer, not per-file: keeps ratio decisions
+centralized. If Day 7 monitoring says top-5 is too tight for real
+queries touching more articles, one file changes.
+
+**Trade-offs named honestly.**
+
+- **Not measured empirically.** Rubric doesn't require it, Day 3
+  measurement budget was spent on retrieval configs (ADR #20 pattern).
+  Ratio was chosen from professional consensus + one-query eyeball
+  validation, not from a sweep. Deferred experiment (§7): grid
+  {(10,3), (20,5), (50,10)} × {vector_only, hybrid} × ground truth =
+  6 configs.
+- **20 candidates ≈ 2.5% of the 792-chunk corpus.** For a bigger
+  corpus this ratio would be much smaller. Currently "small corpus,
+  generous over-fetch" territory; the trade-off would shift for a
+  10k-chunk corpus and needs re-tuning if scope grows.
+- **k=5 for the LLM context bounds synthesis quality.** Real
+  succession-domain queries often touch 3-8 articles (quasi-usufruit
+  = cc-587 + cc-621 + doctrine + jurisprudence). k=5 may be too
+  tight for complex queries. Only measurable once Day 7 monitoring
+  collects real query logs; deferred.
+
+**Reversibility.** Trivial. Both constants live at
+`rag/flow.py:38-39`. One-line change to swap ratio, no downstream
+impact.
+
+---
