@@ -175,3 +175,39 @@ def test_ground_truth_ids_valid(
     gt_ids = set(ground_truth["chunk_id"])
     orphans = gt_ids - valid_ids
     assert not orphans, f"ground_truth chunk_ids not in chunks.csv: {sorted(orphans)[:5]}"
+
+
+# --- Plane II end-to-end -----------------------------------------------------
+
+
+@pytest.mark.slow
+def test_rag_flow_end_to_end() -> None:
+    """Full pipeline: query → French answer with at least one Legifrance citation.
+
+    Slow (~10-25s cold, ~3-4s warm). Opt-in via `pytest -m slow`.
+    Not in the default smoke suite because it hits the OpenAI API and
+    loads two ~2GB models into VRAM.
+    """
+    from rag import flow
+
+    result = flow.run("Qu'est-ce que le quasi-usufruit ?")
+
+    # answer is non-empty French text
+    assert result["answer"], "empty answer from flow.run"
+    assert len(result["answer"]) > 100, "answer suspiciously short"
+
+    # citations link to Legifrance
+    assert len(result["citations"]) >= 1, "no citations returned"
+    assert all(c["url"].startswith("http") for c in result["citations"]), \
+        "non-URL citation slipped through"
+    assert all("legifrance" in c["url"] for c in result["citations"]), \
+        "citation not pointing at Legifrance"
+
+    # cost + timing sanity
+    assert result["cost_usd"] < 0.01, f"cost too high: ${result['cost_usd']}"
+    assert result["elapsed_seconds"] < 60, f"too slow: {result['elapsed_seconds']}s"
+
+    # pipeline shape
+    assert result["chunks_retrieved"] == 20
+    assert result["chunks_reranked"] == 5
+    assert result["model_used"] == "gpt-4o-mini"

@@ -10,6 +10,11 @@ dependencies = [
     "python-dotenv",
     "pandas",
     "tqdm",
+    "chromadb>=1.5.9",
+    "flagembedding>=1.4.0",
+    "minsearch>=0.2.0",
+    "openai>=2.46.0",
+    "sentence-transformers>=5.6.0",
 ]
 
 [build-system]
@@ -18,3 +23,13 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["ingestion", "rag", "eval", "monitoring"]
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: end-to-end tests that hit LLM APIs (~10-25s each, opt-in via -m slow)",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
