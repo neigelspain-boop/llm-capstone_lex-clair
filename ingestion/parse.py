@@ -1,8 +1,4 @@
-# data/raw/ → data/articles.csv
-"""Parse data/raw/*.json → data/articles.csv with a uniform schema.
-
-Only articles with etat == 'VIGUEUR' are emitted (or when etat is missing).
-"""
+"""Parse raw JSON articles into a normalized articles CSV."""
 from __future__ import annotations
 import argparse
 import json
@@ -18,7 +14,7 @@ from tqdm import tqdm
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
-# File paths for corpus manifest, raw JSON input, and output CSV.
+# Paths for corpus manifest, raw JSON input, and normalized output.
 MANIFEST_PATH = Path("data/corpus_manifest.yaml")
 RAW_DIR = Path("data/raw")
 OUT_CSV = Path("data/articles.csv")
@@ -40,6 +36,8 @@ CHUNK_ID_PREFIX = {
     "decret_2023_1297": "d2023-1297",
 }
 
+
+# text cleaning helpers
 
 def _strip_html(s: str) -> str:
     """Remove HTML markup and collapse whitespace from text fields."""
@@ -102,6 +100,8 @@ def _titre(article: dict) -> str:
     return ""
 
 
+# article parsing helpers
+
 def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
     """Parse one raw JSON object into a normalized article row, or skip it."""
     article = raw.get("article") or raw
@@ -136,6 +136,8 @@ def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
         "url": f"https://www.legifrance.gouv.fr/codes/article_lc/{aid}" if aid else "",
     }
 
+
+# CSV generation
 
 def parse_all(manifest_path=MANIFEST_PATH, raw_dir=RAW_DIR, out_csv=OUT_CSV) -> pd.DataFrame:
     """Load manifest and raw JSON files, normalize articles, and write a CSV."""
@@ -179,6 +181,8 @@ def parse_all(manifest_path=MANIFEST_PATH, raw_dir=RAW_DIR, out_csv=OUT_CSV) -> 
     log.info("wrote %s", out_csv)
     return df
 
+
+# command-line entrypoint
 
 def main() -> None:
     """Command-line entrypoint for parsing raw JSON into the CSV output."""

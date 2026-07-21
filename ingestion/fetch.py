@@ -1,15 +1,4 @@
-# corpus enumeration → data/raw/*.json
-"""Fetch corpus articles from PISTE per data/corpus_manifest.yaml.
-
-Idempotent: skips articles already on disk.
-Writes: data/raw/{source_key}/{legiarti_id}.json
-        data/raw/fetched_at.txt (UTC ISO timestamp)
-
-Usage:
-    uv run python -m ingestion.fetch
-    uv run python -m ingestion.fetch --sources cc_successions
-    uv run python -m ingestion.fetch --limit 5   # smoke test
-"""
+"""Fetch corpus articles from PISTE and write raw JSON files to disk."""
 from __future__ import annotations
 import argparse
 import json
@@ -26,17 +15,21 @@ from ingestion.piste import PisteClient
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
-# Manifest, raw output directory, and fetch timestamp marker.
+# Manifest path, raw output dir, and fetched-at stamp.
 MANIFEST_PATH = Path("data/corpus_manifest.yaml")
 RAW_DIR = Path("data/raw")
 STAMP = RAW_DIR / "fetched_at.txt"
 
+
+# manifest helpers
 
 def load_manifest(path: Path = MANIFEST_PATH) -> dict:
     """Read corpus manifest YAML and return parsed manifest data."""
     with path.open() as f:
         return yaml.safe_load(f)
 
+
+# fetch helpers
 
 def enumerate_ids(client: PisteClient, source_key: str, spec: dict) -> list[str]:
     """Choose the fetch strategy for a source and return article ids."""
@@ -77,6 +70,8 @@ def fetch_source(
             continue
         dest.write_text(json.dumps(body, ensure_ascii=False, indent=2))
 
+
+# command-line entrypoint
 
 def main() -> None:
     """CLI entrypoint: load env, manifest, enumerate ids, fetch raw articles, and write a stamp."""

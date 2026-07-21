@@ -1,11 +1,4 @@
-"""PISTE (Légifrance) OAuth2 client with rate limiting and retry.
-
-Endpoints used:
-- /consult/getSectionByCid   → section content (LEGISCTA within a code)
-- /consult/lawDecree         → whole LODA text (décret, ordonnance)
-- /consult/jorf              → raw Journal Officiel text (non-consolidated)
-- /consult/getArticle        → single article by LEGIARTI id
-"""
+"""PISTE OAuth2 client and helpers for Legifrance API access."""
 from __future__ import annotations
 import os
 import re
@@ -35,7 +28,7 @@ SANDBOX = {
     "api_base": "https://sandbox-api.piste.gouv.fr/dila/legifrance/lf-engine-app",
 }
 
-
+# rate limiting
 class RateLimiter:
     """Simple rate limiter to keep API requests below a fixed rate."""
 
@@ -53,6 +46,7 @@ class RateLimiter:
             self._last = time.monotonic()
 
 
+# PISTE API client
 @dataclass
 class PisteClient:
     """Client for PISTE OAuth2 authentication and Legifrance data calls."""
