@@ -865,3 +865,83 @@ queries touching more articles, one file changes.
 impact.
 
 ---
+
+## 2026-07-22 · Claude judge via OpenRouter (not direct Anthropic API)
+**Status:** Accepted
+
+**Context.** The Day 4 judge stack needs a third provider to compare
+French legal answers across multiple LLMs. Direct Anthropic billing via a
+personal account is blocked in the EU, creating a practical access issue.
+
+**Decision.** Use OpenRouter as the transport for a Claude judge with the
+model slug `anthropic/claude-haiku-4.5`. Keep the `anthropic` Python
+package installed for reversibility, but make OpenRouter the active
+runtime path.
+
+**Rationale.** OpenRouter removes the Anthropic billing wall while
+preserving the same underlying model family. The trade-off is small
+latency overhead (~50-100ms) and a minor pricing/availability margin (~5%).
+This is a better operational fit than blocking Day 4 eval on provider
+billing constraints.
+
+**Trade-offs.** The route is slightly less direct than a native Anthropic
+call, and provider-specific quirks can differ. The implementation remains
+simple and reversible.
+
+**Reversibility.** High. The `anthropic` dependency stays in place and the
+judge wiring is isolated to one evaluation module.
+
+---
+
+## 2026-07-22 · Mistral as French-native third judge
+**Status:** Accepted
+
+**Context.** A strong peer-review signal for French-domain RAG is to have
+three providers agree on answer quality rather than only relying on a
+single model family. The rubric benefits from a cross-provider judge stack.
+
+**Decision.** Add Mistral as the third judge provider using
+`mistral-small-latest` as the runtime model. Keep the judge methodology
+reference-free and comparative.
+
+**Rationale.** Mistral is a French-native and widely used provider in
+European contexts, which makes it a credible cross-check against OpenAI
+and Claude-style judgments on French legal questions. The value is not
+that it is perfect, but that it gives a distinct opinion on the same
+answers.
+
+**Trade-offs.** The model is pinned to a rolling release (`mistral-small-latest`),
+so provider-side changes can shift behavior over time. This raises JSON
+schema drift risk compared with a dated snapshot.
+
+**Reversibility.** Medium. The integration is isolated and can be removed
+without changing the rest of the judge pipeline.
+
+---
+
+## 2026-07-22 · LLM-as-judge methodology: % agreement + majority vote
+**Status:** Accepted
+
+**Context.** The judge setup needs a simple, rubric-visible method to
+aggregate three independent judgments without overcomplicating the Day 4
+implementation. The rubric should be readable to reviewers without a
+statistics background.
+
+**Decision.** Use percentage agreement plus majority vote as the judge
+aggregation method. Judge each answer on a 3-class relevance scale and
+aggregate by agreement rate and majority label.
+
+**Rationale.** Three-way weighted kappa is mathematically messy, hard to
+explain to reviewers, and not clearly visible in the rubric. Percentage
+agreement with majority vote is simpler, more transparent, and aligns
+with a Zoomcamp-style evaluation mindset. The method is also reference-
+free, which fits the Day 4 setup.
+
+**Trade-offs.** This method does not produce a calibrated inter-rater
+statistic like Cohen's kappa. It is intentionally simpler and more
+operational than a full agreement model.
+
+**Reversibility.** High. The scoring logic is local to the evaluation code
+and can be swapped later if a more formal metric becomes necessary.
+
+---

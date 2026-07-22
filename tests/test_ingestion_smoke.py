@@ -148,6 +148,7 @@ def test_chunks_url_populated_where_expected(chunks: pd.DataFrame) -> None:
         f"only {with_url}/{len(chunks)} chunks have URLs — expected ≥90%"
     )
 
+
 # --- ground_truth.csv invariants ----------------------------------------------
 
 
@@ -177,7 +178,7 @@ def test_ground_truth_ids_valid(
     assert not orphans, f"ground_truth chunk_ids not in chunks.csv: {sorted(orphans)[:5]}"
 
 
-# --- Plane II end-to-end -----------------------------------------------------
+# --- Plane II end-to-end ------------------------------------------------------
 
 
 @pytest.mark.slow
@@ -211,3 +212,47 @@ def test_rag_flow_end_to_end() -> None:
     assert result["chunks_retrieved"] == 20
     assert result["chunks_reranked"] == 5
     assert result["model_used"] == "gpt-4o-mini"
+
+
+# --- llm_eval_results.csv invariants (Day 5) ----------------------------------
+
+
+@pytest.fixture(scope="module")
+def llm_eval() -> pd.DataFrame:
+    """Load llm_eval_results.csv produced by eval/llm_eval.py."""
+    path = ROOT / "data" / "llm_eval_results.csv"
+    assert path.exists(), f"missing artifact: {path}"
+    return pd.read_csv(path, keep_default_na=False)
+
+
+def test_llm_eval_row_count(llm_eval: pd.DataFrame) -> None:
+    """N samples × 3 judges = 3N rows. Guards partial runs / mid-flight state."""
+    n = len(llm_eval)
+    assert n % 3 == 0, f"row count {n} not divisible by 3 judges"
+    assert n >= 300, f"suspicious sample size: {n // 3} queries (expected >=100)"
+
+
+def test_llm_eval_all_judges_present(llm_eval: pd.DataFrame) -> None:
+    """Every query must have all 3 judgments. No partial evaluations."""
+    per_query = llm_eval.groupby("query_id").size()
+    incomplete = per_query[per_query != 3]
+    assert incomplete.empty, (
+        f"{len(incomplete)} queries have !=3 judgments: "
+        f"{incomplete.head().to_dict()}"
+    )
+
+
+def test_llm_eval_verdicts_valid(llm_eval: pd.DataFrame) -> None:
+    """No JSON drift from any judge model.
+
+    UNKNOWN is a permitted recorded-failure verdict from the silent-fallback
+    contract (see eval/llm_eval.py:_parse_judge_response). If UNKNOWN counts
+    are high, the run's kill switch should have tripped -- the invariant here
+    is contract-shape, not failure-rate.
+    """
+    valid = {"RELEVANT", "PARTLY_RELEVANT", "NON_RELEVANT", "UNKNOWN"}
+    bad = llm_eval[~llm_eval["verdict"].isin(valid)]
+    assert bad.empty, (
+        f"{len(bad)} rows with invalid verdicts: "
+        f"{bad['verdict'].unique().tolist()}"
+    )
