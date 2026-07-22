@@ -19,3 +19,8 @@ notebooks/.ipynb_checkpoints/
 data/chroma/
 tmp-chroma-test/
 .vscode/
+
+# Runtime logs
+eval_run.log
+eval_run.pid
+eval_resume.log
