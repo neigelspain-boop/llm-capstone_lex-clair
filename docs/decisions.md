@@ -241,6 +241,83 @@ Chroma binary that will not match a fresh embedding run on their machine.
 
 ---
 
+## 2026-07-23 · ADR #27 — Streamlit for the UI layer
+
+**Context.** Rubric line "Interface" awards +2 for UI, web app, or API. Zoomcamp reference module 07 uses Flask; broader capstone community defaults to Streamlit. Peer reviewers evaluate ~20 min per project — the UI must be legible at a glance.
+
+**Decision.** Streamlit, single file at `app/streamlit_app.py`.
+
+**Rationale.** Peer-review surface: reviewer clones, runs `streamlit run`, sees the app. `@st.cache_resource` handles BGE-M3 + reranker cold-start in one line (Flask would need module-level singleton + gunicorn config). `st.chat_input` + `st.chat_message` deliver the standard chat UX without templates or JS. ADR #10 protects reversibility — `rag.flow.run()` has no Streamlit dependency.
+
+**Alternatives.** Flask (reference module) — familiar but adds template + JS burden for feedback UX, same rubric score. FastAPI — adds Swagger UI, doubles code footprint for no rubric gain.
+
+**Reversibility.** High. Swapping to Flask/FastAPI touches only `app/`.
+
+---
+
+## 2026-07-23 · ADR #28 — Interim CSV feedback storage before Postgres
+
+**Context.** Rubric "Monitoring" splits +2 into feedback collection (+1) and dashboard (+1). Day 7 is scoped for full Postgres + Grafana. Adding Postgres today doubles Day 6 scope for a rubric-neutral gain.
+
+**Decision.** Day 6 writes feedback to `data/feedback.csv` with `csv.QUOTE_ALL`. Header: `timestamp, conversation_id, turn_id, question, answer, rating, comment, model_used, cost_usd, elapsed_seconds`. Day 7 migrates rows into a Postgres `feedback` table via a one-shot loader; `_append_feedback` swaps to `psycopg2`.
+
+**Rationale.** Schema mirrors the intended Postgres table 1:1 → migration is a `COPY` command, not a re-plumb. `QUOTE_ALL` makes the file `COPY`-compatible without an escape pass. File is gitignored so no leakage.
+
+**Notes.** `conversation_id` semantics = thread ID (all turns of one conversation share it). `turn_id` = specific Q&A within a thread. Both are UUIDs.
+
+**Reversibility.** High. Same schema on both sides of the migration.
+
+---
+
+## 2026-07-23 · ADR #29 — SUPERSEDED by ADR #30
+
+**Original decision (chrome-only EN toggle).** Retained for the labels/buttons/instructions portion. Answer-translation restriction lifted by #30 after live testing revealed the peer-review-accessibility gap.
+
+---
+
+## 2026-07-23 · ADR #30 — EN toggle: Tier 1.5 (chrome + machine-translated answer)
+
+**Supersedes:** ADR #29 in part.
+
+**Context.** ADR #29 shipped chrome-only EN. Live testing revealed a non-French reviewer toggling EN sees English labels but a French answer body and cannot judge answer quality — which is what rubric bonus points reward. The "rubric-neutral" framing in #29 was wrong: reviewer bonus points (up to 3 × 3 = 9 pts) depend on visible RAG quality.
+
+**Decision.** When EN toggle is on, machine-translate the assistant's French answer via `gpt-4o-mini`. Cache result on the turn dict (`answer_en`). Show disclaimer above every translated answer: "🌐 Machine translation for peer-review accessibility. The French answer is authoritative." Question, citations (article numbers with Légifrance URLs), and technical-details values stay French.
+
+**Cost.** ~$0.0005 per turn when EN is used. Zero otherwise. Estimated peer-review load: 3 reviewers × 5 turns × 1 EN session ≈ $0.008 total.
+
+**Latency.** ~2–3 s per translation, once per turn. Cached thereafter.
+
+**Failure surface.** Translation call is wrapped in `try/except` → warning banner + French fallback. Never blocks.
+
+**Alternatives.** Client-side browser translation (rejected: destroys chrome labels, poor on dynamic content). Translate at generation time (rejected: doubles cost even when never toggled, violates ADR #10). Per-turn "Show translation" button (rejected: redundant with the toggle we already have).
+
+**Plane discipline.** Translation lives in `app/streamlit_app.py`, not `rag/`. UI accessory, never enters feedback signal — CSV stores canonical French answer.
+
+**Reversibility.** High. Delete `_translate_to_english`, `get_openai_client`, the EN branch in `_render_answer_body`, three label keys. ~40 lines.
+
+---
+
+## 2026-07-23 · ADR #31 — Multi-turn conversation architecture with JSON persistence
+
+**Context.** Initial UI (v1–v3) modelled each Q&A as its own conversation with a per-Q&A `conversation_id`. Live testing revealed this is a log view, not a chat architecture — every serious chat UI (ChatGPT, Claude, Perplexity, Gemini) uses a two-level model where a conversation is a thread of turns. Peer reviewers arriving at a Streamlit chat app expect this pattern; getting the shape right now also prevents a data-model refactor in Day 7.
+
+**Decision.** Two-level state:
+- **Conversation** = `{id, title, created_at, updated_at, turns: list[dict]}`. Title auto-generated from the first question (truncated to 45 chars).
+- **Turn** = `{turn_id, question, result, answer_en, feedback}` — one Q&A pair within a conversation.
+
+Persistence: one JSON file per conversation at `data/conversations/{id}.json`. Loaded once at session start via `glob`. Saved atomically (`.tmp` → `rename`) on every mutation — turn append, `flow.run` completion, translation cache, feedback capture.
+
+**Rationale.** Standard chat UX. Preserves multi-turn context for reviewers to test the app the way it will actually be used. Migrates to Postgres tomorrow as: `for f in glob(data/conversations/*.json): INSERT INTO conversations (...) VALUES (...)`. Atomic writes prevent corruption on crash.
+
+**Alternatives.** Single JSON blob (`data/conversations.json`) — rejected: read-modify-rewrite hazard, harder to delete individual conversations. SQLite intermediate — rejected: adds a DB choice today for storage that gets replaced tomorrow. No persistence (session-only) — rejected: loses history on browser refresh, defeats sidebar navigation.
+
+**Feedback CSV impact.** `turn_id` column added; `conversation_id` semantics shift from per-Q&A to per-thread. Old rows have empty `turn_id` (existing rows are effectively one-turn conversations); wipe with `rm data/feedback.csv` on schema flip if desired.
+
+**Reversibility.** High. `_load_all_conversations` and `_save_conversation` are the only two disk-touching functions — swap for DB calls in Day 7.
+
+
+---
+
 ## 2026-07-19 · `load_index()` as the sole cross-plane interface
 **Status:** Accepted
 

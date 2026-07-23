@@ -24,3 +24,5 @@ tmp-chroma-test/
 eval_run.log
 eval_run.pid
 eval_resume.log
+data/conversations/
+data/feedback.csv

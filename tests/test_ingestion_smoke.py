@@ -11,6 +11,7 @@ fiscal anti-abuse). If any is missing, retrieval eval on Day 3 cannot pass.
 """
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 import pandas as pd
@@ -44,6 +45,85 @@ CRITICAL_ARTICLES = [
 
 
 # --- fixtures -----------------------------------------------------------------
+
+
+def test_import_smoke_streamlit_app() -> None:
+    """Import smoke — catches typos, bad imports, missing deps."""
+    result = subprocess.run(
+        ["uv", "run", "python", "-c", "import app.streamlit_app; print('imports ok')"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr or result.stdout
+    assert "imports ok" in result.stdout
+
+
+# ========== Day 6: Streamlit app smoke tests ==========
+
+def test_streamlit_app_imports():
+    """UI module imports without errors — catches broken flow.run
+    import chains, missing deps, or refactor-induced import breakage."""
+    import importlib
+
+    module = importlib.import_module("app.streamlit_app")
+    assert hasattr(module, "LABELS"), "LABELS dict missing"
+    assert "fr" in module.LABELS and "en" in module.LABELS
+    assert hasattr(module, "FEEDBACK_HEADER"), "feedback schema missing"
+    assert hasattr(module, "main"), "main() entry point missing"
+    assert hasattr(module, "_new_conversation")
+    assert hasattr(module, "_save_conversation")
+    assert hasattr(module, "_load_all_conversations")
+
+
+def test_feedback_csv_header_matches_day7_schema():
+    """FEEDBACK_HEADER is the exact set Day 7 Postgres will consume.
+    Adding/removing columns without updating the Postgres schema is
+    the migration hazard this test guards against."""
+    from app import streamlit_app as ui
+
+    expected = [
+        "timestamp",
+        "conversation_id",
+        "turn_id",
+        "question",
+        "answer",
+        "rating",
+        "comment",
+        "model_used",
+        "cost_usd",
+        "elapsed_seconds",
+    ]
+    assert ui.FEEDBACK_HEADER == expected
+
+
+def test_conversation_json_roundtrip(tmp_path, monkeypatch):
+    """save → load → same dict. Catches JSON serialisation drift on
+    the conversation shape (e.g. adding a non-serialisable field)."""
+    from app import streamlit_app as ui
+
+    monkeypatch.setattr(ui, "CONVERSATIONS_DIR", tmp_path)
+
+    conv = ui._new_conversation("Qu'est-ce que le quasi-usufruit ?")
+    conv["turns"].append(ui._new_turn("Et pour un immeuble ?"))
+    conv["turns"][0]["result"] = {
+        "answer": "…", "citations": [], "cost_usd": 0.001,
+        "elapsed_seconds": 5.2, "model_used": "gpt-4o-mini",
+        "chunks_retrieved": 20, "chunks_reranked": 5,
+        "rewritten_query": "…",
+    }
+    conv["turns"][0]["feedback"] = ui.RATING_UP
+
+    ui._save_conversation(conv)
+    loaded = ui._load_all_conversations()
+
+    assert conv["id"] in loaded
+    reloaded = loaded[conv["id"]]
+    assert reloaded["title"] == conv["title"]
+    assert len(reloaded["turns"]) == 1
+    assert reloaded["turns"][0]["feedback"] == ui.RATING_UP
+    assert reloaded["turns"][0]["result"]["model_used"] == "gpt-4o-mini"
 
 
 @pytest.fixture(scope="module")
