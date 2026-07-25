@@ -1022,3 +1022,183 @@ operational than a full agreement model.
 and can be swapped later if a more formal metric becomes necessary.
 
 ---
+## ADR #32 — Three-table Postgres schema for Plane IV persistence
+
+**Date:** 2026-07-25 · **Day:** 7 · **Status:** Locked
+
+### Decision
+
+Migrate Day 6 JSON+CSV persistence to Postgres with three tables:
+`conversations` (thread metadata), `turns` (Q&A pairs, one-to-many under
+conversation), `feedback` (ratings, one-to-many under turn). Foreign keys
+CASCADE on delete. Indexes on all foreign-key columns and `created_at`
+timestamps for Grafana time-series queries.
+
+### Alternatives considered
+
+**Two-table (Zoomcamp reference):** `conversations` + `feedback`, where
+each "conversation" is a single Q&A. Rejected because Day 6's ADR #31
+locked a multi-turn architecture: one thread contains N Q&A pairs. Forcing
+each turn into its own conversation row would either (a) flatten the
+sidebar's thread grouping — regressing the UX from Day 6 — or (b) create
+synthetic conversation rows with the same title, corrupting Grafana's
+"turns per conversation" panel.
+
+**Single denormalized table:** `conversations` with a JSONB column
+holding all turns. Rejected because Grafana panel SQL becomes lateral
+joins against JSONB paths, defeating the point of using a relational store.
+
+**Separate SQLite files per conversation (Day 6 continuity):** rejected
+because it doesn't move any rubric-line and blocks the Grafana dashboard.
+
+### Rationale
+
+- **Peer reviewers who know module 07 recognize the `feedback` table**
+  as the reference pattern. The `turns` layer reads as a legitimate
+  extension for multi-turn architectures, not a departure.
+- **CASCADE preserves referential integrity** — dropping a conversation
+  from the UI cleanly removes its turns and their feedback with no
+  orphan rows corrupting Grafana panels.
+- **Feedback as a separate table** (not a column on `turns`) matches
+  Zoomcamp reference AND future-proofs for comment-only submissions or
+  re-rating scenarios where a turn could accumulate multiple feedback
+  events.
+- **CHECK constraint on `rating IN (-1, 1)`** enforces the Day 6 semantics
+  at the DB layer. Loud failure at INSERT if the UI ever sends invalid
+  data — verified with a rejected `rating = 0` INSERT during schema
+  validation.
+
+### Trade-offs kept in code
+
+- FK CASCADE is destructive; a bug in the "delete conversation" UI flow
+  could nuke feedback history. Mitigated by not exposing a "delete"
+  action in Day 7 UI; conversation deletion is post-Day-9 concern.
+- `turns.answer_en` column persists translations that Day 6 held only in
+  session state. Trade-off: durability across restarts vs. storage cost.
+  Chose durability — translations are ~1KB each, negligible.
+- Sequence gaps in `feedback.id` on rolled-back INSERTs are expected
+  PostgreSQL behavior. Not exposed externally, no mitigation needed.
+
+## ADR #33 — Grafana dashboard structure and file-provisioned build path
+
+**Date:** 2026-07-25 · **Day:** 7 · **Status:** Locked
+
+### Decision
+
+Six-panel dashboard, 2-per-row layout, provisioned to Grafana via a
+committed JSON file at `monitoring/grafana/dashboards/lexclair.json`
+using Grafana's file-based provisioner (see
+`monitoring/grafana/provisioning/dashboards/dashboards.yml`).
+
+Panels chosen to tell one coherent story about how the RAG app is used:
+1. **Feedback ratio** (stat) — headline signal, do users like the answers
+2. **Questions asked per day** (time series) — usage trend
+3. **Response time distribution** (histogram) — performance shape
+4. **Cost per query over time** (time series, USD-formatted) — spend signal
+5. **Model usage** (bar) — infrastructure signal
+6. **Turns per conversation** (histogram) — surfaces the multi-turn
+   architecture (ADR #31) as a distinguishing feature vs Zoomcamp
+   reference module 07's single-turn assumption
+
+### Alternatives considered
+
+**Automated init-script provisioning** (Zoomcamp reference module 07's
+pattern): script talks to Grafana's HTTP API at container start, creates
+the datasource, imports the dashboard. Rejected: file provisioning
+achieves the same "zero clicks on first boot" peer-review UX with less
+code, no script to maintain, and no bootstrap ordering concerns
+(provisioning runs before HTTP is up).
+
+**Dashboard-as-code (Grafonnet/Terraform)**: rejected as scope-inflating
+for a solo capstone; JSON authoring in the UI + git-committed export is
+the industry-standard workflow for small deployments.
+
+**In-UI build only, no file commit**: rejected because the rubric point
+requires the dashboard to survive `docker compose down -v` and a clone
+by a peer reviewer. UI-only state lives in Grafana's own DB volume and
+would be lost.
+
+### Rationale
+
+- **Peer reviewers get a populated dashboard on first `docker compose up`**
+  because the file provisioner loads it at container boot. Same "install
+  and it just works" property as ADR #33's datasource YAML.
+- **The six panels aren't uniform**; each has a stated purpose. Turns
+  per conversation specifically surfaces our multi-turn architecture as
+  a visible differentiator, not just a chart-count filler.
+- **JSON was authored in the UI, then committed as a portable export**
+  (with `__inputs` block for datasource UID rewiring). This gives the
+  best of both: interactive iteration in Grafana, deterministic replay
+  in git.
+
+### Trade-offs kept in code
+
+- Committed JSON has a schema-versioned tie to Grafana v11.4.0. A future
+  Grafana upgrade may require the JSON to be regenerated. Compose file
+  pins the tag to `grafana/grafana-oss:11.4.0` to prevent silent drift.
+- Two dashboard formats exist and must be kept distinct: the **portable**
+  format (committed, with `${DS_LEXCLAIR}` placeholder) and the
+  **internal** format (what the UI's JSON Model editor works with). Editing
+  in the UI produces internal format; committing requires converting to
+  portable. Documented in this ADR to prevent future confusion.
+- Some panels (Questions per day, Turns per conversation) will look
+  sparse in demo state due to only ~24 turns of migrated Day 6 data. This
+  is honest — the dashboard is populated from real usage, not synthetic
+  seed data.
+
+## ADR #34 — Services-only docker-compose scope for Day 7
+
+**Date:** 2026-07-25 · **Day:** 7 · **Status:** Locked (Day 8 supersedes for app)
+
+### Decision
+
+Day 7's `docker-compose.yml` containerises Postgres and Grafana only.
+The Streamlit app continues to run on the host via
+`uv run streamlit run app/streamlit_app.py`, connecting to Postgres at
+`localhost:5432`.
+
+Kill switch for DB connection lives at module level in `monitoring/db.py`
+(`_DB_HEALTHY: bool`), NOT in Streamlit session state. One flag, one
+check per call, no Streamlit dependency in db.py — preserves ADR #10's
+plane-separation discipline.
+
+### Alternatives considered
+
+**Full-stack docker-compose today** (app + Postgres + Grafana): rejected
+because Day 8 has a dedicated Containerization rubric line (+2 points).
+Splitting the compose file work across two days for no rubric gain
+would double Day 7 scope. Day 8 adds the app service; connection strings
+switch from `localhost` to the `postgres` service name inside the
+network.
+
+**Kill switch in Streamlit session state**: rejected because it would
+require importing `streamlit` inside `monitoring/db.py`, breaking
+plane-separation. Module-level global is simpler, testable, and works
+correctly for the single-user HF Spaces deploy target (Day 9).
+
+### Rationale
+
+- **Day 7 scope stays focused** on Plane IV completion (persistence +
+  monitoring dashboard), not deployment plumbing.
+- **`app/streamlit_app.py` runs unchanged** on the host during
+  development — no BGE cache mount, no Streamlit-in-Docker port
+  forwarding, no hot-reload complexity to solve today.
+- **The kill switch pattern is testable** via `_reset_conn()` helper
+  and works identically in local dev and containerised deployment. It's
+  not a Day 7 hack that Day 8 needs to remove.
+
+### Trade-offs kept in code
+
+- The peer-review demo on Day 9 requires two commands, not one
+  (`docker compose up -d` for services, then
+  `uv run streamlit run app/streamlit_app.py` for the app). Day 8
+  collapses this to one command. Documented in README.
+- Kill switch is one-way per process — once `_DB_HEALTHY` flips false,
+  the app stays in degraded mode until Streamlit restart, even if
+  Postgres recovers. Chosen over auto-retry to avoid hammering a down
+  DB. If HF Spaces reveals this as a real issue on Day 9, a "reconnect"
+  button in the UI banner would resolve it in ~10 min.
+- Session-state loss on browser refresh when the kill switch has
+  tripped: rendering degrades to whatever's already in `st.session_state`;
+  full state is lost on refresh. Acceptable for a solo demo; documented
+  as a Day 9 buffer improvement if HF Spaces feedback demands it.

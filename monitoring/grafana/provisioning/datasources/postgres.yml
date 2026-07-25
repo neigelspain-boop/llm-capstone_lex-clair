@@ -1,16 +1,22 @@
+# Provisioning config for the LexClair Postgres datasource.
+# Grafana reads this at container boot and registers the datasource
+# with zero UI clicks. Substitution uses env vars passed via
+# docker-compose.yml → grafana service → environment.
+#
+# Note: `url: postgres:5432` uses the Docker service name, NOT localhost,
+# because Grafana reaches Postgres over the Docker network.
+
 apiVersion: 1
 
 datasources:
-  - name: Postgres
+  - name: LexClair
     type: postgres
-    access: proxy
     url: postgres:5432
-    database: capstone
-    user: capstone
-    secureJsonData:
-      password: capstone
+    user: ${POSTGRES_USER}
+    isDefault: true
     jsonData:
+      database: ${POSTGRES_DB}
       sslmode: disable
       postgresVersion: 1600
-      timescaledb: false
-    isDefault: true
+    secureJsonData:
+      password: ${POSTGRES_PASSWORD}

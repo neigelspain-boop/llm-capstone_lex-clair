@@ -63,67 +63,97 @@ def test_import_smoke_streamlit_app() -> None:
 # ========== Day 6: Streamlit app smoke tests ==========
 
 def test_streamlit_app_imports():
-    """UI module imports without errors — catches broken flow.run
-    import chains, missing deps, or refactor-induced import breakage."""
+    """UI module imports cleanly + Day 7 contract intact.
+
+    Guards: import chain, LABELS shape, Day 7 db_offline_banner labels,
+    and the three wrappers (_save_conversation, _load_all_conversations,
+    _append_feedback) that the render code calls into. Any refactor that
+    renames or drops a wrapper breaks silently at rendertime without this.
+    """
     import importlib
 
     module = importlib.import_module("app.streamlit_app")
+
     assert hasattr(module, "LABELS"), "LABELS dict missing"
     assert "fr" in module.LABELS and "en" in module.LABELS
-    assert hasattr(module, "FEEDBACK_HEADER"), "feedback schema missing"
-    assert hasattr(module, "main"), "main() entry point missing"
-    assert hasattr(module, "_new_conversation")
-    assert hasattr(module, "_save_conversation")
-    assert hasattr(module, "_load_all_conversations")
+    assert "db_offline_banner" in module.LABELS["fr"], (
+        "Day 7 fr db_offline_banner label missing"
+    )
+    assert "db_offline_banner" in module.LABELS["en"], (
+        "Day 7 en db_offline_banner label missing"
+    )
+
+    for name in ("_save_conversation", "_load_all_conversations", "_append_feedback"):
+        assert hasattr(module, name), f"{name} wrapper missing"
+        assert callable(getattr(module, name)), f"{name} not callable"
 
 
-def test_feedback_csv_header_matches_day7_schema():
-    """FEEDBACK_HEADER is the exact set Day 7 Postgres will consume.
-    Adding/removing columns without updating the Postgres schema is
-    the migration hazard this test guards against."""
-    from app import streamlit_app as ui
+def test_feedback_schema_columns_match_day7_contract(db_conn):
+    """Postgres feedback table has exactly the columns db.append_feedback
+    reads from the row dict, plus DB-managed columns (id, created_at).
 
-    expected = [
-        "timestamp",
-        "conversation_id",
-        "turn_id",
-        "question",
-        "answer",
-        "rating",
-        "comment",
-        "model_used",
-        "cost_usd",
-        "elapsed_seconds",
-    ]
-    assert ui.FEEDBACK_HEADER == expected
-
-
-def test_conversation_json_roundtrip(tmp_path, monkeypatch):
-    """save → load → same dict. Catches JSON serialisation drift on
-    the conversation shape (e.g. adding a non-serialisable field)."""
-    from app import streamlit_app as ui
-
-    monkeypatch.setattr(ui, "CONVERSATIONS_DIR", tmp_path)
-
-    conv = ui._new_conversation("Qu'est-ce que le quasi-usufruit ?")
-    conv["turns"].append(ui._new_turn("Et pour un immeuble ?"))
-    conv["turns"][0]["result"] = {
-        "answer": "…", "citations": [], "cost_usd": 0.001,
-        "elapsed_seconds": 5.2, "model_used": "gpt-4o-mini",
-        "chunks_retrieved": 20, "chunks_reranked": 5,
-        "rewritten_query": "…",
+    Original intent preserved: guard against schema drift between what
+    the app writes and what the persistence layer expects. Day 7 moves
+    the check from a CSV header constant to a real DB introspection query.
+    """
+    expected_columns = {
+        "id",              # SERIAL PK, DB-managed
+        "conversation_id", # from row["conversation_id"]
+        "turn_id",         # from row["turn_id"]
+        "rating",          # from row["rating"]
+        "comment",         # from row.get("comment")
+        "created_at",      # from either DEFAULT NOW() or migrate override
     }
-    conv["turns"][0]["feedback"] = ui.RATING_UP
+    with db_conn.cursor() as cur:
+        cur.execute("""
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_schema = 'public' AND table_name = 'feedback'
+        """)
+        actual = {r[0] for r in cur.fetchall()}
+
+    assert actual == expected_columns, (
+        f"feedback schema drift — expected {expected_columns}, got {actual}"
+    )
+
+
+def test_conversation_wrapper_roundtrip(db_conn):
+    """Wrapper roundtrip: _save_conversation → _load_all_conversations.
+
+    Complements test_db_conversation_roundtrip by exercising the app-layer
+    wrappers, including _save_conversation's updated_at mutation which the
+    sidebar sort depends on. A refactor that drops the mutation would
+    silently regress "most-recent-first" ordering — this test catches it.
+    """
+    import time
+    from app import streamlit_app as ui
+
+    conv = ui._new_conversation("Wrapper roundtrip test")
+    original_updated = conv["updated_at"]
+
+    # Sleep enough that datetime.now differs on any reasonable clock resolution
+    time.sleep(0.05)
 
     ui._save_conversation(conv)
-    loaded = ui._load_all_conversations()
 
-    assert conv["id"] in loaded
-    reloaded = loaded[conv["id"]]
-    assert reloaded["title"] == conv["title"]
-    assert len(reloaded["turns"]) == 1
-    assert reloaded["turns"][0]["feedback"] == ui.RATING_UP
-    assert reloaded["turns"][0]["result"]["model_used"] == "gpt-4o-mini"
+    # updated_at mutation contract — sidebar sort depends on this
+    assert conv["updated_at"] != original_updated, (
+        "_save_conversation must mutate conv['updated_at'] to NOW "
+        "(sidebar sort-by-recency depends on this)"
+    )
+    assert conv["updated_at"] > original_updated, (
+        "updated_at moved backwards, clock issue or bug"
+    )
+
+    # Roundtrip through Postgres via the wrapper (not db.* directly)
+    loaded = ui._load_all_conversations()
+    assert conv["id"] in loaded, "wrapper didn't persist"
+    assert loaded[conv["id"]]["title"] == "Wrapper roundtrip test"
+
+    # Cleanup — CASCADE nukes any turns
+    with db_conn.cursor() as cur:
+        cur.execute("DELETE FROM conversations WHERE id = %s", (conv["id"],))
+    db_conn.commit()
 
 
 @pytest.fixture(scope="module")
@@ -336,3 +366,98 @@ def test_llm_eval_verdicts_valid(llm_eval: pd.DataFrame) -> None:
         f"{len(bad)} rows with invalid verdicts: "
         f"{bad['verdict'].unique().tolist()}"
     )
+
+# ========== db.py Postgres integration smoke tests (Day 7) ==========
+
+
+@pytest.fixture
+def db_conn():
+    """Yield a live Postgres connection. Skip if unreachable.
+
+    Fast suite must not require `docker compose up`. On skip, other tests
+    still run. Does NOT close the connection — db.py owns the singleton.
+    """
+    import psycopg2  # noqa: F401 — imported for OperationalError catch
+    from monitoring import db
+
+    db._reset_conn()  # clear any kill-switch trip from prior test
+    conn = db.get_conn()
+    if conn is None:
+        pytest.skip("Postgres unavailable — expected without docker compose up")
+    yield conn
+    # deliberately do not close: db.py manages the singleton lifecycle
+
+
+def test_db_schema_init_idempotent(db_conn):
+    """init_schema() is safe to call multiple times.
+
+    Verifies CREATE TABLE IF NOT EXISTS contract: first call creates,
+    subsequent calls no-op. Also asserts all three tables land as
+    expected shape.
+    """
+    from monitoring import db
+
+    db.init_schema()
+    db.init_schema()  # second call MUST NOT raise
+    with db_conn.cursor() as cur:
+        cur.execute(
+            "SELECT tablename FROM pg_tables WHERE schemaname='public'"
+        )
+        tables = {r[0] for r in cur.fetchall()}
+    assert {"conversations", "turns", "feedback"}.issubset(tables), (
+        f"missing tables: expected superset of "
+        f"{{'conversations', 'turns', 'feedback'}}, got {tables}"
+    )
+
+
+def test_db_conversation_roundtrip(db_conn):
+    """Save via db.save_conversation, load back, verify shape preservation.
+
+    Catches ORM drift on Day 6 dict → Postgres columns → reconstructed dict.
+    Uses app.streamlit_app helpers (same code path the UI uses) to build
+    the input, so any breakage in _new_conversation/_new_turn also fails
+    this test.
+    """
+    from app import streamlit_app as ui
+    from monitoring import db
+
+    # Build a conversation matching Day 6's ADR #31 shape
+    conv = ui._new_conversation("Day 7 smoke test question")
+    conv["turns"].append(ui._new_turn("Day 7 smoke test question"))
+    conv["turns"][0]["result"] = {
+        "answer": "smoke test answer",
+        "citations": [
+            {"chunk_id": "cc-test", "num": "999", "url": "https://example.com"}
+        ],
+        "cost_usd": 0.001,
+        "elapsed_seconds": 5.0,
+        "model_used": "gpt-4o-mini",
+        "chunks_retrieved": 20,
+        "chunks_reranked": 5,
+        "rewritten_query": "smoke",
+    }
+
+    # Save
+    db.save_conversation(conv)
+
+    # Load back and verify shape
+    loaded = db.load_all_conversations()
+    assert conv["id"] in loaded, "conversation not persisted"
+    reloaded = loaded[conv["id"]]
+    assert reloaded["title"] == conv["title"]
+    assert len(reloaded["turns"]) == 1
+    reloaded_turn = reloaded["turns"][0]
+    assert reloaded_turn["question"] == "Day 7 smoke test question"
+
+    # Result dict was reconstructed correctly
+    reloaded_result = reloaded_turn["result"]
+    assert reloaded_result is not None
+    assert reloaded_result["model_used"] == "gpt-4o-mini"
+    assert float(reloaded_result["cost_usd"]) == 0.001
+    assert len(reloaded_result["citations"]) == 1
+    assert reloaded_result["citations"][0]["chunk_id"] == "cc-test"
+
+    # Cleanup — CASCADE nukes the turn too
+    with db_conn.cursor() as cur:
+        cur.execute("DELETE FROM conversations WHERE id = %s", (conv["id"],))
+    db_conn.commit()

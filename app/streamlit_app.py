@@ -5,9 +5,10 @@ each conversation contains multiple TURNS (Q&A pairs). Standard
 ChatGPT/Claude-style pattern with a "New conversation" button, a
 conversation list, and per-turn feedback.
 
-Persistence: one JSON file per conversation at
-`data/conversations/{id}.json`. Loaded once at session start, saved
-atomically on every mutation. Day 7 migrates this to Postgres.
+Persistence: Postgres via monitoring.db (ADRs #32, #34). Conversations,
+turns, and feedback all live in relational tables. Kill switch in
+monitoring.db surfaces to the UI as a persistent warning banner when
+the DB is unreachable — the app keeps rendering in-memory state.
 
 Public surface: Streamlit runs this file directly. Plane II is
 consumed via `rag.flow.run(query)` per ADR #10.
@@ -15,8 +16,6 @@ consumed via `rag.flow.run(query)` per ADR #10.
 
 from __future__ import annotations
 
-import csv
-import json
 import os
 import traceback
 import uuid
@@ -25,6 +24,8 @@ from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
+
+from monitoring import db
 
 
 # ========== labels (EN/FR chrome) ==========
@@ -75,6 +76,10 @@ LABELS = {
             "des assurances et le CGI via Légifrance.\n\n"
             "Projet capstone LLM Zoomcamp 2026."
         ),
+        "db_offline_banner": (
+            "⚠️ Base de données indisponible — les conversations et "
+            "retours de cette session ne seront pas conservés."
+        ),
     },
     "en": {
         "title": "lex-clair · French legal assistant",
@@ -124,6 +129,10 @@ LABELS = {
             "assurances, and CGI via Légifrance.\n\n"
             "LLM Zoomcamp 2026 capstone project."
         ),
+        "db_offline_banner": (
+            "⚠️ Database unavailable — conversations and feedback from "
+            "this session will not be persisted."
+        ),
     },
 }
 
@@ -131,23 +140,7 @@ LABELS = {
 # ========== paths + constants ==========
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
 ENV_PATH = PROJECT_ROOT / ".env"
-FEEDBACK_CSV = DATA_DIR / "feedback.csv"
-CONVERSATIONS_DIR = DATA_DIR / "conversations"
-
-FEEDBACK_HEADER = [
-    "timestamp",
-    "conversation_id",   # thread ID (all turns of one conversation share this)
-    "turn_id",           # this specific Q&A's ID
-    "question",
-    "answer",
-    "rating",
-    "comment",
-    "model_used",
-    "cost_usd",
-    "elapsed_seconds",
-]
 
 RATING_UP = 1
 RATING_DOWN = -1
@@ -162,26 +155,19 @@ TITLE_MAX_LEN = 45  # truncate long questions for sidebar titles
 LANG_OPTIONS = ["🇫🇷 FR", "🇬🇧 EN"]
 
 
-# ========== feedback CSV helpers ==========
-
-def _ensure_feedback_csv() -> None:
-    """Create the feedback CSV with header if missing. Idempotent."""
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    if not FEEDBACK_CSV.exists():
-        with FEEDBACK_CSV.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.writer(fh, quoting=csv.QUOTE_ALL)
-            writer.writerow(FEEDBACK_HEADER)
-
+# ========== feedback wrapper (delegates to monitoring.db) ==========
 
 def _append_feedback(row: dict) -> None:
-    """Append one feedback row. QUOTE_ALL → Postgres-COPY-compatible."""
-    _ensure_feedback_csv()
-    with FEEDBACK_CSV.open("a", newline="", encoding="utf-8") as fh:
-        writer = csv.writer(fh, quoting=csv.QUOTE_ALL)
-        writer.writerow([row.get(f, "") for f in FEEDBACK_HEADER])
+    """Append one feedback row via monitoring.db.
+
+    Kept as a wrapper so the Day 6 render code's call sites don't
+    need to change. row is the 10-column dict Day 6 built for the CSV;
+    db.append_feedback picks out the 4 keys it stores and ignores the rest.
+    """
+    db.append_feedback(row)
 
 
-# ========== conversation persistence (JSON per file) ==========
+# ========== conversation persistence (Postgres via monitoring.db) ==========
 
 def _new_conversation(first_question: str) -> dict:
     """Create a new conversation dict with a generated title."""
@@ -210,41 +196,18 @@ def _new_turn(question: str) -> dict:
 
 
 def _save_conversation(conv: dict) -> None:
-    """Atomic write to data/conversations/{id}.json."""
-    CONVERSATIONS_DIR.mkdir(parents=True, exist_ok=True)
+    """Persist a conversation via monitoring.db.
+
+    Mutates conv['updated_at'] to NOW before delegating — preserves Day 6's
+    sidebar sort-by-recency behavior (see _render_sidebar's sort key).
+    """
     conv["updated_at"] = datetime.now(timezone.utc).isoformat()
-    path = CONVERSATIONS_DIR / f"{conv['id']}.json"
-    tmp = path.with_suffix(".json.tmp")
-    try:
-        with tmp.open("w", encoding="utf-8") as fh:
-            json.dump(conv, fh, ensure_ascii=False, indent=2)
-        tmp.replace(path)
-    except Exception:
-        traceback.print_exc()
-        if tmp.exists():
-            try:
-                tmp.unlink()
-            except OSError:
-                pass
+    db.save_conversation(conv)
 
 
 def _load_all_conversations() -> dict[str, dict]:
-    """Load every persisted conversation. Returns dict keyed by id.
-
-    Bad files are logged and skipped; app boots regardless.
-    """
-    if not CONVERSATIONS_DIR.exists():
-        return {}
-    convs: dict[str, dict] = {}
-    for path in sorted(CONVERSATIONS_DIR.glob("*.json")):
-        try:
-            with path.open(encoding="utf-8") as fh:
-                conv = json.load(fh)
-            if isinstance(conv, dict) and "id" in conv and "turns" in conv:
-                convs[conv["id"]] = conv
-        except Exception:
-            traceback.print_exc()
-    return convs
+    """Load every persisted conversation from Postgres, keyed by id."""
+    return db.load_all_conversations()
 
 
 # ========== flow.run() wrapper (cached) ==========
@@ -310,6 +273,9 @@ def _init_session_state() -> None:
     models_warm: bool
     """
     if "conversations" not in st.session_state:
+        # Idempotent — no-op after first session if Postgres already has
+        # the schema. Silently returns if kill switch tripped.
+        db.init_schema()
         st.session_state.conversations = _load_all_conversations()
     if "active_conversation_id" not in st.session_state:
         st.session_state.active_conversation_id = None
@@ -513,13 +479,13 @@ def _render_turn_feedback(
     rating = RATING_UP if clicked_yes else RATING_DOWN
     turn["feedback"] = rating
 
-    # Feedback CSV: canonical French answer + both conversation and turn ids.
+    # Feedback record: full 10-key Day 6 dict. db.append_feedback stores
     _append_feedback(
         {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "conversation_id": conv["id"],
             "turn_id": turn["turn_id"],
-            "question": turn["question"],
+            "question": turn["question"],  
             "answer": turn["result"].get("answer", ""),
             "rating": rating,
             "comment": "",
@@ -618,6 +584,12 @@ def main() -> None:
     _init_session_state()
 
     labels = LABELS[st.session_state.lang]
+
+    # DB health banner — persistent warning while the kill switch is tripped.
+    # Kill switch is one-way per process (see ADR #34); recovery requires
+    # a Streamlit restart, not just Postgres coming back.
+    if not db.is_healthy():
+        st.warning(labels["db_offline_banner"])
 
     _render_sidebar(labels)
 

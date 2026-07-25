@@ -1,8 +1,20 @@
+# Provisioning config for dashboard auto-loading.
+# Grafana reads this at container boot; every 30s it re-scans the mounted
+# dashboards folder so JSON edits during development don't require a
+# container restart.
+#
+# `path` is the container-internal mount point (see docker-compose.yml
+# → grafana.volumes for the host-side path).
+
 apiVersion: 1
 
 providers:
-  - name: capstone
-    folder: ""
+  - name: LexClair
+    orgId: 1
+    folder: ''
     type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
     options:
       path: /var/lib/grafana/dashboards
