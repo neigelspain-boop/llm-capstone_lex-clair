@@ -6,7 +6,7 @@ analogue of ingestion/build.py's fetch → parse → chunk → index pipeline.
 Runs the four dossier stages in sequence for one case_id and reports a
 summary, including any coverage warnings from gate.py.
 
-Inputs:  --case-id <id>, --step {extract,gate,all}, --limit N, and
+Inputs:  --case-id <id>, --step {extract,gate,facts,all}, --limit N, and
          --raw-dir <path> (conditionally required — see below)  (CLI args)
 Outputs: full dossier artifact tree under data/dossier/<case_id>/:
              extracted/<doc_id>.md + .json   (extract.py)
@@ -15,17 +15,18 @@ Outputs: full dossier artifact tree under data/dossier/<case_id>/:
              chunks.csv                      (index.py)
          plus appended rows in the shared Chroma collection (index.py)
 
-Deliverable 3 status: extract and gate steps are implemented. --step all
-(full extract → gate → facts → index) is not implemented yet — raises
-NotImplementedError until facts/index land in Deliverable 5.
+Deliverable 4 status: extract, gate, and facts steps are implemented.
+--step all (full extract → gate → facts → index) is not implemented yet —
+raises NotImplementedError until index lands in Deliverable 5.
 
 --raw-dir is only required for steps that read raw source files (extract,
 all) — argparse enforces this after parsing (see STAGES_REQUIRING_RAW_DIR),
-since it can't express "required unless --step is X" declaratively. gate
-(and future facts/index) operate on already-extracted artifacts under
-data/dossier/<case_id>/ and never need --raw-dir: each sidecar written by
-extract.py now carries source_relpath, so gate.gate_case(case_id) locates
-every document's original source file by itself.
+since it can't express "required unless --step is X" declaratively. gate and
+facts operate on already-extracted artifacts under data/dossier/<case_id>/
+and never need --raw-dir: each sidecar written by extract.py now carries
+source_relpath, so gate.gate_case(case_id) locates every document's original
+source file by itself, and facts.extract_case_facts(case_id) reads only the
+.md transcripts under extracted/.
 """
 from __future__ import annotations
 
@@ -72,8 +73,12 @@ def run_pipeline(
     gate.gate_case(case_id) (no raw_dir needed — see module docstring),
     prints a one-line summary, and returns
     {case_id, step, total, ok, warnings, source_missing, parse_failed, elapsed}.
+    step="facts" runs facts.extract_case_facts(case_id) (no raw_dir needed),
+    prints a one-line summary, and returns
+    {case_id, step, docs_processed, facts_extracted, unique_roles,
+    ambiguities, parse_failed_docs, elapsed}.
     step="all" (full extract → gate → facts → index) is not implemented
-    yet — raises NotImplementedError until facts/index land in Deliverable 5.
+    yet — raises NotImplementedError until index lands in Deliverable 5.
     """
     if step == "extract":
         results = _run_stage("EXTRACT", extract.extract_case, case_id, raw_dir, limit=limit)
@@ -118,10 +123,22 @@ def run_pipeline(
             "elapsed": elapsed,
         }
 
-    if step == "all":
-        raise NotImplementedError("all steps pending — implement in later deliverables")
+    if step == "facts":
+        summary = _run_stage("FACTS", facts.extract_case_facts, case_id)
 
-    raise ValueError(f"unknown --step {step!r}; expected 'extract', 'gate', or 'all'")
+        print(
+            f"facts summary · case_id={case_id} docs_processed={summary['docs_processed']} "
+            f"facts={summary['facts_extracted']} unique_roles={summary['unique_roles']} "
+            f"ambiguities={summary['ambiguities']} parse_failed_docs={summary['parse_failed_docs']} "
+            f"elapsed={summary['elapsed']:.1f}s"
+        )
+
+        return {"case_id": case_id, "step": step, **summary}
+
+    if step == "all":
+        raise NotImplementedError("all steps pending — implement in Deliverable 5")
+
+    raise ValueError(f"unknown --step {step!r}; expected 'extract', 'gate', 'facts', or 'all'")
 
 
 # ========== CLI entrypoint ==========
@@ -135,10 +152,10 @@ def main() -> None:
     parser.add_argument(
         "--raw-dir", type=Path, required=False, default=None,
         help="directory of raw dossier documents for this case "
-             "(required for --step extract/all; optional for --step gate)",
+             "(required for --step extract/all; optional for --step gate/facts)",
     )
     parser.add_argument(
-        "--step", choices=["extract", "gate", "all"], default="all",
+        "--step", choices=["extract", "gate", "facts", "all"], default="all",
         help="which pipeline step(s) to run (default: all — not yet implemented)",
     )
     parser.add_argument(

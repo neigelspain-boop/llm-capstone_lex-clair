@@ -1276,3 +1276,84 @@ ADR; tracked as a follow-up if Qwen3-VL quality proves insufficient.
   to `ingestion/clients.py`, and add a `--force-model` override to the
   extract CLI so a case can be selectively re-extracted with a different
   vision model without a global constant flip.
+
+## ADR #36 — Actor roles discovered per case, not hardcoded
+
+**Date:** 2026-07-27 · **Branch:** v2-agentic (Deliverable 4) · **Status:** Accepted
+
+### Context
+
+An earlier draft of Deliverable 4 hardcoded 18 `ActorRole` enum values based on the
+Bossavit case. Rejected: an enum makes the pipeline case-specific — a different
+succession with a `syndic_de_copropriete` or `juge_des_tutelles` would silently
+degrade to `autre`. The whole point of lex-clair as generic tooling requires per-case
+role discovery.
+
+### Decision
+
+- `actor_role` is a validated snake_case string (regex `^[a-z][a-z0-9_]{2,60}$`), not
+  an `Enum`.
+- Roles are catalogued per case in `actor_roles.jsonl` with `label_fr`,
+  `grounding_note`, `confidence`, `first_seen_doc_id`, `fact_count`.
+- Ambiguous role assignments emit both a provisional `Fact` **and** a `RoleAmbiguity`
+  record in `role_ambiguities.jsonl`. Never silently pick one.
+- The extractor prompt teaches the snake_case pattern with examples from French
+  succession/notarial law, but does not restrict the set.
+
+### Consequences
+
+- Downstream reasoners (Day B) must consult the case's `actor_roles.jsonl` to
+  interpret role_ids, not a global registry.
+- Cross-case aggregation of roles (if ever needed) becomes a normalization concern,
+  not a data-model concern — different cases can call the same underlying role
+  slightly different names, and that's acceptable as long as intra-case coherence
+  holds.
+- Ambiguities become first-class data. Day B UI (Deliverable Day B-3) exposes them
+  for interactive resolution. Never silently resolved.
+
+### Follow-ups
+
+- Deliverable 5 populates `source_chunk_id` after indexing. Day B analysis reads
+  `facts.jsonl` + `actor_roles.jsonl` + `role_ambiguities.jsonl` as its complete
+  Plane Ib output.
+
+## ADR #37 — Correction to Deliverable 4 fact extractor — dead model ID
+
+**Date:** 2026-07-27 · **Branch:** v2-agentic (Deliverable 4) · **Status:** Accepted
+
+### Context
+
+Deliverable 4's initial ADR (#36) specified `google/gemini-2.0-flash-001` as
+`FACT_EXTRACTOR_MODEL_ID`. A real run against the ship-gate corpus returned an
+OpenRouter 404. Root cause: Gemini 2.0 Flash was retired 2026-03-31 — the
+model ID no longer resolves. This was a stale-fact failure — the model was
+recommended without verifying it against the current OpenRouter catalogue.
+
+### Decision
+
+Swap to `google/gemini-3.1-flash-lite`, verified live against OpenRouter's
+`/api/v1/models` catalogue and a 1-token dry call through the existing
+`get_anthropic_client()` → `chat.completions.create()` surface on
+2026-07-27 (GA, not preview; `max_tokens`/`response_format` supported; same
+message shape already used in `facts.py`). This preserves the intended
+pipeline provider diversity: `extract` (Qwen) → `gate` (Anthropic) → `facts`
+(Google), matching the Day 5 three-judge harness discipline of cross-family
+evaluation. Same OpenRouter surface and credit pool — no new provider
+integration.
+
+### Consequences
+
+- Adds Google to the OpenRouter model palette (previously Qwen + Anthropic +
+  Mistral). Does not add a new provider surface — same OpenRouter client,
+  same auth, same credit pool.
+- Fact-extraction cost estimate at Gemini 3.1 Flash Lite's published
+  OpenRouter pricing ($0.25/M prompt, $1.50/M completion tokens): well within
+  the ~$0.30–0.80 budget flagged in Deliverable 4 for the 55-doc corpus.
+
+### Follow-ups
+
+- Codify pre-flight model-ID verification (live catalogue check or a 1-token
+  dry call) as a mandatory step for any deliverable introducing a new model
+  constant. The Deliverable 3 vision swap (ADR #35) included this step; the
+  Deliverable 4 initial pass (ADR #36) did not. Add to the plan-review
+  checklist.

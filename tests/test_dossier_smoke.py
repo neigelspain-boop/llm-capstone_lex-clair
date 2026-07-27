@@ -6,10 +6,10 @@ the dossier pipeline's public entry points against import/signature drift.
 Deliverables 1-2 (extract.py, gate.py) are implemented — their tests run for
 real against the committed fixture data/dossier/demo/raw/sample_text.pdf (and,
 for gate.py, small synthetic PDFs built on the fly) with the Anthropic client
-mocked. Deliverable 3 (facts.py + index.py) remains skipped: no
-implementation exists yet behind facts.extract_case_facts or index.index_case
-(both raise NotImplementedError by design, see ingestion/dossier/*.py).
-Unskip and fill in assertions once that deliverable lands.
+mocked. Deliverable 4 (facts.py) is now implemented and tested the same way
+(mocked client, hermetic tmp_path DOSSIER_DIR). index.py (Deliverable 5)
+remains skipped: no implementation exists yet behind index.index_case (still
+raises NotImplementedError by design, see ingestion/dossier/index.py).
 """
 from __future__ import annotations
 
@@ -20,8 +20,9 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
+from pydantic import ValidationError
 
-from ingestion.dossier import extract, gate
+from ingestion.dossier import extract, facts, gate
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PDF = ROOT / "data" / "dossier" / "demo" / "raw" / "sample_text.pdf"
@@ -500,10 +501,277 @@ def test_build_all_requires_raw_dir(monkeypatch, capsys) -> None:
     assert "all" in err
 
 
-# ========== deliverable 3: facts.extract_case_facts + index.index_case ==========
+# ========== deliverable 4: facts.extract_facts_and_roles + extract_case_facts ==========
 
-@pytest.mark.skip("deliverable 3 pending")
-def test_facts_and_index_case_smoke() -> None:
-    """facts.extract_case_facts + index.index_case should produce facts.jsonl and
-    indexed dossier chunks appended to the shared Chroma collection."""
-    pass
+_FACT_KWARGS = dict(
+    fact_id="doc-f001",
+    date=None,
+    actor_role="notaire_redacteur",
+    action="signe l'acte de notoriete",
+    target="heritiers",
+    verbatim_quote="Le notaire soussigne signe l'acte.",
+    source_doc_id="doc",
+    source_chunk_id=None,
+)
+
+
+def test_fact_schema_validates() -> None:
+    """A Fact built with valid fields validates and round-trips its fields."""
+    fact = facts.Fact(**_FACT_KWARGS)
+    assert fact.actor_role == "notaire_redacteur"
+    assert fact.source_chunk_id is None
+
+
+def test_fact_actor_role_rejects_invalid_format() -> None:
+    """actor_role must be snake_case: no spaces, no capitals, no accents, min 3 chars."""
+    kwargs = {k: v for k, v in _FACT_KWARGS.items() if k != "actor_role"}
+    for bad_role in ["Maître Jean", "notaire redacteur", "", "ab"]:
+        with pytest.raises(ValidationError):
+            facts.Fact(actor_role=bad_role, **kwargs)
+
+    fact = facts.Fact(actor_role="notaire_redacteur", **kwargs)
+    assert fact.actor_role == "notaire_redacteur"
+
+
+def test_fact_verbatim_quote_rejects_empty() -> None:
+    """verbatim_quote must be non-empty after stripping whitespace."""
+    kwargs = {k: v for k, v in _FACT_KWARGS.items() if k != "verbatim_quote"}
+    for bad_quote in ["", " "]:
+        with pytest.raises(ValidationError):
+            facts.Fact(verbatim_quote=bad_quote, **kwargs)
+
+
+def test_fact_action_word_count_limit() -> None:
+    """action allows up to 15 words; 16 words raises."""
+    kwargs = {k: v for k, v in _FACT_KWARGS.items() if k != "action"}
+
+    fifteen_words = " ".join(["mot"] * 15)
+    fact = facts.Fact(action=fifteen_words, **kwargs)
+    assert fact.action == fifteen_words
+
+    sixteen_words = " ".join(["mot"] * 16)
+    with pytest.raises(ValidationError):
+        facts.Fact(action=sixteen_words, **kwargs)
+
+
+@pytest.fixture
+def facts_case_dir(tmp_path, monkeypatch):
+    """Redirect facts.DOSSIER_DIR into an isolated tmp dir with a fake case's extracted/ dir."""
+    monkeypatch.setattr(facts, "DOSSIER_DIR", tmp_path)
+    extracted_dir = tmp_path / "acme" / "extracted"
+    extracted_dir.mkdir(parents=True)
+    return tmp_path, extracted_dir
+
+
+def test_actor_role_catalogue_deduplicates(facts_case_dir, caplog) -> None:
+    """Two docs discovering the same role_id with conflicting labels: first-seen wins, warning logged."""
+    _, extracted_dir = facts_case_dir
+    (extracted_dir / "doc_a.md").write_text("## Page 1\n\nLe notaire agit.", encoding="utf-8")
+    (extracted_dir / "doc_b.md").write_text("## Page 1\n\nLe notaire agit encore.", encoding="utf-8")
+
+    response_a = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_redacteur", "action": "signe l'acte",
+                   "target": None, "verbatim_quote": "Le notaire agit."}],
+        "roles_discovered": [{"role_id": "notaire_redacteur", "label_fr": "Notaire rédacteur",
+                               "grounding_note": "Notaire qui rédige l'acte.", "confidence": "high"}],
+        "ambiguities": [],
+    }))
+    response_b = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_redacteur", "action": "signe encore",
+                   "target": None, "verbatim_quote": "Le notaire agit encore."}],
+        "roles_discovered": [{"role_id": "notaire_redacteur", "label_fr": "Notaire instrumentaire",
+                               "grounding_note": "Libelle different.", "confidence": "high"}],
+        "ambiguities": [],
+    }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [response_a, response_b]
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        with caplog.at_level("WARNING"):
+            summary = facts.extract_case_facts("acme")
+
+    assert summary["unique_roles"] == 1
+
+    roles_path = extracted_dir.parent / "actor_roles.jsonl"
+    lines = roles_path.read_text(encoding="utf-8").strip().splitlines()
+    assert len(lines) == 1
+    role = json.loads(lines[0])
+    assert role["role_id"] == "notaire_redacteur"
+    assert role["label_fr"] == "Notaire rédacteur"  # first-seen (doc_a) wins
+    assert "conflicting" in caplog.text
+
+
+def test_extract_facts_deterministic_fact_id(facts_case_dir) -> None:
+    """fact_ids are 1-indexed positions in the raw array, stable across repeated calls."""
+    _, extracted_dir = facts_case_dir
+    md_path = extracted_dir / "doc.md"
+    md_path.write_text("## Page 1\n\nTrois faits.", encoding="utf-8")
+
+    response = _fake_chat_response(json.dumps({
+        "facts": [
+            {"date": None, "actor_role": "notaire_redacteur", "action": "fait un",
+             "target": None, "verbatim_quote": "Fait un."},
+            {"date": None, "actor_role": "notaire_redacteur", "action": "fait deux",
+             "target": None, "verbatim_quote": "Fait deux."},
+            {"date": None, "actor_role": "notaire_redacteur", "action": "fait trois",
+             "target": None, "verbatim_quote": "Fait trois."},
+        ],
+        "roles_discovered": [],
+        "ambiguities": [],
+    }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = response
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        result1, _, _ = facts.extract_facts_and_roles(md_path, "doc")
+        result2, _, _ = facts.extract_facts_and_roles(md_path, "doc")
+
+    expected_ids = ["doc-f001", "doc-f002", "doc-f003"]
+    assert [f.fact_id for f in result1] == expected_ids
+    assert [f.fact_id for f in result2] == expected_ids
+
+
+def test_extract_case_facts_idempotent(facts_case_dir) -> None:
+    """Running extract_case_facts twice yields identical line counts in all 3 JSONL files."""
+    _, extracted_dir = facts_case_dir
+    (extracted_dir / "doc_a.md").write_text("## Page 1\n\nUn fait.", encoding="utf-8")
+    (extracted_dir / "doc_b.md").write_text("## Page 1\n\nUn autre fait.", encoding="utf-8")
+
+    def make_response(n):
+        return _fake_chat_response(json.dumps({
+            "facts": [{"date": None, "actor_role": "heritier_nu_proprietaire",
+                       "action": f"fait numero {n}", "target": None,
+                       "verbatim_quote": f"Fait {n}."}],
+            "roles_discovered": [{"role_id": "heritier_nu_proprietaire",
+                                   "label_fr": "Héritier nu-propriétaire",
+                                   "grounding_note": "Titulaire de la nue-propriete.",
+                                   "confidence": "high"}],
+            "ambiguities": [],
+        }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [
+        make_response(1), make_response(2), make_response(1), make_response(2),
+    ]
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        facts.extract_case_facts("acme")
+        facts.extract_case_facts("acme")
+
+    case_dir = extracted_dir.parent
+    facts_lines = (case_dir / "facts.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    roles_lines = (case_dir / "actor_roles.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    ambig_lines = (case_dir / "role_ambiguities.jsonl").read_text(encoding="utf-8").strip().splitlines()
+
+    assert len(facts_lines) == 2
+    assert len(roles_lines) == 1
+    assert len(ambig_lines) == 0
+
+
+def test_extract_case_facts_handles_parse_failure(facts_case_dir, caplog) -> None:
+    """One doc returns non-JSON, the other valid JSON: no exception, bad doc contributes 0."""
+    _, extracted_dir = facts_case_dir
+    (extracted_dir / "doc_bad.md").write_text("## Page 1\n\nTexte illisible.", encoding="utf-8")
+    (extracted_dir / "doc_good.md").write_text("## Page 1\n\nUn fait clair.", encoding="utf-8")
+
+    bad_response = _fake_chat_response("This is not JSON at all, sorry!")
+    good_response = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_redacteur", "action": "signe",
+                   "target": None, "verbatim_quote": "Un fait clair."}],
+        "roles_discovered": [],
+        "ambiguities": [],
+    }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [bad_response, good_response]
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        with caplog.at_level("WARNING"):
+            summary = facts.extract_case_facts("acme")
+
+    assert summary["facts_extracted"] == 1
+    assert summary["parse_failed_docs"] == 1
+    assert "doc_bad" in caplog.text
+
+
+def test_ambiguity_records_written(facts_case_dir) -> None:
+    """A provisional Fact plus its RoleAmbiguity: the ambiguity's fact_ids references the Fact."""
+    _, extracted_dir = facts_case_dir
+    md_path = extracted_dir / "doc.md"
+    md_path.write_text("## Page 1\n\nMaitre VIGNERON envoie un mail.", encoding="utf-8")
+
+    response = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_associe", "action": "envoie un mail",
+                   "target": None, "verbatim_quote": "Maitre VIGNERON envoie un mail."}],
+        "roles_discovered": [{"role_id": "notaire_associe", "label_fr": "Notaire associe",
+                               "grounding_note": "Notaire titulaire d'une part de societe.",
+                               "confidence": "low"}],
+        "ambiguities": [{
+            "verbatim_quote": "Maitre VIGNERON envoie un mail.",
+            "candidate_role_ids": ["notaire_associe", "notaire_stagiaire"],
+            "note": "Statut de Maitre VIGNERON incertain faute de contexte.",
+        }],
+    }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = response
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        summary = facts.extract_case_facts("acme")
+
+    case_dir = extracted_dir.parent
+    facts_lines = (case_dir / "facts.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    ambig_lines = (case_dir / "role_ambiguities.jsonl").read_text(encoding="utf-8").strip().splitlines()
+
+    assert len(ambig_lines) == 1
+    fact = json.loads(facts_lines[0])
+    ambiguity = json.loads(ambig_lines[0])
+
+    assert ambiguity["candidate_role_ids"] == ["notaire_associe", "notaire_stagiaire"]
+    assert ambiguity["fact_ids"] == [fact["fact_id"]]
+    assert summary["ambiguities"] == 1
+
+
+def test_facts_and_index_case_smoke(tmp_path, monkeypatch) -> None:
+    """facts.extract_case_facts, run through build.run_pipeline, produces facts.jsonl,
+    actor_roles.jsonl, and role_ambiguities.jsonl for the demo case. Does not assert
+    on indexing — that's Deliverable 5."""
+    from ingestion.dossier import build
+
+    monkeypatch.setattr(facts, "DOSSIER_DIR", tmp_path)
+    extracted_dir = tmp_path / "demo" / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "sample_text.md").write_text(
+        "## Page 1\n\nLe notaire signe l'acte de notoriete.", encoding="utf-8"
+    )
+
+    response = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_redacteur",
+                   "action": "signe l'acte de notoriete", "target": None,
+                   "verbatim_quote": "Le notaire signe l'acte de notoriete."}],
+        "roles_discovered": [{"role_id": "notaire_redacteur",
+                               "label_fr": "Notaire rédacteur",
+                               "grounding_note": "Notaire qui instrumente l'acte.",
+                               "confidence": "high"}],
+        "ambiguities": [],
+    }))
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = response
+
+    with patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_client):
+        summary = build.run_pipeline("demo", raw_dir=None, step="facts")
+
+    for name in ("facts.jsonl", "actor_roles.jsonl", "role_ambiguities.jsonl"):
+        assert (tmp_path / "demo" / name).exists(), f"missing {name}"
+
+    facts_lines = (tmp_path / "demo" / "facts.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(facts_lines) == 1
+    fact = json.loads(facts_lines[0])
+    assert fact["actor_role"] == "notaire_redacteur"
+    assert fact["source_chunk_id"] is None
+
+    assert summary["facts_extracted"] == 1
+    assert summary["docs_processed"] == 1

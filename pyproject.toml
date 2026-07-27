@@ -21,6 +21,7 @@ dependencies = [
     "psycopg2-binary>=2.9.12",
     "pdfplumber>=0.11.10",
     "pdf2image>=1.17.0",
+    "pydantic>=2.13.4",
 ]
 
 [build-system]

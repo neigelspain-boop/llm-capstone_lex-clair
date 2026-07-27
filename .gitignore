@@ -1,28 +1,33 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 .venv/
 .env
-.ruff_cache/
-.pytest_cache/
-uv.lock.tmp
 
-# Notebooks are exploration only, not the deliverable
-notebooks/.ipynb_checkpoints/
+# uv
+.uv/
 
-# Local persisted data volumes if bind-mounted
-*.db
-
-.DS_Store
-.env
-
-# Local build artifacts, not source
+# Data
+data/raw/
 data/chroma/
-tmp-chroma-test/
-.vscode/
+data/*.json.gz
+data/*.parquet
+
+# Feedback + conversations (Day 6/7)
+data/conversations/
+data/feedback.csv
 
 # Runtime logs
 eval_run.log
 eval_run.pid
 eval_resume.log
-data/conversations/
-data/feedback.csv
+
+# v2 dossier work
+# Rule: private case fully ignored; demo case fully committed as fixture.
+data/dossier/private/
+!data/dossier/demo/
+!data/dossier/demo/**
+
+# Backups
+*.bak

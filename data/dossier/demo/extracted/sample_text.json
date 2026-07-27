@@ -1,0 +1,10 @@
+{
+  "doc_id": "sample_text",
+  "source_filename": "sample_text.pdf",
+  "kind": "pdf",
+  "page_count": 1,
+  "extraction_mode": "text_pdf",
+  "extractor_model": null,
+  "extracted_at": "2026-07-27T10:11:31Z",
+  "source_hash": "7159b02d1aafe158d937266f1a9142159ed6022afc99c2bd7d377acf2119873e"
+}
