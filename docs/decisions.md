@@ -1202,3 +1202,77 @@ correctly for the single-user HF Spaces deploy target (Day 9).
   tripped: rendering degrades to whatever's already in `st.session_state`;
   full state is lost on refresh. Acceptable for a solo demo; documented
   as a Day 9 buffer improvement if HF Spaces feedback demands it.
+
+## ADR #35 — Vision extractor swapped from Opus 4.7 to Qwen3-VL
+
+**Date:** 2026-07-27 · **Branch:** v2-agentic (Deliverable 3) · **Status:** Accepted
+
+### Context
+
+Deliverable 3's real run on 55 dossier documents exhausted OpenRouter
+credit mid-batch on Opus 4.7 vision extraction, at roughly $0.03-0.05 per
+page. DeepSeek's flagship models (`deepseek-v4-flash`/`deepseek-v4-pro`,
+confirmed live via DeepSeek's own API docs) are text-only and cannot
+process images, so DeepSeek's direct API — despite already-paid credit
+there — is not a viable transport for this stage. DeepSeek-OCR, a
+purpose-built OCR model (~$0.03/M tokens), is not hosted on OpenRouter or
+DeepSeek's direct API; it would require adding DeepInfra as a new
+provider, which is deferred rather than done under this ADR.
+
+### Decision
+
+`VLM_MODEL_ID` in `ingestion/dossier/extract.py` changes from
+`anthropic/claude-opus-4.7` to `qwen/qwen3-vl-235b-a22b-instruct` —
+verified live against OpenRouter's `/api/v1/models` catalog
+(`modality: text+image->text`, `max_completion_tokens: 32768`). Qwen3-VL
+is OpenRouter's best OCR-targeted vision model today; its own model
+description lists "document AI, multilingual OCR" as a target scenario.
+`max_tokens` is now set explicitly to 8192 per vision call (previously
+unset, which is what let a call balloon toward 65536 requested tokens and
+trip the 402 credit error). Same OpenRouter OpenAI-compatible client
+(`ingestion.clients.get_anthropic_client()`), same message structure
+(system prompt + user text/image_url blocks), same French verbatim
+system prompt — none of that changed. Haiku 4.5 stays as the `gate.py`
+faithfulness check, unchanged.
+
+### Alternatives considered
+
+**DeepSeek direct API** (`deepseek-v4-flash`/`deepseek-v4-pro`): rejected —
+confirmed via DeepSeek's own API docs to be text-only, no image input
+support at all. Cannot serve this stage regardless of available credit.
+
+**DeepSeek-OCR via DeepInfra**: deferred, not rejected outright — a
+purpose-built, cheaper OCR model, but requires standing up a new provider
+(DeepInfra) and a new `clients.py` entry point. Out of scope for this
+ADR; tracked as a follow-up if Qwen3-VL quality proves insufficient.
+
+### Rationale
+
+- **Cost**: Qwen3-VL pricing (~$0.00000021/token prompt,
+  ~$0.0000019/token completion) is roughly 30-50x cheaper than Opus 4.7
+  vision per page.
+- **Purpose-fit**: Qwen3-VL's own OpenRouter listing explicitly targets
+  document AI and multilingual OCR — a closer match to verbatim French
+  legal-document transcription than a general-purpose frontier model.
+- **No auth/transport change**: still OpenRouter, still the same
+  OpenAI-compatible client — reversible with a one-line constant change.
+
+### Trade-offs kept in code
+
+- Wall time per page should drop from ~15-25s (Opus) to ~3-8s (Qwen3-VL),
+  but this is not yet measured against the real dossier corpus.
+- Quality regression risk on French legal scans is real and unmeasured
+  ahead of time — the Haiku 4.5 gate (`gate.gate_case`) is the designed
+  safety net for catching exactly this kind of drift per-document.
+- Cached Opus-vintage extractions remain valid and are not invalidated —
+  each sidecar records `extractor_model`, so a case can contain a mix of
+  Opus- and Qwen-extracted documents without ambiguity.
+
+### Follow-ups
+
+- If `gate.gate_case` flags material regressions concentrated on
+  Qwen-extracted documents specifically, escalate to DeepSeek-OCR via
+  DeepInfra: write a new ADR for that swap, add `get_deepinfra_client()`
+  to `ingestion/clients.py`, and add a `--force-model` override to the
+  extract CLI so a case can be selectively re-extracted with a different
+  vision model without a global constant flip.

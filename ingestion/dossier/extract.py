@@ -7,9 +7,11 @@ transcript plus a JSON metadata sidecar. Three routes:
                deterministic text-layer extraction, no LLM call.
 - image_pdf  — PDF where any page yields <=50 characters via pdfplumber
                (scan-inside-a-PDF wrapper): pages rasterized via pdf2image,
-               one Anthropic Opus 4.7 vision call per page.
-- image      — standalone image file (.png/.jpg/.jpeg): one Opus 4.7 vision
-               call for the single page.
+               one Qwen3-VL vision call per page (via OpenRouter's
+               OpenAI-compatible surface).
+- image      — standalone image file (.png/.jpg/.jpeg): one Qwen3-VL vision
+               call for the single page (via OpenRouter's OpenAI-compatible
+               surface).
 
 Vision calls go one page at a time — never batched — to preserve fidelity on
 dense pages. The system prompt enforces verbatim transcription: preserve
@@ -25,8 +27,9 @@ Inputs:  data/dossier/<case_id>/raw/**  (mixed mimetypes, heir-supplied document
          arbitrarily nested in subdirectories, e.g. raw/Bossavit_s/01_Creance/*.pdf)
 Outputs: data/dossier/<case_id>/extracted/<doc_id>.md    — verbatim transcript
          data/dossier/<case_id>/extracted/<doc_id>.json  — sidecar metadata:
-             doc_id, source_filename, kind, page_count, extraction_mode,
-             extractor_model, extracted_at (ISO 8601), source_hash (sha256)
+             doc_id, source_filename, source_relpath, kind, page_count,
+             extraction_mode, extractor_model, extracted_at (ISO 8601),
+             source_hash (sha256)
 
 <doc_id> is derived deterministically from the source path via slugify — no
 random component, so re-running extraction on the same raw file always
@@ -38,6 +41,13 @@ becomes doc_id "bossavit_s__01_creance__facture" — collision-safe across
 subdirectories without downstream stages needing to walk a tree. Idempotent:
 if the .md exists and the sidecar's source_hash matches the current file's
 hash, extraction is skipped (logged as "cached") and no vision call is made.
+
+source_relpath (the source path relative to data/dossier/<case_id>/raw/) is
+what lets gate.py relocate each document's original file later — filename
+alone is not collision-safe across subdirectories (the private dossier has
+at least one duplicate filename in two different places). A cache hit on a
+sidecar written before this field existed backfills it in place, at no VLM
+cost, so already-extracted cases upgrade just by re-running extract.
 
 Downstream consumers: gate.py (coverage check against source pages),
 facts.py (structured fact extraction from the .md), index.py (chunk + index
@@ -69,7 +79,7 @@ log = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parents[2]
 DOSSIER_DIR = ROOT / "data" / "dossier"
 
-VLM_MODEL_ID = "anthropic/claude-opus-4.7"
+VLM_MODEL_ID = "qwen/qwen3-vl-235b-a22b-instruct"
 
 # Minimum extracted characters per page for a PDF page to count as "text".
 TEXT_PAGE_MIN_CHARS = 50
@@ -172,13 +182,14 @@ def extract_text_pdf(path: Path) -> str:
 
 
 def extract_via_vlm(pages: list[bytes], doc_id: str) -> str:
-    """Send each page image to Opus 4.7 vision (one call per page) and concatenate a verbatim transcript."""
+    """Send each page image to Qwen3-VL vision (one call per page) and concatenate a verbatim transcript."""
     client = get_anthropic_client()
     pages_md = []
     for i, page_png in enumerate(pages, start=1):
         b64 = base64.b64encode(page_png).decode("ascii")
         response = client.chat.completions.create(
             model=VLM_MODEL_ID,
+            max_tokens=8192,
             messages=[
                 {"role": "system", "content": _VLM_SYSTEM_PROMPT},
                 {
@@ -213,7 +224,7 @@ def extract_document(source_path: Path, case_id: str) -> ExtractResult:
     any vision call) if the source file's hash matches what's already
     recorded in the sidecar.
     """
-    path = Path(source_path)
+    path = Path(source_path).resolve()
     doc_id = _doc_id_from_path(path)
     extracted_dir = DOSSIER_DIR / case_id / "extracted"
     extracted_dir.mkdir(parents=True, exist_ok=True)
@@ -226,6 +237,16 @@ def extract_document(source_path: Path, case_id: str) -> ExtractResult:
         sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
         if sidecar.get("source_hash") == source_hash:
             log.info("cached extraction for %s (doc_id=%s)", path.name, doc_id)
+
+            if "source_relpath" not in sidecar:
+                sidecar["source_relpath"] = str(
+                    path.relative_to(DOSSIER_DIR / case_id / "raw")
+                )
+                sidecar_path.write_text(
+                    json.dumps(sidecar, indent=2, ensure_ascii=False), encoding="utf-8"
+                )
+                log.info("backfilled source_relpath in sidecar for doc_id=%s", doc_id)
+
             return ExtractResult(
                 doc_id=sidecar["doc_id"],
                 md_path=md_path,
@@ -273,6 +294,7 @@ def extract_document(source_path: Path, case_id: str) -> ExtractResult:
     sidecar = {
         "doc_id": doc_id,
         "source_filename": path.name,
+        "source_relpath": str(path.relative_to(DOSSIER_DIR / case_id / "raw")),
         "kind": kind,
         "page_count": page_count,
         "extraction_mode": mode,
