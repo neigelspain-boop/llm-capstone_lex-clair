@@ -213,9 +213,13 @@ def test_articles_only_vigueur(articles: pd.DataFrame) -> None:
 def test_chunks_csv_matches_articles_row_count(
     articles: pd.DataFrame, chunks: pd.DataFrame
 ) -> None:
-    """V1 chunk.py is identity — row count must be preserved."""
-    assert len(chunks) == len(articles), (
-        f"row-count drift: articles={len(articles)}, chunks={len(chunks)}"
+    """V1 chunk.py is identity — row count must be preserved for the statute
+    corpus. Scoped to non-dossier rows: chunks.csv also carries dossier
+    chunks (v2, ADR #39) that have no articles.csv counterpart.
+    """
+    statute_chunks = chunks[~chunks["chunk_id"].str.startswith("dossier-")]
+    assert len(statute_chunks) == len(articles), (
+        f"row-count drift: articles={len(articles)}, chunks={len(statute_chunks)}"
     )
 
 
@@ -251,11 +255,14 @@ def test_chunks_url_populated_where_expected(chunks: pd.DataFrame) -> None:
 
     Not every row has a URL (LODA articles sometimes lack legiarti_id), but
     the vast majority should. Threshold guards against a schema regression
-    dropping url from parse.py.
+    dropping url from parse.py. Scoped to non-dossier rows: dossier chunks
+    (v2, ADR #39) use local extraction file paths as url by design, not
+    Legifrance links.
     """
-    with_url = (chunks["url"].str.startswith("http")).sum()
-    assert with_url >= 0.9 * len(chunks), (
-        f"only {with_url}/{len(chunks)} chunks have URLs — expected ≥90%"
+    statute_chunks = chunks[~chunks["chunk_id"].str.startswith("dossier-")]
+    with_url = (statute_chunks["url"].str.startswith("http")).sum()
+    assert with_url >= 0.9 * len(statute_chunks), (
+        f"only {with_url}/{len(statute_chunks)} statute chunks have URLs — expected ≥90%"
     )
 
 
@@ -307,12 +314,16 @@ def test_rag_flow_end_to_end() -> None:
     assert result["answer"], "empty answer from flow.run"
     assert len(result["answer"]) > 100, "answer suspiciously short"
 
-    # citations link to Legifrance
+    # at least one citation links to Legifrance — the corpus is now
+    # dual (statute + dossier, ADR #39), so a definitional query can
+    # legitimately also surface a non-Legifrance dossier citation; the
+    # docstring's contract is "at least one", not "every citation"
     assert len(result["citations"]) >= 1, "no citations returned"
-    assert all(c["url"].startswith("http") for c in result["citations"]), \
-        "non-URL citation slipped through"
-    assert all("legifrance" in c["url"] for c in result["citations"]), \
-        "citation not pointing at Legifrance"
+    legifrance_citations = [
+        c for c in result["citations"]
+        if c["url"].startswith("http") and "legifrance" in c["url"]
+    ]
+    assert legifrance_citations, "no Legifrance citation among the results"
 
     # cost + timing sanity
     assert result["cost_usd"] < 0.01, f"cost too high: ${result['cost_usd']}"

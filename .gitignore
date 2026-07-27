@@ -31,3 +31,5 @@ data/dossier/private/
 
 # Backups
 *.bak
+.vscode/
+tmp-chroma-test/

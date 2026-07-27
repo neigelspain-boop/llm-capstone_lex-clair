@@ -1,0 +1,4 @@
+chunk_id,source,source_label,num,titre,section_path,texte,url
+dossier-demo-sample_text-c001,dossier-demo,Dossier demo,sample_text,,Page 1,"This is sentence one for the lex-clair fixture.
+This is sentence two about succession law testing.
+This is sentence three verifying verbatim extraction.",data/dossier/demo/extracted/sample_text.md

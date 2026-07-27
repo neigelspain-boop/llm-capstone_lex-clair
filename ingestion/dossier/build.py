@@ -6,18 +6,17 @@ analogue of ingestion/build.py's fetch → parse → chunk → index pipeline.
 Runs the four dossier stages in sequence for one case_id and reports a
 summary, including any coverage warnings from gate.py.
 
-Inputs:  --case-id <id>, --step {extract,gate,facts,all}, --limit N, and
-         --raw-dir <path> (conditionally required — see below)  (CLI args)
+Inputs:  --case-id <id>, --step {extract,gate,facts,index,all}, --limit N,
+         and --raw-dir <path> (conditionally required — see below)  (CLI args)
 Outputs: full dossier artifact tree under data/dossier/<case_id>/:
              extracted/<doc_id>.md + .json   (extract.py)
              coverage.jsonl                  (gate.py)
-             facts.jsonl                     (facts.py)
+             facts.jsonl                     (facts.py, backfilled by index.py)
              chunks.csv                      (index.py)
          plus appended rows in the shared Chroma collection (index.py)
 
-Deliverable 4 status: extract, gate, and facts steps are implemented.
---step all (full extract → gate → facts → index) is not implemented yet —
-raises NotImplementedError until index lands in Deliverable 5.
+Deliverable 5 status: extract, gate, facts, and index are all implemented.
+--step all runs the full extract → gate → facts → index pipeline.
 
 --raw-dir is only required for steps that read raw source files (extract,
 all) — argparse enforces this after parsing (see STAGES_REQUIRING_RAW_DIR),
@@ -77,8 +76,11 @@ def run_pipeline(
     prints a one-line summary, and returns
     {case_id, step, docs_processed, facts_extracted, unique_roles,
     ambiguities, parse_failed_docs, elapsed}.
-    step="all" (full extract → gate → facts → index) is not implemented
-    yet — raises NotImplementedError until index lands in Deliverable 5.
+    step="index" runs index.index_dossier(case_id) (no raw_dir needed),
+    prints a one-line summary, and returns
+    {case_id, step, **DossierIndexResult.model_dump()}.
+    step="all" runs extract → gate → facts → index in sequence (requires
+    raw_dir); any stage failure aborts the remaining stages.
     """
     if step == "extract":
         results = _run_stage("EXTRACT", extract.extract_case, case_id, raw_dir, limit=limit)
@@ -135,16 +137,50 @@ def run_pipeline(
 
         return {"case_id": case_id, "step": step, **summary}
 
-    if step == "all":
-        raise NotImplementedError("all steps pending — implement in Deliverable 5")
+    if step == "index":
+        result = _run_stage("INDEX", index.index_dossier, case_id)
 
-    raise ValueError(f"unknown --step {step!r}; expected 'extract', 'gate', 'facts', or 'all'")
+        print(
+            f"index summary · case_id={case_id} docs_indexed={result.docs_indexed} "
+            f"chunks_created={result.chunks_created} facts_backfilled={result.facts_backfilled} "
+            f"facts_unmatched={result.facts_unmatched} elapsed={result.elapsed:.1f}s"
+        )
+
+        return {"case_id": case_id, "step": step, **result.model_dump()}
+
+    if step == "all":
+        extract_summary = run_pipeline(case_id, raw_dir=raw_dir, step="extract", limit=limit)
+        gate_summary = run_pipeline(case_id, step="gate")
+        facts_summary = run_pipeline(case_id, step="facts")
+        index_summary = run_pipeline(case_id, step="index")
+
+        print(
+            f"all summary · case_id={case_id} "
+            f"docs_extracted={extract_summary['doc_count']} "
+            f"gate_ok={gate_summary['ok']} gate_warnings={gate_summary['warnings']} "
+            f"facts={facts_summary['facts_extracted']} "
+            f"chunks_created={index_summary['chunks_created']} "
+            f"facts_backfilled={index_summary['facts_backfilled']}"
+        )
+
+        return {
+            "case_id": case_id,
+            "step": step,
+            "extract": extract_summary,
+            "gate": gate_summary,
+            "facts": facts_summary,
+            "index": index_summary,
+        }
+
+    raise ValueError(
+        f"unknown --step {step!r}; expected 'extract', 'gate', 'facts', 'index', or 'all'"
+    )
 
 
 # ========== CLI entrypoint ==========
 
 def main() -> None:
-    """Command-line entrypoint: python -m ingestion.dossier.build --case-id <id> [--raw-dir <path>] [--step extract|gate] [--limit N]."""
+    """Command-line entrypoint: python -m ingestion.dossier.build --case-id <id> [--raw-dir <path>] [--step extract|gate|facts|index|all] [--limit N]."""
     parser = argparse.ArgumentParser(
         description="Build one case's dossier artifacts: extract → gate → facts → index."
     )
@@ -152,11 +188,11 @@ def main() -> None:
     parser.add_argument(
         "--raw-dir", type=Path, required=False, default=None,
         help="directory of raw dossier documents for this case "
-             "(required for --step extract/all; optional for --step gate/facts)",
+             "(required for --step extract/all; optional for --step gate/facts/index)",
     )
     parser.add_argument(
-        "--step", choices=["extract", "gate", "facts", "all"], default="all",
-        help="which pipeline step(s) to run (default: all — not yet implemented)",
+        "--step", choices=["extract", "gate", "facts", "index", "all"], default="all",
+        help="which pipeline step(s) to run (default: all)",
     )
     parser.add_argument(
         "--limit", type=int, default=None,

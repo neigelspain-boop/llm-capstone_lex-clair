@@ -7,22 +7,28 @@ Deliverables 1-2 (extract.py, gate.py) are implemented — their tests run for
 real against the committed fixture data/dossier/demo/raw/sample_text.pdf (and,
 for gate.py, small synthetic PDFs built on the fly) with the Anthropic client
 mocked. Deliverable 4 (facts.py) is now implemented and tested the same way
-(mocked client, hermetic tmp_path DOSSIER_DIR). index.py (Deliverable 5)
-remains skipped: no implementation exists yet behind index.index_case (still
-raises NotImplementedError by design, see ingestion/dossier/index.py).
+(mocked client, hermetic tmp_path DOSSIER_DIR). Deliverable 5 (index.py) is
+now implemented: chunking + facts backfill tests run in the fast suite
+(Chroma append stubbed out); the two tests that exercise a real Chroma
+collection + real BGE-M3 embeddings are marked @pytest.mark.slow, matching
+the precedent in tests/test_ingestion_smoke.py::test_rag_flow_end_to_end
+(slow because it loads a real local model, not because it hits an LLM API).
 """
 from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
+import chromadb
+import pandas as pd
 import pytest
 from pydantic import ValidationError
 
-from ingestion.dossier import extract, facts, gate
+from ingestion.dossier import extract, facts, gate, index
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PDF = ROOT / "data" / "dossier" / "demo" / "raw" / "sample_text.pdf"
@@ -775,3 +781,351 @@ def test_facts_and_index_case_smoke(tmp_path, monkeypatch) -> None:
 
     assert summary["facts_extracted"] == 1
     assert summary["docs_processed"] == 1
+
+
+# ========== deliverable 5: index.py ==========
+
+def test_chunk_dossier_document_produces_namespace_prefixed_ids(tmp_path) -> None:
+    """Every chunk_id matches dossier-<case_id>-<doc_id>-c<NNN>."""
+    md_path = tmp_path / "doc.md"
+    paragraph = "Phrase repetee pour allonger le texte du document de test. " * 6
+    md_path.write_text(f"## Page 1\n\n{paragraph}\n\n{paragraph}\n\n{paragraph}", encoding="utf-8")
+
+    chunks = index.chunk_dossier_document(md_path, doc_id="doc", case_id="acme")
+
+    assert len(chunks) >= 2, "fixture text too short to exercise multi-chunk splitting"
+    for chunk_id in chunks["chunk_id"]:
+        assert re.match(r"^dossier-acme-doc-c\d{3}$", chunk_id), chunk_id
+
+
+def test_chunk_dossier_document_deterministic(tmp_path) -> None:
+    """Chunking the same file twice yields identical chunk_id and texte lists."""
+    md_path = tmp_path / "doc.md"
+    paragraph = "Une autre phrase repetee pour forcer un decoupage multiple. " * 6
+    md_path.write_text(f"## Page 1\n\n{paragraph}\n\n{paragraph}", encoding="utf-8")
+
+    chunks1 = index.chunk_dossier_document(md_path, doc_id="doc", case_id="acme")
+    chunks2 = index.chunk_dossier_document(md_path, doc_id="doc", case_id="acme")
+
+    pd.testing.assert_frame_equal(chunks1, chunks2)
+
+
+def test_chunk_dossier_document_respects_page_boundaries(tmp_path) -> None:
+    """No chunk contains text from two different '## Page N' sections."""
+    md_path = tmp_path / "doc.md"
+    page1 = "MARKERONE. " + ("Phrase de la premiere page repetee. " * 40)
+    page2 = "MARKERTWO. " + ("Phrase de la deuxieme page repetee encore plus. " * 40)
+    md_path.write_text(f"## Page 1\n\n{page1}\n\n## Page 2\n\n{page2}", encoding="utf-8")
+
+    chunks = index.chunk_dossier_document(md_path, doc_id="doc", case_id="acme")
+
+    assert len(chunks) >= 2
+    for _, row in chunks.iterrows():
+        has_one = "MARKERONE" in row["texte"]
+        has_two = "MARKERTWO" in row["texte"]
+        assert not (has_one and has_two), row["texte"]
+        assert row["section_path"] in ("Page 1", "Page 2")
+
+
+@pytest.fixture
+def isolated_chroma(tmp_path, monkeypatch):
+    """Redirect index.CHROMA_DIR into an isolated tmp dir with a real, empty
+    Chroma collection, so Chroma-append tests never touch data/chroma/.
+
+    Must patch the name bound *inside* ingestion.dossier.index, not
+    ingestion.index.CHROMA_DIR — `from ingestion.index import CHROMA_DIR`
+    binds a separate local name at import time that patching the origin
+    module would not reach.
+    """
+    chroma_dir = tmp_path / "chroma"
+    monkeypatch.setattr(index, "CHROMA_DIR", chroma_dir)
+    client = chromadb.PersistentClient(path=str(chroma_dir))
+    collection = client.get_or_create_collection(
+        index.COLLECTION, metadata={"hnsw:space": "cosine"}
+    )
+    return collection
+
+
+@pytest.fixture
+def isolated_chunks_csv(tmp_path, monkeypatch):
+    """Redirect index.CHUNKS_CSV into an isolated tmp CSV seeded with two
+    dummy statute rows, so append_to_statute_chunks_csv never touches the
+    real, tracked data/chunks.csv — and so tests can assert statute rows
+    survive dossier appends untouched.
+
+    Must patch the name bound *inside* ingestion.dossier.index, not
+    ingestion.index.CHUNKS_CSV — same import-time local-binding reason as
+    isolated_chroma's docstring.
+    """
+    statute_columns = [
+        "chunk_id", "source", "source_label", "num", "section_path", "titre",
+        "texte", "etat", "date_debut", "date_fin", "legiarti_id", "url",
+    ]
+    seed = pd.DataFrame([
+        {"chunk_id": "cc-720", "source": "cc_successions", "source_label": "Code civil",
+         "num": "720", "section_path": "", "titre": "", "texte": "dummy statute row",
+         "etat": "VIGUEUR", "date_debut": "", "date_fin": "", "legiarti_id": "", "url": ""},
+        {"chunk_id": "cc-587", "source": "cc_successions", "source_label": "Code civil",
+         "num": "587", "section_path": "", "titre": "", "texte": "dummy statute row",
+         "etat": "VIGUEUR", "date_debut": "", "date_fin": "", "legiarti_id": "", "url": ""},
+    ], columns=statute_columns)
+    csv_path = tmp_path / "statute_chunks.csv"
+    seed.to_csv(csv_path, index=False)
+    monkeypatch.setattr(index, "CHUNKS_CSV", csv_path)
+    return csv_path
+
+
+@pytest.mark.slow
+def test_index_dossier_end_to_end_demo(
+    tmp_path, monkeypatch, isolated_chroma, isolated_chunks_csv
+) -> None:
+    """index_dossier appends dossier chunks to Chroma without touching
+    pre-existing (statute-like) rows.
+
+    Slow: loads a real local BGE-M3 model (same justification as
+    tests/test_ingestion_smoke.py::test_rag_flow_end_to_end), not because it
+    hits any LLM API — this test makes zero API calls.
+    """
+    collection = isolated_chroma
+
+    model = index.BGEM3FlagModel(index.EMBED_MODEL_ID, use_fp16=False, device="cpu")
+    statute_texts = [
+        "Les successions s'ouvrent par la mort.",
+        "Le quasi-usufruit est un droit reel.",
+    ]
+    statute_ids = ["cc-720", "cc-587"]
+    output = model.encode(
+        statute_texts, return_dense=True, return_sparse=False, return_colbert_vecs=False
+    )
+    dense_vecs = [[float(v) for v in vec] for vec in output["dense_vecs"]]
+    collection.add(
+        ids=statute_ids,
+        embeddings=dense_vecs,
+        documents=statute_texts,
+        metadatas=[
+            {"source": "cc_successions", "source_label": "Code civil", "num": n,
+             "titre": "", "section_path": "", "url": "https://example.test"}
+            for n in ("720", "587")
+        ],
+    )
+    before_count = collection.count()
+    assert before_count == 2
+
+    monkeypatch.setattr(index, "DOSSIER_DIR", tmp_path)
+    extracted_dir = tmp_path / "demo" / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "sample_text.md").write_text(
+        "## Page 1\n\nLe notaire signe l'acte de notoriete.", encoding="utf-8"
+    )
+
+    result = index.index_dossier("demo")
+
+    assert result.docs_indexed == 1
+    assert result.chunks_created >= 1
+    assert collection.count() == before_count + result.chunks_created
+
+    all_ids = collection.get(include=[])["ids"]
+    dossier_ids = [cid for cid in all_ids if cid.startswith("dossier-demo-")]
+    assert len(dossier_ids) == result.chunks_created
+
+    statute_rows = collection.get(ids=statute_ids, include=["documents"])
+    assert dict(zip(statute_rows["ids"], statute_rows["documents"])) == dict(
+        zip(statute_ids, statute_texts)
+    )
+
+    written = pd.read_csv(tmp_path / "demo" / "chunks.csv", keep_default_na=False)
+    assert any(cid.startswith("dossier-demo-") for cid in written["chunk_id"])
+
+    written_shared = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
+    dossier_rows = written_shared[written_shared["chunk_id"].str.startswith("dossier-demo-")]
+    assert len(dossier_rows) == result.chunks_created
+    assert list(written_shared.columns) == [
+        "chunk_id", "source", "source_label", "num", "section_path", "titre",
+        "texte", "etat", "date_debut", "date_fin", "legiarti_id", "url",
+    ]
+
+
+@pytest.mark.slow
+def test_index_dossier_idempotent(
+    tmp_path, monkeypatch, isolated_chroma, isolated_chunks_csv
+) -> None:
+    """Running index_dossier twice does not double-append or duplicate rows."""
+    collection = isolated_chroma
+
+    monkeypatch.setattr(index, "DOSSIER_DIR", tmp_path)
+    extracted_dir = tmp_path / "demo" / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "sample_text.md").write_text(
+        "## Page 1\n\nLe notaire signe l'acte de notoriete.", encoding="utf-8"
+    )
+
+    initial = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
+    initial_statute_count = len(initial[~initial["chunk_id"].str.startswith("dossier-")])
+
+    result1 = index.index_dossier("demo")
+    after_run1 = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
+    dossier_count_1 = int(after_run1["chunk_id"].str.startswith("dossier-demo-").sum())
+
+    result2 = index.index_dossier("demo")
+
+    assert result1.chunks_created == result2.chunks_created
+    assert collection.count() == result2.chunks_created
+
+    written = pd.read_csv(tmp_path / "demo" / "chunks.csv", keep_default_na=False)
+    assert len(written) == result2.chunks_created
+    assert written["chunk_id"].is_unique
+
+    after_run2 = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
+    dossier_count_2 = int(after_run2["chunk_id"].str.startswith("dossier-demo-").sum())
+    statute_count_2 = len(after_run2[~after_run2["chunk_id"].str.startswith("dossier-")])
+
+    assert dossier_count_1 == dossier_count_2 == result2.chunks_created
+    assert statute_count_2 == initial_statute_count
+
+
+def test_facts_source_chunk_id_backfilled(tmp_path, monkeypatch, isolated_chunks_csv) -> None:
+    """Both known facts get source_chunk_id backfilled after index_dossier."""
+    monkeypatch.setattr(index, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(index, "append_to_chroma", MagicMock())
+
+    case_dir = tmp_path / "acme"
+    extracted_dir = case_dir / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "doc.md").write_text(
+        "## Page 1\n\nLe notaire signe l'acte de notoriete. "
+        "Les heritiers acceptent la succession.",
+        encoding="utf-8",
+    )
+
+    fact1 = facts.Fact(
+        fact_id="doc-f001", date=None, actor_role="notaire_redacteur",
+        action="signe l'acte", target=None,
+        verbatim_quote="Le notaire signe l'acte de notoriete.",
+        source_doc_id="doc", source_chunk_id=None,
+    )
+    fact2 = facts.Fact(
+        fact_id="doc-f002", date=None, actor_role="heritier_nu_proprietaire",
+        action="accepte la succession", target=None,
+        verbatim_quote="Les heritiers acceptent la succession.",
+        source_doc_id="doc", source_chunk_id=None,
+    )
+    facts_path = case_dir / "facts.jsonl"
+    facts_path.write_text(
+        fact1.model_dump_json() + "\n" + fact2.model_dump_json() + "\n", encoding="utf-8"
+    )
+
+    result = index.index_dossier("acme")
+
+    assert result.facts_backfilled == 2
+    assert result.facts_unmatched == 0
+
+    written_chunk_ids = set(
+        pd.read_csv(case_dir / "chunks.csv", keep_default_na=False)["chunk_id"]
+    )
+    reloaded = [
+        facts.Fact.model_validate_json(line)
+        for line in facts_path.read_text(encoding="utf-8").strip().splitlines()
+    ]
+    for fact in reloaded:
+        assert fact.source_chunk_id is not None
+        assert fact.source_chunk_id.startswith("dossier-acme-")
+        assert fact.source_chunk_id in written_chunk_ids
+
+
+def test_facts_unmatched_logged_not_crashed(
+    tmp_path, monkeypatch, caplog, isolated_chunks_csv
+) -> None:
+    """A fact whose verbatim_quote never appears in any chunk stays unmatched, not raised."""
+    monkeypatch.setattr(index, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(index, "append_to_chroma", MagicMock())
+
+    case_dir = tmp_path / "acme"
+    extracted_dir = case_dir / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "doc.md").write_text(
+        "## Page 1\n\nLe notaire signe l'acte de notoriete.", encoding="utf-8"
+    )
+
+    fact = facts.Fact(
+        fact_id="doc-f001", date=None, actor_role="notaire_redacteur",
+        action="signe l'acte", target=None,
+        verbatim_quote="Cette phrase n'existe nulle part dans le document.",
+        source_doc_id="doc", source_chunk_id=None,
+    )
+    facts_path = case_dir / "facts.jsonl"
+    facts_path.write_text(fact.model_dump_json() + "\n", encoding="utf-8")
+
+    with caplog.at_level("INFO"):
+        result = index.index_dossier("acme")
+
+    assert result.facts_unmatched >= 1
+    assert "doc-f001" in caplog.text
+
+    reloaded = facts.Fact.model_validate_json(
+        facts_path.read_text(encoding="utf-8").strip()
+    )
+    assert reloaded.source_chunk_id is None
+
+
+def test_build_step_all_end_to_end_demo(
+    tmp_path, monkeypatch, capsys, isolated_chunks_csv
+) -> None:
+    """--step all runs extract -> gate -> facts -> index in sequence end to end."""
+    from ingestion.dossier import build
+
+    monkeypatch.setattr(extract, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(gate, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(facts, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(index, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(index, "append_to_chroma", MagicMock())
+
+    raw_dir = tmp_path / "demo" / "raw"
+    raw_dir.mkdir(parents=True)
+    (raw_dir / FIXTURE_PDF.name).write_bytes(FIXTURE_PDF.read_bytes())
+
+    gate_response = _fake_chat_response(
+        json.dumps({"missing_facts": [], "mistranscriptions": []})
+    )
+    facts_response = _fake_chat_response(json.dumps({
+        "facts": [{"date": None, "actor_role": "notaire_redacteur",
+                   "action": "verifie l'extraction", "target": None,
+                   "verbatim_quote": KNOWN_SENTENCES[0]}],
+        "roles_discovered": [{"role_id": "notaire_redacteur", "label_fr": "Notaire rédacteur",
+                               "grounding_note": "Notaire qui redige l'acte.",
+                               "confidence": "high"}],
+        "ambiguities": [],
+    }))
+
+    mock_gate_client = MagicMock()
+    mock_gate_client.chat.completions.create.return_value = gate_response
+    mock_facts_client = MagicMock()
+    mock_facts_client.chat.completions.create.return_value = facts_response
+
+    with patch("ingestion.dossier.gate.get_anthropic_client", return_value=mock_gate_client), \
+         patch("ingestion.dossier.facts.get_anthropic_client", return_value=mock_facts_client), \
+         patch("ingestion.dossier.extract.get_anthropic_client") as mock_extract_client:
+        summary = build.run_pipeline("demo", raw_dir=raw_dir, step="all")
+
+    mock_extract_client.assert_not_called()  # text_pdf route has no vision step
+
+    case_dir = tmp_path / "demo"
+    assert (case_dir / "extracted" / "sample_text.md").exists()
+    assert (case_dir / "coverage.jsonl").exists()
+    assert (case_dir / "facts.jsonl").exists()
+    assert (case_dir / "chunks.csv").exists()
+
+    facts_lines = (case_dir / "facts.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(facts_lines) == 1
+    fact = json.loads(facts_lines[0])
+    assert fact["source_chunk_id"] is not None
+    assert fact["source_chunk_id"].startswith("dossier-demo-")
+
+    assert summary["step"] == "all"
+    assert summary["extract"]["doc_count"] == 1
+    assert summary["index"]["chunks_created"] >= 1
+
+    out = capsys.readouterr().out
+    assert "gate summary" in out
+    assert "facts summary" in out
+    assert "index summary" in out
+    assert "all summary" in out

@@ -1357,3 +1357,164 @@ integration.
   constant. The Deliverable 3 vision swap (ADR #35) included this step; the
   Deliverable 4 initial pass (ADR #36) did not. Add to the plan-review
   checklist.
+
+## ADR #38 — Dossier incremental indexing: per-case CSV as BM25 stand-in, Chroma append via id-prefix delete
+
+**Date:** 2026-07-27 · **Branch:** v2-agentic (Deliverable 5) · **Status:** Accepted
+
+### Context
+
+Deliverable 5 needed to add dossier chunks to the hybrid retrieval store
+without rebuilding the statute corpus. `ingestion/load.py`'s `load_index()`
+rebuilds BM25 from `data/chunks.csv` fresh on every call and has no append
+mechanism, and it cannot be modified under this deliverable's scope. Chroma,
+by contrast, genuinely supports incremental writes via
+`client.get_collection(COLLECTION)` + `collection.add()` — bypassing
+`ingestion.index.build_chroma`/`build_all` (which `shutil.rmtree()`s the
+whole directory) entirely.
+
+### Decision
+
+- Dossier chunks are written to `data/dossier/<case_id>/chunks.csv` (same
+  column schema as `data/chunks.csv`), fully overwritten on each
+  `index_dossier` run — deterministic chunking makes this idempotent by
+  content, and the file is case-scoped, not shared. This CSV is this
+  deliverable's own tested artifact; it is **not** wired into
+  `load_index()`'s BM25 rebuild yet (Day B follow-up).
+- Chroma appends use `client.get_collection` (never create/recreate) plus an
+  idempotent **delete-by-id-prefix, then add**: since Chroma has no
+  server-side prefix `where` filter, every existing id is listed via
+  `collection.get(include=[])["ids"]`, filtered client-side for the
+  `dossier-{case_id}-` prefix, and deleted before re-adding the fresh batch.
+- `chunk_dossier_document` is a small hand-written recursive splitter (hard
+  split on `## Page N`, then paragraph → sentence → character, ~800 char
+  target / ~100 char overlap) — no new dependency (no langchain).
+- `Fact.source_chunk_id` is backfilled by substring-matching each fact's
+  `verbatim_quote` against its own document's chunks (exact match first,
+  then whitespace-normalized/lowercased fallback); unmatched facts are
+  logged and left `None`, never silently dropped. Every fact's match is
+  unconditionally recomputed on each run for clean idempotence.
+- Filtering (dossier-only vs statute-only vs blended retrieval) is a Day B
+  concern, not added to `HybridRetriever` here — this deliverable's contract
+  is that chunks are indexed with the correct prefix, nothing more.
+
+### Consequences
+
+- Dossier chunks landing in Chroma **are** reachable today by production
+  vector-mode search (ADR #20's default), even though BM25 does not yet see
+  them — a real, if partial, retrieval capability.
+- The client-side full-id-list scan for prefix-deletion is fine at current
+  corpus scale but does not scale indefinitely; if the Chroma collection
+  grows much larger, a `case_id` metadata field + a real `where` filter would
+  be cheaper.
+- The heuristic sentence splitter (regex-based, no NLP dependency) can
+  mis-split on French abbreviations (e.g. "Me.", "Mme"); mitigated by the
+  paragraph-level grouping and chunk overlap, not eliminated.
+- Deleting a case (privacy or reset) means deleting all chunks with a
+  `dossier-<case_id>-` prefix — this becomes a small operational tool later,
+  not needed now.
+
+### Follow-ups
+
+- Day B: wire `data/dossier/<case_id>/chunks.csv` into `load_index()`'s BM25
+  rebuild (concatenate with `data/chunks.csv`) — needs its own review since
+  it touches the statute-side loader.
+- Day B router. If the Chroma collection grows large enough that the
+  full-id-list scan becomes slow, add a `case_id` metadata field and use
+  `where={"case_id": ...}` instead of client-side prefix filtering.
+
+## ADR #39 — Correction to Deliverable 5: dossier chunks synced to shared data/chunks.csv for retriever coherence
+
+**Date:** 2026-07-27 · **Branch:** v2-agentic (Deliverable 5) · **Status:** Accepted
+
+### Context
+
+ADR #38 shipped dossier chunks to two surfaces only: a per-case
+`data/dossier/<case_id>/chunks.csv` (audit) and the shared Chroma
+collection (dense retrieval), deferring `data/chunks.csv` sync to a
+"Day B" follow-up on the assumption that BM25-only blindness to dossier
+chunks was an acceptable gap (ADR #20: vector wins over BM25 on synthetic
+ground truth). That assumption missed a second dependency:
+`HybridRetriever.search()` in `ingestion/load.py` calls
+`self.chunks.loc[cid]` to hydrate *every* hit regardless of which
+retrieval mode produced it, and `self.chunks` is built exclusively from
+`data/chunks.csv` in `load_index()`. Because Chroma is correctly
+appended to per ADR #38, vector-mode and hybrid-mode search return
+dossier chunk_ids that have no row in `self.chunks` — raising
+`KeyError`. ADR #38's "Consequences" claim that dossier chunks were
+"reachable today by production vector-mode search" was therefore
+incorrect: Chroma returned them, but hydration crashed. Discovered
+during Deliverable 5 verification.
+
+### Decision
+
+`index_dossier()` now writes to three persistence surfaces, in order:
+(1) the per-case `data/dossier/<case_id>/chunks.csv` (unchanged from ADR
+#38), (2) the shared `data/chunks.csv` via the new
+`append_to_statute_chunks_csv()` — idempotent drop-then-append keyed on
+the `dossier-<case_id>-` chunk_id prefix, with dossier rows
+`reindex()`-aligned onto the statute CSV's column set (extra
+statute-only columns fill as `""`, never `NaN`), (3) the Chroma
+collection (unchanged from ADR #38). `ingestion/load.py` is not
+touched — `load_index()` already reads whatever is in
+`data/chunks.csv`, so keeping that file in sync is sufficient.
+
+### Consequences
+
+- Fixes the `KeyError` in `HybridRetriever.search()` for any hit
+  resolving to a dossier chunk_id, across all three retrieval modes.
+- BM25 now also sees dossier chunks as a side effect (ADR #38
+  deliberately excluded this) — not the goal of this fix, and per ADR
+  #20 vector remains the production default, but BM25-mode search over
+  dossiers is now incidentally functional rather than blind.
+- Corrects ADR #38's "Consequences" claim about vector-mode
+  reachability; that entry is left as-written (ADRs aren't edited
+  retroactively) and should be read alongside this one.
+- `eval/`'s harnesses were built and tuned statute-only (Day A);
+  re-running them now will surface dossier chunks in `data/chunks.csv`,
+  which they weren't designed to see. Non-blocking today.
+
+### Follow-ups
+
+- Day B: decide whether eval harnesses should filter dossier-prefixed
+  chunk_ids out, or grow a dossier-aware eval track.
+- `tests/test_dossier_smoke.py` calls `index_dossier()` directly for
+  test case_ids without isolating `data/chunks.csv` — fixed in the same
+  change as this ADR via a new `isolated_chunks_csv` fixture mirroring
+  `isolated_chroma`, so the fast suite never touches the real, tracked
+  CSV.
+- Backfilling the real `data/chunks.csv` for the already-indexed
+  `private` case (re-running `index_dossier("private")` post-fix) broke
+  3 v1-era invariant tests in `tests/test_ingestion_smoke.py` that
+  assumed `data/chunks.csv` is statute-only:
+  `test_chunks_csv_matches_articles_row_count`,
+  `test_chunks_url_populated_where_expected`, and
+  `test_rag_flow_end_to_end`'s citation assertion. Fixed in the same
+  change: the first two are scoped to non-`dossier-`-prefixed rows; the
+  third is loosened from "every citation is Legifrance" to "at least one
+  citation is Legifrance," matching what its own docstring already
+  claimed. This is the general shape of the v1→v2 pivot's tension
+  flagged elsewhere (`docs/response_doctrine.md` §6.3–6.5) — any
+  remaining test or eval code assuming a statute-only corpus should be
+  audited the same way as dossier ingestion continues.
+- **Backfilling the real `private` case exposed a live privacy gap and
+  was reverted.** Re-running `index_dossier("private")` to backfill
+  `data/chunks.csv` (above) made that case's 853 chunks — real client
+  succession documents — reachable by `rag/flow.run()`, the
+  general-purpose baseline Q&A flow, with no source scoping. A generic
+  query ("Qu'est-ce que le quasi-usufruit ?") then retrieved *zero*
+  Legifrance citations: the dossier's own quasi-usufruit convention
+  document out-competed statute articles for a plain definitional
+  question. ADR #38 had flagged retrieval-mode filtering
+  (dossier-only/statute-only/blended) as an unimplemented "Day B
+  concern," but that gap was inert before this fix because dossier
+  chunks were unreachable (the ADR #39 `KeyError` itself masked it).
+  Decision: `dossier-private-*` rows were removed from both
+  `data/chunks.csv` and the Chroma collection (delete-by-prefix, same
+  mechanism `append_to_chroma` already uses), restoring today's
+  statute-only baseline behavior. The `index_dossier()` code fix (three-
+  surface write) stays — it's correct and necessary — but no case should
+  be indexed into the shared corpus again until `rag/retrieve.py` /
+  `flow.run()` can scope retrieval by source. This is now the
+  highest-priority Day B item, promoted from "concern" to "blocker for
+  indexing any real case."
