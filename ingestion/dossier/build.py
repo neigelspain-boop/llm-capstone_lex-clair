@@ -6,13 +6,18 @@ analogue of ingestion/build.py's fetch → parse → chunk → index pipeline.
 Runs the four dossier stages in sequence for one case_id and reports a
 summary, including any coverage warnings from gate.py.
 
-Inputs:  --case-id <id>, --raw-dir <path>  (CLI args)
+Inputs:  --case-id <id>, --raw-dir <path>, --step {extract,all}, --limit N  (CLI args)
 Outputs: full dossier artifact tree under data/dossier/<case_id>/:
              extracted/<doc_id>.md + .json   (extract.py)
              coverage.jsonl                  (gate.py)
              facts.jsonl                     (facts.py)
              chunks.csv                      (index.py)
          plus appended rows in the shared Chroma collection (index.py)
+
+Deliverable 2 status: only the extract stage is implemented. --step extract
+runs extract.extract_case and returns a summary; --step all (the default)
+raises NotImplementedError until gate/facts/index land in later
+deliverables — it does not call any of them yet.
 """
 from __future__ import annotations
 
@@ -46,24 +51,35 @@ def _run_stage(name: str, func, *args, **kwargs):
 
 # ========== pipeline orchestration ==========
 
-def run_pipeline(case_id: str, raw_dir: Path) -> dict:
-    """Run extract → gate → facts → index for one case; return a summary dict."""
-    raise NotImplementedError(
-        "spec: call _run_stage('EXTRACT', extract.extract_case, case_id, "
-        "raw_dir), _run_stage('GATE', gate.gate_case, case_id), "
-        "_run_stage('FACTS', facts.extract_case_facts, case_id), "
-        "_run_stage('INDEX', index.index_case, case_id) in sequence. Return "
-        "a summary dict: {case_id, doc_count, fact_count, chunk_count, "
-        "coverage_warnings: [records from gate_case where verdict == "
-        "'incomplete']}. A stage failure must abort the remaining stages "
-        "(mirrors ingestion/build.py's _run_stage re-raise behavior)."
-    )
+def run_pipeline(
+    case_id: str, raw_dir: Path, step: str = "all", limit: int | None = None
+) -> dict:
+    """Run the requested pipeline step(s) for one case; return a summary dict.
+
+    step="extract" runs only extract.extract_case and returns
+    {case_id, step, doc_count, docs}. step="all" (full extract → gate →
+    facts → index) is not implemented yet — raises NotImplementedError until
+    gate/facts/index land in later deliverables.
+    """
+    if step == "extract":
+        results = _run_stage("EXTRACT", extract.extract_case, case_id, raw_dir, limit=limit)
+        return {
+            "case_id": case_id,
+            "step": step,
+            "doc_count": len(results),
+            "docs": [r.doc_id for r in results],
+        }
+
+    if step == "all":
+        raise NotImplementedError("all steps pending — implement in later deliverables")
+
+    raise ValueError(f"unknown --step {step!r}; expected 'extract' or 'all'")
 
 
 # ========== CLI entrypoint ==========
 
 def main() -> None:
-    """Command-line entrypoint: python -m ingestion.dossier.build --case-id <id> --raw-dir <path>."""
+    """Command-line entrypoint: python -m ingestion.dossier.build --case-id <id> --raw-dir <path> [--step extract] [--limit N]."""
     parser = argparse.ArgumentParser(
         description="Build one case's dossier artifacts: extract → gate → facts → index."
     )
@@ -72,11 +88,22 @@ def main() -> None:
         "--raw-dir", type=Path, required=True,
         help="directory of raw dossier documents for this case",
     )
+    parser.add_argument(
+        "--step", choices=["extract", "all"], default="all",
+        help="which pipeline step(s) to run (default: all — not yet implemented)",
+    )
+    parser.add_argument(
+        "--limit", type=int, default=None,
+        help="cap the number of documents processed (extract step only)",
+    )
     args = parser.parse_args()
 
     t_start = time.time()
-    log.info("dossier build starting · case_id=%s raw_dir=%s", args.case_id, args.raw_dir)
-    summary = run_pipeline(args.case_id, args.raw_dir)
+    log.info(
+        "dossier build starting · case_id=%s raw_dir=%s step=%s limit=%s",
+        args.case_id, args.raw_dir, args.step, args.limit,
+    )
+    summary = run_pipeline(args.case_id, args.raw_dir, step=args.step, limit=args.limit)
     log.info("dossier build complete · %s · total elapsed %.1fs", summary, time.time() - t_start)
 
 
