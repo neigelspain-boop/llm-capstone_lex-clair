@@ -13,14 +13,18 @@ at that time.
 Cost: gpt-4o-mini is $0.15/M input, $0.60/M output. A typical answer
 call with 5 chunks × ~300 tokens context + 400-token answer costs
 ~$0.00048. Same order of magnitude as rewrite.py (~$0.00005).
+
+Routed through OpenRouter (ADR #40) — get_openrouter_client() returns an
+OpenAI-compatible client pointed at OpenRouter, so the model ID must be the
+fully-qualified OpenRouter slug ("openai/gpt-4o-mini").
 """
 from __future__ import annotations
 
 import logging
-import os
 
 from dotenv import load_dotenv
-from openai import OpenAI
+
+from ingestion.clients import get_openrouter_client
 
 
 load_dotenv()
@@ -28,21 +32,8 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
-MODEL = "gpt-4o-mini"
+MODEL = "openai/gpt-4o-mini"
 MAX_OUTPUT_TOKENS = 500
-
-
-_client: OpenAI | None = None
-
-
-def get_client() -> OpenAI:
-    """Return the cached OpenAI client, initializing on first call."""
-    global _client
-    if _client is None:
-        if not os.getenv("OPENAI_API_KEY"):
-            raise RuntimeError("OPENAI_API_KEY not set — check .env file")
-        _client = OpenAI()
-    return _client
 
 
 def generate(prompt: str) -> tuple[str, dict]:
@@ -52,15 +43,15 @@ def generate(prompt: str) -> tuple[str, dict]:
         (answer_text, token_stats) where token_stats is:
         {"prompt_tokens": int, "completion_tokens": int, "total_tokens": int}
     """
-    response = get_client().responses.create(
+    response = get_openrouter_client().chat.completions.create(
         model=MODEL,
-        input=[{"role": "user", "content": prompt}],
-        max_output_tokens=MAX_OUTPUT_TOKENS,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=MAX_OUTPUT_TOKENS,
     )
-    answer = response.output_text
+    answer = response.choices[0].message.content
     token_stats = {
-        "prompt_tokens": response.usage.input_tokens,
-        "completion_tokens": response.usage.output_tokens,
+        "prompt_tokens": response.usage.prompt_tokens,
+        "completion_tokens": response.usage.completion_tokens,
         "total_tokens": response.usage.total_tokens,
     }
     return answer, token_stats

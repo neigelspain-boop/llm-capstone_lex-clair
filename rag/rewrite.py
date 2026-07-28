@@ -19,23 +19,26 @@ the whole flow.
 
 Cost: ~150 input + 40 output tokens per query on gpt-4o-mini ≈ $0.00005
 per call. Negligible at Day 4 volumes.
+
+Routed through OpenRouter (ADR #40) — get_openrouter_client() returns an
+OpenAI-compatible client pointed at OpenRouter, so the model ID must be the
+fully-qualified OpenRouter slug ("openai/gpt-4o-mini").
 """
 from __future__ import annotations
 
 import logging
-import os
 
 from dotenv import load_dotenv
-from openai import OpenAI
 from pydantic import BaseModel, Field
 
+from ingestion.clients import get_openrouter_client
 
 load_dotenv()
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
-REWRITE_MODEL = "gpt-4o-mini"
+REWRITE_MODEL = "openai/gpt-4o-mini"
 TEMPERATURE = 0.3
 
 REWRITE_PROMPT = """
@@ -60,19 +63,6 @@ class RewrittenQuery(BaseModel):
     enriched_query: str = Field(description="Query enriched with legal vocabulary, ≤40 words.")
 
 
-_client: OpenAI | None = None
-
-
-def get_client() -> OpenAI:
-    """Return the cached OpenAI client, initializing on first call."""
-    global _client
-    if _client is None:
-        if not os.getenv("OPENAI_API_KEY"):
-            raise RuntimeError("OPENAI_API_KEY not set — check .env file")
-        _client = OpenAI()
-    return _client
-
-
 def rewrite(query: str) -> str:
     """Rewrite a plain-French query with legal-register vocabulary.
 
@@ -80,13 +70,13 @@ def rewrite(query: str) -> str:
     unchanged on any failure (empty API response, parse error, network).
     """
     try:
-        response = get_client().responses.parse(
+        response = get_openrouter_client().beta.chat.completions.parse(
             model=REWRITE_MODEL,
-            input=[{"role": "user", "content": REWRITE_PROMPT.format(query=query)}],
-            text_format=RewrittenQuery,
+            messages=[{"role": "user", "content": REWRITE_PROMPT.format(query=query)}],
+            response_format=RewrittenQuery,
             temperature=TEMPERATURE,
         )
-        enriched = response.output_parsed.enriched_query.strip()
+        enriched = response.choices[0].message.parsed.enriched_query.strip()
         if not enriched:
             log.warning("rewrite returned empty; falling back to original query")
             return query

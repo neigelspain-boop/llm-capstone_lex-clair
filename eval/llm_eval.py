@@ -1,17 +1,18 @@
 """LLM-as-judge evaluation harness for lex-clair.
 
 Runs `rag.flow.run(question)` on a sample of ground-truth queries, then
-scores each generated answer with three provider-diverse judges:
+scores each generated answer with three provider-diverse judges, all routed
+through OpenRouter's OpenAI-compatible endpoint (ADR #40):
 
-    - GPT-4o-mini          (OpenAI direct)
-    - Claude Haiku 4.5     (via OpenRouter, OpenAI-compatible endpoint)
-    - Mistral Small        (Mistral SDK direct)
+    - GPT-4o-mini          (openai/gpt-4o-mini)
+    - Claude Haiku 4.5     (anthropic/claude-haiku-4.5)
+    - Mistral Small        (mistralai/mistral-small-3.2-24b-instruct)
 
 Writes one row per (query x judge) to data/llm_eval_results.csv. Resume-safe:
 if the CSV exists on start, already-scored (query_id, judge) pairs are skipped.
 Kill switches trip on aggregate cost cap and cumulative judge failure rate.
 
-Design decisions locked in ADRs #24, #25, #26. Rubric line: "LLM eval +2 --
+Design decisions locked in ADRs #24, #25, #26, #40. Rubric line: "LLM eval +2 --
 multiple approaches evaluated." See docs/decisions.md for rationale.
 
 CLI:
@@ -30,7 +31,6 @@ from __future__ import annotations
 # ========== stdlib imports ==========
 import argparse
 import json
-import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,6 +41,7 @@ from dotenv import load_dotenv
 from tqdm.auto import tqdm
 
 # ========== project imports ==========
+from ingestion.clients import get_openrouter_client
 from rag import flow
 
 # ========== paths + constants ==========
@@ -55,22 +56,22 @@ COST_KILL_TOTAL_USD = 3.00     # aggregate cost cap across answer-gen + all judg
 FAILURE_KILL_RATE = 0.10       # abort if >10% of judgments fail (after 10 min samples)
 MIN_JUDGMENTS_BEFORE_KILL = 10 # don't trip failure-rate kill on early noise
 
-# Judge model IDs -- see ADR #24 (Claude via OpenRouter), #25 (Mistral).
+# Judge model IDs -- all fully-qualified OpenRouter slugs per ADR #40.
 # Answer generator stays gpt-4o-mini per Plane II (ADR #20), untouched here.
 JUDGE_MODELS = {
-    "gpt":     "gpt-4o-mini",
-    "claude":  "anthropic/claude-haiku-4.5",   # OpenRouter model slug
-    "mistral": "mistral-small-latest",
+    "gpt":     "openai/gpt-4o-mini",
+    "claude":  "anthropic/claude-haiku-4.5",
+    "mistral": "mistralai/mistral-small-3.2-24b-instruct",
 }
 
 # USD per million tokens (input, output). Used for kill-switch aggregation.
-# Sources: OpenAI pricing page (gpt-4o-mini), OpenRouter Claude Haiku 4.5 page,
-# Mistral pricing docs. Approximations acceptable -- kill switch is a safety
-# net, not accounting.
+# Sources: OpenAI pricing page (gpt-4o-mini), OpenRouter Claude Haiku 4.5 and
+# Mistral Small 3.2 pages. Approximations acceptable -- kill switch is a
+# safety net, not accounting.
 COST_PER_MTOKEN = {
-    "gpt-4o-mini":                (0.15, 0.60),
-    "anthropic/claude-haiku-4.5": (1.00, 5.00),
-    "mistral-small-latest":       (0.20, 0.60),
+    "openai/gpt-4o-mini":                        (0.15, 0.60),
+    "anthropic/claude-haiku-4.5":                (1.00, 5.00),
+    "mistralai/mistral-small-3.2-24b-instruct":  (0.20, 0.60),
 }
 
 # ========== judge prompt template ==========
@@ -90,42 +91,6 @@ Reponds en JSON strict, sans markdown, sans texte autour:
 """.strip()
 
 VALID_VERDICTS = {"RELEVANT", "PARTLY_RELEVANT", "NON_RELEVANT"}
-
-# ========== lazy client singletons ==========
-# One client per provider, instantiated on first use. Prevents unused imports
-# on --analyze runs.
-
-_openai_client = None
-_openrouter_client = None
-_mistral_client = None
-
-
-def get_openai_client():
-    global _openai_client
-    if _openai_client is None:
-        from openai import OpenAI
-        _openai_client = OpenAI()
-    return _openai_client
-
-
-def get_openrouter_client():
-    global _openrouter_client
-    if _openrouter_client is None:
-        from openai import OpenAI
-        _openrouter_client = OpenAI(
-            api_key=os.environ["OPENROUTER_API_KEY"],
-            base_url="https://openrouter.ai/api/v1",
-        )
-    return _openrouter_client
-
-
-def get_mistral_client():
-    global _mistral_client
-    if _mistral_client is None:
-        from mistralai.client import Mistral
-        _mistral_client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
-    return _mistral_client
-
 
 # ========== usage + JSON parse helpers ==========
 
@@ -189,24 +154,20 @@ def _parse_judge_response(raw: str) -> dict:
 # caller catches and records "UNKNOWN" per silent-fallback contract.
 
 def judge_gpt(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with GPT-4o-mini (OpenAI Responses API)."""
-    client = get_openai_client()
+    """Score with GPT-4o-mini via OpenRouter (ADR #40)."""
+    client = get_openrouter_client()
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
-    r = client.responses.create(
+    r = client.chat.completions.create(
         model=JUDGE_MODELS["gpt"],
-        input=[{"role": "user", "content": prompt}],
+        messages=[{"role": "user", "content": prompt}],
     )
     token_stats = _extract_usage(r)
-    verdict = _parse_judge_response(r.output_text)
+    verdict = _parse_judge_response(r.choices[0].message.content)
     return verdict, token_stats
 
 
 def judge_claude(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with Claude Haiku 4.5 via OpenRouter (ADR #24).
-
-    Uses OpenAI SDK with base_url override -- OpenRouter's Chat Completions
-    endpoint is OpenAI-compatible.
-    """
+    """Score with Claude Haiku 4.5 via OpenRouter (ADR #40)."""
     client = get_openrouter_client()
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
     r = client.chat.completions.create(
@@ -219,14 +180,14 @@ def judge_claude(question: str, answer: str) -> tuple[dict, dict]:
 
 
 def judge_mistral(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with Mistral Small (Mistral SDK, ADR #25).
+    """Score with Mistral Small via OpenRouter (ADR #40).
 
     Highest JSON-drift risk of the three -- dry-run validates this before
     the full 200-sample commitment.
     """
-    client = get_mistral_client()
+    client = get_openrouter_client()
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
-    r = client.chat.complete(
+    r = client.chat.completions.create(
         model=JUDGE_MODELS["mistral"],
         messages=[{"role": "user", "content": prompt}],
     )

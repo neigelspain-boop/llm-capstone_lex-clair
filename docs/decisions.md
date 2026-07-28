@@ -1518,3 +1518,83 @@ touched — `load_index()` already reads whatever is in
   `flow.run()` can scope retrieval by source. This is now the
   highest-priority Day B item, promoted from "concern" to "blocker for
   indexing any real case."
+
+## ADR #40 — OpenRouter unification for operational simplicity
+
+**Date:** 2026-07-28 · **Branch:** v2-agentic (Day B, Deliverable 0) · **Status:** Accepted
+
+### Context
+
+Day A hit 402/403 twice from per-provider credit exhaustion mid-batch.
+Three separate credit pools (OpenAI, Anthropic, Mistral direct) plus
+OpenRouter (already used for the dossier vision/fact pipeline) created
+split-brain on budget: a batch could die partway through because one
+provider's pool ran dry while the other two still had headroom, and there
+was no single place to watch remaining credit.
+
+### Decision
+
+All LLM calls now route through OpenRouter's OpenAI-compatible endpoint,
+with fully-qualified model IDs:
+
+- `rag/rewrite.py` — `openai/gpt-4o-mini`
+- `rag/generate.py` — `openai/gpt-4o-mini`
+- `eval/llm_eval.py` judges — `openai/gpt-4o-mini`, `anthropic/claude-haiku-4.5`,
+  `mistralai/mistral-small-3.2-24b-instruct`
+
+`ingestion/clients.py` gains a single canonical factory,
+`get_openrouter_client()`. `get_openai_client()`, `get_anthropic_client()`,
+and `get_mistral_client()` become deprecated thin aliases over it (each
+emits a `DeprecationWarning` then returns `get_openrouter_client()`) so
+`ingestion/dossier/{gate,extract,facts}.py` — already OpenRouter-routed via
+`get_anthropic_client()`, per ADR referenced in that module's docstring —
+keep working unchanged.
+
+Two mechanical consequences fell out of this that are worth recording
+explicitly rather than leaving implicit in the diff:
+
+- `rag/rewrite.py` and `rag/generate.py` previously called OpenAI's
+  **Responses API** (`client.responses.create` / `.responses.parse`).
+  OpenRouter's Responses API is beta, stateless-only, and its
+  structured-output support is undocumented, so both files were converted
+  to **Chat Completions** (`client.chat.completions.create` /
+  `client.beta.chat.completions.parse`) instead — the surface
+  `get_anthropic_client()` and the Claude judge already use successfully
+  through OpenRouter.
+- The Mistral judge's model ID was `mistral-small-latest`, a Mistral-native
+  API alias with no literal OpenRouter equivalent. It's now pinned to
+  `mistralai/mistral-small-3.2-24b-instruct` — the established, stable
+  Mistral Small release, chosen over the newer `mistral-small-2603`
+  ("Mistral Small 4") to minimize judge-behavior drift relative to
+  already-collected eval numbers. This is a substitution, not a like-for-
+  like rename.
+
+Preserves 3-family judge diversity: all three judges still use distinct
+model families (GPT, Anthropic, Mistral) for cross-family agreement
+measurement — only the transport changed.
+
+### Consequences
+
+- Single API key, single credit pool, single usage dashboard. Dev
+  environment now needs only `OPENROUTER_API_KEY` (legacy `OPENAI_API_KEY`
+  / `MISTRAL_API_KEY` no longer required for any in-scope call site, though
+  harmless to leave set).
+- `mistralai` dependency removed from `pyproject.toml` — its only two
+  callers were the now-deleted native `get_mistral_client()` bodies in
+  `ingestion/clients.py` and `eval/llm_eval.py`. `google-genai` was never a
+  dependency in this project, despite an initial assumption that it was —
+  nothing to remove there.
+- `anthropic` and `openai` stay in `pyproject.toml` as direct dependencies:
+  `openai` because its SDK is what actually talks to OpenRouter (base_url
+  override); `anthropic` despite the native SDK having zero imports
+  anywhere in the codebase today — left in place rather than pruned, since
+  removing an unused-but-harmless dependency wasn't part of this refactor's
+  scope.
+- ~5% OpenRouter price penalty versus direct-provider pricing, accepted as
+  the cost of eliminating the mid-batch credit-exhaustion failure mode.
+
+### Follow-ups
+
+- Revisit the Mistral slug if OpenRouter ever publishes a stable "latest"
+  Mistral Small alias, or if the judge is deliberately re-pinned to a
+  specific dated model for other reasons.
