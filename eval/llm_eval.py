@@ -6,7 +6,7 @@ through OpenRouter's OpenAI-compatible endpoint (ADR #40):
 
     - GPT-4o-mini          (openai/gpt-4o-mini)
     - Claude Haiku 4.5     (anthropic/claude-haiku-4.5)
-    - Mistral Small        (mistralai/mistral-small-3.2-24b-instruct)
+    - Mistral Small        (mistralai/mistral-small-2603)
 
 Writes one row per (query x judge) to data/llm_eval_results.csv. Resume-safe:
 if the CSV exists on start, already-scored (query_id, judge) pairs are skipped.
@@ -61,7 +61,7 @@ MIN_JUDGMENTS_BEFORE_KILL = 10 # don't trip failure-rate kill on early noise
 JUDGE_MODELS = {
     "gpt":     "openai/gpt-4o-mini",
     "claude":  "anthropic/claude-haiku-4.5",
-    "mistral": "mistralai/mistral-small-3.2-24b-instruct",
+    "mistral": "mistralai/mistral-small-2603",
 }
 
 # USD per million tokens (input, output). Used for kill-switch aggregation.
@@ -71,7 +71,7 @@ JUDGE_MODELS = {
 COST_PER_MTOKEN = {
     "openai/gpt-4o-mini":                        (0.15, 0.60),
     "anthropic/claude-haiku-4.5":                (1.00, 5.00),
-    "mistralai/mistral-small-3.2-24b-instruct":  (0.20, 0.60),
+    "mistralai/mistral-small-2603":  (0.15, 0.60),
 }
 
 # ========== judge prompt template ==========
@@ -272,7 +272,7 @@ def run_eval(n_samples: int, dry_run: bool = False) -> None:
         est_answer = 0.00047 * len(sample)
         est_gpt = (500 * 0.15 + 100 * 0.60) / 1_000_000 * len(sample)     # rough per-call
         est_claude = (500 * 1.00 + 100 * 5.00) / 1_000_000 * len(sample)
-        est_mistral = (500 * 0.20 + 100 * 0.60) / 1_000_000 * len(sample)
+        est_mistral = (500 * 0.15 + 100 * 0.60) / 1_000_000 * len(sample)
         total = est_answer + est_gpt + est_claude + est_mistral
         print(f"[llm_eval] DRY RUN estimate for {len(sample)} samples:")
         print(f"  answer generation (flow):     ~${est_answer:.4f}")

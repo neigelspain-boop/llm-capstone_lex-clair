@@ -332,7 +332,7 @@ def test_rag_flow_end_to_end() -> None:
     # pipeline shape
     assert result["chunks_retrieved"] == 20
     assert result["chunks_reranked"] == 5
-    assert result["model_used"] == "gpt-4o-mini"
+    assert result["model_used"] == "openai/gpt-4o-mini"
 
 
 # --- llm_eval_results.csv invariants (Day 5) ----------------------------------

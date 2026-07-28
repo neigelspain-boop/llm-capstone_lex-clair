@@ -9,7 +9,7 @@ pool and usage dashboard. get_openai_client(), get_anthropic_client(), and
 get_mistral_client() are deprecated aliases kept for callers mid-transition
 — each now just returns get_openrouter_client(). Callers must use
 fully-qualified OpenRouter model slugs (e.g. "openai/gpt-4o-mini",
-"anthropic/claude-haiku-4.5", "mistralai/mistral-small-3.2-24b-instruct").
+"anthropic/claude-haiku-4.5", "mistralai/mistral-small-2603").
 """
 from __future__ import annotations
 

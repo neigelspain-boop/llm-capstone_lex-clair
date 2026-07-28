@@ -23,7 +23,7 @@ Return shape locked here for downstream consumers:
     "rewritten_query": str,      # for debugging / eval
     "chunks_retrieved": int,     # always 20 in V1
     "chunks_reranked": int,      # always 5 in V1
-    "model_used": str,           # "gpt-4o-mini" in V1
+    "model_used": str,           # "openai/gpt-4o-mini" in V1 (ADR #40)
     "cost_usd": float,           # includes rewrite + generate calls
     "elapsed_seconds": float,    # end-to-end wall time
   }
@@ -48,9 +48,9 @@ RETRIEVE_K = 20
 RERANK_K = 5
 
 
-def _compute_cost(tokens: dict, model: str = "gpt-4o-mini") -> float:
+def _compute_cost(tokens: dict, model: str = "openai/gpt-4o-mini") -> float:
     """Compute USD cost from token counts. V1: gpt-4o-mini only."""
-    if model != "gpt-4o-mini":
+    if model != "openai/gpt-4o-mini":
         return 0.0  # unknown pricing → fail-quiet, not fail-loud
     input_cost = tokens["prompt_tokens"] * GPT_4O_MINI_INPUT_PER_M / 1_000_000
     output_cost = tokens["completion_tokens"] * GPT_4O_MINI_OUTPUT_PER_M / 1_000_000
