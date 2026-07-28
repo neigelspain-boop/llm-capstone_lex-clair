@@ -626,12 +626,25 @@ def test_source_scope_invalid_raises() -> None:
 
 
 def test_flow_run_default_source_scope_is_statute(monkeypatch) -> None:
-    """flow.run(query) with no source_scope arg must retrieve with 'statute', not 'blended'."""
+    """flow.run(query) with no source_scope arg must retrieve with 'statute', not 'blended'.
+
+    Since ADR #42 (Deliverable B2), a None source_scope routes through
+    rag.router.route_query instead of a hardcoded default, so the router
+    must be mocked here too — otherwise this "fast" test would fire a real
+    network call to Haiku via OpenRouter.
+    """
     from unittest.mock import MagicMock
 
     from rag import flow
+    from rag.router import RouteDecision
 
+    mock_route_query = MagicMock(
+        return_value=RouteDecision(
+            intent="statute_lookup", source_scope="statute", confidence="high", rationale="test",
+        )
+    )
     mock_retrieve = MagicMock(return_value=[])
+    monkeypatch.setattr(flow, "route_query", mock_route_query)
     monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
     monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
     monkeypatch.setattr(

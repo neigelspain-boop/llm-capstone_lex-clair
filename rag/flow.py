@@ -26,6 +26,7 @@ Return shape locked here for downstream consumers:
     "model_used": str,           # "openai/gpt-4o-mini" in V1 (ADR #40)
     "cost_usd": float,           # includes rewrite + generate calls
     "elapsed_seconds": float,    # end-to-end wall time
+    "route_decision": dict,      # {intent, source_scope, confidence, rationale} (ADR #42)
   }
 """
 from __future__ import annotations
@@ -34,6 +35,7 @@ import logging
 from time import time
 
 from rag import generate, prompt, rerank, retrieve, rewrite
+from rag.router import route_query
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
@@ -57,13 +59,38 @@ def _compute_cost(tokens: dict, model: str = "openai/gpt-4o-mini") -> float:
     return input_cost + output_cost
 
 
-def run(query: str, verbose: bool = False, source_scope: str = "statute") -> dict:
+def run(
+    query: str,
+    source_scope: str | None = None,
+    active_case_id: str | None = None,
+    verbose: bool = False,
+) -> dict:
     """Run the full RAG flow. Returns the locked dict spec (see module docstring).
 
-    source_scope (ADR #41, default "statute") is passed through to
-    retrieve.retrieve; default preserves statute-only behavior.
+    source_scope (ADR #42, default None): if None, the query router
+    (rag.router.route_query) infers scope from query intent + active_case_id.
+    Passing an explicit value skips the router entirely — used by tests and
+    the UI scope dropdown (B5).
     """
     t0 = time()
+
+    # 0. route: infer source_scope from query intent, unless caller overrides
+    if source_scope is None:
+        decision = route_query(query, active_case_id=active_case_id)
+        resolved_scope = decision.source_scope
+        log.info(
+            "router: intent=%s scope=%s conf=%s",
+            decision.intent, decision.source_scope, decision.confidence,
+        )
+        route_decision = decision.model_dump()
+    else:
+        resolved_scope = source_scope
+        route_decision = {
+            "intent": "override",
+            "source_scope": source_scope,
+            "confidence": "high",
+            "rationale": "explicit source_scope override; router skipped",
+        }
 
     # 1. rewrite (retrieval-side only, silent-fallback on failure)
     rewritten = rewrite.rewrite(query)
@@ -71,7 +98,7 @@ def run(query: str, verbose: bool = False, source_scope: str = "statute") -> dic
         log.info("rewritten: %s", rewritten)
 
     # 2. retrieve k=20 via vector search
-    candidates = retrieve.retrieve(rewritten, k=RETRIEVE_K, source_scope=source_scope)
+    candidates = retrieve.retrieve(rewritten, k=RETRIEVE_K, source_scope=resolved_scope)
     if verbose:
         log.info("retrieved %d candidates", len(candidates))
 
@@ -103,6 +130,7 @@ def run(query: str, verbose: bool = False, source_scope: str = "statute") -> dic
         "model_used": generate.MODEL,
         "cost_usd": _compute_cost(tokens, generate.MODEL),
         "elapsed_seconds": took,
+        "route_decision": route_decision,
     }
 
 
@@ -126,3 +154,4 @@ if __name__ == "__main__":
     print(f"elapsed: {result['elapsed_seconds']:.2f}s")
     print(f"model: {result['model_used']}")
     print(f"rewritten: {result['rewritten_query']}")
+    print(f"route_decision: {result['route_decision']}")

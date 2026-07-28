@@ -1674,3 +1674,86 @@ opts in explicitly.
 - B2 wires the router to drive `source_scope` automatically based on
   query intent. B5 wires the UI selector. Consider adding retrieval
   telemetry on which scope was used per query, for eval.
+
+## ADR #42 — Query router auto-selects retrieval source scope
+
+**Date:** 2026-07-28 · **Branch:** v2-agentic (Day B, Deliverable B2) · **Status:** Accepted
+
+### Context
+
+ADR #41 shipped `source_scope` filtering on `HybridRetriever.search()`, but
+every caller had to specify the scope manually — `rag/flow.py::run()`
+defaulted to a hardcoded `"statute"`. Both UX and correctness improve when
+the system infers scope from query intent instead of requiring the caller
+(or a future UI dropdown) to guess it correctly every time.
+
+### Decision
+
+A new module, `rag/router.py`, exposes `route_query(query,
+active_case_id=None) -> RouteDecision`. A single Haiku 4.5 call (via
+`get_openrouter_client()`, ADR #40, `temperature=0.0` for classifier
+determinism) classifies the query into one of 4 intents —
+`statute_lookup`, `case_factual`, `gap_analysis`, `other` — using a fixed
+French system prompt. The model never chooses `source_scope` directly;
+`route_query` maps `(intent, active_case_id)` to a scope deterministically
+in Python:
+
+- `statute_lookup` → `"statute"`
+- `case_factual` + `active_case_id` → `"case:{active_case_id}"`; without a
+  case id, downgrades to `"statute"` with `confidence="low"`
+- `gap_analysis` + `active_case_id` → `"blended"`; without a case id,
+  downgrades to `"statute"` with `confidence="low"`
+- `other` → `"statute"` (safest fallback)
+
+Response parsing mirrors `ingestion/dossier/gate.py::_parse_verifier_response`
+(hand-parsed JSON text, code-fence stripped, `ValueError` on bad shape) —
+chosen over `rewrite.py`'s `.beta.chat.completions.parse()` structured-output
+path specifically so a malformed response is *catchable* rather than
+structurally impossible to receive. `route_query` never raises: any
+call or parse failure logs a warning and returns
+`RouteDecision(intent="other", source_scope="statute", confidence="low",
+rationale=...)`.
+
+`RouteDecision.intent` additionally accepts the value `"override"` — never
+produced by the classifier itself, only by `rag/flow.py::run()` when the
+caller passes an explicit `source_scope`, which skips the router entirely.
+This keeps the return shape self-consistent across both paths rather than
+having the override path emit a dict that would fail `RouteDecision`
+validation if a downstream consumer (e.g. a future UI reconstructing the
+model from `result["route_decision"]`) ever re-validated it.
+
+`rag/flow.py::run()`'s signature changes from `(query, verbose=False,
+source_scope="statute")` to `(query, source_scope=None,
+active_case_id=None, verbose=False)`. When `source_scope is None`, `run()`
+calls `route_query` and logs `"router: intent=%s scope=%s conf=%s"` at INFO
+level. The resolved `RouteDecision` (or the synthetic override dict) is
+included in the return dict as `"route_decision"`.
+
+### Consequences
+
+- Adds one Haiku 4.5 call (~150 input / <50 output tokens, well under
+  $0.001) per query that doesn't pass an explicit `source_scope` —
+  negligible at current volumes, but now a per-query cost on every
+  `app/streamlit_app.py` call site (unchanged code, changed runtime
+  behavior) since it still calls `flow.run()` with no `source_scope`.
+- Router failure defaults to `"statute"`, the same safe fallback ADR #41
+  already established as the retrieval-layer default — a dead OpenRouter
+  degrades scope selection, not correctness.
+- `result["route_decision"]` gives a future UI (B5) a ready-made "why this
+  scope was chosen" surface, including the downgrade rationale when a
+  case-specific intent was inferred but no case was active.
+- Two existing fast-suite tests written against the ADR #41 hardcoded
+  default (`tests/test_ingestion_smoke.py::test_flow_run_default_source_scope_is_statute`)
+  needed their mocking updated in this same change to mock
+  `flow.route_query` — otherwise a "fast" test would fire a real network
+  call. `test_flow_run_passes_source_scope_through` needed no change since
+  an explicit `source_scope` always skips the router.
+
+### Follow-ups
+
+- Router prompt tuning based on real query logs, once Day 7-style
+  monitoring exists for v2 traffic.
+- Optional: cache routing decisions per query hash to save cost on repeat
+  queries.
+- B5 wires the UI's scope selector and surfaces `route_decision` to the
+  user.
