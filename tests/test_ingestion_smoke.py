@@ -472,3 +472,192 @@ def test_db_conversation_roundtrip(db_conn):
     with db_conn.cursor() as cur:
         cur.execute("DELETE FROM conversations WHERE id = %s", (conv["id"],))
     db_conn.commit()
+
+
+# ========== Day B / Deliverable B1: source_scope filtering (ADR #41) ==========
+
+# Shared vocabulary across all three groups (statute, dossier-demo, dossier-acme)
+# is deliberate: a single query must activate BM25 + vector signal for every
+# group, or the blended/case-scope tests below would be trivially true.
+_MIXED_CORPUS_QUERY = "quasi-usufruit et restitution aux nu-propriétaires"
+
+
+def _build_mixed_corpus() -> pd.DataFrame:
+    """6-row synthetic corpus: 2 statute + 2 dossier-demo + 2 dossier-acme rows.
+
+    Schema matches ingestion/index.py::REQUIRED_COLUMNS. Entirely synthetic --
+    never touches real data/chunks.csv or real case content.
+    """
+    rows = [
+        {"chunk_id": "cc-587", "source": "cc_successions", "source_label": "Code civil",
+         "num": "587", "titre": "Du quasi-usufruit", "section_path": "Livre III",
+         "texte": "L'usufruitier jouit des choses consomptibles à charge de rendre, "
+                  "à la fin de l'usufruit, des choses de même quantité et qualité, "
+                  "ou leur valeur estimée : ceci définit le quasi-usufruit.",
+         "url": ""},
+        {"chunk_id": "cc-758", "source": "cc_successions", "source_label": "Code civil",
+         "num": "758", "titre": "Droits du conjoint survivant", "section_path": "Livre III",
+         "texte": "Les droits du conjoint survivant dans la succession incluent l'usufruit "
+                  "ou la quasi-usufruit sur les biens du défunt selon la convention successorale.",
+         "url": ""},
+        {"chunk_id": "dossier-demo-conv-c001", "source": "dossier-demo", "source_label": "Dossier demo",
+         "num": "", "titre": "Convention de quasi-usufruit", "section_path": "",
+         "texte": "Convention de quasi-usufruit signée entre les héritiers du dossier demo : "
+                  "la quasi-usufruitière conserve la libre disposition des sommes, à charge de "
+                  "restitution de la valeur équivalente aux nu-propriétaires au terme de la convention.",
+         "url": ""},
+        {"chunk_id": "dossier-demo-conv-c002", "source": "dossier-demo", "source_label": "Dossier demo",
+         "num": "", "titre": "Convention de quasi-usufruit", "section_path": "",
+         "texte": "Le notaire du dossier demo a rédigé la convention de quasi-usufruit précisant "
+                  "les modalités de restitution dues par le quasi-usufruitier aux nu-propriétaires héritiers.",
+         "url": ""},
+        {"chunk_id": "dossier-acme-conv-c001", "source": "dossier-acme", "source_label": "Dossier acme",
+         "num": "", "titre": "Convention de quasi-usufruit", "section_path": "",
+         "texte": "Convention de quasi-usufruit du dossier acme : le quasi-usufruitier s'engage "
+                  "à restituer aux nu-propriétaires la valeur des sommes reçues en quasi-usufruit.",
+         "url": ""},
+        {"chunk_id": "dossier-acme-conv-c002", "source": "dossier-acme", "source_label": "Dossier acme",
+         "num": "", "titre": "Convention de quasi-usufruit", "section_path": "",
+         "texte": "Le dossier acme comporte une clause de quasi-usufruit conventionnel définissant "
+                  "les droits du quasi-usufruitier et les garanties dues aux nu-propriétaires.",
+         "url": ""},
+    ]
+    return pd.DataFrame(rows, columns=[
+        "chunk_id", "source", "source_label", "num", "titre", "section_path", "texte", "url",
+    ])
+
+
+def _embed_into_chroma(chunks: pd.DataFrame, chroma_dir: Path) -> None:
+    """Manually embed + write chunks into an isolated Chroma collection.
+
+    Mirrors ingestion/dossier/index.py::append_to_chroma's manual
+    PersistentClient + BGEM3FlagModel.encode + collection.add pattern --
+    NOT ingestion.index.build_chroma, which unconditionally shutil.rmtree()s
+    the shared CHROMA_DIR global. That's unsafe to reuse here even behind a
+    monkeypatch: this fixture must never risk touching real data/chroma/.
+    """
+    import chromadb
+    from FlagEmbedding import BGEM3FlagModel
+    from ingestion import index as ingestion_index
+
+    client = chromadb.PersistentClient(path=str(chroma_dir))
+    collection = client.get_or_create_collection(
+        name=ingestion_index.COLLECTION, metadata={"hnsw:space": "cosine"},
+    )
+    model = BGEM3FlagModel(ingestion_index.EMBED_MODEL_ID, use_fp16=False, device="cpu")
+    texts = chunks["texte"].astype(str).tolist()
+    dense_vecs = model.encode(
+        texts, return_dense=True, return_sparse=False, return_colbert_vecs=False,
+    )["dense_vecs"]
+    metadatas = (
+        chunks[["source", "source_label", "num", "titre", "section_path", "url"]]
+        .astype(str)
+        .to_dict(orient="records")
+    )
+    collection.add(
+        ids=chunks["chunk_id"].tolist(),
+        embeddings=[[float(v) for v in vec] for vec in dense_vecs],
+        documents=texts,
+        metadatas=metadatas,
+    )
+
+
+@pytest.fixture(scope="module")
+def mixed_corpus_retriever(tmp_path_factory):
+    """Real BM25 + real Chroma + real BGE-M3 retriever over an isolated,
+    fully synthetic 6-row corpus (2 statute + 2 dossier-demo + 2 dossier-acme
+    chunks). Never touches data/chunks.csv or data/chroma/ -- ADR #39's
+    `private`-case incident is exactly the risk this isolation avoids.
+    """
+    from ingestion import index as ingestion_index
+    from ingestion.load import load_index
+
+    tmp_dir = tmp_path_factory.mktemp("mixed_corpus")
+    chunks = _build_mixed_corpus()
+    csv_path = tmp_dir / "chunks.csv"
+    chunks.to_csv(csv_path, index=False)
+
+    chroma_dir = tmp_dir / "chroma"
+    _embed_into_chroma(chunks, chroma_dir)
+
+    return load_index(
+        src=csv_path,
+        chroma_dir=chroma_dir,
+        collection_name=ingestion_index.COLLECTION,
+        device="cpu",
+    )
+
+
+@pytest.mark.slow
+def test_source_scope_statute_filters_out_dossier(mixed_corpus_retriever) -> None:
+    """source_scope="statute" (the new default) must exclude every dossier chunk."""
+    hits = mixed_corpus_retriever.search(_MIXED_CORPUS_QUERY, k=6, source_scope="statute")
+    assert hits, "expected at least one statute hit"
+    dossier_hits = [h["chunk_id"] for h in hits if h["chunk_id"].startswith("dossier-")]
+    assert not dossier_hits, f"statute scope leaked dossier chunks: {dossier_hits}"
+
+
+@pytest.mark.slow
+def test_source_scope_case_returns_only_that_case(mixed_corpus_retriever) -> None:
+    """source_scope="case:demo" must return only dossier-demo-* chunks, never acme or statute."""
+    hits = mixed_corpus_retriever.search(_MIXED_CORPUS_QUERY, k=6, source_scope="case:demo")
+    assert hits, "expected at least one dossier-demo hit"
+    assert all(h["chunk_id"].startswith("dossier-demo-") for h in hits), (
+        f"case:demo scope leaked non-demo chunks: {[h['chunk_id'] for h in hits]}"
+    )
+
+
+@pytest.mark.slow
+def test_source_scope_blended_returns_mix(mixed_corpus_retriever) -> None:
+    """source_scope="blended" applies no filter -- statute and dossier chunks both surface."""
+    hits = mixed_corpus_retriever.search(_MIXED_CORPUS_QUERY, k=6, source_scope="blended")
+    ids = [h["chunk_id"] for h in hits]
+    assert any(not cid.startswith("dossier-") for cid in ids), f"no statute chunk in blended results: {ids}"
+    assert any(cid.startswith("dossier-") for cid in ids), f"no dossier chunk in blended results: {ids}"
+
+
+def test_source_scope_invalid_raises() -> None:
+    """Bad source_scope raises ValueError before any BM25/Chroma/embed work happens."""
+    from ingestion.load import HybridRetriever
+
+    retriever = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=None)
+    with pytest.raises(ValueError, match="invalid source_scope"):
+        retriever.search("x", source_scope="typo")
+
+
+def test_flow_run_default_source_scope_is_statute(monkeypatch) -> None:
+    """flow.run(query) with no source_scope arg must retrieve with 'statute', not 'blended'."""
+    from unittest.mock import MagicMock
+
+    from rag import flow
+
+    mock_retrieve = MagicMock(return_value=[])
+    monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
+    monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
+    monkeypatch.setattr(
+        flow.generate, "generate",
+        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
+    )
+
+    flow.run("Qu'est-ce que le quasi-usufruit ?")
+
+    assert mock_retrieve.call_args.kwargs["source_scope"] == "statute"
+
+
+def test_flow_run_passes_source_scope_through(monkeypatch) -> None:
+    """flow.run(query, source_scope=...) must pass the value through to retrieve.retrieve."""
+    from unittest.mock import MagicMock
+
+    from rag import flow
+
+    mock_retrieve = MagicMock(return_value=[])
+    monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
+    monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
+    monkeypatch.setattr(
+        flow.generate, "generate",
+        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
+    )
+
+    flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope="case:demo")
+
+    assert mock_retrieve.call_args.kwargs["source_scope"] == "case:demo"

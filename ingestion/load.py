@@ -33,6 +33,35 @@ DEFAULT_BM25_BOOST = {
 }
 
 
+# ========== source_scope filtering (ADR #41) ==========
+
+def _scope_predicate(source_scope: str):
+    """Return a chunk_id -> bool predicate for the given source_scope.
+
+    Raises ValueError for anything other than "statute", "dossier",
+    "blended", or "case:<id>". Called first thing in search() so bad
+    input fails before any embedding/query work.
+    """
+    if source_scope == "statute":
+        return lambda cid: not cid.startswith("dossier-")
+    if source_scope == "dossier":
+        return lambda cid: cid.startswith("dossier-")
+    if source_scope == "blended":
+        return lambda cid: True
+    if source_scope.startswith("case:"):
+        case_id = source_scope.removeprefix("case:")
+        if not case_id:
+            raise ValueError(
+                f"invalid source_scope: {source_scope!r} — case id must not be empty"
+            )
+        prefix = f"dossier-{case_id}-"
+        return lambda cid: cid.startswith(prefix)
+    raise ValueError(
+        f"invalid source_scope: {source_scope!r} — must be 'statute', 'dossier', "
+        f"'blended', or 'case:<id>'"
+    )
+
+
 # HybridRetriever: stateful BM25 + dense-vector retriever for query time.
 @dataclass
 class HybridRetriever:
@@ -51,8 +80,15 @@ class HybridRetriever:
         k: int = 10,
         boost_dict: dict[str, float] | None = None,
         mode: str = "hybrid",
+        source_scope: str = "statute",
     ) -> list[dict]:
-        """Return top-k chunks fused from BM25 and dense retrieval."""
+        """Return top-k chunks fused from BM25 and dense retrieval.
+
+        source_scope (ADR #41, default "statute") filters the fused
+        candidate set before the top-k cut: "statute" (default),
+        "dossier", "case:<id>", or "blended" (no filter).
+        """
+        predicate = _scope_predicate(source_scope)
 
         if mode not in ("bm25", "vector", "hybrid"):
             raise ValueError("mode must be one of 'bm25', 'vector', or 'hybrid'")
@@ -89,6 +125,11 @@ class HybridRetriever:
             scores[cid] = scores.get(cid, 0.0) + 1.0 / (RRF_K + rank)
         for rank, cid in enumerate(vec_ids):
             scores[cid] = scores.get(cid, 0.0) + 1.0 / (RRF_K + rank)
+
+        # source_scope filter: applied to the fused candidate pool, before
+        # the top-k cut, so a narrow scope draws from the full k*3 over-fetch
+        # rather than being cut down further after truncation (ADR #41).
+        scores = {cid: s for cid, s in scores.items() if predicate(cid)}
 
         top_ids = sorted(scores, key=scores.get, reverse=True)[:k]
 

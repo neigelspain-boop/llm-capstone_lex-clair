@@ -1598,3 +1598,79 @@ measurement — only the transport changed.
 - Revisit the Mistral slug if OpenRouter ever publishes a stable "latest"
   Mistral Small alias, or if the judge is deliberately re-pinned to a
   specific dated model for other reasons.
+
+## ADR #41 — source_scope filtering on HybridRetriever.search() closes the ADR #39 privacy blocker
+
+**Date:** 2026-07-28 · **Branch:** v2-agentic (Day B, Deliverable B1) · **Status:** Accepted
+
+### Context
+
+ADR #39's Follow-ups promoted retrieval-mode scoping — originally flagged
+in ADR #38 as an unimplemented "Day B concern" — to a blocker: once
+dossier chunks are correctly synced to `data/chunks.csv` and the shared
+Chroma collection, `HybridRetriever.search()` has no mechanism to keep a
+real client case's chunks from out-competing statute chunks on a generic
+query. The `private` case incident recorded in ADR #39 showed this
+concretely — a definitional quasi-usufruit query returned zero
+Legifrance citations because the case's own convention document won on
+relevance — and had to be manually reverted (dossier-private-* rows
+deleted from both surfaces) rather than fixed at the retrieval layer. No
+case may be re-indexed into the shared corpus until this scoping exists.
+
+### Decision
+
+`HybridRetriever.search()` (`ingestion/load.py`) gains a `source_scope`
+parameter, default `"statute"`:
+
+- `"statute"` (default) — chunk_ids not prefixed `dossier-`
+- `"dossier"` — chunk_ids prefixed `dossier-`
+- `"case:<case_id>"` — chunk_ids prefixed `dossier-<case_id>-`
+- `"blended"` — no filter
+
+Validated by a new `_scope_predicate()` helper called first thing inside
+`search()`, before the embedding call, so an invalid value raises
+`ValueError` without wasting a query-time embed. The filter is applied to
+the fused RRF `scores` dict — after BM25 and vector candidates are
+combined into one chunk_id-keyed dict, before the `[:k]` top-k cut —
+giving a single filter call site regardless of `mode`. It draws from the
+existing `k*3` per-mode over-fetch as its candidate pool rather than
+over-fetching further to compensate; a narrow scope (e.g. one small case)
+may legitimately return fewer than `k` hits.
+
+`source_scope` is threaded through `rag/retrieve.py::retrieve()` and
+`rag/flow.py::run()`, both defaulting to `"statute"` so the existing
+general-purpose baseline flow's behavior is unchanged unless a caller
+opts in explicitly.
+
+### Consequences
+
+- Closes the ADR #39 blocker: a case can now be indexed into the shared
+  corpus without its chunks being reachable by the default statute-only
+  flow.
+- `eval/retrieval_eval.py` calls `HybridRetriever.search()` directly and
+  is out of scope for this change, but silently inherits the new
+  `source_scope="statute"` default — resolving ADR #39's own Follow-up
+  question ("decide whether eval harnesses should filter dossier-
+  prefixed chunk_ids out") as a side effect, since eval was tuned
+  statute-only in Day A.
+- No case is unblocked from re-indexing by this change alone — that
+  remains a product/process decision; this ADR only removes the code
+  blocker ADR #39 identified.
+- `app/streamlit_app.py` is untouched: it has no case-scoped UI yet, so
+  it continues to reach `flow.run()` with the default `"statute"` scope
+  end-to-end.
+
+### Follow-ups
+
+- No caller yet passes anything other than the default `"statute"` —
+  `"dossier"` / `"case:<id>"` / `"blended"` exist as retrieval-layer
+  capability only. Wiring a case-aware UI/API surface that actually
+  passes a non-default `source_scope` is future work, not part of this
+  deliverable.
+- `eval/retrieval_eval.py` should eventually decide, explicitly rather
+  than by accident, whether it wants a dossier-aware eval track (ADR
+  #39's original follow-up) now that the scoping mechanism exists to
+  support one.
+- B2 wires the router to drive `source_scope` automatically based on
+  query intent. B5 wires the UI selector. Consider adding retrieval
+  telemetry on which scope was used per query, for eval.

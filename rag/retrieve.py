@@ -30,14 +30,18 @@ def get_retriever() -> HybridRetriever:
     return _retriever
 
 
-def retrieve(query: str, k: int = 20) -> list[dict]:
+def retrieve(query: str, k: int = 20, source_scope: str = "statute") -> list[dict]:
     """Retrieve top-k chunks for a query using vector-only search.
+
+    source_scope defaults to "statute" (ADR #41): prevents dossier case
+    chunks from leaking into the general-purpose baseline flow. Passed
+    straight through to HybridRetriever.search().
 
     Returns raw hits from HybridRetriever.search — full field set including
     chunk_id, num, titre, section_path, texte, source, source_label, url,
     rrf_score. Callers (rerank, flow) do their own field selection.
     """
-    return get_retriever().search(query, k=k, mode="vector")
+    return get_retriever().search(query, k=k, mode="vector", source_scope=source_scope)
 
 
 if __name__ == "__main__":

@@ -57,8 +57,12 @@ def _compute_cost(tokens: dict, model: str = "openai/gpt-4o-mini") -> float:
     return input_cost + output_cost
 
 
-def run(query: str, verbose: bool = False) -> dict:
-    """Run the full RAG flow. Returns the locked dict spec (see module docstring)."""
+def run(query: str, verbose: bool = False, source_scope: str = "statute") -> dict:
+    """Run the full RAG flow. Returns the locked dict spec (see module docstring).
+
+    source_scope (ADR #41, default "statute") is passed through to
+    retrieve.retrieve; default preserves statute-only behavior.
+    """
     t0 = time()
 
     # 1. rewrite (retrieval-side only, silent-fallback on failure)
@@ -67,7 +71,7 @@ def run(query: str, verbose: bool = False) -> dict:
         log.info("rewritten: %s", rewritten)
 
     # 2. retrieve k=20 via vector search
-    candidates = retrieve.retrieve(rewritten, k=RETRIEVE_K)
+    candidates = retrieve.retrieve(rewritten, k=RETRIEVE_K, source_scope=source_scope)
     if verbose:
         log.info("retrieved %d candidates", len(candidates))
 
