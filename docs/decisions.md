@@ -1989,3 +1989,54 @@ usage dict.
   the reasoning-tier models.
 - Consider a cheaper "medium" tier (e.g. Mistral Small 4, Gemini 2.5 Flash)
   between `gpt-4o-mini` and the two max-effort reasoning models.
+
+## ADR #46 — Streamlit sidebar model toggle
+
+**Date:** 2026-07-30 · **Branch:** v2-agentic (Day C, Deliverable C3) · **Status:** Accepted
+
+### Context
+
+ADR #45 (C2) plumbed `answer_model` through `rag/flow.py` and
+`rag/generate.py`'s `ANSWER_MODELS` catalog, but nothing in the UI let a
+user actually select it — every query still ran against the hardcoded
+default. Users facing a hard query (ambiguous quasi-usufruit facts,
+multi-party liability) need a way to opt into a heavier reasoning model
+per-query, and need to see the cost tradeoff before doing so.
+
+### Decision
+
+`app/streamlit_app.py` gains a sidebar `st.segmented_control` with three
+options mirrored from the C2 catalog keys (`gpt-4o-mini`, `opus-4.7`,
+`kimi-k3`), rendered between the "New conversation" button and the
+conversations list. Selection persists in `st.session_state.answer_model`
+(default `"gpt-4o-mini"`), initialized in `_init_session_state()` alongside
+the existing `lang`/`models_warm` keys. A cost-per-question caption below
+the toggle (`COST_HINTS`) makes the tradeoff visible before the user asks a
+question. `_render_turn()`'s call to `get_flow().run(...)` now passes
+`answer_model=st.session_state.answer_model`. The existing technical-details
+expander (`_render_turn_details()`) gains an `answer_model_key` row next to
+the pre-existing `model_used` row, so the catalog key and resolved
+OpenRouter model_id are both visible for debugging.
+
+### Consequences
+
+- Users can spend ~20-100x more per query intentionally (per ADR #45's
+  cost table); the cost hint is the only guardrail — there is no
+  confirmation dialog or spend cap.
+- Model choice is a `st.session_state` value, not per-conversation: it
+  applies to whichever question is asked next, and switching models
+  mid-conversation is silent (no marker on which turn used which model
+  beyond the per-turn debug expander).
+- `MODEL_LABELS`/`COST_HINTS` duplicate the `ANSWER_MODELS` catalog keys as
+  a local dict rather than importing `rag.generate.ANSWER_MODELS` directly
+  — keeps Plane IV consuming Plane II only through `flow.run()`, at the
+  cost of the two dicts needing to stay in sync by hand if the catalog
+  changes.
+
+### Follow-ups
+
+- Per-turn cost display in the answer bubble itself, not just the debug
+  expander.
+- Running-total cost per session.
+- Automatic model recommendation based on the router's `route_decision`
+  confidence (ADR #42).

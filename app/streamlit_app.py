@@ -57,6 +57,7 @@ LABELS = {
         "retrieved": "Chunks récupérés",
         "reranked": "Chunks reclassés",
         "model": "Modèle utilisé",
+        "model_key": "Clé catalogue",
         "cost": "Coût",
         "elapsed": "Temps de réponse",
         "conv_id_label": "Identifiant de conversation",
@@ -110,6 +111,7 @@ LABELS = {
         "retrieved": "Retrieved chunks",
         "reranked": "Reranked chunks",
         "model": "Model used",
+        "model_key": "Catalog key",
         "cost": "Cost",
         "elapsed": "Response time",
         "conv_id_label": "Conversation ID",
@@ -153,6 +155,18 @@ TRANSLATION_MODEL = "gpt-4o-mini"
 TITLE_MAX_LEN = 45  # truncate long questions for sidebar titles
 
 LANG_OPTIONS = ["🇫🇷 FR", "🇬🇧 EN"]
+
+# Answer-model toggle (ADR #46). Keys must match rag.generate.ANSWER_MODELS.
+MODEL_LABELS = {
+    "gpt-4o-mini": "⚡ Rapide",
+    "opus-4.7": "🧠 Opus 4.7",
+    "kimi-k3": "🔬 Kimi K3",
+}
+COST_HINTS = {
+    "gpt-4o-mini": "~0,001€/question",
+    "opus-4.7": "~0,05€/question",
+    "kimi-k3": "~0,03€/question",
+}
 
 
 # ========== feedback wrapper (delegates to monitoring.db) ==========
@@ -271,6 +285,7 @@ def _init_session_state() -> None:
     active_conversation_id: str | None — currently displayed thread
     lang: 'fr' | 'en'
     models_warm: bool
+    answer_model: str — ANSWER_MODELS catalog key (ADR #46)
     """
     if "conversations" not in st.session_state:
         # Idempotent — no-op after first session if Postgres already has
@@ -283,6 +298,7 @@ def _init_session_state() -> None:
         st.session_state.lang = "fr"
     if "models_warm" not in st.session_state:
         st.session_state.models_warm = False
+    st.session_state.setdefault("answer_model", "gpt-4o-mini")
 
 
 # ========== env validation (startup fail-loud) ==========
@@ -323,6 +339,27 @@ def _render_lang_toggle() -> None:
         st.rerun()
 
 
+# ========== sidebar model toggle (ADR #46) ==========
+
+def _render_model_toggle() -> None:
+    """Answer-model selector. Session state persists the ANSWER_MODELS key."""
+    current_label = MODEL_LABELS[st.session_state.answer_model]
+    choice = st.segmented_control(
+        "Modèle",
+        options=list(MODEL_LABELS.values()),
+        default=current_label,
+        key="model_selector",
+    )
+    if choice is None:
+        return
+    label_to_key = {v: k for k, v in MODEL_LABELS.items()}
+    new_key = label_to_key[choice]
+    if new_key != st.session_state.answer_model:
+        st.session_state.answer_model = new_key
+        st.rerun()
+    st.caption(f"Coût estimé : {COST_HINTS[st.session_state.answer_model]}")
+
+
 # ========== sidebar (new-chat + conversations + docs placeholder + about) ==========
 
 def _render_sidebar(labels: dict) -> None:
@@ -336,6 +373,11 @@ def _render_sidebar(labels: dict) -> None:
         ):
             st.session_state.active_conversation_id = None
             st.rerun()
+
+        st.divider()
+
+        # --- Answer-model toggle (ADR #46) ---
+        _render_model_toggle()
 
         st.divider()
 
@@ -512,6 +554,7 @@ def _render_turn_details(turn: dict, conv: dict, labels: dict) -> None:
             ("chunks_retrieved", labels["retrieved"]),
             ("chunks_reranked", labels["reranked"]),
             ("model_used", labels["model"]),
+            ("answer_model_key", labels["model_key"]),
             ("cost_usd", labels["cost"]),
             ("elapsed_seconds", labels["elapsed"]),
         ]
@@ -539,7 +582,10 @@ def _render_turn(
             )
             with st.spinner(spinner_msg):
                 try:
-                    turn["result"] = get_flow().run(turn["question"])
+                    turn["result"] = get_flow().run(
+                        turn["question"],
+                        answer_model=st.session_state.answer_model,
+                    )
                     st.session_state.models_warm = True
                 except Exception:  # noqa: BLE001 — user-facing fallback
                     st.error(labels["error"])
