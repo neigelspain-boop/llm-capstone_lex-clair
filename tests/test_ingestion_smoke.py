@@ -649,7 +649,7 @@ def test_flow_run_default_source_scope_is_statute(monkeypatch) -> None:
     monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
     monkeypatch.setattr(
         flow.generate, "generate",
-        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
+        lambda p, model_key=None: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "model_id": "openai/gpt-4o-mini", "model_key": model_key or "gpt-4o-mini"}),
     )
 
     flow.run("Qu'est-ce que le quasi-usufruit ?")
@@ -668,7 +668,7 @@ def test_flow_run_passes_source_scope_through(monkeypatch) -> None:
     monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
     monkeypatch.setattr(
         flow.generate, "generate",
-        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
+        lambda p, model_key=None: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "model_id": "openai/gpt-4o-mini", "model_key": model_key or "gpt-4o-mini"}),
     )
 
     flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope="case:demo")
