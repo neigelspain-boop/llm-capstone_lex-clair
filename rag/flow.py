@@ -23,7 +23,8 @@ Return shape locked here for downstream consumers:
     "rewritten_query": str,      # for debugging / eval
     "chunks_retrieved": int,     # always 20 in V1
     "chunks_reranked": int,      # always 5 in V1
-    "model_used": str,           # "openai/gpt-4o-mini" in V1 (ADR #40)
+    "model_used": str,           # OpenRouter model_id of the selected answer model (ADR #45)
+    "answer_model_key": str,     # ANSWER_MODELS catalog key that produced this answer (ADR #45)
     "cost_usd": float,           # includes rewrite + generate calls
     "elapsed_seconds": float,    # end-to-end wall time
     "route_decision": dict,      # {intent, source_scope, confidence, rationale} (ADR #42)
@@ -41,28 +42,15 @@ from rag.router import route_query
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 
-# gpt-4o-mini pricing (source: openai.com/pricing, Day 3 ADR #19).
-# Kept at flow layer, not generate layer, so pricing updates touch one file.
-GPT_4O_MINI_INPUT_PER_M = 0.15
-GPT_4O_MINI_OUTPUT_PER_M = 0.60
-
 RETRIEVE_K = 20
 RERANK_K = 5
-
-
-def _compute_cost(tokens: dict, model: str = "openai/gpt-4o-mini") -> float:
-    """Compute USD cost from token counts. V1: gpt-4o-mini only."""
-    if model != "openai/gpt-4o-mini":
-        return 0.0  # unknown pricing → fail-quiet, not fail-loud
-    input_cost = tokens["prompt_tokens"] * GPT_4O_MINI_INPUT_PER_M / 1_000_000
-    output_cost = tokens["completion_tokens"] * GPT_4O_MINI_OUTPUT_PER_M / 1_000_000
-    return input_cost + output_cost
 
 
 def run(
     query: str,
     source_scope: str | None = None,
     active_case_id: str | None = None,
+    answer_model: str = "gpt-4o-mini",
     verbose: bool = False,
 ) -> dict:
     """Run the full RAG flow. Returns the locked dict spec (see module docstring).
@@ -71,6 +59,10 @@ def run(
     (rag.router.route_query) infers scope from query intent + active_case_id.
     Passing an explicit value skips the router entirely — used by tests and
     the UI scope dropdown (B5).
+
+    answer_model (ADR #45, default "gpt-4o-mini"): key into
+    generate.ANSWER_MODELS selecting which model answers the query. Passed
+    straight through to generate.generate() as model_key.
     """
     t0 = time()
 
@@ -114,7 +106,7 @@ def run(
         log.info("prompt built: %d chars", len(p))
 
     # 5. generate
-    answer, tokens = generate.generate(p)
+    answer, tokens = generate.generate(p, model_key=answer_model)
 
     took = time() - t0
 
@@ -127,8 +119,9 @@ def run(
         "rewritten_query": rewritten,
         "chunks_retrieved": len(candidates),
         "chunks_reranked": len(top_chunks),
-        "model_used": generate.MODEL,
-        "cost_usd": _compute_cost(tokens, generate.MODEL),
+        "model_used": tokens["model_id"],
+        "answer_model_key": tokens["model_key"],
+        "cost_usd": tokens["cost_usd"],
         "elapsed_seconds": took,
         "route_decision": route_decision,
     }

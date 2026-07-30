@@ -1,16 +1,28 @@
-"""Plane II fast smoke tests: query router (Day B, Deliverable B2, ADR #42).
+"""Plane II fast smoke tests: query router (Day B, Deliverable B2, ADR #42),
+compliance matrix generator (Day B, Deliverable B3, ADR #43), cross-role
+context annotation (Day B, Deliverable C1, ADR #44), and the answer model
+catalog (Day C, Deliverable C2, ADR #45).
 
 Router unit tests mock rag.router.get_openrouter_client so no network call
 happens. Flow integration tests mock rag.flow.route_query, rag.flow.rewrite,
 rag.flow.retrieve, rag.flow.generate — same monkeypatch style as the B1
-tests in tests/test_ingestion_smoke.py.
+tests in tests/test_ingestion_smoke.py. Compliance tests mock
+rag.compliance.get_openrouter_client and rag.compliance.retrieve, and use a
+synthetic tmp_path fixture case (data/dossier/demo/*.jsonl are empty, so
+there's no real demo case to run an end-to-end test against). Generate unit
+tests mock rag.generate.get_openrouter_client the same way the router tests
+do.
 """
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+
+from ingestion.dossier.facts import ActorRole, Fact, RoleAmbiguity
 
 
 # ========== helpers ==========
@@ -27,6 +39,22 @@ def _mock_openrouter_client(content: str) -> MagicMock:
 
 def _classifier_json(intent: str, confidence: str = "high", rationale: str = "test") -> str:
     return json.dumps({"intent": intent, "confidence": confidence, "rationale": rationale})
+
+
+def _mock_generate(prompt: str, model_key: str | None = None) -> tuple[str, dict]:
+    """Stand-in for rag.generate.generate used by flow tests — mirrors the
+    real usage dict shape (ADR #45) so flow.run()'s tokens["model_id"] /
+    tokens["cost_usd"] / tokens["model_key"] reads don't KeyError."""
+    key = model_key or "gpt-4o-mini"
+    from rag.generate import ANSWER_MODELS
+
+    return "mocked answer", {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cost_usd": 0.0,
+        "model_id": ANSWER_MODELS[key]["model_id"],
+        "model_key": key,
+    }
 
 
 # ========== router unit tests ==========
@@ -147,10 +175,7 @@ def test_flow_run_uses_router_when_scope_none(monkeypatch) -> None:
     monkeypatch.setattr(flow, "route_query", mock_route_query)
     monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
     monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
-    monkeypatch.setattr(
-        flow.generate, "generate",
-        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
-    )
+    monkeypatch.setattr(flow.generate, "generate", _mock_generate)
 
     result = flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope=None)
 
@@ -167,10 +192,7 @@ def test_flow_run_skips_router_when_scope_provided(monkeypatch) -> None:
     monkeypatch.setattr(flow, "route_query", mock_route_query)
     monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
     monkeypatch.setattr(flow.retrieve, "retrieve", mock_retrieve)
-    monkeypatch.setattr(
-        flow.generate, "generate",
-        lambda p: ("mocked answer", {"prompt_tokens": 0, "completion_tokens": 0}),
-    )
+    monkeypatch.setattr(flow.generate, "generate", _mock_generate)
 
     result = flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope="blended")
 
@@ -178,3 +200,625 @@ def test_flow_run_skips_router_when_scope_provided(monkeypatch) -> None:
     assert mock_retrieve.call_args.kwargs["source_scope"] == "blended"
     assert result["route_decision"]["intent"] == "override"
     assert result["route_decision"]["source_scope"] == "blended"
+
+
+# ========== answer model catalog tests (C2, ADR #45) ==========
+
+def test_flow_run_default_answer_model_is_gpt4o_mini(monkeypatch) -> None:
+    from rag import flow
+
+    mock_generate = MagicMock(side_effect=_mock_generate)
+    monkeypatch.setattr(flow, "route_query", MagicMock())
+    monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
+    monkeypatch.setattr(flow.retrieve, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr(flow.generate, "generate", mock_generate)
+
+    flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope="statute")
+
+    assert mock_generate.call_args.kwargs["model_key"] == "gpt-4o-mini"
+
+
+def test_flow_run_passes_answer_model_through(monkeypatch) -> None:
+    from rag import flow
+
+    mock_generate = MagicMock(side_effect=_mock_generate)
+    monkeypatch.setattr(flow, "route_query", MagicMock())
+    monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
+    monkeypatch.setattr(flow.retrieve, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr(flow.generate, "generate", mock_generate)
+
+    flow.run(
+        "Qu'est-ce que le quasi-usufruit ?",
+        source_scope="statute",
+        answer_model="opus-4.7",
+    )
+
+    assert mock_generate.call_args.kwargs["model_key"] == "opus-4.7"
+
+
+def test_flow_run_return_dict_includes_answer_model_key(monkeypatch) -> None:
+    from rag import flow
+
+    monkeypatch.setattr(flow, "route_query", MagicMock())
+    monkeypatch.setattr(flow.rewrite, "rewrite", lambda q: q)
+    monkeypatch.setattr(flow.retrieve, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr(flow.generate, "generate", _mock_generate)
+
+    result = flow.run(
+        "Qu'est-ce que le quasi-usufruit ?",
+        source_scope="statute",
+        answer_model="kimi-k3",
+    )
+
+    assert result["answer_model_key"] == "kimi-k3"
+    assert result["model_used"] == "moonshotai/kimi-k3"
+
+
+def test_generate_invalid_model_key_raises() -> None:
+    from rag.generate import generate
+
+    with pytest.raises(ValueError, match="unknown model_key"):
+        generate("prompt", model_key="not-a-real-model")
+
+
+def test_generate_default_model_uses_gpt4o_mini(monkeypatch) -> None:
+    from rag import generate
+
+    client = _mock_openrouter_client("answer text")
+    client.chat.completions.create.return_value.usage = MagicMock(
+        prompt_tokens=100, completion_tokens=50,
+    )
+    monkeypatch.setattr(generate, "get_openrouter_client", lambda: client)
+
+    generate.generate("prompt")
+
+    call_kwargs = client.chat.completions.create.call_args.kwargs
+    assert call_kwargs["model"] == "openai/gpt-4o-mini"
+    assert "extra_body" not in call_kwargs
+
+
+def test_generate_opus_uses_reasoning_effort(monkeypatch) -> None:
+    from rag import generate
+
+    client = _mock_openrouter_client("answer text")
+    client.chat.completions.create.return_value.usage = MagicMock(
+        prompt_tokens=100, completion_tokens=50,
+    )
+    monkeypatch.setattr(generate, "get_openrouter_client", lambda: client)
+
+    generate.generate("prompt", model_key="opus-4.7")
+
+    call_kwargs = client.chat.completions.create.call_args.kwargs
+    assert call_kwargs["model"] == "anthropic/claude-opus-4.7"
+    assert call_kwargs["extra_body"] == {"reasoning": {"effort": "max"}}
+
+
+def test_generate_kimi_uses_reasoning_effort(monkeypatch) -> None:
+    from rag import generate
+
+    client = _mock_openrouter_client("answer text")
+    client.chat.completions.create.return_value.usage = MagicMock(
+        prompt_tokens=100, completion_tokens=50,
+    )
+    monkeypatch.setattr(generate, "get_openrouter_client", lambda: client)
+
+    generate.generate("prompt", model_key="kimi-k3")
+
+    call_kwargs = client.chat.completions.create.call_args.kwargs
+    assert call_kwargs["model"] == "moonshotai/kimi-k3"
+    assert call_kwargs["extra_body"] == {"reasoning": {"effort": "max"}}
+
+
+def test_generate_cost_calculation_from_catalog(monkeypatch) -> None:
+    from rag import generate
+
+    prompt_tokens, completion_tokens = 1000, 500
+
+    for model_key, cfg in generate.ANSWER_MODELS.items():
+        client = _mock_openrouter_client("answer text")
+        client.chat.completions.create.return_value.usage = MagicMock(
+            prompt_tokens=prompt_tokens, completion_tokens=completion_tokens,
+        )
+        monkeypatch.setattr(generate, "get_openrouter_client", lambda c=client: c)
+
+        _, usage = generate.generate("prompt", model_key=model_key)
+
+        expected_cost = (
+            prompt_tokens * cfg["cost_input_per_m"] / 1_000_000
+            + completion_tokens * cfg["cost_output_per_m"] / 1_000_000
+        )
+        assert usage["cost_usd"] == pytest.approx(expected_cost)
+        assert usage["model_id"] == cfg["model_id"]
+        assert usage["model_key"] == model_key
+
+
+# ========== compliance matrix tests (B3, ADR #43) ==========
+
+def _compliance_entries_json() -> str:
+    return json.dumps([
+        {
+            "statute_chunk_id": "cc-587",
+            "statute_excerpt": "L'usufruitier doit conserver la substance des choses.",
+            "obligation_summary": "Conserver la substance des biens quasi-usufruits.",
+            "status": "met",
+            "evidence_fact_ids": ["doc1-f001"],
+            "rationale": "Les faits montrent la remise de la convention. Aucune irrégularité constatée.",
+        },
+    ])
+
+
+def _mock_chunks() -> list[dict]:
+    return [
+        {
+            "chunk_id": "cc-587", "num": "587", "titre": "Code civil", "section_path": "Livre II",
+            "texte": "L'usufruitier doit conserver la substance des choses.",
+            "source": "legifrance", "source_label": "Code civil", "url": "https://example.test/cc-587",
+            "rrf_score": 0.9,
+        },
+    ]
+
+
+def _mock_compliance_client(content: str, cost: float = 0.005) -> MagicMock:
+    """Like _mock_openrouter_client, but with usage.prompt_tokens/
+    completion_tokens/cost set to real numbers (not MagicMock attributes) —
+    rag.compliance sums these across role groups, which breaks on an
+    un-configured MagicMock auto-attribute."""
+    client = _mock_openrouter_client(content)
+    client.chat.completions.create.return_value.usage = MagicMock(
+        prompt_tokens=100, completion_tokens=50, cost=cost,
+    )
+    return client
+
+
+def _write_fixture_case(base_dir: Path, case_id: str) -> None:
+    """Write a small synthetic case (2 roles, 3 facts, 1 ambiguity) to
+    base_dir/case_id/*.jsonl. data/dossier/demo/*.jsonl are empty in this
+    repo, so there's no real demo case to test against."""
+    case_dir = base_dir / case_id
+    case_dir.mkdir(parents=True, exist_ok=True)
+
+    facts = [
+        Fact(
+            fact_id="doc1-f001", date="2024-01-10", actor_role="notaire_redacteur",
+            action="recevoir une convention de quasi-usufruit", target="convention",
+            verbatim_quote="Le notaire reçoit la convention de quasi-usufruit.",
+            source_doc_id="doc1", source_chunk_id="dossier-testcase-doc1-c001",
+        ),
+        Fact(
+            fact_id="doc1-f002", date="2024-01-15", actor_role="notaire_redacteur",
+            action="informer les heritiers de leurs droits", target="heritiers",
+            verbatim_quote="Le notaire informe les héritiers de leurs droits.",
+            source_doc_id="doc1", source_chunk_id="dossier-testcase-doc1-c002",
+        ),
+        Fact(
+            fact_id="doc2-f001", date="2024-02-01", actor_role="heritier_nu_proprietaire",
+            action="signer la convention", target="convention",
+            verbatim_quote="L'héritier signe la convention de quasi-usufruit.",
+            source_doc_id="doc2", source_chunk_id="dossier-testcase-doc2-c001",
+        ),
+    ]
+    roles = [
+        ActorRole(
+            role_id="notaire_redacteur", label_fr="Notaire rédacteur",
+            grounding_note="Notaire ayant rédigé l'acte.", first_seen_doc_id="doc1",
+            fact_count=2, confidence="high",
+        ),
+        ActorRole(
+            role_id="heritier_nu_proprietaire", label_fr="Héritier nu-propriétaire",
+            grounding_note="Héritier titulaire de la nue-propriété.", first_seen_doc_id="doc2",
+            fact_count=1, confidence="high",
+        ),
+    ]
+    ambiguities = [
+        RoleAmbiguity(
+            ambiguity_id="doc1-a001", source_doc_id="doc1",
+            verbatim_quote="Maître X a signé.",
+            candidate_role_ids=["notaire_associe", "notaire_stagiaire"],
+            note="Statut du signataire incertain.", fact_ids=["doc1-f001"],
+        ),
+    ]
+
+    with (case_dir / "facts.jsonl").open("w", encoding="utf-8") as f:
+        for fact in facts:
+            f.write(fact.model_dump_json() + "\n")
+    with (case_dir / "actor_roles.jsonl").open("w", encoding="utf-8") as f:
+        for role in roles:
+            f.write(role.model_dump_json() + "\n")
+    with (case_dir / "role_ambiguities.jsonl").open("w", encoding="utf-8") as f:
+        for amb in ambiguities:
+            f.write(amb.model_dump_json() + "\n")
+
+
+def test_compliance_entry_schema_validates() -> None:
+    from rag.compliance import ComplianceEntry
+
+    entry = ComplianceEntry(
+        entry_id="abc123def456",
+        statute_chunk_id="cc-587",
+        statute_excerpt="Le quasi-usufruitier doit conserver la substance des biens.",
+        obligation_summary="L'usufruitier doit conserver la substance des biens.",
+        actor_role="quasi_usufruitier",
+        status="met",
+        evidence_fact_ids=["doc1-f001"],
+        rationale="Les faits montrent que l'usufruitier a respecté cette obligation. Aucune preuve contraire.",
+    )
+
+    assert entry.status == "met"
+    assert entry.entry_id == "abc123def456"
+
+
+def test_compliance_entry_id_deterministic() -> None:
+    from rag.compliance import _entry_id
+
+    id1 = _entry_id("cc-587", "notaire_redacteur")
+    id2 = _entry_id("cc-587", "notaire_redacteur")
+
+    assert id1 == id2
+    assert len(id1) == 12
+    assert id1 != _entry_id("cc-587", "heritier_nu_proprietaire")
+
+
+def test_compliance_handles_json_fence_wrapper() -> None:
+    from rag.compliance import _parse_compliance_response
+
+    wrapped = "```json\n" + _compliance_entries_json() + "\n```"
+    parsed = _parse_compliance_response(wrapped, role_id="notaire_redacteur")
+
+    assert len(parsed) == 1
+    assert parsed[0]["statute_chunk_id"] == "cc-587"
+
+
+def test_compliance_handles_trailing_prose() -> None:
+    from rag.compliance import _parse_compliance_response
+
+    raw = _compliance_entries_json() + "\n\nCeci est une analyse basée sur les faits fournis."
+    parsed = _parse_compliance_response(raw, role_id="notaire_redacteur")
+
+    assert len(parsed) == 1
+    assert parsed[0]["statute_chunk_id"] == "cc-587"
+
+
+def test_compliance_parse_recovers_leading_entries_on_trailing_truncation(caplog) -> None:
+    from rag.compliance import _parse_compliance_response
+
+    good_entry = json.loads(_compliance_entries_json())[0]
+    truncated_tail = (
+        '{"statute_chunk_id": "cc-601", "statute_excerpt": "Le nu-propri\\u00e9taire doit'
+    )
+    raw = "[" + json.dumps(good_entry) + ",\n" + truncated_tail
+
+    with caplog.at_level("WARNING"):
+        parsed = _parse_compliance_response(raw, role_id="notaire_redacteur")
+
+    assert len(parsed) == 1
+    assert parsed[0]["statute_chunk_id"] == "cc-587"
+    assert any("partial parse recovered 1" in rec.message for rec in caplog.records)
+
+
+def test_compliance_matrix_idempotent(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(
+        compliance, "get_openrouter_client",
+        lambda: _mock_compliance_client(_compliance_entries_json()),
+    )
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+    fixed_time = datetime(2026, 7, 28, 12, 0, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(compliance, "_utcnow", lambda: fixed_time)
+
+    compliance.generate_compliance_matrix("testcase")
+    out_path = tmp_path / "testcase" / "compliance_matrix.json"
+    content1 = out_path.read_bytes()
+
+    compliance.generate_compliance_matrix("testcase")
+    content2 = out_path.read_bytes()
+
+    assert content1 == content2
+
+
+def test_compliance_matrix_end_to_end_demo_with_mocked_llm(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "demo")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(
+        compliance, "get_openrouter_client",
+        lambda: _mock_compliance_client(_compliance_entries_json()),
+    )
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.generate_compliance_matrix("demo")
+
+    out_path = tmp_path / "demo" / "compliance_matrix.json"
+    assert out_path.exists()
+
+    data = json.loads(out_path.read_text(encoding="utf-8"))
+    loaded = compliance.ComplianceMatrix.model_validate(data)
+
+    assert loaded.total_entries == len(loaded.entries)
+    assert len(loaded.entries) == 2  # one entry per role group in the fixture
+    entry_ids = [e.entry_id for e in loaded.entries]
+    assert len(entry_ids) == len(set(entry_ids))
+    assert loaded.unresolved_ambiguities == 1
+    for entry in loaded.entries:
+        assert entry.status in {"met", "breached", "ambiguous", "insufficient_evidence"}
+
+
+def test_compliance_cli_dry_run_no_api_calls(tmp_path, monkeypatch, capsys) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+
+    def _fail_if_called():
+        raise AssertionError("get_openrouter_client must not be called in --dry-run")
+
+    monkeypatch.setattr(compliance, "get_openrouter_client", _fail_if_called)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+    monkeypatch.setattr("sys.argv", ["rag.compliance", "--case-id", "testcase", "--dry-run"])
+
+    compliance.main()
+
+    captured = capsys.readouterr()
+    assert "compliance dry-run" in captured.out
+    assert "est_prompt_tokens" in captured.out
+    assert not (tmp_path / "testcase" / "compliance_matrix.json").exists()
+
+
+def test_compliance_cli_limit_caps_role_groups(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(
+        compliance, "get_openrouter_client",
+        lambda: _mock_compliance_client(_compliance_entries_json()),
+    )
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    call_log: list[str] = []
+    original_call = compliance._call_compliance_llm
+
+    def _tracking_call(role_id, *args, **kwargs):
+        call_log.append(role_id)
+        return original_call(role_id, *args, **kwargs)
+
+    monkeypatch.setattr(compliance, "_call_compliance_llm", _tracking_call)
+    monkeypatch.setattr("sys.argv", ["rag.compliance", "--case-id", "testcase", "--limit", "1"])
+
+    compliance.main()
+
+    assert len(call_log) == 1
+
+
+# ========== cross-role context tests (C1, ADR #44) ==========
+
+def _write_fixture_case_cross_role(base_dir: Path, case_id: str) -> None:
+    """Two role clusters sharing a source_doc_id, so the C1 cross-role block
+    is triggered — unlike _write_fixture_case, whose two roles sit on
+    different docs (doc1 vs doc2) and so never trigger it."""
+    case_dir = base_dir / case_id
+    case_dir.mkdir(parents=True, exist_ok=True)
+
+    facts = [
+        Fact(
+            fact_id="doc1-f001", date="2024-01-10", actor_role="heritier_nu_proprietaire",
+            action="signer la convention", target="convention",
+            verbatim_quote="L'héritier nu-propriétaire signe la convention.",
+            source_doc_id="doc1", source_chunk_id="dossier-crosscase-doc1-c001",
+        ),
+        Fact(
+            fact_id="doc1-f002", date="2024-01-12", actor_role="heritier_representation",
+            action="recevoir notification", target="notification",
+            verbatim_quote="L'héritier par représentation reçoit notification.",
+            source_doc_id="doc1", source_chunk_id="dossier-crosscase-doc1-c002",
+        ),
+    ]
+    roles = [
+        ActorRole(
+            role_id="heritier_nu_proprietaire", label_fr="Héritier nu-propriétaire",
+            grounding_note="Héritier titulaire de la nue-propriété.", first_seen_doc_id="doc1",
+            fact_count=1, confidence="high",
+        ),
+        ActorRole(
+            role_id="heritier_representation", label_fr="Héritier par représentation",
+            grounding_note="Héritier venant en représentation d'un héritier prédécédé.",
+            first_seen_doc_id="doc1", fact_count=1, confidence="high",
+        ),
+    ]
+
+    with (case_dir / "facts.jsonl").open("w", encoding="utf-8") as f:
+        for fact in facts:
+            f.write(fact.model_dump_json() + "\n")
+    with (case_dir / "actor_roles.jsonl").open("w", encoding="utf-8") as f:
+        for role in roles:
+            f.write(role.model_dump_json() + "\n")
+
+
+def test_extract_cross_role_context_no_shared_docs_returns_empty() -> None:
+    from rag.compliance import _extract_cross_role_context
+
+    cluster_facts = [
+        Fact(
+            fact_id="doc_x-f001", date=None, actor_role="role_a", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    all_facts = cluster_facts + [
+        Fact(
+            fact_id="doc_y-f001", date=None, actor_role="role_b", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_y", source_chunk_id=None,
+        ),
+    ]
+
+    result = _extract_cross_role_context("role_a", cluster_facts, all_facts, [])
+
+    assert result == ""
+
+
+def test_extract_cross_role_context_single_shared_role() -> None:
+    from rag.compliance import _extract_cross_role_context
+
+    cluster_facts = [
+        Fact(
+            fact_id="doc_x-f001", date=None, actor_role="role_a", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    all_facts = cluster_facts + [
+        Fact(
+            fact_id="doc_x-f002", date=None, actor_role="role_b", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    actor_roles = [
+        ActorRole(
+            role_id="role_b", label_fr="Rôle B", grounding_note="note",
+            first_seen_doc_id="doc_x", fact_count=1, confidence="high",
+        ),
+    ]
+
+    result = _extract_cross_role_context("role_a", cluster_facts, all_facts, actor_roles)
+
+    assert "role_b" in result
+    assert "Rôle B" in result
+
+
+def test_extract_cross_role_context_multiple_shared_roles() -> None:
+    from rag.compliance import _extract_cross_role_context
+
+    cluster_facts = [
+        Fact(
+            fact_id="doc_x-f001", date=None, actor_role="role_a", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_x", source_chunk_id=None,
+        ),
+        Fact(
+            fact_id="doc_y-f001", date=None, actor_role="role_a", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_y", source_chunk_id=None,
+        ),
+    ]
+    all_facts = cluster_facts + [
+        Fact(
+            fact_id="doc_x-f002", date=None, actor_role="role_b", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_x", source_chunk_id=None,
+        ),
+        Fact(
+            fact_id="doc_y-f002", date=None, actor_role="role_c", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id="doc_y", source_chunk_id=None,
+        ),
+    ]
+
+    result = _extract_cross_role_context("role_a", cluster_facts, all_facts, [])
+
+    assert "role_b" in result
+    assert "role_c" in result
+
+
+def test_extract_cross_role_context_caps_doc_list_at_3() -> None:
+    from rag.compliance import _extract_cross_role_context
+
+    cluster_facts = [
+        Fact(
+            fact_id=f"doc{i}-f001", date=None, actor_role="role_a", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id=f"doc{i}", source_chunk_id=None,
+        )
+        for i in range(1, 6)
+    ]
+    shared_facts = [
+        Fact(
+            fact_id=f"doc{i}-f002", date=None, actor_role="role_b", action="agir",
+            target=None, verbatim_quote="quote", source_doc_id=f"doc{i}", source_chunk_id=None,
+        )
+        for i in range(1, 6)
+    ]
+    all_facts = cluster_facts + shared_facts
+
+    result = _extract_cross_role_context("role_a", cluster_facts, all_facts, [])
+
+    assert "doc1" in result and "doc2" in result and "doc3" in result
+    assert "doc4" not in result and "doc5" not in result
+    assert "(…)" in result
+
+
+def test_build_user_message_includes_cross_role_when_present() -> None:
+    from rag.compliance import _build_user_message
+
+    facts_a = [
+        Fact(
+            fact_id="doc_x-f001", date="2024-01-01", actor_role="role_a",
+            action="signer", target="doc", verbatim_quote="Signature.",
+            source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    facts_b = [
+        Fact(
+            fact_id="doc_x-f002", date="2024-01-02", actor_role="role_b",
+            action="notifier", target="doc", verbatim_quote="Notification.",
+            source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    all_facts = facts_a + facts_b
+    actor_roles = [
+        ActorRole(
+            role_id="role_b", label_fr="Rôle B", grounding_note="note",
+            first_seen_doc_id="doc_x", fact_count=1, confidence="high",
+        ),
+    ]
+
+    message = _build_user_message("role_a", "Rôle A", facts_a, _mock_chunks(), all_facts, actor_roles)
+
+    assert "Contexte inter-rôles" in message
+
+
+def test_build_user_message_omits_cross_role_when_empty() -> None:
+    from rag.compliance import _build_user_message
+
+    facts_a = [
+        Fact(
+            fact_id="doc_x-f001", date="2024-01-01", actor_role="role_a",
+            action="signer", target="doc", verbatim_quote="Signature.",
+            source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+
+    message = _build_user_message("role_a", "Rôle A", facts_a, _mock_chunks(), facts_a, [])
+
+    assert "Contexte inter-rôles" not in message
+
+
+def test_generate_compliance_matrix_end_to_end_with_cross_role_mocked(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case_cross_role(tmp_path, "crosscase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+
+    captured_messages: list[str] = []
+
+    def _tracking_client() -> MagicMock:
+        client = _mock_compliance_client(_compliance_entries_json())
+        original_create = client.chat.completions.create
+
+        def _create(*args, **kwargs):
+            captured_messages.append(kwargs["messages"][1]["content"])
+            return original_create(*args, **kwargs)
+
+        client.chat.completions.create = _create
+        return client
+
+    monkeypatch.setattr(compliance, "get_openrouter_client", _tracking_client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.generate_compliance_matrix("crosscase")
+
+    out_path = tmp_path / "crosscase" / "compliance_matrix.json"
+    assert out_path.exists()
+
+    data = json.loads(out_path.read_text(encoding="utf-8"))
+    loaded = compliance.ComplianceMatrix.model_validate(data)
+
+    assert loaded.total_entries == len(loaded.entries)
+    for entry in loaded.entries:
+        assert entry.status in {"met", "breached", "ambiguous", "insufficient_evidence"}
+    assert any("Contexte inter-rôles" in msg for msg in captured_messages)

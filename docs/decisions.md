@@ -630,10 +630,10 @@ problem at the API layer.
   between questions and source text. BM25 has less to match on than a
   natural query distribution would provide. This biases retrieval eval
   against lexical methods, and is the direct cause of the counter-
-  intuitive result documented in ADR #20 (hybrid loses to vector).
+  intuitive result documented in ADR  (hybrid loses to vector).
 - Real users may cite article numbers verbatim after receiving legal
   correspondence ("qu'est-ce que dit l'art 815 ?"). The prompt explicitly
-  strips article numbers from generated questions, so this query mode is
+  strips article numbers from generated que#20stions, so this query mode is
   under-represented in eval.
 - Temperature 0.7 makes re-generation non-deterministic — reviewers who
   re-run `eval/ground_truth.py` will get different (but similar-quality)
@@ -1757,3 +1757,235 @@ included in the return dict as `"route_decision"`.
   queries.
 - B5 wires the UI's scope selector and surfaces `route_decision` to the
   user.
+
+## ADR #43 — Compliance matrix generation as Day B reasoning stage
+
+**Date:** 2026-07-28 · **Branch:** v2-agentic (Day B, Deliverable B3) · **Status:** Accepted
+
+### Context
+
+Plane Ib (`facts.jsonl`, `actor_roles.jsonl`, `role_ambiguities.jsonl`) is
+now the structured substrate for a case — facts extracted and validated
+(Deliverable 5), roles discovered and catalogued (ADR #36), retrieval
+scoped to statute vs. dossier vs. blended (ADR #41), and query intent
+auto-routed to the right scope (ADR #42). None of that reasons about
+*compliance* yet: whether the obligations the statute imposes on each
+actor role were actually met. B3 is that reasoning stage — the first
+deliverable to produce a legally-grounded judgment rather than retrieve or
+classify.
+
+### Decision
+
+A new module, `rag/compliance.py`, exposes
+`generate_compliance_matrix(case_id, limit=None, dry_run=False) ->
+ComplianceMatrix`. Facts are grouped by exact `actor_role` string (no fuzzy
+dedup of near-duplicate role_ids — see Follow-ups). For each role cluster,
+`rag/retrieve.py::retrieve()` (ADR #41's `source_scope` filtering, already
+hardcoded to `mode="vector"` per ADR #20) fetches the top
+`RELEVANT_STATUTE_K=8` statute chunks for a query built from the role's
+label + its top action verbs. One call to `anthropic/claude-opus-4.7` with
+`reasoning={"effort": "max"}` then judges, per identifiable obligation in
+the retrieved articles, whether it was `met`, `breached`, `ambiguous`, or
+`insufficient_evidence` — this is the one deliverable in the pipeline that
+justifies Opus-class reasoning cost; every other LLM call (routing,
+rewriting, fact extraction) uses a cheaper model.
+
+Two corrections against the original spec, confirmed live against
+OpenRouter's `/v1/models` and a real dry-call before writing any code: the
+model slug is `anthropic/claude-opus-4.7` (a dot, not a hyphen — the
+originally-specified `claude-opus-4-7` doesn't exist), and `"max"` is a
+`reasoning.effort` enum value (`"max"|"xhigh"|"high"|"medium"|"low"|"minimal"|"none"`),
+not a model suffix. A third correction surfaced at ship-gate: the OpenAI
+SDK's typed `chat.completions.create()` rejects a bare `reasoning` kwarg,
+so it's passed via `extra_body={"reasoning": {"effort": "max"}}` — the
+SDK's standard transport for provider-specific fields, which OpenRouter
+still receives as `"reasoning": {"effort": "max"}` at the top level of the
+request body.
+
+Response parsing mirrors `ingestion/dossier/facts.py::_parse_llm_json`
+(fence-strip + `json.JSONDecoder().raw_decode()`, tolerant of trailing
+prose), adapted for a top-level JSON list instead of a dict. Each parsed
+entry gets a deterministic `entry_id = SHA1(statute_chunk_id + "|" +
+actor_role)[:12]`, so a future merge-on-rerun mode (not implemented here)
+wouldn't produce duplicate rows for the same obligation/role pair. Output
+is fully regenerated (no merge) and written to
+`data/dossier/<case_id>/compliance_matrix.json` on every run —
+idempotency is achieved via an injectable `_utcnow()` clock rather than a
+literal `datetime.now()` call, so the same inputs always serialize to the
+same bytes.
+
+Each role cluster is capped at 30 facts (`MAX_FACTS_PER_ROLE`), keeping the
+chronologically earliest facts when a role exceeds the cap and logging a
+`WARNING` with `role_id`, actual count, and the cap. Heavy roles in the
+private case (e.g. `notaire_redacteur`) run 20-40 facts; uncapped, the user
+message balloons past 5K tokens before statute chunks are even added, and
+Opus's coherence degrades reasoning across too many facts in one call.
+Chronological truncation is a stopgap, not a real solution — see
+Follow-ups.
+
+`ComplianceMatrix.unresolved_ambiguities` is set to the bare
+`len(role_ambiguities)` loaded for the case — a total count for v1, not a
+per-entry link between a specific ambiguity and the determinations it may
+have blocked (see Follow-ups).
+
+Cost: real (non-`--dry-run`) calls sum OpenRouter's exact per-response
+`usage.cost` field across role groups for the `compliance summary`
+log line, rather than maintaining a hardcoded per-model price table (the
+fallback `rag/flow.py` uses for unknown models). `--dry-run` (no API calls)
+estimates tokens via a char/4 heuristic and cost via the same approximate
+rates observed in a live pricing check (~$5/M prompt, ~$25/M completion),
+clearly marked as an estimate.
+
+### Consequences
+
+- Adds a paid dependency to case processing: ~$2.4–3.5 per full-case run
+  at the private case's scale (60 role groups), consistent with the
+  ~$1-5/case order of magnitude expected going in. `--limit` and
+  `--dry-run` cap dev-iteration cost.
+- Cheaper models (Haiku, Sonnet) were considered and rejected during dev
+  for this stage specifically — reasoning coherently across many facts ×
+  obligations per role is the one place in the pipeline where the cheaper
+  models' output was noticeably weaker; every other stage stays on a
+  cheaper model.
+- `rag/compliance.py` calls into `rag/retrieve.py` and `ingestion/dossier/facts.py`
+  read-only (imports the existing `retrieve()` wrapper and the
+  `Fact`/`ActorRole`/`RoleAmbiguity` models) rather than re-deriving
+  retriever plumbing or a new data model — keeps the Plane I → II
+  `load_index()` contract intact.
+- `data/dossier/demo/{facts,actor_roles,role_ambiguities}.jsonl` are empty
+  in this repo, so B3's tests exercise a synthetic tmp_path fixture case
+  instead of a real demo case — no files were added under
+  `data/dossier/demo/`.
+- `ingestion/dossier/build.py` gained a `--step compliance` (and it was
+  appended to `--step all`), so a case's full artifact chain now runs
+  extract → gate → facts → index → compliance in one command.
+
+### Follow-ups
+
+- Role_id near-duplicate normalization (e.g. `conseil_regional_des_notaires`
+  vs. `conseil_regional_notaires`, both observed in the private case's role
+  catalogue) — B3 groups by exact string match; a future pass could dedupe
+  by `label_fr` similarity before clustering.
+- Per-entry (not just total-count) linkage between `role_ambiguities.jsonl`
+  and the specific `ComplianceEntry` determinations an ambiguity may have
+  blocked.
+- Fact clustering/summarization for oversized role groups instead of
+  chronological truncation — the 30-fact cap keeps token cost bounded but
+  silently drops the chronologically latest facts for the heaviest roles.
+- B5 wires the UI to display the matrix.
+
+## ADR #44 — Cross-role context annotation in compliance prompts
+
+**Date:** 2026-07-30 · **Branch:** v2-agentic (Day B, Deliverable C1) · **Status:** Accepted
+
+### Context
+
+ADR #43 groups facts by exact `actor_role`. Same person in multiple roles
+(discovered post-B3 on the private case: Roxane appears as both
+`heritier_nu_proprietaire` and `heritier_representation`) is invisible to
+per-role LLM calls, degrading gap-analysis quality — the model judging one
+role's obligations has no way to know the same physical person also holds
+another role with its own obligations.
+
+### Decision
+
+Enrich the compliance user message with a "Contexte inter-rôles" block
+enumerating other roles that share source documents with the current
+cluster. `rag/compliance.py::_extract_cross_role_context()` scans
+`all_facts` for `source_doc_id`s in common with the current role's capped
+fact cluster, groups the other roles found there, and renders a
+deterministic (sorted) French block naming each other role_id + its
+`label_fr` + up to 3 shared doc_ids. `_build_user_message()` appends this
+block after the statute-chunks section when non-empty; empty otherwise (no
+size or shape change to the message). `COMPLIANCE_SYSTEM_PROMPT` gained one
+paragraph instructing the model to treat cross-role presence as evidence
+the same physical person may hold multiple roles, and to say so explicitly
+in `rationale` when its judgment depends on a cross-role fact. No schema
+change, no re-extraction, additive only.
+
+### Consequences
+
+- Marginal prompt token increase (~50-200 tokens per call when cross-role
+  present).
+- No structural change to `compliance_matrix.json`'s shape —
+  `ComplianceEntry`/`ComplianceMatrix` are untouched.
+- Idempotency preserved: the helper is a pure function over already-loaded
+  facts/roles with sorted iteration order, so repeat runs on the same
+  inputs still serialize to identical bytes.
+- `_call_compliance_llm()`'s call structure (model, messages shape,
+  `max_tokens`, `extra_body`) is unchanged — only the user message string
+  grows.
+
+### Follow-ups
+
+- Fuzzy-dedup near-duplicate role names (`heritier_` vs. `heritiere_`
+  variants) — same normalization gap ADR #43 already flagged, now doubly
+  relevant since it also affects cross-role matching.
+- Proper multi-role fact schema (`actor_roles: list[str]`) as an Attempt-2
+  architectural change — C1 is a prompt-level patch, not a schema fix.
+- Per-person identity resolution via LLM if `label_fr`/role_id matching
+  proves unreliable at catching same-person-different-role cases that
+  don't share a source document.
+
+---
+
+## ADR #45 — Multi-model answer generation with runtime catalog
+
+**Date:** 2026-07-30 · **Branch:** v2-agentic (Day C, Deliverable C2) · **Status:** Accepted
+
+### Context
+
+Single-model answer generation (`rag/generate.py` hardcoded to
+`openai/gpt-4o-mini`) limits user choice for hard queries: there is no way
+to trade cost for reasoning depth on a per-query basis. Kimi K3 and Opus 4.7
+(`reasoning.effort="max"`) are frontier reasoning models already reachable
+through OpenRouter's unified surface (ADR #40), and `rag/compliance.py`
+(ADR #43) already proves the `extra_body={"reasoning": {"effort": "max"}}`
+call pattern for one of them. This ADR supersedes the plan §6.4 constraint
+that locked answer generation to gpt-4o-mini for V1 evaluation stability;
+multi-model support is now scoped and evaluations pin their answer model
+explicitly at call time.
+
+### Decision
+
+`rag/generate.py` gains an `ANSWER_MODELS` catalog of three answer models —
+`gpt-4o-mini` (default), `opus-4.7` (max reasoning effort), `kimi-k3` (max
+reasoning effort) — each with `model_id`, `cost_input_per_m`,
+`cost_output_per_m`, `reasoning_effort`, `max_tokens`, and a French UI label.
+`generate(prompt, model_key=...)` looks up the catalog entry, raises
+`ValueError` on an unrecognized key, and only sets `extra_body` when
+`reasoning_effort` is configured. `max_tokens` is per-model rather than a
+flat constant: `500` for `gpt-4o-mini` (unchanged from pre-C2 behavior),
+`4096` for `opus-4.7`/`kimi-k3` — matching `rag/compliance.py`'s existing
+Opus precedent, since reasoning-effort tokens share the same budget as
+completion tokens and a small `max_tokens` truncates reasoning models before
+any visible answer text is produced.
+
+Cost calculation, previously duplicated in `rag/flow.py` via
+`_compute_cost()` + `GPT_4O_MINI_INPUT_PER_M`/`GPT_4O_MINI_OUTPUT_PER_M`
+(which silently returned `0.0` for any model other than gpt-4o-mini — a
+latent bug once the model became selectable), moves fully into
+`generate()`, computed from the catalog's per-model rates. `flow.py::run()`
+gains an `answer_model: str = "gpt-4o-mini"` param, passes it through as
+`generate.generate(p, model_key=answer_model)`, and reads `model_used`,
+`cost_usd`, and the new `answer_model_key` field straight from the returned
+usage dict.
+
+### Consequences
+
+- Reasoning models are 20-100x more expensive per query than the default
+  (Opus: 100x input / 125x output vs. gpt-4o-mini; Kimi: 20x input / 25x
+  output) — cost must stay visible wherever model choice is exposed.
+- `flow.py` no longer owns any pricing constants; a pricing update now
+  touches only `rag/generate.py`'s catalog.
+- UI (C3, not yet built) will surface model choice with cost implications
+  visible, using each catalog entry's `label_fr`.
+
+### Follow-ups
+
+- Token-level cost breakdown per conversation turn (currently only a
+  per-call total).
+- Per-model `max_tokens` tuning once real answer lengths are observed for
+  the reasoning-tier models.
+- Consider a cheaper "medium" tier (e.g. Mistral Small 4, Gemini 2.5 Flash)
+  between `gpt-4o-mini` and the two max-effort reasoning models.
