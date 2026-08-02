@@ -2348,3 +2348,109 @@ context block) rather than a normal cost curve.
   reads it via `getattr(f, "mentioned_person_ids", None) or []` so the
   per-cluster person-filtering logic is real code today, exercised as a
   no-op, rather than dead code gated behind a feature flag.
+
+## ADR #54 — Per-doc mention extraction (D2)
+
+**Date:** 2026-08-02 · **Branch:** v2-persons (D2) · **Status:** Accepted
+
+### Context
+
+D1's own ADR + fixture case (person-index pipeline scaffolding) never
+materialized — ADR #50 was reserved but never written, and no fixture case
+was built. Rather than write a standalone D1 ADR after the fact, D2
+collapses D1's remaining scope into itself and ships straight to code: this
+ADR is the first real entry for the mention-extraction stage.
+
+D5 (distillation, ADR #52) and D6 (compliance verify-conclude + person
+plumbing, ADR #53) already shipped. D6's `persons_named` field (on
+`ComplianceEntry`) and the "Personnes impliquées" prompt block remain
+**inert** — `[]` on every entry, no section ever rendered — because no
+`mentions.py`/`resolve.py` output exists to populate them. D2 is the first
+of two remaining stages (D3 `resolve.py` is next) needed to make that
+plumbing live.
+
+Model choice: `anthropic/claude-haiku-4.5`, matching D5's `distill.py` —
+consistency across the person-pipeline's LLM calls, and Haiku 4.5's JSON
+reliability at temperature 0 is already proven in this codebase (`facts.py`
+uses the same defensive-JSON-parse pattern this module reuses).
+
+Sequencing: mentions extraction reads only
+`data/dossier/<case_id>/extracted/<doc_id>.md` (the Attempt 1 verbatim
+transcript) and is independent of `facts.jsonl` by design — it does not
+read, write, or depend on facts, actor roles, or role ambiguities. This
+keeps D2 shippable and testable without any coupling to D4's fact-extraction
+schema (sequencing "β" from the design discussion this ADR follows).
+
+**Pre-work correction:** the originating task brief assumed distill's (D5)
+test mock pattern lived in `tests/test_dossier_smoke.py`. It doesn't —
+distill's tests live in `tests/test_persons_smoke.py` (added in the same D5
+commit), whose own docstring states it's the intended home for the
+Attempt-2 person-pipeline test suite. D2's 8 tests were added there
+instead, following that file's existing inline `MagicMock()` +
+`patch(..., get_openrouter_client=...)` convention — there is no named
+mock-helper function to reuse in either file.
+
+### Decision
+
+New `ingestion/dossier/mentions.py`, mirroring `distill.py`'s module
+structure (constants → system prompt → cache functions → per-item call →
+orchestration → CLI). For each extracted document, `anthropic/claude-haiku-4.5`
+(temperature 0.0) reads the full markdown transcript and returns a strict
+JSON array of mentions, each with exactly 4 fields: `surface_form`
+(verbatim, undeduplicated — every occurrence is a distinct mention),
+`kind` (`"person"` | `"entity"`), `context_snippet` (1-3 surrounding
+sentences), and `role_hint` (nullable, only when textually anchored).
+
+Output is `data/dossier/<case_id>/_mentions/<doc_id>.json` — one file per
+document, and that file **is** the cache: keyed by a content-hash
+(`SHA-256(markdown)[:16]`) of the source markdown, so a re-run with an
+unchanged document is a pure cache hit at zero cost. `schema_version: 1` is
+embedded in every cache file for D3 to key its own migration logic against.
+Atomic write via `.tmp` → `os.replace`, matching `distill.py`'s
+cleanup-on-exception pattern. A JSON-parse failure returns an empty result
+to the caller but does **not** write a cache file — distinguishing "nothing
+to cache" from a legitimate, cacheable zero-mention extraction (mirrors
+`facts.py`'s `_parse_llm_json` `None`-vs-empty-collection idiom, which
+`distill.py` has no precedent for since its own output is free prose, not
+JSON).
+
+Non-destructive to `facts.jsonl`, `actor_roles.jsonl`, and
+`role_ambiguities.jsonl` — this module never opens any of them. Dormant by
+default: not wired into `build.py`; invoked only via its own CLI
+(`python -m ingestion.dossier.mentions --case-id <id> [--doc-id <one>]
+[--force] [--dry-run] [--verbose]`), same dormancy pattern as `distill.py`.
+
+### Consequences
+
+- The committed demo fixture (`data/dossier/demo/extracted/sample_text.md`,
+  1 doc, 3 generic English test sentences) extracts **0 mentions at
+  $0.0004** on a real run — the fixture has no named entities to find. This
+  is expected, not a bug: the demo case exists to prove the pipeline runs
+  end-to-end, not to exercise extraction quality. A future private-case
+  backfill (~55 docs of real French legal correspondence) is estimated at
+  roughly $0.02 total at Haiku 4.5 rates, scaled from this session's
+  per-document dry-run cost estimate — that backfill is explicitly **not**
+  run in this session (code-only deliverable; private-case backfill is a
+  separate step gated on user approval, per the D5/D6 precedent).
+- D3 (`resolve.py`) will consume `_mentions/*.json` + `facts.jsonl` to
+  produce `persons.jsonl` (case-local and, per the original person-pipeline
+  design, eventually global). Until D3 ships, D2's output is inert data —
+  correctly shaped, cached, and versioned, but nothing reads it yet.
+- Compliance re-run (to make D6's `persons_named` non-empty) remains gated
+  on D3's completion, not D2's — D2 alone does not activate any inert
+  plumbing.
+- `Fact.mentioned_person_ids` still does not exist (see ADR #53's
+  Follow-ups) — D2 does not add it; that remains D3/D4 scope if still
+  needed once real person IDs exist.
+
+### Follow-ups
+
+- D3 `resolve.py` — deterministic clustering of `_mentions/*.json` entries
+  into canonical `persons.jsonl` entities, case-local first.
+- D4 (global entity store across cases) remains deferred, per ADR #50/#51's
+  original scope — not started this session.
+
+References: ADR #52 (D5, distillation — cache-file and atomic-write
+precedent), ADR #53 (D6, compliance verify-conclude — the inert plumbing D2
+is the first step toward activating), `plan_attempt2_full.md` (local, not
+committed) D2 section.

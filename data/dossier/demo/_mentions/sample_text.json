@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "source_hash": "03d836c3aa058b29",
+  "model": "anthropic/claude-haiku-4.5",
+  "generated_at": "2026-08-02T20:12:57.839181+00:00",
+  "mentions": []
+}

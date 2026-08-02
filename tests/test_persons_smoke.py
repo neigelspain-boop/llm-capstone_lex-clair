@@ -21,7 +21,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ingestion.dossier import distill
+from ingestion.dossier import distill, mentions
 
 
 def _fake_chat_response(content: str):
@@ -211,3 +211,156 @@ def test_distill_preserves_existing_fact_fields(distill_case_dir) -> None:
     updated_minus = {k: v for k, v in updated.items() if k != "distilled_context"}
     assert original_minus == updated_minus
     assert updated["distilled_context"] == _DISTILLED_TEXT
+
+
+# === D2 mentions.py tests ===
+
+_MENTIONS_JSON = json.dumps([
+    {"surface_form": "Maitre Eve Marie MENA", "kind": "person",
+     "context_snippet": "Maitre Eve Marie MENA, notaire a Paris.", "role_hint": "notaire"},
+    {"surface_form": "Maitre MENA", "kind": "person",
+     "context_snippet": "Cette creance est nee d'une convention recue par l'etude PAVY-MENA.",
+     "role_hint": None},
+    {"surface_form": "etude PAVY-MENA", "kind": "entity",
+     "context_snippet": "recue par l'etude PAVY-MENA.", "role_hint": None},
+])
+
+
+@pytest.fixture
+def mentions_case_dir(tmp_path, monkeypatch):
+    """Redirect mentions.DOSSIER_DIR to an isolated tmp dir with one case's extracted doc."""
+    monkeypatch.setattr(mentions, "DOSSIER_DIR", tmp_path)
+    case_dir = tmp_path / "acme"
+    extracted_dir = case_dir / "extracted"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "doc.md").write_text(_SOURCE_MD, encoding="utf-8")
+    return case_dir
+
+
+def test_mentions_extracts_from_sample_markdown(mentions_case_dir) -> None:
+    """2 person + 1 entity mention mocked: correct schema, count, cache file written."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        result = mentions.extract_mentions_for_doc("acme", "doc")
+
+    assert result["mentions_count"] == 3
+    assert result["from_cache"] is False
+
+    cache_path = mentions_case_dir / "_mentions" / "doc.json"
+    assert cache_path.exists()
+    entry = json.loads(cache_path.read_text(encoding="utf-8"))
+    assert entry["schema_version"] == 1
+    assert entry["model"] == "anthropic/claude-haiku-4.5"
+    assert "source_hash" in entry and "generated_at" in entry
+    assert len(entry["mentions"]) == 3
+    for m in entry["mentions"]:
+        assert set(m.keys()) == {"surface_form", "kind", "context_snippet", "role_hint"}
+    assert entry["mentions"][0]["surface_form"] == "Maitre Eve Marie MENA"
+    assert entry["mentions"][2]["kind"] == "entity"
+
+
+def test_mentions_cache_hit_skips_llm(mentions_case_dir) -> None:
+    """Second run on unchanged markdown is a cache hit; LLM called once total."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        result1 = mentions.extract_mentions_for_doc("acme", "doc")
+        result2 = mentions.extract_mentions_for_doc("acme", "doc")
+
+    assert result1["from_cache"] is False
+    assert result2["from_cache"] is True
+    assert result2["mentions_count"] == 3
+    mock_client.chat.completions.create.assert_called_once()
+
+
+def test_mentions_force_bypasses_cache(mentions_case_dir) -> None:
+    """--force ignores the cache; the LLM is called on both runs."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        mentions.extract_mentions_for_doc("acme", "doc")
+        result2 = mentions.extract_mentions_for_doc("acme", "doc", force=True)
+
+    assert result2["from_cache"] is False
+    assert mock_client.chat.completions.create.call_count == 2
+
+
+def test_mentions_source_hash_invalidates_cache(mentions_case_dir) -> None:
+    """Modifying the source markdown between calls invalidates the cache, even without --force."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        mentions.extract_mentions_for_doc("acme", "doc")
+
+        (mentions_case_dir / "extracted" / "doc.md").write_text(
+            _SOURCE_MD + "\n\nTexte supplementaire modifiant le hash source.", encoding="utf-8"
+        )
+        result2 = mentions.extract_mentions_for_doc("acme", "doc")
+
+    assert result2["from_cache"] is False
+    assert mock_client.chat.completions.create.call_count == 2
+
+
+def test_mentions_dry_run_makes_no_api_call(mentions_case_dir) -> None:
+    """dry_run=True never calls the LLM and returns a cost estimate."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        summary = mentions.extract_mentions_for_case("acme", dry_run=True)
+
+    mock_client.chat.completions.create.assert_not_called()
+    assert summary["docs_processed"] == 1
+    assert summary["total_cost"] > 0.0
+
+
+def test_mentions_atomic_write_on_failure(mentions_case_dir) -> None:
+    """A failing os.replace leaves no cache file and no .tmp file behind."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(_MENTIONS_JSON)
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client), \
+         patch("ingestion.dossier.mentions.os.replace", side_effect=OSError("disk full")):
+        with pytest.raises(OSError):
+            mentions.extract_mentions_for_doc("acme", "doc")
+
+    mentions_dir = mentions_case_dir / "_mentions"
+    assert not (mentions_dir / "doc.json").exists()
+    assert not (mentions_dir / "doc.json.tmp").exists()
+
+
+def test_mentions_json_parse_failure_returns_empty(mentions_case_dir, caplog) -> None:
+    """Malformed JSON from the LLM: warning logged, empty mentions returned, cache NOT written."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(
+        "This is not JSON at all, sorry!"
+    )
+
+    with patch("ingestion.dossier.mentions.get_openrouter_client", return_value=mock_client):
+        with caplog.at_level("WARNING"):
+            result = mentions.extract_mentions_for_doc("acme", "doc")
+
+    assert result["mentions_count"] == 0
+    assert result["from_cache"] is False
+    assert "doc" in caplog.text
+    assert not (mentions_case_dir / "_mentions" / "doc.json").exists()
+
+
+def test_mentions_handles_missing_extracted_doc(mentions_case_dir, monkeypatch, capsys) -> None:
+    """CLI called with a non-existent --doc-id: clean error message, non-zero exit code."""
+    monkeypatch.setattr(
+        "sys.argv",
+        ["mentions.py", "--case-id", "acme", "--doc-id", "nonexistent"],
+    )
+
+    with pytest.raises(SystemExit) as exc_info:
+        mentions._cli()
+
+    assert exc_info.value.code != 0
+    err = capsys.readouterr().err
+    assert "nonexistent" in err
