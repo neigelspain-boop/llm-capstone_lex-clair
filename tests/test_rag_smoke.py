@@ -966,3 +966,48 @@ def test_check_dry_run_cost_gate_allows_below_threshold() -> None:
     from rag.compliance import DRY_RUN_COST_ALERT_USD, _check_dry_run_cost_gate
 
     _check_dry_run_cost_gate(DRY_RUN_COST_ALERT_USD - 0.01)  # no raise
+
+
+def test_check_real_run_cost_gate_raises_when_pacing_over_budget() -> None:
+    from rag.compliance import REAL_RUN_COST_ALERT_USD, _check_real_run_cost_gate
+
+    # Full budget already spent after only 1 of 2 clusters — badly off pace.
+    with pytest.raises(RuntimeError, match="pro-rated"):
+        _check_real_run_cost_gate(1, 2, REAL_RUN_COST_ALERT_USD)
+
+
+def test_check_real_run_cost_gate_allows_when_pacing_under_budget() -> None:
+    from rag.compliance import REAL_RUN_COST_ALERT_USD, _check_real_run_cost_gate
+
+    _check_real_run_cost_gate(1, 46, REAL_RUN_COST_ALERT_USD / 46 - 0.01)  # no raise
+
+
+def test_check_real_run_cost_gate_noop_before_any_clusters_done() -> None:
+    from rag.compliance import _check_real_run_cost_gate
+
+    _check_real_run_cost_gate(0, 46, 1000.0)  # nothing attributable yet — no raise
+
+
+def test_compliance_matrix_real_run_aborts_and_preserves_cache(tmp_path, monkeypatch) -> None:
+    """A real run that breaches the pro-rated pace aborts, but the cluster(s)
+    already completed are persisted to compliance_cache.jsonl before the
+    raise — a rerun after fixing the underlying issue resumes at zero cost
+    for them, since caching is per-cluster append-only (ADR #53)."""
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(
+        compliance, "get_openrouter_client",
+        lambda: _mock_compliance_client(_compliance_entries_json(), cost=20.0),
+    )
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    with pytest.raises(RuntimeError, match="exceeds the pro-rated"):
+        compliance.generate_compliance_matrix("testcase")
+
+    cache_path = tmp_path / "testcase" / "compliance_cache.jsonl"
+    assert cache_path.exists()
+    cached_lines = cache_path.read_text(encoding="utf-8").strip().splitlines()
+    assert len(cached_lines) == 1  # first cluster's result persisted before the abort
+    assert not (tmp_path / "testcase" / "compliance_matrix.json").exists()

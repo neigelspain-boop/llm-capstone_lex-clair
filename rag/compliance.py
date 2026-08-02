@@ -58,20 +58,47 @@ COMPLIANCE_MODEL_ID = "anthropic/claude-opus-4.7"
 RELEVANT_STATUTE_K = 8  # per fact cluster, retrieve top-k statute chunks for context
 MAX_FACTS_PER_ROLE = 30  # see _cap_facts_chronologically
 
-# Rough per-token USD rates for --dry-run token/cost estimates only, based
-# on a live OpenRouter dry-call against anthropic/claude-opus-4.7 on
-# 2026-07-28 ($0.008435 for 22 prompt / 333 completion tokens). Real
-# (non-dry-run) calls use the exact `usage.cost` OpenRouter returns instead.
-_EST_PROMPT_USD_PER_TOKEN = 5e-6
-_EST_COMPLETION_USD_PER_TOKEN = 25e-6
-# --dry-run only: no real max_tokens cap on the live call (ADR #49). This
-# is a stand-in completion-length estimate for cost preview.
-_DRY_RUN_EST_COMPLETION_TOKENS = 2048
+# Per-token USD rates for --dry-run cost estimates only, matching the
+# documented model palette rate for anthropic/claude-opus-4.7 in CLAUDE.md
+# ($15 / $75 per M in/out). Previously calibrated from a single tiny live
+# OpenRouter call (22 prompt / 333 completion tokens, $0.008435 total) that
+# landed at 1/3 this rate for unexplained reasons and was never re-checked
+# against a real multi-cluster bill — caught 2026-08-02 when this estimate
+# undershot the actual ADR #49 real-run cost (~$22 for 46 clusters) by
+# ~7x. Real (non-dry-run) calls use the exact `usage.cost` OpenRouter
+# returns instead; this constant only feeds the --dry-run preview.
+_EST_PROMPT_USD_PER_TOKEN = 15e-6
+_EST_COMPLETION_USD_PER_TOKEN = 75e-6
+# --dry-run only: no real max_tokens cap on the live call (ADR #49), so
+# there's no cap to reference for a completion-length estimate — reasoning-
+# effort="max" output is prompt-dependent and can run large. Back-solved
+# from the one surviving empirical anchor, ADR #49's real run on this same
+# case (46 clusters, ~$22 total, all finish_reason=stop): per-cluster
+# completion-token telemetry from that run is unrecoverable (compliance_run.log
+# is overwritten every run by design, ADR #48, and is gitignored — it was
+# overwritten by this fix's own diagnostic dry-runs before the gap was
+# caught). Floor estimate: ($22 total - (this run's 172,456 prompt tokens x
+# $15e-6, an upper bound since distillation only adds tokens vs. the
+# historical prompt)) / $75e-6 / 46 clusters =~ 5,626 tokens/cluster.
+_DRY_RUN_EST_COMPLETION_TOKENS = 5626
 
 # ADR #53: a dry-run cost estimate above this signals a prompt-size
 # regression (e.g. an unbounded persons/cross-role block) — loud failure
 # rather than a silently expensive real run.
 DRY_RUN_COST_ALERT_USD = 25.0
+
+# ADR #53: live circuit breaker for REAL (non-dry-run) runs, checked after
+# every cluster — independent of DRY_RUN_COST_ALERT_USD, which only
+# checks the pre-flight estimate. Set higher than the dry-run gate: the
+# verify-conclude prompt (ADR #53) asks Opus to do extra per-fact
+# cross-checking work the dry-run estimator's completion-token constant
+# was calibrated without, so some real-run headroom above the dry-run
+# estimate is expected, not just regression. Checked pro-rated by cluster
+# progress so a cost spike is caught early, not only once the full budget
+# is gone. compliance_cache.jsonl is append-only per-cluster (ADR #53), so
+# a rerun after this fires resumes from cache at zero cost for every
+# cluster already completed.
+REAL_RUN_COST_ALERT_USD = 30.0
 
 _VALID_STATUSES = {"met", "breached", "ambiguous", "insufficient_evidence"}
 
@@ -661,6 +688,30 @@ def _check_dry_run_cost_gate(total_cost: float) -> None:
         )
 
 
+def _check_real_run_cost_gate(clusters_done: int, clusters_total: int, total_cost: float) -> None:
+    """Raise if a REAL run's accumulated cost is pacing above
+    REAL_RUN_COST_ALERT_USD, checked after every cluster.
+
+    Pro-rated by progress (clusters_done / clusters_total) rather than a
+    flat cap, so the check is meaningful from the first cluster onward
+    instead of only firing once the whole budget is already spent. No-op
+    on clusters_done == 0 (nothing spent yet, nothing to divide by).
+    Extracted as its own function for the same direct-testability reason
+    as _check_dry_run_cost_gate.
+    """
+    if clusters_done == 0:
+        return
+    budget_at_this_point = (clusters_done / clusters_total) * REAL_RUN_COST_ALERT_USD
+    if total_cost > budget_at_this_point:
+        raise RuntimeError(
+            f"compliance real-run cost ${total_cost:.2f} after {clusters_done}/{clusters_total} "
+            f"clusters exceeds the pro-rated ${budget_at_this_point:.2f} pace toward the "
+            f"${REAL_RUN_COST_ALERT_USD:.2f} safety threshold — stopping before further spend. "
+            "Completed clusters are already cached (compliance_cache.jsonl); rerunning resumes "
+            "from cache at zero cost for them."
+        )
+
+
 # ========== orchestration ==========
 
 def generate_compliance_matrix(
@@ -679,7 +730,10 @@ def generate_compliance_matrix(
     data/dossier/<case_id>/compliance_cache.jsonl, keyed by a fingerprint of
     (role_id, sorted fact_ids, prompt hash): an idempotent rerun with
     unchanged facts/retrieval/context is entirely cache hits, at zero
-    marginal cost.
+    marginal cost. The cache is append-only per cluster, so a real (non-
+    dry-run) run also checks accumulated cost against REAL_RUN_COST_ALERT_USD
+    after every cluster (_check_real_run_cost_gate) — a crash or abort part
+    way through loses nothing already completed.
 
     case_persons/entities (ADR #53) are loaded once per case from
     data/dossier/<case_id>/persons.jsonl and data/dossier/entities/
@@ -720,7 +774,7 @@ def generate_compliance_matrix(
         total_cost = 0.0
         dry_run_cluster_summaries: list[dict] = []
 
-        for role_id in role_ids:
+        for cluster_idx, role_id in enumerate(role_ids, start=1):
             role_facts = groups[role_id]
             role_label = _role_label(role_id, roles)
             query = _build_retrieval_query(role_id, role_label, role_facts)
@@ -754,6 +808,9 @@ def generate_compliance_matrix(
             total_completion_tokens += usage["completion_tokens"]
             total_cost += usage["cost_usd"] or 0.0
             all_entries.extend(_build_entries(raw_entries, role_id, persons_named=persons_named))
+
+            if not dry_run:
+                _check_real_run_cost_gate(cluster_idx, len(role_ids), total_cost)
 
             if dry_run:
                 dry_run_cluster_summaries.append({
