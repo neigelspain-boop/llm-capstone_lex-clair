@@ -68,6 +68,11 @@ _EST_COMPLETION_USD_PER_TOKEN = 25e-6
 # is a stand-in completion-length estimate for cost preview.
 _DRY_RUN_EST_COMPLETION_TOKENS = 2048
 
+# ADR #53: a dry-run cost estimate above this signals a prompt-size
+# regression (e.g. an unbounded persons/cross-role block) — loud failure
+# rather than a silently expensive real run.
+DRY_RUN_COST_ALERT_USD = 25.0
+
 _VALID_STATUSES = {"met", "breached", "ambiguous", "insufficient_evidence"}
 
 
@@ -84,6 +89,7 @@ class ComplianceEntry(BaseModel):
     status: Literal["met", "breached", "ambiguous", "insufficient_evidence"]
     evidence_fact_ids: list[str]  # facts supporting the status
     rationale: str  # 2-3 French sentences explaining the determination
+    persons_named: list[dict] = Field(default_factory=list)  # [] on every case until D1-D4 ship (ADR #53)
 
 
 class ComplianceMatrix(BaseModel):
@@ -127,6 +133,20 @@ def _read_jsonl(path: Path, model: type[BaseModel]) -> list:
     ]
 
 
+def _read_jsonl_dicts(path: Path) -> list[dict]:
+    """Plain-dict JSONL reader for person records — no pydantic model exists
+    for them yet (D1-D4 person-index pipeline unshipped, ADR #53). Returns
+    [] if the file doesn't exist, matching _read_jsonl's convention.
+    """
+    if not path.exists():
+        return []
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
 def _load_case_artifacts(case_id: str) -> tuple[list[Fact], list[ActorRole], list[RoleAmbiguity]]:
     """Load facts.jsonl, actor_roles.jsonl, role_ambiguities.jsonl for one case."""
     case_dir = DOSSIER_DIR / case_id
@@ -134,6 +154,40 @@ def _load_case_artifacts(case_id: str) -> tuple[list[Fact], list[ActorRole], lis
     roles = _read_jsonl(case_dir / "actor_roles.jsonl", ActorRole)
     ambiguities = _read_jsonl(case_dir / "role_ambiguities.jsonl", RoleAmbiguity)
     return facts, roles, ambiguities
+
+
+# ========== compliance-run cache (ADR #53) ==========
+
+def _compliance_cache_key(role_id: str, fact_ids: list[str], user_message: str) -> str:
+    """Deterministic cluster fingerprint: role_id + sorted fact_ids + a hash
+    of the assembled prompt (so a retrieval or context change invalidates
+    the cache entry, not just a fact-set change).
+    """
+    prompt_hash = hashlib.sha256(user_message.encode("utf-8")).hexdigest()
+    payload = f"{role_id}|{','.join(sorted(fact_ids))}|{prompt_hash}"
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _load_compliance_cache(case_id: str) -> dict[str, dict]:
+    """Load data/dossier/<case_id>/compliance_cache.jsonl into a {cache_key: entry} map."""
+    cache_path = DOSSIER_DIR / case_id / "compliance_cache.jsonl"
+    cache: dict[str, dict] = {}
+    if not cache_path.exists():
+        return cache
+    for line in cache_path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        entry = json.loads(line)
+        cache[entry["cache_key"]] = entry
+    return cache
+
+
+def _append_compliance_cache(case_id: str, entry: dict) -> None:
+    """Append one cache entry — only called for a real (non-cached, non-dry-run) call."""
+    cache_path = DOSSIER_DIR / case_id / "compliance_cache.jsonl"
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    with cache_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 # ========== fact clustering ==========
@@ -231,6 +285,64 @@ def _extract_cross_role_context(
     return "\n".join(lines)
 
 
+def _extract_persons_context(case_persons: list[dict], entities: list[dict]) -> str:
+    """Return French "Personnes impliquées" context block for the compliance
+    LLM prompt, merging case_persons (case-specific: role_assignments,
+    ambiguity_note) with entities (base identity: canonical_name, aliases),
+    keyed by person_id.
+
+    Returns "" if both lists are empty — the real-world state for every
+    case today, since D1-D4 (mention extraction, entity resolution) haven't
+    shipped (ADR #53). Deterministic (sorted output) to preserve compliance
+    matrix idempotency, mirroring _extract_cross_role_context.
+    """
+    if not case_persons and not entities:
+        return ""
+
+    entities_by_id = {e["person_id"]: e for e in entities if "person_id" in e}
+    case_by_id = {p["person_id"]: p for p in case_persons if "person_id" in p}
+    person_ids = sorted(set(entities_by_id) | set(case_by_id))
+
+    if not person_ids:
+        return ""
+
+    lines = ["Personnes impliquées :"]
+    for pid in person_ids:
+        entity = entities_by_id.get(pid, {})
+        case_p = case_by_id.get(pid, {})
+        canonical_name = entity.get("canonical_name") or case_p.get("canonical_name") or pid
+        aliases = sorted(entity.get("aliases") or [])
+        role_assignments = sorted(case_p.get("role_assignments") or [])
+        ambiguity_note = case_p.get("ambiguity_note")
+
+        line = f"- person_id={pid} nom={canonical_name}"
+        if aliases:
+            line += f" alias=[{', '.join(aliases)}]"
+        if role_assignments:
+            line += f" rôles=[{', '.join(role_assignments)}]"
+        if ambiguity_note:
+            line += f" ambiguïté={ambiguity_note}"
+        lines.append(line)
+
+    return "\n".join(lines)
+
+
+def _merge_persons_named(case_persons: list[dict], entities: list[dict]) -> list[dict]:
+    """Reduce a cluster's persons context to [{"person_id", "canonical_name"}, ...],
+    sorted by person_id, for ComplianceEntry.persons_named."""
+    entities_by_id = {e["person_id"]: e for e in entities if "person_id" in e}
+    case_by_id = {p["person_id"]: p for p in case_persons if "person_id" in p}
+    person_ids = sorted(set(entities_by_id) | set(case_by_id))
+
+    merged: list[dict] = []
+    for pid in person_ids:
+        entity = entities_by_id.get(pid, {})
+        case_p = case_by_id.get(pid, {})
+        canonical_name = entity.get("canonical_name") or case_p.get("canonical_name") or pid
+        merged.append({"person_id": pid, "canonical_name": canonical_name})
+    return merged
+
+
 def _build_user_message(
     role_id: str,
     role_label: str,
@@ -238,14 +350,18 @@ def _build_user_message(
     chunks: list[dict],
     all_facts: list[Fact],
     actor_roles: list[ActorRole],
+    case_persons: list[dict] | None = None,
+    entities: list[dict] | None = None,
 ) -> str:
     """Assemble the compact context blob: role, capped facts, retrieved statute
-    chunks, and (when applicable) a cross-role context block (C1, ADR #44)."""
+    chunks, and (when applicable) cross-role (C1, ADR #44) and persons
+    (ADR #53) context blocks."""
     capped_facts = _cap_facts_chronologically(role_id, facts)
 
     facts_block = "\n".join(
         f'- fact_id={f.fact_id} date={f.date or "inconnue"} action="{f.action}" '
-        f'target={f.target or "N/A"} citation="{f.verbatim_quote}"'
+        f'target={f.target or "N/A"} distilled="{f.distilled_context or "N/A"}" '
+        f'citation="{f.verbatim_quote}"'
         for f in capped_facts
     )
     chunks_block = "\n".join(
@@ -262,6 +378,10 @@ def _build_user_message(
     cross_role_block = _extract_cross_role_context(role_id, capped_facts, all_facts, actor_roles)
     if cross_role_block:
         message = f"{message}\n\n{cross_role_block}"
+
+    persons_block = _extract_persons_context(case_persons or [], entities or [])
+    if persons_block:
+        message = f"{message}\n\n{persons_block}"
 
     return message
 
@@ -370,9 +490,13 @@ def _entry_id(statute_chunk_id: str, actor_role: str) -> str:
     return digest[:12]
 
 
-def _build_entries(raw_entries: list[dict], actor_role: str) -> list[ComplianceEntry]:
+def _build_entries(
+    raw_entries: list[dict], actor_role: str, persons_named: list[dict] | None = None
+) -> list[ComplianceEntry]:
     """Validate each raw entry dict into a ComplianceEntry; skip (with a
-    warning) any that fail validation or are missing required fields."""
+    warning) any that fail validation or are missing required fields.
+    persons_named is the same cluster-level list on every entry (ADR #53)."""
+    persons_named = persons_named or []
     entries: list[ComplianceEntry] = []
     for item in raw_entries:
         try:
@@ -386,6 +510,7 @@ def _build_entries(raw_entries: list[dict], actor_role: str) -> list[ComplianceE
                 status=item["status"],
                 evidence_fact_ids=item.get("evidence_fact_ids", []),
                 rationale=item["rationale"],
+                persons_named=persons_named,
             )
         except (KeyError, ValidationError) as e:
             log.warning("compliance: skipping invalid entry for actor_role=%s: %s", actor_role, e)
@@ -407,24 +532,52 @@ def _call_compliance_llm(
     chunks: list[dict],
     all_facts: list[Fact],
     actor_roles: list[ActorRole],
+    case_persons: list[dict] | None = None,
+    entities: list[dict] | None = None,
+    cache: dict[str, dict] | None = None,
     dry_run: bool = False,
 ) -> tuple[list[dict], dict]:
     """Call Opus 4.7 (reasoning.effort="max") for one role cluster.
 
     Returns (parsed_entries, usage) where usage is
-    {"prompt_tokens", "completion_tokens", "cost_usd", "estimated"}. In
-    --dry-run mode, no API call is made: tokens are estimated via a char/4
-    heuristic and cost via the approximate rates in _EST_*_USD_PER_TOKEN,
-    with estimated=True. Otherwise, cost comes from OpenRouter's exact
-    per-call usage.cost when present, falling back to the same estimate
-    formula if it isn't.
+    {"prompt_tokens", "completion_tokens", "cost_usd", "estimated",
+    "cache_hit", "cache_key"}. If `cache` is given and the cluster
+    fingerprint (ADR #53, _compliance_cache_key) is already present, the
+    cached entries are returned at zero cost with cache_hit=True — checked
+    before both the dry-run estimate and the real call, so a cached rerun's
+    dry-run report is also accurate. Otherwise, in --dry-run mode, no API
+    call is made: tokens are estimated via a char/4 heuristic and cost via
+    the approximate rates in _EST_*_USD_PER_TOKEN, with estimated=True.
+    Otherwise, cost comes from OpenRouter's exact per-call usage.cost when
+    present, falling back to the same estimate formula if it isn't.
+    "cache_key" is returned uncached (None on a cache hit) so the caller can
+    persist a fresh entry without recomputing the fingerprint.
 
     For real calls, reasoning-effort tokens and completion tokens share the
     same max_tokens budget for this model, so finish_reason can come back
     "length" (and get logged) before any visible JSON output completes —
     see _recover_partial_entries() for how the parser copes with that.
     """
-    user_message = _build_user_message(role_id, role_label, facts, chunks, all_facts, actor_roles)
+    capped_facts = _cap_facts_chronologically(role_id, facts)
+    user_message = _build_user_message(
+        role_id, role_label, capped_facts, chunks, all_facts, actor_roles,
+        case_persons=case_persons, entities=entities,
+    )
+
+    cache_key = None
+    if cache is not None:
+        fact_ids = [f.fact_id for f in capped_facts]
+        cache_key = _compliance_cache_key(role_id, fact_ids, user_message)
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return cached["raw_entries"], {
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "cost_usd": 0.0,
+                "estimated": False,
+                "cache_hit": True,
+                "cache_key": None,
+            }
 
     if dry_run:
         prompt_tokens = _estimate_tokens(COMPLIANCE_SYSTEM_PROMPT) + _estimate_tokens(user_message)
@@ -438,6 +591,8 @@ def _call_compliance_llm(
             "completion_tokens": completion_tokens,
             "cost_usd": cost,
             "estimated": True,
+            "cache_hit": False,
+            "cache_key": cache_key,
         }
 
     client = get_openrouter_client()
@@ -483,7 +638,27 @@ def _call_compliance_llm(
         "completion_tokens": completion_tokens,
         "cost_usd": cost,
         "estimated": False,
+        "cache_hit": False,
+        "cache_key": cache_key,
     }
+
+
+def _check_dry_run_cost_gate(total_cost: float) -> None:
+    """Raise if a --dry-run cost estimate exceeds DRY_RUN_COST_ALERT_USD.
+
+    Extracted as its own function (rather than an inline check) so the
+    threshold is directly testable without constructing a fixture large
+    enough to actually cross $25. Called only from the dry_run branch of
+    generate_compliance_matrix, after the per-cluster and total estimates
+    have already been printed — so the operator sees the numbers even
+    though the run then aborts loudly (ADR #53).
+    """
+    if total_cost > DRY_RUN_COST_ALERT_USD:
+        raise RuntimeError(
+            f"compliance dry-run cost estimate ${total_cost:.2f} exceeds the "
+            f"${DRY_RUN_COST_ALERT_USD:.2f} safety threshold — this signals a "
+            "prompt-size regression. Review before running for real."
+        )
 
 
 # ========== orchestration ==========
@@ -495,8 +670,21 @@ def generate_compliance_matrix(
 
     Idempotent: fully regenerates data/dossier/<case_id>/compliance_matrix.json
     from scratch on every run (no merge logic). limit caps the number of
-    role groups processed (dev cost cap). dry_run assembles the LLM calls
-    and estimates tokens/cost without invoking the API or writing output.
+    role groups processed (dev cost cap). dry_run assembles the LLM calls,
+    reports per-cluster and total token/cost estimates, and estimates
+    tokens/cost without invoking the API or writing output — raising if the
+    total exceeds DRY_RUN_COST_ALERT_USD (ADR #53).
+
+    Cluster-level results are cached (ADR #53) at
+    data/dossier/<case_id>/compliance_cache.jsonl, keyed by a fingerprint of
+    (role_id, sorted fact_ids, prompt hash): an idempotent rerun with
+    unchanged facts/retrieval/context is entirely cache hits, at zero
+    marginal cost.
+
+    case_persons/entities (ADR #53) are loaded once per case from
+    data/dossier/<case_id>/persons.jsonl and data/dossier/entities/
+    persons.jsonl — both [] in every case today, since the D1-D4 person-
+    index pipeline (mention extraction, entity resolution) hasn't shipped.
     """
     t0 = time.time()
 
@@ -518,6 +706,10 @@ def generate_compliance_matrix(
         facts, roles, ambiguities = _load_case_artifacts(case_id)
         groups = _group_facts_by_role(facts)
 
+        case_persons_all = _read_jsonl_dicts(DOSSIER_DIR / case_id / "persons.jsonl")
+        entities_all = _read_jsonl_dicts(DOSSIER_DIR / "entities" / "persons.jsonl")
+        compliance_cache = _load_compliance_cache(case_id)
+
         role_ids = sorted(groups)
         if limit is not None:
             role_ids = role_ids[:limit]
@@ -526,6 +718,7 @@ def generate_compliance_matrix(
         total_prompt_tokens = 0
         total_completion_tokens = 0
         total_cost = 0.0
+        dry_run_cluster_summaries: list[dict] = []
 
         for role_id in role_ids:
             role_facts = groups[role_id]
@@ -533,13 +726,43 @@ def generate_compliance_matrix(
             query = _build_retrieval_query(role_id, role_label, role_facts)
             chunks = retrieve(query, k=RELEVANT_STATUTE_K, source_scope="statute")
 
+            # ADR #53: mentioned_person_ids doesn't exist on Fact yet (D1-D4
+            # unshipped) — defensive getattr, real current-state handling.
+            mentioned_ids: set[str] = set()
+            for f in role_facts:
+                mentioned_ids.update(getattr(f, "mentioned_person_ids", None) or [])
+            cluster_case_persons = [p for p in case_persons_all if p.get("person_id") in mentioned_ids]
+            cluster_entities = [e for e in entities_all if e.get("person_id") in mentioned_ids]
+
             raw_entries, usage = _call_compliance_llm(
-                role_id, role_label, role_facts, chunks, facts, roles, dry_run=dry_run
+                role_id, role_label, role_facts, chunks, facts, roles,
+                case_persons=cluster_case_persons, entities=cluster_entities,
+                cache=compliance_cache, dry_run=dry_run,
             )
+
+            if not usage["cache_hit"] and not dry_run and usage["cache_key"] is not None:
+                cache_entry = {
+                    "cache_key": usage["cache_key"], "role_id": role_id, "raw_entries": raw_entries,
+                }
+                compliance_cache[usage["cache_key"]] = cache_entry
+                _append_compliance_cache(case_id, cache_entry)
+
+            persons_named = _merge_persons_named(cluster_case_persons, cluster_entities)
+            log.info("compliance: role_id=%s persons_named_count=%d", role_id, len(persons_named))
+
             total_prompt_tokens += usage["prompt_tokens"]
             total_completion_tokens += usage["completion_tokens"]
             total_cost += usage["cost_usd"] or 0.0
-            all_entries.extend(_build_entries(raw_entries, role_id))
+            all_entries.extend(_build_entries(raw_entries, role_id, persons_named=persons_named))
+
+            if dry_run:
+                dry_run_cluster_summaries.append({
+                    "role_id": role_id,
+                    "prompt_tokens": usage["prompt_tokens"],
+                    "completion_tokens": usage["completion_tokens"],
+                    "cost_usd": usage["cost_usd"] or 0.0,
+                    "cache_hit": usage["cache_hit"],
+                })
 
         matrix = ComplianceMatrix(
             case_id=case_id,
@@ -563,11 +786,20 @@ def generate_compliance_matrix(
             )
 
         if dry_run:
+            for cluster in dry_run_cluster_summaries:
+                cache_note = " (cache_hit)" if cluster["cache_hit"] else ""
+                print(
+                    f"compliance dry-run cluster · role_id={cluster['role_id']} "
+                    f"prompt_tokens={cluster['prompt_tokens']} "
+                    f"completion_tokens_est={cluster['completion_tokens']} "
+                    f"cost_est=${cluster['cost_usd']:.4f}{cache_note}"
+                )
             print(
                 f"compliance dry-run · case_id={case_id} roles_processed={len(role_ids)} "
                 f"est_prompt_tokens={total_prompt_tokens} est_completion_tokens={total_completion_tokens} "
                 f"cost_est=${total_cost:.2f} elapsed={elapsed:.1f}s"
             )
+            _check_dry_run_cost_gate(total_cost)
         else:
             status_counts = {"met": 0, "breached": 0, "ambiguous": 0, "insufficient_evidence": 0}
             for entry in all_entries:

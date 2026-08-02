@@ -17,6 +17,13 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 
 **Any file that doesn't fit cleanly into one plane is a smell.** Cross-plane imports only through defined contracts. `load_index()` is the single Plane I → Plane II interface. Do not add hidden cross-plane paths.
 
+## Person pipeline + distillation — Plane Ib, partially shipped
+
+- Plane Ib's person-index pipeline was planned as three stages: **mentions** (extract person mentions per fact) → **resolve** (cluster mentions into canonical entities, case-local and global) → **distill** (ceremony-stripped substance summary per fact). Only **distill** has shipped (`ingestion/dossier/distill.py`, ADR #52). Mentions and resolve do not exist anywhere in this repo — no `mentions.py`/`resolve.py` on any branch — and remain open per ADR #50 (D1) and ADR #51 (D4).
+- `Fact.distilled_context: str | None` is populated by `distill.py`; `verbatim_quote` is never mutated. The anticipated `Fact.mentioned_person_ids` field (mentions-stage output) does **not** exist yet — `rag/compliance.py` reads it defensively via `getattr(f, "mentioned_person_ids", None) or []`, so the person-context plumbing (ADR #53) is real code exercised as a no-op, not dead code behind a flag.
+- Model choices: shipped stages use Haiku 4.5 (distill, temperature 0.0) and Opus 4.7 max (compliance reasoning over `distilled_context` + `verbatim_quote`, ADR #53). Planned (unbuilt) stages: Gemini flash-lite for mentions (high-volume, low-reasoning extraction), Haiku 4.5 for resolve (clustering/dedup judgment).
+- See ADR #50-#53 in `docs/decisions.md` for the full history of what's built vs. open.
+
 ## Retrieval — source-scoped hybrid + router
 
 - `HybridRetriever.search(query, source_scope="statute")` — RRF fusion of BM25 + BGE-M3 vector search, then BGE-reranker cross-encoder rescoring. `source_scope` values: `"statute"` (default), `"dossier"`, `"case:{id}"`, `"blended"`. Enforced at the Chroma filter level, not post-hoc. ADR #41 (B1). Default `"statute"` matches v1 behavior and closes the ADR #39 privacy blocker.
@@ -30,6 +37,7 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 - **Cross-role context block** (ADR #44, C1): when facts across roles share a source document, the user message gains a "Contexte inter-rôles" section listing other roles and their labels. System prompt updated to weigh cross-role obligation interactions. No schema change, no re-extraction — pure prompt enrichment. Deterministic (sorted output), preserves matrix idempotency.
 - Compliance matrix output is gitignored for private cases (`data/dossier/private/`). Demo fixture (`data/dossier/demo/`) is committed for reproducibility.
 - **Known truncation risk** (candidate ADR #47, Attempt 2): `max_tokens=4096` is shared between reasoning tokens and output JSON on Opus 4.7 max. Fact-heavy roles (10+ facts, prompt_tokens >5000) risk `finish_reason=length` with `raw_chars=0`. Loud warning logs fire; parser has bracket-tracking incremental recovery. Observed loss rate on private case Day C run: ~52% of calls truncated. Fix path: raise budget to 8192 or split fact-heavy clusters. Do not tune inside Attempt 1 — cost curves shift.
+- **Verify-conclude + person integration** (ADR #53, D6): the prompt requires reasoning from `distilled_context` but verifying against `verbatim_quote` before finalizing `breached`/`met`, downgrading to `insufficient_evidence` on any mismatch. A "Personnes impliquées" section and `ComplianceEntry.persons_named` are wired but inert — `persons_named` is `[]` on every entry until the D1-D4 person pipeline ships (see Person pipeline + distillation, above). Cluster-level results are cached at `data/dossier/{case_id}/compliance_cache.jsonl`; `--dry-run` reports per-cluster token/cost estimates and raises if the total exceeds `DRY_RUN_COST_ALERT_USD` ($25).
 
 ## Multi-model answer generation — runtime catalog (ADR #45, C2)
 

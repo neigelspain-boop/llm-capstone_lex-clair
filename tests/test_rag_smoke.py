@@ -1,7 +1,9 @@
 """Plane II fast smoke tests: query router (Day B, Deliverable B2, ADR #42),
 compliance matrix generator (Day B, Deliverable B3, ADR #43), cross-role
-context annotation (Day B, Deliverable C1, ADR #44), and the answer model
-catalog (Day C, Deliverable C2, ADR #45).
+context annotation (Day B, Deliverable C1, ADR #44), the answer model
+catalog (Day C, Deliverable C2, ADR #45), and the D6 verify-conclude
+prompt + person-integration plumbing + compliance-run cache + dry-run cost
+gate (ADR #53).
 
 Router unit tests mock rag.router.get_openrouter_client so no network call
 happens. Flow integration tests mock rag.flow.route_query, rag.flow.rewrite,
@@ -822,3 +824,145 @@ def test_generate_compliance_matrix_end_to_end_with_cross_role_mocked(tmp_path, 
     for entry in loaded.entries:
         assert entry.status in {"met", "breached", "ambiguous", "insufficient_evidence"}
     assert any("Contexte inter-rôles" in msg for msg in captured_messages)
+
+
+# ========== D6 persons + distillation + cache + cost-gate tests (ADR #53) ==========
+
+def test_compliance_user_message_includes_persons_when_present() -> None:
+    from rag.compliance import _build_user_message
+
+    facts_a = [
+        Fact(
+            fact_id="doc_x-f001", date="2024-01-01", actor_role="role_a",
+            action="signer", target="doc", verbatim_quote="Signature.",
+            source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+    case_persons = [
+        {"person_id": "p1", "role_assignments": ["heritier_nu_proprietaire"]},
+    ]
+    entities = [
+        {"person_id": "p1", "canonical_name": "Marie Dupont", "aliases": []},
+    ]
+
+    message = _build_user_message(
+        "role_a", "Rôle A", facts_a, _mock_chunks(), facts_a, [],
+        case_persons=case_persons, entities=entities,
+    )
+
+    assert "Personnes impliquées" in message
+    assert "Marie Dupont" in message
+
+
+def test_compliance_user_message_includes_distilled_context_when_present() -> None:
+    from rag.compliance import _build_user_message
+
+    facts_a = [
+        Fact(
+            fact_id="doc_x-f001", date="2024-01-01", actor_role="role_a",
+            action="signer", target="doc", verbatim_quote="Signature.",
+            source_doc_id="doc_x", source_chunk_id=None,
+            distilled_context="Résumé dense de la signature.",
+        ),
+    ]
+
+    message = _build_user_message("role_a", "Rôle A", facts_a, _mock_chunks(), facts_a, [])
+
+    assert 'distilled="Résumé dense de la signature."' in message
+
+
+def test_compliance_user_message_omits_persons_when_empty() -> None:
+    """Also the regression check for the real private-case/demo state today
+    (no persons.jsonl exists anywhere, D1-D4 unshipped)."""
+    from rag.compliance import _build_user_message
+
+    facts_a = [
+        Fact(
+            fact_id="doc_x-f001", date="2024-01-01", actor_role="role_a",
+            action="signer", target="doc", verbatim_quote="Signature.",
+            source_doc_id="doc_x", source_chunk_id=None,
+        ),
+    ]
+
+    message = _build_user_message("role_a", "Rôle A", facts_a, _mock_chunks(), facts_a, [])
+
+    assert "Personnes impliquées" not in message
+
+
+def test_compliance_matrix_entry_has_persons_named_field() -> None:
+    """Direct unit test of _build_entries' persons_named plumbing — not
+    exercised through generate_compliance_matrix end-to-end, since that path
+    depends on Fact.mentioned_person_ids, which doesn't exist yet."""
+    from rag.compliance import _build_entries
+
+    raw_entries = json.loads(_compliance_entries_json())
+    entries = _build_entries(
+        raw_entries, "notaire_redacteur",
+        persons_named=[{"person_id": "p1", "canonical_name": "Marie Dupont"}],
+    )
+
+    assert len(entries) == 1
+    assert entries[0].persons_named == [{"person_id": "p1", "canonical_name": "Marie Dupont"}]
+
+
+def test_compliance_prompt_falls_back_on_low_confidence_person() -> None:
+    """Prompt-content check, not a code-layer behavioral test — the verdict
+    downgrade on ambiguous person identity is an LLM-prompt instruction, no
+    code-layer logic implements it in this deliverable."""
+    from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT
+
+    assert "Ne nommez PAS" in COMPLIANCE_SYSTEM_PROMPT
+    assert "insufficient_evidence" in COMPLIANCE_SYSTEM_PROMPT.split("Ne nommez PAS", 1)[1]
+
+
+def test_compliance_matrix_cache_avoids_llm_call_on_rerun(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compliance_client(_compliance_entries_json())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.generate_compliance_matrix("testcase")
+    first_call_count = client.chat.completions.create.call_count
+    assert first_call_count == 2  # one per role group in the fixture
+
+    compliance.generate_compliance_matrix("testcase")
+    second_call_count = client.chat.completions.create.call_count
+
+    assert second_call_count == first_call_count  # rerun is entirely cache hits
+    assert (tmp_path / "testcase" / "compliance_cache.jsonl").exists()
+
+
+def test_compliance_cli_dry_run_reports_per_cluster_tokens(tmp_path, monkeypatch, capsys) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+
+    def _fail_if_called():
+        raise AssertionError("get_openrouter_client must not be called in --dry-run")
+
+    monkeypatch.setattr(compliance, "get_openrouter_client", _fail_if_called)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+    monkeypatch.setattr("sys.argv", ["rag.compliance", "--case-id", "testcase", "--dry-run"])
+
+    compliance.main()
+
+    captured = capsys.readouterr()
+    assert "compliance dry-run cluster · role_id=" in captured.out
+    assert captured.out.count("compliance dry-run cluster") == 2  # one per role group in the fixture
+
+
+def test_check_dry_run_cost_gate_raises_above_threshold() -> None:
+    from rag.compliance import DRY_RUN_COST_ALERT_USD, _check_dry_run_cost_gate
+
+    with pytest.raises(RuntimeError, match="exceeds"):
+        _check_dry_run_cost_gate(DRY_RUN_COST_ALERT_USD + 0.01)
+
+
+def test_check_dry_run_cost_gate_allows_below_threshold() -> None:
+    from rag.compliance import DRY_RUN_COST_ALERT_USD, _check_dry_run_cost_gate
+
+    _check_dry_run_cost_gate(DRY_RUN_COST_ALERT_USD - 0.01)  # no raise

@@ -2225,3 +2225,126 @@ authorized separately, at D6's ship gate.
 - Distillation quality eval via LLM-as-judge — deferred to Attempt 3.
 - ADR #50 (D1, person-index fixtures) and ADR #51 (D4, global entity store)
   remain open — not written, not implemented, in this session.
+
+## ADR #53 — Compliance verify-conclude prompt + person integration
+
+**Date:** 2026-08-09 · **Branch:** v2-persons (D6) · **Status:** Accepted
+
+### Context
+
+This ADR was briefed as D6: wire D1-D4 (mention extraction → entity
+resolution → `persons.jsonl`) and D5 (distillation, ADR #52) into
+compliance, then re-run compliance on the private case with Opus 4.7 max.
+Pre-work found D1-D4 do not exist anywhere in this repo — `ingestion/dossier/`
+has no `mentions.py` or `resolve.py`, confirmed via `git log --all` across
+every branch. ADR #52's own Context already stated this ("D1-D4 ... not
+shipped"), and its Follow-ups close with "ADR #50 (D1) ... and ADR #51 (D4)
+... remain open — not written, not implemented." Both citations still hold
+as of this ADR: #50 and #51 remain open.
+
+D6 is therefore descoped to distillation + verify-conclude only. The
+person-integration plumbing below (persons context block, `persons_named`
+schema field) is built exactly as originally specified — forward-compatible
+plumbing that activates automatically once D1-D4 ship — but is **inert in
+practice**: `case_persons`/`entities`/`persons_named` are `[]` on every
+entry, for every case, today, because no `persons.jsonl` exists anywhere
+(case-local or global) to populate them.
+
+The verify-conclude prompt rule is structural motivation independent of the
+person pipeline: distillation (ADR #52) strips ceremony from `verbatim_quote`
+into a dense `distilled_context`, but a distillation model summarizing
+"substance" can pull in adjacent factual context from the surrounding
+source text that the strict `verbatim_quote` doesn't itself support (see
+Consequences). The compliance model (ADR #43, #49) already reasons over
+`verbatim_quote` alone; adding `distilled_context` as a second, denser
+reasoning surface without a cross-check would let compliance verdicts
+silently inherit any over-inclusion distillation introduces. This closes
+that gap the same way ADR #48/#49 closed the truncation-evidence gap:
+structurally, in the prompt contract, not by trusting model behavior.
+
+### Decision
+
+(a) `_build_user_message` gains a "Personnes impliquées" section, built
+from `case_persons` (case-specific: role assignments, ambiguity note) and
+`entities` (base identity: canonical name, aliases), merged and keyed by
+`person_id` — appended only when non-empty, mirroring the ADR #44
+cross-role block. **Inert until D1-D4 ship.**
+
+(b) Each fact line in the compliance prompt exposes both fields side by
+side: `distilled="..."` (reasoning surface) and `citation="..."` (verbatim
+verification anchor, previously the only field shown).
+
+(c) `COMPLIANCE_SYSTEM_PROMPT` gains a verify-conclude paragraph: reason
+from `distilled`, but before finalizing `breached`/`met`, verify the
+specific claim is actually present in `citation` — downgrade to
+`insufficient_evidence` on any mismatch or suspected fabrication.
+
+(d) `COMPLIANCE_SYSTEM_PROMPT` gains a person-naming paragraph: name a
+person in the rationale for a `breached`/`met` verdict that concerns them,
+when a "Personnes impliquées" section is present — but never name a person
+whose `ambiguity_note` flags uncertain resolution; fall back to role-only
+reference or `insufficient_evidence`. **Inert until D1-D4 ship** (no
+section ever renders today, so this rule has no live effect yet).
+
+(e) `ComplianceEntry` gains `persons_named: list[dict]` (default `[]`),
+populated per-cluster from the same merge as (a). **`[]` on every entry
+until D1-D4 ship.**
+
+(f) **Compliance-run cache** (added before implementation, user directive):
+`data/dossier/{case_id}/compliance_cache.jsonl`, keyed by a cluster
+fingerprint — SHA-256 of `role_id + sorted(fact_ids) + SHA-256(prompt)`.
+Cluster-level, not fact-level. An idempotent re-run with unchanged facts,
+retrieval, and context is entirely cache hits at zero marginal cost.
+Mirrors ADR #52's `distill_cache.jsonl` pattern.
+
+(g) **Dry-run cost transparency** (added before implementation, user
+directive): `--dry-run` now prints one line per cluster
+(`prompt_tokens`, `completion_tokens_est`, `cost_est`) in addition to the
+existing total line, and raises `RuntimeError` via
+`_check_dry_run_cost_gate` if the total estimate exceeds
+`DRY_RUN_COST_ALERT_USD = 25.0` — a loud stop before any real spend, since
+an estimate that high signals a prompt-size regression (e.g. an unbounded
+context block) rather than a normal cost curve.
+
+### Consequences
+
+- The private-case backfill in this session runs only `distill.py`
+  (mentions/resolve steps don't exist to run) — 235/235 facts distilled,
+  ~3.4% (8/235) fallback rate. Marginal token cost from the persons
+  plumbing is currently zero in practice, since the section never renders.
+- **Known limitation (a):** the 8 facts (3.4%) whose `distilled_context`
+  fell back to `source_context[:2000]` (verbatim quote not locatable in the
+  source document via substring or whitespace-tolerant regex — see
+  `_extract_fact_neighborhood` in ADR #52) have weaker distillation quality:
+  the fallback window is not centered on the quote. Their `fact_id`s are
+  logged to `data/dossier/private/distill_fallback_facts.txt` (gitignored,
+  private-case data) for future auditing, derived by re-running the same
+  deterministic match logic against the committed facts/extracted-text
+  state — no LLM call, no new backfill spend.
+- **Known limitation (b):** distillation (ADR #52) sometimes pulls
+  additional factual context from surrounding source text beyond the
+  strict verbatim scope of the fact it's summarizing — an artifact of
+  summarizing "substance" rather than performing pure extraction. This is
+  exactly the failure mode decision (c)'s verify-conclude rule exists to
+  catch: if the specific reasoning claim in `distilled` isn't actually
+  supported by `citation`, the compliance model must downgrade to
+  `insufficient_evidence` rather than trust the denser surface.
+- Additive, backward-compatible schema change (`persons_named` defaults to
+  `[]`); no existing `ComplianceEntry` or `compliance_matrix.json` breaks.
+- Compliance-run cache and dry-run cost gate are net-new operational
+  safety rails, not scoped in the original D6 brief — added because a
+  re-run against 235 facts without cluster caching would otherwise re-spend
+  on every retry, and an unbounded prompt could regress cost silently.
+
+### Follow-ups
+
+- ADR #50 (D1, person-index fixtures) and ADR #51 (D4, global entity store)
+  remain open — carried forward again from ADR #52, still not written, not
+  implemented.
+- Once D1-D4 ship and `persons.jsonl` exists for a case, decisions (a),
+  (d), and (e) activate with no further code change — this is the point of
+  building them now as inert plumbing rather than deferring them entirely.
+- `Fact.mentioned_person_ids` does not exist yet; `generate_compliance_matrix`
+  reads it via `getattr(f, "mentioned_person_ids", None) or []` so the
+  per-cluster person-filtering logic is real code today, exercised as a
+  no-op, rather than dead code gated behind a feature flag.
