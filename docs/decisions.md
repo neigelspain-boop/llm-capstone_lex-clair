@@ -2094,3 +2094,50 @@ matches the current matrix. No other change: `MAX_OUTPUT_TOKENS` stays at
 - Consider surfacing a per-role truncation/parse-failure/empty summary
   count in the CLI's existing summary print line, once the log has been
   observed across a few runs.
+
+## ADR #49 — Uncapped MAX_OUTPUT_TOKENS on compliance call (correcting Day C notaire silence)
+
+**Date:** 2026-07-30 · **Branch:** v2-agentic (Day C follow-up) · **Status:** Accepted
+
+### Context
+
+Day C private run (2026-07-30) processed 46 role clusters, emitted 6
+entries — all on 1-2-fact clusters. Every notaire_* cluster
+(notaire_redacteur 42 facts, notaire_stagiaire, notaire_instrumentaire,
+notaire_mandataire, notaire_associe, notaire_collaboratrice) produced no
+output. ADR #48 added persisted logging to make the truncation vs
+parse-fail vs empty-response split verifiable. This ADR is the actual fix
+ADR #48 enables verification of. Cites ADR #47 as identical-pattern
+precedent for the answer-model tier: reasoning-effort tokens and
+completion tokens share the same `max_tokens` budget on Opus 4.7 max via
+OpenRouter, so a small cap suffocates reasoning-heavy compliance calls
+before any output is emitted.
+
+### Decision
+
+Remove the `MAX_OUTPUT_TOKENS = 4096` cap. Model's default output cap
+applies. `extra_body={"reasoning": {"effort": "max"}}` remains — the
+reasoning-effort transport pattern is unchanged.
+
+Dry-run path: replace the `MAX_OUTPUT_TOKENS // 2` completion-tokens
+estimate with a standalone `_DRY_RUN_EST_COMPLETION_TOKENS = 2048`
+constant, since there's no longer a real cap to reference.
+
+Truncation warning log message: no longer references a `max_tokens=`
+figure the code doesn't set; instead cites "the provider's max-output
+ceiling."
+
+### Consequences
+
+- Potentially higher per-call cost — mitigated by (a) existing 30-fact
+  chronological cap in `_cap_facts_chronologically`, (b) ADR #48 log
+  surfaces per-call cost immediately so runaway is visible, (c)
+  OpenRouter model default cap acts as ceiling.
+- Empirical post-uncap run: 46/46 `finish_reason=stop`, ~$22 total,
+  all notaire clusters produce substantive output.
+
+### Follow-ups
+
+- If empirical cost is unbounded, add soft ceiling `max_tokens=16000` as
+  safety. Splitting >15-fact clusters into sub-calls with independent
+  budgets remains Attempt 2 architecture work.
