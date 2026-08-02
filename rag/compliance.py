@@ -498,73 +498,92 @@ def generate_compliance_matrix(
     and estimates tokens/cost without invoking the API or writing output.
     """
     t0 = time.time()
-    facts, roles, ambiguities = _load_case_artifacts(case_id)
-    groups = _group_facts_by_role(facts)
 
-    role_ids = sorted(groups)
-    if limit is not None:
-        role_ids = role_ids[:limit]
+    # ADR #48: per-case FileHandler for the compliance run.
+    # Overwritten each run (mode="w") so the log matches the current matrix.
+    # Removed in finally so the handler doesn't leak to other module callers.
+    log_dir = DOSSIER_DIR / case_id
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_path = log_dir / "compliance_run.log"
+    file_handler = logging.FileHandler(log_path, mode="w", encoding="utf-8")
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter(
+        "%(asctime)s  %(levelname)s  %(message)s"
+    ))
+    log.addHandler(file_handler)
+    log.info(f"compliance run start · case_id={case_id} log_path={log_path}")
 
-    all_entries: list[ComplianceEntry] = []
-    total_prompt_tokens = 0
-    total_completion_tokens = 0
-    total_cost = 0.0
+    try:
+        facts, roles, ambiguities = _load_case_artifacts(case_id)
+        groups = _group_facts_by_role(facts)
 
-    for role_id in role_ids:
-        role_facts = groups[role_id]
-        role_label = _role_label(role_id, roles)
-        query = _build_retrieval_query(role_id, role_label, role_facts)
-        chunks = retrieve(query, k=RELEVANT_STATUTE_K, source_scope="statute")
+        role_ids = sorted(groups)
+        if limit is not None:
+            role_ids = role_ids[:limit]
 
-        raw_entries, usage = _call_compliance_llm(
-            role_id, role_label, role_facts, chunks, facts, roles, dry_run=dry_run
-        )
-        total_prompt_tokens += usage["prompt_tokens"]
-        total_completion_tokens += usage["completion_tokens"]
-        total_cost += usage["cost_usd"] or 0.0
-        all_entries.extend(_build_entries(raw_entries, role_id))
+        all_entries: list[ComplianceEntry] = []
+        total_prompt_tokens = 0
+        total_completion_tokens = 0
+        total_cost = 0.0
 
-    matrix = ComplianceMatrix(
-        case_id=case_id,
-        generated_at=_utcnow(),
-        model_id=COMPLIANCE_MODEL_ID,
-        total_facts_considered=len(facts),
-        total_entries=len(all_entries),
-        entries=all_entries,
-        unresolved_ambiguities=len(ambiguities),
-    )
+        for role_id in role_ids:
+            role_facts = groups[role_id]
+            role_label = _role_label(role_id, roles)
+            query = _build_retrieval_query(role_id, role_label, role_facts)
+            chunks = retrieve(query, k=RELEVANT_STATUTE_K, source_scope="statute")
 
-    elapsed = time.time() - t0
+            raw_entries, usage = _call_compliance_llm(
+                role_id, role_label, role_facts, chunks, facts, roles, dry_run=dry_run
+            )
+            total_prompt_tokens += usage["prompt_tokens"]
+            total_completion_tokens += usage["completion_tokens"]
+            total_cost += usage["cost_usd"] or 0.0
+            all_entries.extend(_build_entries(raw_entries, role_id))
 
-    if not dry_run:
-        out_dir = DOSSIER_DIR / case_id
-        out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / "compliance_matrix.json"
-        out_path.write_text(
-            json.dumps(matrix.model_dump(mode="json"), indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-
-    if dry_run:
-        print(
-            f"compliance dry-run · case_id={case_id} roles_processed={len(role_ids)} "
-            f"est_prompt_tokens={total_prompt_tokens} est_completion_tokens={total_completion_tokens} "
-            f"cost_est=${total_cost:.2f} elapsed={elapsed:.1f}s"
-        )
-    else:
-        status_counts = {"met": 0, "breached": 0, "ambiguous": 0, "insufficient_evidence": 0}
-        for entry in all_entries:
-            status_counts[entry.status] += 1
-
-        print(
-            f"compliance summary · case_id={case_id} roles_processed={len(role_ids)} "
-            f"entries={len(all_entries)} met={status_counts['met']} "
-            f"breached={status_counts['breached']} ambiguous={status_counts['ambiguous']} "
-            f"insufficient={status_counts['insufficient_evidence']} elapsed={elapsed:.1f}s "
-            f"cost_est=${total_cost:.2f}"
+        matrix = ComplianceMatrix(
+            case_id=case_id,
+            generated_at=_utcnow(),
+            model_id=COMPLIANCE_MODEL_ID,
+            total_facts_considered=len(facts),
+            total_entries=len(all_entries),
+            entries=all_entries,
+            unresolved_ambiguities=len(ambiguities),
         )
 
-    return matrix
+        elapsed = time.time() - t0
+
+        if not dry_run:
+            out_dir = DOSSIER_DIR / case_id
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out_path = out_dir / "compliance_matrix.json"
+            out_path.write_text(
+                json.dumps(matrix.model_dump(mode="json"), indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+
+        if dry_run:
+            print(
+                f"compliance dry-run · case_id={case_id} roles_processed={len(role_ids)} "
+                f"est_prompt_tokens={total_prompt_tokens} est_completion_tokens={total_completion_tokens} "
+                f"cost_est=${total_cost:.2f} elapsed={elapsed:.1f}s"
+            )
+        else:
+            status_counts = {"met": 0, "breached": 0, "ambiguous": 0, "insufficient_evidence": 0}
+            for entry in all_entries:
+                status_counts[entry.status] += 1
+
+            print(
+                f"compliance summary · case_id={case_id} roles_processed={len(role_ids)} "
+                f"entries={len(all_entries)} met={status_counts['met']} "
+                f"breached={status_counts['breached']} ambiguous={status_counts['ambiguous']} "
+                f"insufficient={status_counts['insufficient_evidence']} elapsed={elapsed:.1f}s "
+                f"cost_est=${total_cost:.2f}"
+            )
+
+        return matrix
+    finally:
+        log.removeHandler(file_handler)
+        file_handler.close()
 
 
 # ========== CLI entrypoint ==========

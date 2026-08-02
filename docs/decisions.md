@@ -2040,3 +2040,57 @@ OpenRouter model_id are both visible for debugging.
 - Running-total cost per session.
 - Automatic model recommendation based on the router's `route_decision`
   confidence (ADR #42).
+## ADR #48 — Persisted per-case compliance run log
+
+**Date:** 2026-07-30 · **Branch:** v2-agentic (Day C follow-up) · **Status:** Accepted
+
+### Context
+
+Day C private compliance run (2026-07-30) processed 46 role clusters but
+emitted only 6 entries, all on 1-2-fact clusters. Every fact-heavy cluster
+(notaire_redacteur at 42 facts, notaire_stagiaire, quasi_usufruitier,
+heritier_nu_proprietaire, etc.) produced no output. Since notaire liability
+is the project's headline use case and every notaire_* cluster went
+silent, the matrix contained zero assessments about the actor class the
+tool exists to evaluate.
+
+`rag/compliance.py` already logs `role_id, finish_reason, prompt_tokens,
+completion_tokens, raw_chars, elapsed` per call, including a dedicated
+warning when `finish_reason == "length"` — but only via `logging.basicConfig`
+(stderr), which nothing captures. No persisted log survived the Day C run,
+so it cannot be confirmed post-hoc whether each silent role_id truncated
+(`finish_reason=length`), failed to parse (`_recover_partial_entries` also
+came up empty), or legitimately returned `[]`. `docs/ai_choreography_audit.md`
+Recommendation #1 ranks closing this evidence gap above any tuning change,
+since a future fix to `MAX_OUTPUT_TOKENS` would otherwise be tuned blind.
+
+### Decision
+
+Add a per-case `logging.FileHandler` at
+`data/dossier/{case_id}/compliance_run.log`, attached to the module logger
+for the duration of `generate_compliance_matrix()` and removed in a
+`finally` block. Overwritten (`mode="w"`) on every run so the log always
+matches the current matrix. No other change: `MAX_OUTPUT_TOKENS` stays at
+`4096` (deferred — see Follow-ups), no log statements or call sites change.
+
+### Consequences
+
+- The next truncation-related change to `rag/compliance.py` (whenever it
+  lands) becomes verifiable rather than assumed: per-role_id outcome
+  (truncated vs. parse-failed vs. legitimately empty) will be visible in
+  the persisted log across a re-run.
+- New artifact per run (`compliance_run.log`), gitignored under
+  `data/dossier/private/` alongside the matrix; overwrites on each
+  invocation, so only the most recent run's log is ever retained.
+- No cost or behavior change to the LLM call itself — this ADR is
+  instrumentation only.
+
+### Follow-ups
+
+- Raising/uncapping `MAX_OUTPUT_TOKENS` in `rag/compliance.py` remains open
+  and deliberately deferred — this ADR's logging is a prerequisite for
+  verifying that fix once it lands. Will need its own ADR number when
+  implemented.
+- Consider surfacing a per-role truncation/parse-failure/empty summary
+  count in the CLI's existing summary print line, once the log has been
+  observed across a few runs.
