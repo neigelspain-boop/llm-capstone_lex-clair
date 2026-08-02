@@ -56,7 +56,6 @@ log = logging.getLogger(__name__)
 
 COMPLIANCE_MODEL_ID = "anthropic/claude-opus-4.7"
 RELEVANT_STATUTE_K = 8  # per fact cluster, retrieve top-k statute chunks for context
-MAX_OUTPUT_TOKENS = 4096
 MAX_FACTS_PER_ROLE = 30  # see _cap_facts_chronologically
 
 # Rough per-token USD rates for --dry-run token/cost estimates only, based
@@ -65,6 +64,9 @@ MAX_FACTS_PER_ROLE = 30  # see _cap_facts_chronologically
 # (non-dry-run) calls use the exact `usage.cost` OpenRouter returns instead.
 _EST_PROMPT_USD_PER_TOKEN = 5e-6
 _EST_COMPLETION_USD_PER_TOKEN = 25e-6
+# --dry-run only: no real max_tokens cap on the live call (ADR #49). This
+# is a stand-in completion-length estimate for cost preview.
+_DRY_RUN_EST_COMPLETION_TOKENS = 2048
 
 _VALID_STATUSES = {"met", "breached", "ambiguous", "insufficient_evidence"}
 
@@ -426,7 +428,7 @@ def _call_compliance_llm(
 
     if dry_run:
         prompt_tokens = _estimate_tokens(COMPLIANCE_SYSTEM_PROMPT) + _estimate_tokens(user_message)
-        completion_tokens = MAX_OUTPUT_TOKENS // 2
+        completion_tokens = _DRY_RUN_EST_COMPLETION_TOKENS
         cost = (
             prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
             + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
@@ -446,7 +448,6 @@ def _call_compliance_llm(
             {"role": "system", "content": COMPLIANCE_SYSTEM_PROMPT},
             {"role": "user", "content": user_message},
         ],
-        max_tokens=MAX_OUTPUT_TOKENS,
         temperature=0.0,
         extra_body={"reasoning": {"effort": "max"}},
     )
@@ -472,9 +473,9 @@ def _call_compliance_llm(
     )
     if finish_reason == "length":
         log.warning(
-            "compliance: response truncated by max_tokens for role_id=%s "
-            "(completion_tokens=%d, max_tokens=%d) — see parser recovery",
-            role_id, completion_tokens, MAX_OUTPUT_TOKENS,
+            "compliance: response truncated by provider's max-output ceiling "
+            "for role_id=%s (completion_tokens=%d) — see parser recovery",
+            role_id, completion_tokens,
         )
 
     return entries, {
