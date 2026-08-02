@@ -40,7 +40,7 @@ import time
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from ingestion.clients import get_anthropic_client
 
@@ -143,6 +143,14 @@ class Fact(BaseModel):
     verbatim_quote: str           # exact source sentence(s), no paraphrase
     source_doc_id: str            # matches sidecar doc_id
     source_chunk_id: str | None = None  # None here — Deliverable 5 backfills
+    distilled_context: str | None = Field(
+        default=None,
+        description=(
+            "Ceremony-stripped substance summary. Populated by distill.py post "
+            "facts extraction. Compliance reasons from this AND verifies "
+            "against verbatim_quote."
+        ),
+    )
 
     @field_validator("actor_role")
     @classmethod

@@ -2141,3 +2141,87 @@ ceiling."
 - If empirical cost is unbounded, add soft ceiling `max_tokens=16000` as
   safety. Splitting >15-fact clusters into sub-calls with independent
   budgets remains Attempt 2 architecture work.
+
+## ADR #52 — Fact-level distillation with verbatim cross-check
+
+**Date:** 2026-08-08 · **Branch:** v2-persons (D5) · **Status:** Accepted
+
+### Context
+
+Facts today store a `verbatim_quote` — the exact source sentence(s), kept
+for forensic verification — extracted from ceremony-heavy source letters.
+Most correspondence in the private case is roughly 80% ceremony (address
+blocks, standard French legal formulas, restated context from prior
+correspondence) and 20% substance. The compliance model (ADR #43, ADR #49)
+spends attention chewing through ceremony to find the substance that
+actually decides an obligation's status. The fix is a dense per-fact
+"lawyer's-note" summary that strips ceremony while preserving substance,
+with `verbatim_quote` kept intact and unmutated alongside it for forensic
+verification.
+
+This deliverable is D5 of the user's Attempt 2 execution plan
+(`plan_attempt2_full.md`, local, not committed). D1-D4 (a separate person-
+index pipeline: mention extraction, entity resolution, ADR #50/#51) are
+**not shipped** as of this ADR — `distill.py` has no dependency on them, so
+distillation proceeds independently. #50 and #51 remain open/reserved for
+whenever that pipeline is built; this ADR does not claim or reference them.
+
+### Decision
+
+Fact-level (not document-level) distillation via new
+`ingestion/dossier/distill.py`. For each fact, `anthropic/claude-haiku-4.5`
+(temperature 0.0) reads the fact's `verbatim_quote` plus a 2000-character
+window of surrounding source-document text (1000 chars either side of the
+quote's location, substring-located; falls back to the document's first
+2000 chars with a logged warning if the quote isn't found verbatim) and
+emits a 2-5 sentence dense summary. The system prompt requires preserving
+every date, name (person or entity), amount, reference to a prior act or
+document, and any direct quotation of an admission, refusal, contradiction,
+or citation, plus the signatory's identity; it requires stripping address
+blocks, closings, standard formulas, restated prior correspondence (unless
+the restatement contradicts or is the first mention of a document), and
+enclosure lists (unless the enclosure is the substance).
+
+New `Fact` field: `distilled_context: str | None`, default `None` —
+additive and backward-compatible; existing serialized facts without the key
+load unchanged. **Salvage constraint**: no existing `fact_id` is renumbered
+or regenerated, and `verbatim_quote` is never mutated by this or any other
+Attempt 2 stage — extensions only ever add new optional fields alongside
+it. `compliance_matrix.json`'s existing structure stays valid under this
+constraint; any future additive field (e.g. a person-pipeline
+`persons_named`) must hold to the same rule.
+
+Idempotency: cache keyed by `SHA-256(verbatim_quote + source_context[:200])`,
+persisted to `data/dossier/<case_id>/distill_cache.jsonl`. A re-run with
+unchanged facts and unchanged source documents is entirely cache hits — no
+API calls, byte-identical `facts.jsonl`. Atomic rewrite of `facts.jsonl` via
+`.tmp` → `os.replace`; the `.tmp` file is removed if `os.replace` fails, so
+a crash mid-write never corrupts or half-writes the file.
+
+`distill_case` is not wired into `build.py` or any other pipeline entry
+point — it ships dormant, invoked only via its own CLI
+(`python -m ingestion.dossier.distill --case-id <id> [--dry-run]
+[--fact-id <one>]`). The private-case backfill (~$1.20 for ~235 facts) is
+authorized separately, at D6's ship gate.
+
+### Consequences
+
+- Additive schema change, fully backward-compatible with every prior
+  Attempt 1/2 fact.
+- Compliance (D6) will read `distilled_context` as its reasoning input and
+  `verbatim_quote` as its verification anchor before finalizing a
+  `breached`/`met` verdict — the fiability constraint this deliverable
+  exists to serve.
+- Cache-hit idempotency means re-running distillation after a partial
+  failure only pays for the facts that hadn't succeeded yet.
+- D5 introduces zero cost or behavior change to any existing pipeline until
+  D6 explicitly invokes it against the private case.
+
+### Follow-ups
+
+- Document-level distillation, if fact-level proves too narrow for
+  cross-fact reasoning (e.g. contradictions spanning two documents) —
+  deferred.
+- Distillation quality eval via LLM-as-judge — deferred to Attempt 3.
+- ADR #50 (D1, person-index fixtures) and ADR #51 (D4, global entity store)
+  remain open — not written, not implemented, in this session.

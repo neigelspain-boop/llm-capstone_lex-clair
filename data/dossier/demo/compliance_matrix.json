@@ -1,0 +1,9 @@
+{
+  "case_id": "demo",
+  "generated_at": "2026-08-02T10:00:43.101979Z",
+  "model_id": "anthropic/claude-opus-4.7",
+  "total_facts_considered": 0,
+  "total_entries": 0,
+  "entries": [],
+  "unresolved_ambiguities": 0
+}
