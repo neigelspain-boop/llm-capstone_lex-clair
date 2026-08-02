@@ -93,6 +93,40 @@ def test_distill_fact_produces_valid_output_on_fixture(distill_case_dir) -> None
     mock_client.chat.completions.create.assert_called_once()
 
 
+def test_extract_fact_neighborhood_matches_across_nbsp_whitespace_drift() -> None:
+    """Regex fallback finds a verbatim_quote (regular spaces) against source
+    text carrying NBSP in place of a space (e.g. in a number like "195 572"),
+    instead of silently returning the source_text[:window] fallback."""
+    verbatim_quote = "amount of 195 572 euros"
+    source_text = (
+        "some preceding filler text " * 5
+        + "amount of 195 572 euros"
+        + " some trailing filler text" * 5
+    )
+
+    result = distill._extract_fact_neighborhood(source_text, verbatim_quote, window=40)
+
+    assert result != source_text[:40]
+    assert "195 572" in result
+
+
+def test_extract_fact_neighborhood_matches_across_newline_count_drift() -> None:
+    """Regex fallback finds a verbatim_quote containing a single \\n where the
+    source text has \\n\\n (different line-break handling), instead of
+    falling back to source_text[:window]."""
+    verbatim_quote = "premiere ligne\ndeuxieme ligne du fait juridique invoque ici"
+    source_text = (
+        "filler " * 10
+        + "premiere ligne\n\ndeuxieme ligne du fait juridique invoque ici"
+        + " filler" * 10
+    )
+
+    result = distill._extract_fact_neighborhood(source_text, verbatim_quote, window=40)
+
+    assert result != source_text[:40]
+    assert "deuxieme ligne du fait juridique invoque ici" in result
+
+
 def test_distill_case_populates_all_facts(distill_case_dir) -> None:
     """distill_case backfills distilled_context on every fact in the case."""
     mock_client = MagicMock()

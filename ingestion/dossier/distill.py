@@ -31,6 +31,7 @@ import hashlib
 import json
 import logging
 import os
+import re
 from pathlib import Path
 
 from ingestion.clients import get_openrouter_client
@@ -107,23 +108,37 @@ def _extract_fact_neighborhood(
 ) -> str:
     """Return `window` chars of source_text centered on verbatim_quote.
 
-    Falls back to source_text[:window] (with a logged warning) if the quote
-    isn't found via substring match — e.g. whitespace normalization drift
-    between extraction and fact extraction.
+    Three-tier match: literal substring (fast path), then a whitespace-
+    tolerant regex anchored on the first 40 chars of the whitespace-
+    collapsed verbatim_quote — source .md transcripts can carry NBSP/
+    thin-space in numbers or different line-break counts than the
+    verbatim_quote captured at extraction time, so a literal find() alone
+    misses real matches. Falls back to source_text[:window] (with a logged
+    warning) only if both fail.
     """
     idx = source_text.find(verbatim_quote)
-    if idx == -1:
-        log.warning(
-            "distill: verbatim_quote not found via substring match in source "
-            "text (len=%d); falling back to source_text[:%d]",
-            len(verbatim_quote), window,
-        )
-        return source_text[:window]
+    if idx != -1:
+        half = window // 2
+        start = max(0, idx - half)
+        end = min(len(source_text), idx + len(verbatim_quote) + half)
+        return source_text[start:end]
 
-    half = window // 2
-    start = max(0, idx - half)
-    end = min(len(source_text), idx + len(verbatim_quote) + half)
-    return source_text[start:end]
+    normalized = " ".join(verbatim_quote.split())
+    pattern = re.escape(normalized[:40]).replace(r"\ ", r"\s+")
+    match = re.search(pattern, source_text)
+    if match is not None:
+        half = window // 2
+        start = max(0, match.start() - half)
+        end = min(len(source_text), match.start() + len(verbatim_quote) + half)
+        return source_text[start:end]
+
+    log.warning(
+        "distill: verbatim_quote not found via substring or whitespace-"
+        "tolerant regex match in source text (len=%d); falling back to "
+        "source_text[:%d]",
+        len(verbatim_quote), window,
+    )
+    return source_text[:window]
 
 
 # ========== content-hash cache ==========
