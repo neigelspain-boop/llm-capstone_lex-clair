@@ -1356,3 +1356,81 @@ def test_run_compliance_for_role_raises_on_unknown_role(tmp_path, monkeypatch) -
 
     with pytest.raises(ValueError, match="role_id"):
         compliance.run_compliance_for_role("testcase", "role_qui_nexiste_pas")
+
+
+# ========== answer prompt: statute vs dossier vs blended (ADR #62) ==========
+
+def _statute_chunk() -> dict:
+    return {
+        "chunk_id": "cc-587-1", "source_label": "Code civil", "num": "587",
+        "titre": "", "section_path": "Livre II > Titre III",
+        "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006428859",
+        "texte": "Si l'usufruit comprend des choses dont on ne peut faire usage...",
+    }
+
+
+def _dossier_chunk() -> dict:
+    return {
+        "chunk_id": "dossier-vitrine-note_de_presentation-c001",
+        "source_label": "", "num": "note_de_presentation", "titre": "Page 1",
+        "section_path": "", "url": "data/dossier/vitrine/extracted/note.md",
+        "texte": "Mme MARTIN a mis en demeure Maître DUBOIS le 30 juin 2026.",
+    }
+
+
+def test_dossier_question_does_not_get_the_statute_prompt() -> None:
+    """The statute template labels its context "ARTICLES DE LOI" and demands
+    "art. {num} du {source_label} ({url})" — fields a case document has no
+    real values for. Applied to a dossier it produced a hedged summary citing
+    "art. non spécifié" at a fabricated "https://data/dossier/..." URL."""
+    from rag import prompt
+
+    p = prompt.build("quel est le litige dans ce dossier ?", [_dossier_chunk()])
+
+    assert "PIÈCES DU DOSSIER" in p
+    assert "ARTICLES DE LOI PERTINENTS" not in p
+    assert "https://" not in p, "a private document must never be given a web URL"
+
+
+def test_dossier_prompt_demands_named_concrete_facts() -> None:
+    """The whole point of the case-file surface: a reply that would describe
+    any succession is a failure, not a safe answer."""
+    from rag import prompt
+
+    p = prompt.build("quel est le litige ?", [_dossier_chunk()])
+
+    assert "nomme les personnes" in p
+    assert "généralités juridiques" in p
+    assert "p. {page}" in p or "p. Page 1" in p or "Page: Page 1" in p
+
+
+def test_statute_question_keeps_the_article_prompt() -> None:
+    from rag import prompt
+
+    p = prompt.build("qu'est-ce que le quasi-usufruit ?", [_statute_chunk()])
+
+    assert "ARTICLES DE LOI PERTINENTS" in p
+    assert "PIÈCES DU DOSSIER" not in p
+    assert "legifrance.gouv.fr" in p
+
+
+def test_blended_retrieval_gets_the_template_that_separates_the_two() -> None:
+    """A gap-analysis query routes to "blended", so both kinds of chunk arrive
+    together and the reply has to say which claim came from which."""
+    from rag import prompt
+
+    p = prompt.build("le notaire a-t-il manqué à ses obligations ?",
+                     [_statute_chunk(), _dossier_chunk()])
+
+    assert "Distingue toujours ce qui vient de la LOI" in p
+    assert "legifrance.gouv.fr" in p
+    assert "Mme MARTIN" in p
+
+
+def test_template_is_chosen_from_the_chunks_not_the_caller() -> None:
+    """Retrieval is what actually decides what the model is looking at;
+    reading it here keeps the prompt and the context from disagreeing."""
+    from rag import prompt
+
+    assert prompt._is_dossier(_dossier_chunk())
+    assert not prompt._is_dossier(_statute_chunk())
