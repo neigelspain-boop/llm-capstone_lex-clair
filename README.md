@@ -1,4 +1,4 @@
-# lex-clair — a legal investigator for succession heirs
+U7# lex-clair — a legal investigator for succession heirs
 
 **A French legal RAG that decodes notaire correspondence, cites the applicable statutes verbatim, and turns a shoebox of documents into an evidence file.**
 
@@ -516,4 +516,4 @@ MIT License. See `LICENSE`.
 
 ---
 
-*Built by Neigel Spain (@neigelspain-boop). Dedicated to the heirs who kept receipts.*
+*Built by Nedj (@neigelspain-boop). Dedicated to the heirs who kept receipts.*
