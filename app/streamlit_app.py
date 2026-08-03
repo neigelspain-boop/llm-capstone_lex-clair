@@ -24,6 +24,7 @@ panel, `rag.compliance.run_compliance_for_role` /
 
 from __future__ import annotations
 
+import hmac
 import json
 import os
 import traceback
@@ -91,6 +92,21 @@ LABELS = {
             "⚠️ Base de données indisponible — les conversations et "
             "retours de cette session ne seront pas conservés."
         ),
+        "dossier_heading": "🔐 Accès dossier",
+        "dossier_passphrase": "Phrase secrète",
+        "dossier_wrong": "Phrase secrète incorrecte.",
+        "dossier_unlocked": "Accès dossier déverrouillé.",
+        "dossier_lock": "🔒 Verrouiller",
+        "dossier_not_configured": (
+            "_Aucune phrase secrète configurée — accès dossier verrouillé. "
+            "Voir `.streamlit/secrets.toml.example`._"
+        ),
+        "dossier_active": "Dossier actif",
+        "dossier_statute_only": (
+            "_Réponses fondées sur la loi uniquement. Sélectionnez un "
+            "dossier pour interroger vos documents._"
+        ),
+        "route": "Périmètre de recherche",
     },
     "en": {
         "title": "lex-clair · French legal assistant",
@@ -145,6 +161,21 @@ LABELS = {
             "⚠️ Database unavailable — conversations and feedback from "
             "this session will not be persisted."
         ),
+        "dossier_heading": "🔐 Dossier access",
+        "dossier_passphrase": "Passphrase",
+        "dossier_wrong": "Incorrect passphrase.",
+        "dossier_unlocked": "Dossier access unlocked.",
+        "dossier_lock": "🔒 Lock",
+        "dossier_not_configured": (
+            "_No passphrase configured — dossier access locked. "
+            "See `.streamlit/secrets.toml.example`._"
+        ),
+        "dossier_active": "Active dossier",
+        "dossier_statute_only": (
+            "_Answers grounded in statute only. Select a dossier to query "
+            "your own documents._"
+        ),
+        "route": "Retrieval scope",
     },
 }
 
@@ -227,6 +258,17 @@ COST_PREVIEW_FALLBACK_USD = 0.55
 COST_COMPARE_USD = 0.70  # Opus + Kimi + Haiku meta-analysis
 
 MATRIX_CACHE_TTL_SECONDS = 300
+
+
+# ========== dossier access gate (ADR #58) ==========
+
+# Cases anyone may reach without the passphrase. Everything else under
+# data/dossier/ is protected — the demo fixture stays open so a deployed
+# Space remains usable for peer review.
+PUBLIC_CASE_IDS = {"demo"}
+
+PASSPHRASE_SECRET_KEY = "dossier_passphrase"
+NO_CASE_LABEL = "Aucun"
 
 
 # ========== feedback wrapper (delegates to monitoring.db) ==========
@@ -336,6 +378,123 @@ def _translate_to_english(french_text: str) -> str | None:
         return None
 
 
+# ========== dossier access gate ==========
+
+def _configured_passphrase() -> str | None:
+    """The configured passphrase, or None if secrets are absent/unset.
+
+    st.secrets raises when no secrets.toml exists at all, which is the
+    normal state for a fresh checkout — treat that as "not configured",
+    which means permanently locked. Never fail open.
+    """
+    try:
+        value = st.secrets.get(PASSPHRASE_SECRET_KEY)
+    except Exception:  # noqa: BLE001 — no secrets.toml at all
+        return None
+    return value or None
+
+
+def _dossier_unlocked() -> bool:
+    """Whether protected cases are reachable in this session.
+
+    Single source of truth for both enforcement points below. Reads session
+    state only — the passphrase comparison happens once, in the sidebar.
+    """
+    return bool(st.session_state.get("dossier_unlocked", False))
+
+
+def _case_is_public(case_id: str) -> bool:
+    return case_id in PUBLIC_CASE_IDS
+
+
+def _filter_accessible(case_ids: list[str], unlocked: bool) -> list[str]:
+    """Enforcement point 1 of 2, as a pure function.
+
+    Applied to the compliance panel's case list so a locked session cannot
+    read data/dossier/<protected>/ at all — the panel reads private facts and
+    matrices directly, so gating only the chat would leave the larger surface
+    open.
+    """
+    if unlocked:
+        return case_ids
+    return [c for c in case_ids if _case_is_public(c)]
+
+
+def _resolve_active_case_id(case_id: str | None, unlocked: bool) -> str | None:
+    """Enforcement point 2 of 2, as a pure function.
+
+    Returns None whenever the session is locked or the selection is absent,
+    regardless of what the widget last held. With no case id,
+    rag.router.route_query can only ever resolve source_scope "statute"
+    (ADR #42 downgrades both case_factual and gap_analysis without one), so
+    the privacy property holds structurally rather than by the UI happening
+    to hide a dropdown.
+
+    Kept pure and separate from session state so the authorisation decision
+    is unit-testable without a Streamlit runtime.
+    """
+    if not case_id or case_id == NO_CASE_LABEL:
+        return None
+    if not unlocked and not _case_is_public(case_id):
+        return None
+    return case_id
+
+
+def _accessible_cases(case_ids: list[str]) -> list[str]:
+    """Session-reading wrapper over _filter_accessible."""
+    return _filter_accessible(case_ids, _dossier_unlocked())
+
+
+def _active_case_id() -> str | None:
+    """Session-reading wrapper over _resolve_active_case_id."""
+    return _resolve_active_case_id(
+        st.session_state.get("active_case_id"), _dossier_unlocked()
+    )
+
+
+def _render_dossier_gate(labels: dict) -> None:
+    """Sidebar passphrase control + active-case selector."""
+    st.markdown("### " + labels["dossier_heading"])
+
+    configured = _configured_passphrase()
+    if configured is None:
+        st.caption(labels["dossier_not_configured"])
+    elif _dossier_unlocked():
+        st.success(labels["dossier_unlocked"], icon="🔓")
+        if st.button(labels["dossier_lock"], key="dossier_lock", width="stretch"):
+            st.session_state.dossier_unlocked = False
+            st.session_state.active_case_id = NO_CASE_LABEL
+            st.rerun()
+    else:
+        entered = st.text_input(
+            labels["dossier_passphrase"],
+            type="password",
+            key="dossier_passphrase_input",
+        )
+        if entered:
+            # compare_digest: constant-time, avoids leaking the prefix length
+            # through timing on repeated attempts.
+            if hmac.compare_digest(entered, configured):
+                st.session_state.dossier_unlocked = True
+                st.rerun()
+            else:
+                st.error(labels["dossier_wrong"])
+
+    cases = _accessible_cases(_list_all_cases())
+    options = [NO_CASE_LABEL, *cases]
+    current = st.session_state.get("active_case_id", NO_CASE_LABEL)
+    if current not in options:
+        current = NO_CASE_LABEL
+    choice = st.selectbox(
+        labels["dossier_active"],
+        options,
+        index=options.index(current),
+        key="active_case_id",
+    )
+    if choice == NO_CASE_LABEL:
+        st.caption(labels["dossier_statute_only"])
+
+
 # ========== compliance panel: data access ==========
 
 @st.cache_resource
@@ -356,7 +515,16 @@ def _load_compliance_matrix(case_id: str) -> dict:
 
 
 @st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
-def _list_cases_with_matrix() -> list[str]:
+def _list_all_cases() -> list[str]:
+    """Every case id on disk, sorted. Unfiltered — callers must pass the
+    result through _accessible_cases before showing or using it."""
+    if not DOSSIER_DIR.exists():
+        return []
+    return sorted(p.parent.name for p in DOSSIER_DIR.glob("*/facts.jsonl"))
+
+
+@st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
+def _cases_with_matrix() -> list[str]:
     """Case ids that have a compliance_matrix.json on disk.
 
     Cases with at least one entry sort first, so the panel opens on
@@ -364,11 +532,20 @@ def _list_cases_with_matrix() -> list[str]:
     otherwise win on alphabetical order and leave the tab looking dead.
     Empty cases still appear rather than silently vanishing — the role
     selector explains why they have nothing to offer.
+
+    Unfiltered by design: _list_cases_with_matrix applies the access gate.
+    Keeping the gate out of the cached function stops a locked result from
+    being cached and then served to an unlocked session, or vice versa.
     """
     if not DOSSIER_DIR.exists():
         return []
     case_ids = [p.parent.name for p in DOSSIER_DIR.glob("*/compliance_matrix.json")]
     return sorted(case_ids, key=lambda c: (not _role_options(c), c))
+
+
+def _list_cases_with_matrix() -> list[str]:
+    """Analysable cases this session is allowed to see (ADR #58)."""
+    return _accessible_cases(_cases_with_matrix())
 
 
 @st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
@@ -669,6 +846,10 @@ def _init_session_state() -> None:
     lang: 'fr' | 'en'
     models_warm: bool
     answer_model: str — ANSWER_MODELS catalog key (ADR #46)
+    dossier_unlocked: bool — passphrase accepted this session (ADR #58).
+        Default False; both enforcement points deny while it is False.
+    active_case_id: str — selected case, or NO_CASE_LABEL. Never read
+        directly for authorisation; go through _active_case_id().
     compare_model: str — selected compliance model id (ADR #57)
     compare_result_cache: dict — analysis results keyed by
         (case_id, role_id, mode, model_id), mode in {'single', 'compare'}.
@@ -690,6 +871,8 @@ def _init_session_state() -> None:
     st.session_state.setdefault("answer_model", "gpt-4o-mini")
     st.session_state.setdefault("compare_model", DEFAULT_COMPLIANCE_MODEL)
     st.session_state.setdefault("compare_result_cache", {})
+    st.session_state.setdefault("dossier_unlocked", False)
+    st.session_state.setdefault("active_case_id", NO_CASE_LABEL)
 
 
 # ========== env validation (startup fail-loud) ==========
@@ -764,6 +947,11 @@ def _render_sidebar(labels: dict) -> None:
         ):
             st.session_state.active_conversation_id = None
             st.rerun()
+
+        st.divider()
+
+        # --- Dossier access gate + active case (ADR #58) ---
+        _render_dossier_gate(labels)
 
         st.divider()
 
@@ -940,6 +1128,22 @@ def _render_turn_details(turn: dict, conv: dict, labels: dict) -> None:
             f"**{labels['turn_id_label']}:** `{turn['turn_id']}`"
         )
         result = turn["result"]
+
+        # Retrieval scope, first: a case_factual query with no active dossier
+        # is silently downgraded to statute (ADR #42), which otherwise reads
+        # as a confident but corpus-blind answer. Showing intent + scope +
+        # confidence + rationale is what makes that visible (ADR #58).
+        route = result.get("route_decision") or {}
+        if route:
+            st.markdown(
+                f"**{labels['route']}:** `{route.get('source_scope', '—')}` "
+                f"(intent `{route.get('intent', '—')}`, "
+                f"confiance `{route.get('confidence', '—')}`)"
+            )
+            rationale = route.get("rationale")
+            if rationale:
+                st.caption(rationale)
+
         fields = [
             ("rewritten_query", labels["rewritten"]),
             ("chunks_retrieved", labels["retrieved"]),
@@ -975,6 +1179,7 @@ def _render_turn(
                 try:
                     turn["result"] = get_flow().run(
                         turn["question"],
+                        active_case_id=_active_case_id(),
                         answer_model=st.session_state.answer_model,
                     )
                     st.session_state.models_warm = True
