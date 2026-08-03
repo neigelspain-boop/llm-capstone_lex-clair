@@ -2881,3 +2881,132 @@ unchanged and still reachable), ADR #53 (persons plumbing; the shared-cache
 model-dimension hazard this ADR guards against twice), ADR #46 (the sidebar
 answer-model toggle whose pattern the panel's model toggle mirrors), ADR #43
 (the compliance prompt both paths send).
+
+---
+
+## ADR #58 — Dossier retrieval reachable from chat, behind a passphrase gate (D9)
+
+**Date:** 2026-08-03 · **Branch:** v2-persons (D9) · **Status:** Accepted
+
+### Context
+
+Asking *"Qui est la notaire responsable de ce dossier ?"* returned a generic
+statute answer from both frontier models. Neither had seen a dossier chunk:
+three independent layers were broken, and only one of them intentionally.
+
+1. **The dossier was not in the retrieval index.** Chroma held 792 documents,
+   all statute. `data/dossier/private/chunks.csv` held 853 dossier chunks that
+   nothing read. `index_dossier("private")` had run (facts carried backfilled
+   `source_chunk_id`), but the shared CSV was later restored to its committed
+   statute-only state and Chroma rebuilt, silently undoing the sync — a failure
+   mode with no alarm, because nothing asserted the corpus was still mixed.
+2. **The UI never passed `active_case_id`.** `flow.run` was called with the
+   query and answer model only, so `route_query` classified `case_factual`,
+   found no active case, and downgraded to `statute` at `confidence="low"`.
+   The downgrade is correct ADR #42 behaviour; the defect was that no surface
+   could ever set a case, making the dossier half of the v2 dual-corpus pivot
+   unreachable in the product.
+3. **The downgrade was invisible.** `flow.run` returns `route_decision`, but
+   nothing rendered it, so a silently narrowed scope read as a confident
+   answer. This is why the gap survived to a user-visible failure.
+
+**A latent privacy hazard surfaced while diagnosing.** `data/chunks.csv` is
+git-tracked, and `append_to_statute_chunks_csv` appended dossier rows into it
+so `load_index` would have a row for every chunk_id Chroma could return
+(ADR #39). Re-indexing would therefore have written real client names into a
+tracked file, and the project's privacy convention greps *filenames*
+(`git diff --cached --name-only | grep private`), which would not have caught
+it. Verified never fired: `git log -S"dossier-private-" -- data/chunks.csv` is
+empty and the file has a single statute-only commit.
+
+### Decision
+
+**Private text never enters a tracked file — structurally.**
+`append_to_statute_chunks_csv` is deleted. `load_index` instead merges the
+tracked statute CSV with every per-case `data/dossier/*/chunks.csv` at load
+time (`_read_dossier_chunks`), aligning dossier rows onto the statute column
+set with `""` fills. Dossier text now lives only in paths already gitignored
+for private cases, plus gitignored `data/chroma/`. The leak becomes impossible
+rather than guarded by a hook someone must remember to run. Empty, missing,
+and zero-byte case files are skipped rather than raised on — one truncated
+CSV would otherwise abort `load_index` and take the whole app down.
+`ingestion/dossier/index.py` gains the `--case-id` CLI it never had.
+
+**Scope filtering moves into Chroma, tightening ADR #41.** Merging the corpora
+exposed a starvation bug that ADR #41's post-hoc design had made harmless only
+by accident: `search()` pulled `k*3` candidates over the whole collection and
+applied the scope predicate to the fused pool afterwards. With both corpora in
+one index, a dossier-flavoured query fills every candidate slot with dossier
+chunks and `source_scope="statute"` — the default — filters them all out and
+returns **zero** hits. Confirmed live before the fix. `_chroma_scope_filter`
+now translates the scope into a Chroma `where` clause (`$nin`/`$in`/exact on
+`source`), so the dense half returns `k*3` documents that already match. BM25
+has no equivalent negation filter and over-fetches instead
+(`SCOPED_BM25_FETCH`), which is free on an in-memory index of this size. The
+filter returns `None` on an all-statute corpus, so a deployment with no
+dossier indexed behaves exactly as before. CLAUDE.md's claim that scoping was
+"enforced at the Chroma filter level, not post-hoc" was aspirational; it is
+now true.
+
+**Access gate.** `PUBLIC_CASE_IDS = {"demo"}`; every other case is protected,
+so a new case directory is protected by default rather than needing to be
+remembered. A sidebar passphrase (`hmac.compare_digest` against
+`st.secrets["dossier_passphrase"]`, gitignored) sets `dossier_unlocked`.
+Absent secrets means permanently locked — never fail open.
+
+Two enforcement points, both pure functions so the authorisation decision is
+unit-testable without a Streamlit runtime, and both must independently deny:
+`_resolve_active_case_id` returns `None` while locked, so `flow.run` gets no
+case and `route_query` can only resolve `"statute"` (ADR #42 downgrades both
+case-scoped intents without one) — the privacy property therefore holds
+structurally, not because a dropdown happened to be hidden; and
+`_filter_accessible` removes protected cases from the compliance panel's list,
+because the ADR #57 panel reads private facts and matrices from disk directly
+and gating only the chat would have left the larger surface open. Re-locking
+revokes a case already chosen, since the widget value survives the rerun and
+the gate cannot trust it.
+
+**Sidebar "Dossier actif" selector**, defaulting to `Aucun`, so statute-only
+behaviour is preserved until explicitly opted into. `route_decision` — intent,
+resolved scope, confidence, rationale — now renders in "Détails techniques".
+
+### Consequences
+
+- The original question now answers correctly end to end: router resolves
+  `case:private` at high confidence and the answer names Maître Eve-Marie MENA
+  of SCP PAVY–MENA with a source citation.
+- Verified by re-indexing the real case: 853 dossier chunks entered Chroma and
+  `data/chunks.csv` stayed **byte-identical**.
+- **The passphrase gates the application, not the files.** Anyone with
+  filesystem or repo access to `data/dossier/<case>/` reads it regardless. It
+  is a second layer over filesystem permissions and a private deployment, not
+  a substitute for either. Accordingly the real dossier stays local: any HF
+  Space deploy ships the demo fixture only, and no deployment may carry a real
+  dossier and rely on this gate.
+- One shared credential: the four authorised people cannot be revoked
+  individually without rotating for all of them, and the app cannot tell who
+  is asking.
+- Two `test_dossier_smoke` assertions were inverted — they required dossier
+  rows in the shared CSV, and now forbid them. `test_ingestion_smoke` gains a
+  guard that fails if any `dossier-` row ever appears in the tracked CSV, or
+  if `append_to_statute_chunks_csv` is reintroduced.
+- Retrieval quality for identity questions still rests on generic chunk
+  similarity; `persons.jsonl` (ADR #55) carries canonical names and role
+  assignments but is not in the retrieval path at all.
+
+### Follow-ups
+
+- (a) per-person identity via `st.login` + an OIDC email allowlist, if the app
+  ever becomes internet-facing — gives revocation and an audit trail.
+- (b) a content-level pre-commit check on `data/chunks.csv` as defence in
+  depth, since the filename-based convention would not have caught this class.
+- (c) index `persons.jsonl` into the retrieval path so identity questions
+  resolve from the resolved-entity table rather than chunk similarity.
+- (d) an alarm when the corpus loses its dossier rows — the silent
+  statute-only regression that caused this had no detection.
+
+Related: ADR #39 (the three-surface design and privacy blocker this replaces),
+ADR #41 (source-scope filtering, tightened here from post-hoc to server-side),
+ADR #42 (the router downgrade — correct, and now both reachable and visible),
+ADR #55 (`persons.jsonl`, still outside retrieval), ADR #57 (the compliance
+panel this gate must also cover).
