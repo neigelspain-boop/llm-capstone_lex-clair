@@ -2595,3 +2595,141 @@ module reads), ADR #53 (D6, compliance verify-conclude — the
 `persons_named` plumbing this module activates), ADR #54 (D2, mention
 extraction — the stage this ADR's Decision supersedes as D3's input
 source, while leaving `mentions.py` itself shipped and dormant).
+
+## ADR #56 — Parallel dual-model compliance comparative analysis (D7)
+
+**Date:** 2026-08-03 · **Branch:** v2-persons (D7) · **Status:** Accepted
+
+### Context
+
+Every compliance verdict today comes from a single model,
+`anthropic/claude-opus-4.7` (ADR #43, reasoning.effort="max"). Single-judge
+risk for high-stakes legal determinations is a known concern in this
+project's own eval design: the 2026-07-22 judge-diversity entries ("Claude
+judge via OpenRouter", "Mistral as French-native third judge") and ADR #40's
+restated rationale ("the rubric benefits from a cross-provider judge
+stack... 3-family judge diversity for cross-family agreement measurement")
+established a 3-provider judge panel specifically to avoid single-model
+bias in the eval harness. The compliance matrix — arguably higher-stakes
+than an eval score, since its verdicts are the deliverable a non-lawyer
+heir reads — has had no equivalent cross-model check until now.
+
+D7 adds an on-demand, per-role comparative mode: run the identical prompt
+against a second frontier reasoning model and have a cheap model tag
+agreement vs. divergence per obligation. This surfaces model-specific
+reasoning differences (a hallucinated obligation, a missed cross-role
+interaction, a different read of the same statute excerpt) without
+replacing the existing single-model matrix, which stays the default,
+unmodified flow.
+
+### Decision
+
+`_call_compliance_llm` (ADR #43/#49/#53) gains one new parameter,
+`compliance_model_id: str = COMPLIANCE_MODEL_ID` — every existing call
+site (`generate_compliance_matrix`) is unaffected by the default. New
+module constants: `COMPLIANCE_MODEL_ALTERNATIVES = ["anthropic/claude-opus-4.7",
+"moonshotai/kimi-k3"]` (both already carry `reasoning_effort="max"` in
+`rag/generate.py`'s `ANSWER_MODELS` catalog, ADR #45) and
+`DIVERGENCE_MODEL_ID = "anthropic/claude-haiku-4.5"`.
+
+New `compare_compliance_for_role(case_id, role_id, dry_run=False)`: loads
+the same case artifacts and retrieves the same statute chunks as
+`generate_compliance_matrix`'s per-role loop (factored out into a shared
+`_persons_context_for_role` helper for the persons/entities filtering step),
+then runs `_call_compliance_llm` twice in parallel via
+`ThreadPoolExecutor(max_workers=2)` — once per `COMPLIANCE_MODEL_ALTERNATIVES`
+entry — before calling new `_call_divergence_analysis` (Haiku 4.5,
+temperature 0.0, prompt in `rag/compliance_prompts.py`'s new
+`DIVERGENCE_ANALYSIS_SYSTEM_PROMPT`) to tag agreement/divergence per shared
+obligation. Pairing verdicts across the two models needs no fuzzy matching:
+`_entry_id(statute_chunk_id, actor_role)` is a content-independent hash, so
+both models land on the same `entry_id` for the same obligation whenever
+they cite the same statute chunk — Python computes `coverage_diff`
+(shared/opus-only/kimi-only `entry_id` sets) deterministically, and only
+the shared set is sent to the divergence LLM as paired verdicts.
+
+Output is written atomically (`.tmp` + `os.replace`) to
+`data/dossier/{case_id}/compliance_comparative_{role_id}.json`. Cache
+fingerprint is two-part, both stored in the output file and both required
+to match for a cache hit:
+- `inputs_hash`: SHA-256 over `role_id` + sorted per-fact fingerprints
+  (`_fact_fingerprint`: fact_id plus every field that feeds the prompt —
+  date, action, target, verbatim_quote, distilled_context — not just
+  fact_id, so a content edit under a stable fact_id still invalidates the
+  cache) + sorted chunk_ids + a persons/entities hash + explicitly,
+  `sorted(COMPLIANCE_MODEL_ALTERNATIVES)` and `DIVERGENCE_MODEL_ID`. Folding
+  the model ids in means a future model swap (e.g. Kimi K3 → K4) can't
+  leave an old cached comparative looking valid and silently serve a stale
+  cross-model comparison.
+- `divergence_prompt_hash`: SHA-256 of `DIVERGENCE_ANALYSIS_SYSTEM_PROMPT`
+  at write time (same cache-key-hashes-the-prompt pattern ADR #52's
+  `distill.py` and this file's own `_compliance_cache_key`, ADR #53, both
+  already use) — an edited divergence prompt invalidates old comparatives
+  even when every other input is unchanged.
+
+`compare_compliance_for_role` deliberately calls `_call_compliance_llm`
+with `cache=None` for both models, never touching the shared
+`compliance_cache.jsonl` (ADR #53). That cache's fingerprint
+(`_compliance_cache_key`) has no model dimension — it keys on
+`(role_id, fact_ids, prompt_hash)` only, because until now only one model
+was ever in play. Reusing it here would mean the second model's call on
+the same role/facts/prompt collides on the same key and silently returns
+the first model's cached entries. The comparative feature's own
+file-level two-hash cache is independent and sufficient; the shared cache
+stays exactly as ADR #53 left it.
+
+Dry-run cost estimates needed a small correction alongside this: the
+existing `_EST_*_USD_PER_TOKEN` module constants are Opus-specific
+($15/$75 per M). A new `_COMPLIANCE_MODEL_DRY_RUN_RATES` lookup (keyed by
+`compliance_model_id`, falling back to the existing Opus constants for an
+unlisted model) gives Kimi's `--dry-run` estimate its own $3/$15-per-M
+rate instead of silently reusing Opus's ~5x-higher rate. The divergence
+call gets its own rough Haiku-rate estimate
+(`_DIVERGENCE_EST_*`, ~$1/$5 per M per CLAUDE.md's model palette) — unlike
+the Opus dry-run constant, this isn't back-solved from a real bill, since
+divergence output is small and bounded by shared-obligation count, not
+worth the same empirical calibration effort.
+
+CLI: `python -m rag.compliance --case-id <id> --role-id <role> --compare
+[--dry-run]`.
+
+### Consequences
+
+- Per-compare cost: roughly $0.28 (Opus) + $0.09 (Kimi) + $0.02 (Haiku
+  divergence) ≈ $0.60 for a typical fact cluster — user-initiated per role,
+  not a batch operation.
+- No real-run cost gate on `compare_compliance_for_role` (unlike
+  `generate_compliance_matrix`'s `_check_real_run_cost_gate`) — a single
+  compare is bounded at ~$0.60, so the `--dry-run` preview is enough; a
+  cost gate only earns its keep once compares can be batched (see
+  Follow-ups).
+- `generate_compliance_matrix`'s default flow is provably unchanged: its
+  one call site never passes `compliance_model_id`, so it always resolves
+  to `COMPLIANCE_MODEL_ID`, and it never touches
+  `compliance_comparative_*.json`.
+- Rubric evidence for LLM evaluation / adversarial-analysis best practice —
+  a second, independent frontier-model read on the same high-stakes legal
+  determination, in the same spirit as the eval harness's existing judge
+  diversity (2026-07-22 entries, ADR #40).
+
+### Follow-ups
+
+- Batch-compare mode (`--compare-all`, all roles in one case) would need a
+  real-run cost gate reusing `_check_real_run_cost_gate`'s pro-rated
+  pattern from ADR #53 — deferred; single-role compare is bounded at
+  ~$0.60 so the dry-run preview suffices for now.
+- Three-model ensemble (add a third frontier model as a tie-breaker
+  instead of just Opus vs. Kimi) — deferred.
+- Systematic Opus-vs-Kimi bias survey across all of Attempt 1's roles —
+  an Attempt 3 research question once enough comparative runs accumulate.
+
+References: ADR #43 (compliance matrix generation, the single-model flow
+this extends), ADR #45 (model catalog — `reasoning_effort="max"` precedent
+for both Opus 4.7 and Kimi K3), ADR #49 (uncapped `max_tokens` on the
+compliance call — the comparative calls inherit the same uncapped
+behavior via `_call_compliance_llm`), ADR #52 (distillation —
+cache-key-hashes-the-prompt precedent this ADR's `divergence_prompt_hash`
+follows), ADR #53 (compliance verify-conclude, persons plumbing reused
+by `_persons_context_for_role`, and the shared `compliance_cache.jsonl`
+this ADR deliberately does not touch), ADR #55 (most recent D-work on
+this branch).

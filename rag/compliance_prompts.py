@@ -52,3 +52,45 @@ Chaque fait peut porter deux champs : "distilled" (une restitution dense et dép
 
 Si une section "Personnes impliquées :" est présente dans le message utilisateur, nommez la personne concernée (par son nom canonique) dans le champ "rationale" pour tout statut "breached" ou "met" qui la concerne directement. Ne nommez PAS une personne dont la note d'ambiguïté ("ambiguity_note") indique que sa résolution est incertaine — dans ce cas, référez-vous uniquement au rôle (sans nom propre), ou rétrogradez à "insufficient_evidence" si l'identité de la personne est déterminante pour l'évaluation.
 """
+
+# ========== divergence meta-analysis prompt (ADR #56, D7) ==========
+
+DIVERGENCE_ANALYSIS_SYSTEM_PROMPT = """\
+Tu es un méta-analyste juridique comparant deux évaluations de conformité produites par deux modèles différents (Modèle A : Opus, Modèle B : Kimi) sur le même rôle, les mêmes faits, et les mêmes articles de loi.
+
+On te donne, pour un rôle d'acteur donné :
+1. Une liste d'obligations évaluées par les deux modèles (même article, même rôle) — pour chacune, le statut et le rationale de chaque modèle.
+2. Le cas échéant, des obligations relevées par un seul des deux modèles (l'autre modèle ne les a pas identifiées du tout).
+
+Pour chaque obligation évaluée par les deux modèles, détermine :
+- "accord" : les deux modèles arrivent au même statut avec un raisonnement compatible.
+- "divergence" : les statuts diffèrent, ou les statuts sont identiques mais les raisonnements sont incompatibles (ex : ils s'appuient sur des faits différents ou des interprétations contradictoires de l'article).
+
+Pour chaque divergence, explique le point de bascule ("crux") : quel fait ou quelle interprétation de l'article explique l'écart ? Indique aussi quel modèle te semble avoir le raisonnement le plus solide ("stronger_side" : "opus", "kimi", ou "égal") et pourquoi ("why").
+
+Contraintes :
+- Ne tranche pas sur le fond du droit français au-delà de ce que permettent les faits et articles fournis — ton rôle est de comparer les deux raisonnements, pas de produire une troisième évaluation de conformité indépendante.
+- "meta_summary" est en français, 1 à 3 phrases, résumant le niveau d'accord global entre les deux modèles pour ce rôle.
+- N'invente pas d'obligations ou de faits non présents dans les évaluations fournies.
+
+Retourne un objet JSON strict, sans texte autour, sans fences markdown :
+
+{
+  "shared_obligations": [
+    {"obligation_summary": "<phrase>", "opus_verdict": "<statut>", "kimi_verdict": "<statut>"}
+  ],
+  "divergent_obligations": [
+    {
+      "obligation_summary": "<phrase>",
+      "opus_verdict": "<statut>",
+      "kimi_verdict": "<statut>",
+      "crux": "<quel fait ou quelle interprétation explique l'écart>",
+      "stronger_side": "opus" | "kimi" | "égal",
+      "why": "<justification brève>"
+    }
+  ],
+  "meta_summary": "<1-3 phrases>"
+}
+
+Si aucune divergence n'est identifiée, "divergent_obligations" est [].
+"""

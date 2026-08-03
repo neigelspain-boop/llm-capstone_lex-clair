@@ -27,6 +27,12 @@ data/dossier/<case_id>/compliance_matrix.json. Deterministic entry_id
 runs from creating duplicate rows if a future version adds merge logic.
 
 CLI: python -m rag.compliance --case-id <id> [--limit N] [--dry-run]
+
+compare_compliance_for_role (ADR #56, D7) is a second, opt-in entry point:
+for one role at a time, it runs the same prompt against two frontier
+reasoning models (Opus 4.7 max + Kimi K3 max) in parallel and has Haiku 4.5
+tag agreement/divergence per obligation — CLI:
+python -m rag.compliance --case-id <id> --role-id <role> --compare [--dry-run]
 """
 from __future__ import annotations
 
@@ -35,6 +41,7 @@ import hashlib
 import json
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
@@ -44,7 +51,7 @@ from pydantic import BaseModel, Field, ValidationError
 
 from ingestion.clients import get_openrouter_client
 from ingestion.dossier.facts import ActorRole, DOSSIER_DIR, Fact, RoleAmbiguity
-from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT
+from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT, DIVERGENCE_ANALYSIS_SYSTEM_PROMPT
 from rag.retrieve import retrieve
 
 load_dotenv()
@@ -57,6 +64,29 @@ log = logging.getLogger(__name__)
 COMPLIANCE_MODEL_ID = "anthropic/claude-opus-4.7"
 RELEVANT_STATUTE_K = 8  # per fact cluster, retrieve top-k statute chunks for context
 MAX_FACTS_PER_ROLE = 30  # see _cap_facts_chronologically
+
+# ADR #56 (D7): the two frontier reasoning models compare_compliance_for_role
+# runs side by side on identical inputs, plus the (much cheaper) model that
+# meta-analyzes their agreement/divergence per obligation.
+COMPLIANCE_MODEL_ALTERNATIVES = ["anthropic/claude-opus-4.7", "moonshotai/kimi-k3"]
+DIVERGENCE_MODEL_ID = "anthropic/claude-haiku-4.5"
+
+# --dry-run cost rates per compliance_model_id, USD per token (in, out).
+# COMPLIANCE_MODEL_ID's entry mirrors _EST_*_USD_PER_TOKEN above; falls back
+# to that pair for any model not listed here.
+_COMPLIANCE_MODEL_DRY_RUN_RATES: dict[str, tuple[float, float]] = {
+    "anthropic/claude-opus-4.7": (15e-6, 75e-6),
+    "moonshotai/kimi-k3": (3e-6, 15e-6),
+}
+
+# --dry-run cost rates + completion-token estimate for the divergence call
+# (Haiku 4.5, CLAUDE.md model palette: ~$1/~$5 per M). Unlike
+# _DRY_RUN_EST_COMPLETION_TOKENS above, this isn't back-solved from a real
+# multi-cluster bill — divergence output is a handful of obligations plus a
+# short summary, bounded by RELEVANT_STATUTE_K, so a rough estimate suffices.
+_DIVERGENCE_EST_PROMPT_USD_PER_TOKEN = 1e-6
+_DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN = 5e-6
+_DIVERGENCE_EST_COMPLETION_TOKENS = 800
 
 # Per-token USD rates for --dry-run cost estimates only, matching the
 # documented model palette rate for anthropic/claude-opus-4.7 in CLAUDE.md
@@ -370,6 +400,22 @@ def _merge_persons_named(case_persons: list[dict], entities: list[dict]) -> list
     return merged
 
 
+def _persons_context_for_role(
+    role_facts: list[Fact], case_persons_all: list[dict], entities_all: list[dict]
+) -> tuple[list[dict], list[dict]]:
+    """Filter case-wide persons/entities down to the ones mentioned in one
+    role's fact cluster, via Fact.mentioned_person_ids (ADR #53: doesn't
+    exist on Fact yet, D1-D4 unshipped — defensive getattr). Shared by
+    generate_compliance_matrix's per-role loop and compare_compliance_for_role.
+    """
+    mentioned_ids: set[str] = set()
+    for f in role_facts:
+        mentioned_ids.update(getattr(f, "mentioned_person_ids", None) or [])
+    cluster_case_persons = [p for p in case_persons_all if p.get("person_id") in mentioned_ids]
+    cluster_entities = [e for e in entities_all if e.get("person_id") in mentioned_ids]
+    return cluster_case_persons, cluster_entities
+
+
 def _build_user_message(
     role_id: str,
     role_label: str,
@@ -563,8 +609,14 @@ def _call_compliance_llm(
     entities: list[dict] | None = None,
     cache: dict[str, dict] | None = None,
     dry_run: bool = False,
+    compliance_model_id: str = COMPLIANCE_MODEL_ID,
 ) -> tuple[list[dict], dict]:
-    """Call Opus 4.7 (reasoning.effort="max") for one role cluster.
+    """Call a compliance-reasoning model (reasoning.effort="max") for one
+    role cluster. Defaults to Opus 4.7 (COMPLIANCE_MODEL_ID);
+    compliance_model_id lets compare_compliance_for_role (ADR #56, D7) run
+    the identical prompt against a second model (Kimi K3) for comparison —
+    generate_compliance_matrix never passes this, so its behavior is
+    unchanged.
 
     Returns (parsed_entries, usage) where usage is
     {"prompt_tokens", "completion_tokens", "cost_usd", "estimated",
@@ -572,11 +624,16 @@ def _call_compliance_llm(
     fingerprint (ADR #53, _compliance_cache_key) is already present, the
     cached entries are returned at zero cost with cache_hit=True — checked
     before both the dry-run estimate and the real call, so a cached rerun's
-    dry-run report is also accurate. Otherwise, in --dry-run mode, no API
-    call is made: tokens are estimated via a char/4 heuristic and cost via
-    the approximate rates in _EST_*_USD_PER_TOKEN, with estimated=True.
+    dry-run report is also accurate. compare_compliance_for_role always
+    passes cache=None: the shared cache key has no model dimension, so
+    reusing it across two different models on the same role/facts would
+    collide and silently return one model's cached entries for the other.
+    Otherwise, in --dry-run mode, no API call is made: tokens are estimated
+    via a char/4 heuristic and cost via the rate looked up for
+    compliance_model_id in _COMPLIANCE_MODEL_DRY_RUN_RATES (falling back to
+    _EST_*_USD_PER_TOKEN for an unlisted model), with estimated=True.
     Otherwise, cost comes from OpenRouter's exact per-call usage.cost when
-    present, falling back to the same estimate formula if it isn't.
+    present, falling back to the same rate-lookup formula if it isn't.
     "cache_key" is returned uncached (None on a cache hit) so the caller can
     persist a fresh entry without recomputing the fingerprint.
 
@@ -607,12 +664,12 @@ def _call_compliance_llm(
             }
 
     if dry_run:
+        prompt_rate, completion_rate = _COMPLIANCE_MODEL_DRY_RUN_RATES.get(
+            compliance_model_id, (_EST_PROMPT_USD_PER_TOKEN, _EST_COMPLETION_USD_PER_TOKEN)
+        )
         prompt_tokens = _estimate_tokens(COMPLIANCE_SYSTEM_PROMPT) + _estimate_tokens(user_message)
         completion_tokens = _DRY_RUN_EST_COMPLETION_TOKENS
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
+        cost = prompt_tokens * prompt_rate + completion_tokens * completion_rate
         return [], {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -625,7 +682,7 @@ def _call_compliance_llm(
     client = get_openrouter_client()
     t0 = time.perf_counter()
     response = client.chat.completions.create(
-        model=COMPLIANCE_MODEL_ID,
+        model=compliance_model_id,
         messages=[
             {"role": "system", "content": COMPLIANCE_SYSTEM_PROMPT},
             {"role": "user", "content": user_message},
@@ -643,15 +700,15 @@ def _call_compliance_llm(
     completion_tokens = getattr(usage, "completion_tokens", 0) or 0
     cost = getattr(usage, "cost", None) if usage is not None else None
     if cost is None:
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
+        prompt_rate, completion_rate = _COMPLIANCE_MODEL_DRY_RUN_RATES.get(
+            compliance_model_id, (_EST_PROMPT_USD_PER_TOKEN, _EST_COMPLETION_USD_PER_TOKEN)
         )
+        cost = prompt_tokens * prompt_rate + completion_tokens * completion_rate
 
     log.info(
-        "compliance call · role_id=%s finish_reason=%s prompt_tokens=%d "
+        "compliance call · role_id=%s model_id=%s finish_reason=%s prompt_tokens=%d "
         "completion_tokens=%d raw_chars=%d elapsed=%.1fs",
-        role_id, finish_reason, prompt_tokens, completion_tokens, len(raw), elapsed,
+        role_id, compliance_model_id, finish_reason, prompt_tokens, completion_tokens, len(raw), elapsed,
     )
     if finish_reason == "length":
         log.warning(
@@ -780,13 +837,9 @@ def generate_compliance_matrix(
             query = _build_retrieval_query(role_id, role_label, role_facts)
             chunks = retrieve(query, k=RELEVANT_STATUTE_K, source_scope="statute")
 
-            # ADR #53: mentioned_person_ids doesn't exist on Fact yet (D1-D4
-            # unshipped) — defensive getattr, real current-state handling.
-            mentioned_ids: set[str] = set()
-            for f in role_facts:
-                mentioned_ids.update(getattr(f, "mentioned_person_ids", None) or [])
-            cluster_case_persons = [p for p in case_persons_all if p.get("person_id") in mentioned_ids]
-            cluster_entities = [e for e in entities_all if e.get("person_id") in mentioned_ids]
+            cluster_case_persons, cluster_entities = _persons_context_for_role(
+                role_facts, case_persons_all, entities_all
+            )
 
             raw_entries, usage = _call_compliance_llm(
                 role_id, role_label, role_facts, chunks, facts, roles,
@@ -876,26 +929,389 @@ def generate_compliance_matrix(
         file_handler.close()
 
 
+# ========== comparative dual-model analysis (ADR #56, D7) ==========
+
+def _persons_hash(case_persons: list[dict], entities: list[dict]) -> str:
+    """Sorted person_id fingerprint, folded into compare_compliance_for_role's
+    inputs_hash so a persons/entities change invalidates the cache."""
+    ids = sorted({p["person_id"] for p in case_persons + entities if p.get("person_id")})
+    return hashlib.sha256(",".join(ids).encode("utf-8")).hexdigest()
+
+
+def _fact_fingerprint(fact: Fact) -> str:
+    """fact_id plus content that matters to the compliance prompt (action,
+    target, date, verbatim_quote, distilled_context) — not just fact_id —
+    so compare_compliance_for_role's cache invalidates when a fact's
+    content changes under a stable fact_id (e.g. a later distillation
+    pass), not only when the fact-id membership of a role cluster changes.
+    """
+    return "|".join([
+        fact.fact_id, fact.date or "", fact.action, fact.target or "",
+        fact.verbatim_quote, fact.distilled_context or "",
+    ])
+
+
+def _comparative_inputs_hash(
+    role_id: str, fact_fingerprints: list[str], chunk_ids: list[str], persons_hash: str
+) -> str:
+    """Fingerprint for compare_compliance_for_role's cache (ADR #56).
+
+    Folds in role_id, sorted fact_fingerprints (_fact_fingerprint per capped
+    fact — content-sensitive, not just fact_id), sorted chunk_ids, and
+    persons_hash — plus, explicitly, sorted(COMPLIANCE_MODEL_ALTERNATIVES)
+    and DIVERGENCE_MODEL_ID. Without the model ids in the hash, swapping
+    either model (e.g. a future Kimi K3 -> K4 upgrade) would leave old
+    cached comparatives looking valid and silently serve a stale cross-
+    model comparison instead of re-running against the new model.
+    """
+    payload = (
+        f"{role_id}|{','.join(sorted(fact_fingerprints))}|{','.join(sorted(chunk_ids))}|"
+        f"{persons_hash}|{','.join(sorted(COMPLIANCE_MODEL_ALTERNATIVES))}|{DIVERGENCE_MODEL_ID}"
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _divergence_prompt_hash() -> str:
+    """SHA-256 of DIVERGENCE_ANALYSIS_SYSTEM_PROMPT, stored alongside
+    inputs_hash in the comparative JSON (ADR #56, mirroring ADR #52's
+    cache-key-hashes-the-prompt precedent). A cache hit requires both to
+    match, so editing the divergence prompt invalidates old comparatives
+    even when role_id/facts/chunks/persons/models are all unchanged.
+    """
+    return hashlib.sha256(DIVERGENCE_ANALYSIS_SYSTEM_PROMPT.encode("utf-8")).hexdigest()
+
+
+def _parse_divergence_response(raw: str, role_id: str) -> dict:
+    """Parse the divergence LLM's raw JSON object text (mirrors
+    _parse_compliance_response's fence-stripping, but expects a top-level
+    dict, not a list). Falls back to an empty-shape dict — rather than
+    raising — on any parse failure or unexpected top-level type, since a
+    divergence-analysis miss shouldn't take down the whole compare call.
+    """
+    text = (raw or "").strip()
+    if text.startswith("```"):
+        text = text.strip("`").strip()
+        if text.lower().startswith("json"):
+            text = text[4:].strip()
+
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(text)
+    except json.JSONDecodeError as e:
+        log.warning(
+            "compliance compare: divergence JSON parse failed for role_id=%s: %s\nraw response: %s",
+            role_id, e, raw,
+        )
+        obj = {}
+
+    if not isinstance(obj, dict):
+        log.warning(
+            "compliance compare: divergence top-level JSON is not a dict for role_id=%s (got %s)",
+            role_id, type(obj).__name__,
+        )
+        obj = {}
+
+    return {
+        "shared_obligations": obj.get("shared_obligations", []),
+        "divergent_obligations": obj.get("divergent_obligations", []),
+        "meta_summary": obj.get("meta_summary", ""),
+    }
+
+
+def _build_divergence_user_message(
+    role_label: str,
+    opus_entries: list[ComplianceEntry],
+    kimi_entries: list[ComplianceEntry],
+    shared_entry_ids: set[str],
+) -> str:
+    """Assemble the divergence-analysis user message: paired verdicts for
+    every obligation both models evaluated (matched by entry_id — a
+    content-independent hash of statute_chunk_id + actor_role, so both
+    models naturally land on the same entry_id for the same obligation),
+    plus a coverage-diff note for obligations only one model surfaced."""
+    opus_by_id = {e.entry_id: e for e in opus_entries}
+    kimi_by_id = {e.entry_id: e for e in kimi_entries}
+
+    lines = [f"Rôle d'acteur : {role_label}", "", "Obligations évaluées par les deux modèles :"]
+    for entry_id in sorted(shared_entry_ids):
+        o, k = opus_by_id[entry_id], kimi_by_id[entry_id]
+        lines.append(
+            f"- obligation (article {o.statute_chunk_id}) : {o.obligation_summary}\n"
+            f"  Modèle A (Opus) : statut={o.status} — {o.rationale}\n"
+            f"  Modèle B (Kimi) : statut={k.status} — {k.rationale}"
+        )
+
+    opus_only = sorted(set(opus_by_id) - shared_entry_ids)
+    kimi_only = sorted(set(kimi_by_id) - shared_entry_ids)
+    if opus_only:
+        lines.append("\nObligations relevées uniquement par le Modèle A (Opus) :")
+        for entry_id in opus_only:
+            o = opus_by_id[entry_id]
+            lines.append(f"- article {o.statute_chunk_id} : {o.obligation_summary} (statut={o.status})")
+    if kimi_only:
+        lines.append("\nObligations relevées uniquement par le Modèle B (Kimi) :")
+        for entry_id in kimi_only:
+            k = kimi_by_id[entry_id]
+            lines.append(f"- article {k.statute_chunk_id} : {k.obligation_summary} (statut={k.status})")
+
+    return "\n".join(lines)
+
+
+def _call_divergence_analysis(
+    role_id: str,
+    role_label: str,
+    opus_entries: list[ComplianceEntry],
+    kimi_entries: list[ComplianceEntry],
+    shared_entry_ids: set[str],
+    dry_run: bool = False,
+) -> tuple[dict, dict]:
+    """Call Haiku 4.5 to tag agreement vs. divergence per shared obligation
+    between the Opus and Kimi compliance passes (ADR #56, D7).
+
+    Returns (divergence_dict, usage), mirroring _call_compliance_llm's
+    (entries, usage) shape. divergence_dict has "shared_obligations",
+    "divergent_obligations", "meta_summary" (see _parse_divergence_response).
+    In --dry-run, no API call is made — tokens/cost are estimated the same
+    way _call_compliance_llm's dry-run branch does, using the (much
+    cheaper, roughly-estimated) _DIVERGENCE_EST_* constants.
+    """
+    user_message = _build_divergence_user_message(role_label, opus_entries, kimi_entries, shared_entry_ids)
+
+    if dry_run:
+        prompt_tokens = _estimate_tokens(DIVERGENCE_ANALYSIS_SYSTEM_PROMPT) + _estimate_tokens(user_message)
+        completion_tokens = _DIVERGENCE_EST_COMPLETION_TOKENS
+        cost = (
+            prompt_tokens * _DIVERGENCE_EST_PROMPT_USD_PER_TOKEN
+            + completion_tokens * _DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN
+        )
+        empty = {"shared_obligations": [], "divergent_obligations": [], "meta_summary": ""}
+        return empty, {
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "cost_usd": cost,
+            "estimated": True,
+        }
+
+    client = get_openrouter_client()
+    response = client.chat.completions.create(
+        model=DIVERGENCE_MODEL_ID,
+        messages=[
+            {"role": "system", "content": DIVERGENCE_ANALYSIS_SYSTEM_PROMPT},
+            {"role": "user", "content": user_message},
+        ],
+        temperature=0.0,
+    )
+    raw = response.choices[0].message.content or ""
+    divergence = _parse_divergence_response(raw, role_id)
+
+    usage = getattr(response, "usage", None)
+    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
+    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
+    cost = getattr(usage, "cost", None) if usage is not None else None
+    if cost is None:
+        cost = (
+            prompt_tokens * _DIVERGENCE_EST_PROMPT_USD_PER_TOKEN
+            + completion_tokens * _DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN
+        )
+
+    log.info(
+        "compliance compare: divergence call · role_id=%s prompt_tokens=%d completion_tokens=%d",
+        role_id, prompt_tokens, completion_tokens,
+    )
+
+    return divergence, {
+        "prompt_tokens": prompt_tokens,
+        "completion_tokens": completion_tokens,
+        "cost_usd": cost,
+        "estimated": False,
+    }
+
+
+def compare_compliance_for_role(case_id: str, role_id: str, dry_run: bool = False) -> dict:
+    """Run both frontier reasoning models (Opus 4.7 max + Kimi K3 max) on
+    identical inputs for one role cluster, then produce a Haiku 4.5
+    divergence meta-analysis tagging agreement vs. divergence per obligation
+    (ADR #56, D7).
+
+    Output written atomically to
+    data/dossier/<case_id>/compliance_comparative_<role_id>.json. A rerun is
+    a cache hit (zero LLM calls, including the divergence call) whenever
+    both inputs_hash and divergence_prompt_hash match the cached file —
+    otherwise both compliance calls and the divergence call re-run.
+
+    Deliberately bypasses the shared compliance_cache.jsonl
+    (_call_compliance_llm(..., cache=None) for both calls): that cache
+    fingerprints on (role_id, fact_ids, prompt) with no model dimension, so
+    reusing it here would let the second model's call silently return the
+    first model's cached entries for the identical role/facts/prompt.
+
+    No real-run cost gate here (unlike generate_compliance_matrix) — a
+    single compare is bounded at ~$0.60, so the --dry-run preview is
+    sufficient. A future --compare-all batch mode would need one, reusing
+    _check_real_run_cost_gate's pro-rated pattern (deferred, ADR #56
+    follow-ups).
+    """
+    facts, roles, ambiguities = _load_case_artifacts(case_id)
+    groups = _group_facts_by_role(facts)
+    if role_id not in groups:
+        raise ValueError(f"role_id {role_id!r} not found in case {case_id!r} facts")
+
+    role_facts = groups[role_id]
+    role_label = _role_label(role_id, roles)
+
+    case_persons_all = _read_jsonl_dicts(DOSSIER_DIR / case_id / "persons.jsonl")
+    entities_all = _read_jsonl_dicts(DOSSIER_DIR / "entities" / "persons.jsonl")
+    cluster_case_persons, cluster_entities = _persons_context_for_role(
+        role_facts, case_persons_all, entities_all
+    )
+
+    query = _build_retrieval_query(role_id, role_label, role_facts)
+    chunks = retrieve(query, k=RELEVANT_STATUTE_K, source_scope="statute")
+
+    capped_facts = _cap_facts_chronologically(role_id, role_facts)
+    fact_fingerprints = [_fact_fingerprint(f) for f in capped_facts]
+    chunk_ids = [c["chunk_id"] for c in chunks]
+    persons_hash = _persons_hash(cluster_case_persons, cluster_entities)
+    inputs_hash = _comparative_inputs_hash(role_id, fact_fingerprints, chunk_ids, persons_hash)
+    divergence_prompt_hash = _divergence_prompt_hash()
+
+    out_dir = DOSSIER_DIR / case_id
+    out_path = out_dir / f"compliance_comparative_{role_id}.json"
+
+    if out_path.exists():
+        cached = json.loads(out_path.read_text(encoding="utf-8"))
+        if (
+            cached.get("inputs_hash") == inputs_hash
+            and cached.get("divergence_prompt_hash") == divergence_prompt_hash
+        ):
+            log.info("compliance compare: cache_hit for case_id=%s role_id=%s", case_id, role_id)
+            cached["cache_hit"] = True
+            return cached
+
+    # Warm the lazy OpenRouter client singleton once before fanning out to
+    # two worker threads, so the first-call race can't construct it twice.
+    get_openrouter_client()
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = {
+            model_id: executor.submit(
+                _call_compliance_llm,
+                role_id, role_label, role_facts, chunks, facts, roles,
+                case_persons=cluster_case_persons, entities=cluster_entities,
+                cache=None, dry_run=dry_run, compliance_model_id=model_id,
+            )
+            for model_id in COMPLIANCE_MODEL_ALTERNATIVES
+        }
+        results = {model_id: future.result() for model_id, future in futures.items()}
+
+    opus_raw, opus_usage = results["anthropic/claude-opus-4.7"]
+    kimi_raw, kimi_usage = results["moonshotai/kimi-k3"]
+
+    persons_named = _merge_persons_named(cluster_case_persons, cluster_entities)
+    opus_entries = _build_entries(opus_raw, role_id, persons_named=persons_named)
+    kimi_entries = _build_entries(kimi_raw, role_id, persons_named=persons_named)
+
+    opus_ids = {e.entry_id for e in opus_entries}
+    kimi_ids = {e.entry_id for e in kimi_entries}
+    shared_ids = opus_ids & kimi_ids
+    coverage_diff = {
+        "shared_entry_ids": sorted(shared_ids),
+        "opus_only_entry_ids": sorted(opus_ids - kimi_ids),
+        "kimi_only_entry_ids": sorted(kimi_ids - opus_ids),
+    }
+
+    divergence, divergence_usage = _call_divergence_analysis(
+        role_id, role_label, opus_entries, kimi_entries, shared_ids, dry_run=dry_run,
+    )
+
+    result = {
+        "case_id": case_id,
+        "role_id": role_id,
+        "role_label": role_label,
+        "generated_at": _utcnow().isoformat(),
+        "inputs_hash": inputs_hash,
+        "divergence_prompt_hash": divergence_prompt_hash,
+        "models": {
+            "opus": {
+                "model_id": "anthropic/claude-opus-4.7",
+                "entries": [e.model_dump(mode="json") for e in opus_entries],
+                "usage": opus_usage,
+            },
+            "kimi": {
+                "model_id": "moonshotai/kimi-k3",
+                "entries": [e.model_dump(mode="json") for e in kimi_entries],
+                "usage": kimi_usage,
+            },
+        },
+        "coverage_diff": coverage_diff,
+        "divergence_analysis": divergence,
+        "divergence_model_id": DIVERGENCE_MODEL_ID,
+        "divergence_usage": divergence_usage,
+        "cache_hit": False,
+    }
+
+    if not dry_run:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        tmp_path = out_path.with_suffix(".json.tmp")
+        tmp_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        tmp_path.replace(out_path)
+
+    total_cost = (
+        (opus_usage.get("cost_usd") or 0.0)
+        + (kimi_usage.get("cost_usd") or 0.0)
+        + (divergence_usage.get("cost_usd") or 0.0)
+    )
+    print(
+        f"compliance compare · case_id={case_id} role_id={role_id} "
+        f"shared={len(coverage_diff['shared_entry_ids'])} "
+        f"opus_only={len(coverage_diff['opus_only_entry_ids'])} "
+        f"kimi_only={len(coverage_diff['kimi_only_entry_ids'])} "
+        f"cost_est=${total_cost:.4f}"
+    )
+
+    return result
+
+
 # ========== CLI entrypoint ==========
 
 def main() -> None:
-    """Command-line entrypoint: python -m rag.compliance --case-id <id> [--limit N] [--dry-run]."""
+    """Command-line entrypoint:
+    python -m rag.compliance --case-id <id> [--limit N] [--dry-run]
+    python -m rag.compliance --case-id <id> --role-id <role> --compare [--dry-run]
+    """
     parser = argparse.ArgumentParser(
         description="Generate the compliance matrix for one case: facts x "
-        "obligations -> met/breached/ambiguous/insufficient_evidence."
+        "obligations -> met/breached/ambiguous/insufficient_evidence. "
+        "--compare runs a per-role dual-model (Opus + Kimi) comparative "
+        "analysis instead (ADR #56)."
     )
     parser.add_argument("--case-id", type=str, required=True, help="case identifier")
     parser.add_argument(
         "--limit", type=int, default=None,
-        help="process only the first N role groups (dev cost cap)",
+        help="process only the first N role groups (dev cost cap; ignored with --compare)",
     )
     parser.add_argument(
         "--dry-run", action="store_true",
         help="assemble the LLM calls but don't invoke them; print token estimates and skip API calls",
     )
+    parser.add_argument(
+        "--role-id", type=str, default=None,
+        help="role identifier for a single-role comparative run (required with --compare)",
+    )
+    parser.add_argument(
+        "--compare", action="store_true",
+        help="run the dual-model (Opus 4.7 max + Kimi K3 max) comparative analysis "
+        "for one role, with a Haiku 4.5 divergence meta-analysis (ADR #56)",
+    )
     args = parser.parse_args()
 
-    generate_compliance_matrix(args.case_id, limit=args.limit, dry_run=args.dry_run)
+    if args.compare:
+        if not args.role_id:
+            parser.error("--compare requires --role-id")
+        result = compare_compliance_for_role(args.case_id, args.role_id, dry_run=args.dry_run)
+        cache_note = " (cache_hit)" if result.get("cache_hit") else ""
+        print(f"compliance compare done{cache_note}")
+    else:
+        generate_compliance_matrix(args.case_id, limit=args.limit, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":

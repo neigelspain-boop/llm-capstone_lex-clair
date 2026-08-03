@@ -1011,3 +1011,251 @@ def test_compliance_matrix_real_run_aborts_and_preserves_cache(tmp_path, monkeyp
     cached_lines = cache_path.read_text(encoding="utf-8").strip().splitlines()
     assert len(cached_lines) == 1  # first cluster's result persisted before the abort
     assert not (tmp_path / "testcase" / "compliance_matrix.json").exists()
+
+
+# ========== comparative dual-model analysis tests (ADR #56, D7) ==========
+
+def _compare_model_responses(opus_status: str = "met", kimi_status: str = "breached") -> dict[str, str]:
+    """Canned Opus/Kimi/divergence JSON responses for compare-mode tests.
+    Opus and Kimi agree on statute_chunk_id=cc-587 for notaire_redacteur, so
+    both land on the same entry_id (a content-independent hash of
+    statute_chunk_id + actor_role) — the pairing key the divergence
+    analysis relies on."""
+    obligation_summary = "Conserver la substance des biens quasi-usufruits."
+    opus_json = json.dumps([{
+        "statute_chunk_id": "cc-587", "statute_excerpt": "x",
+        "obligation_summary": obligation_summary,
+        "status": opus_status, "evidence_fact_ids": ["doc1-f001"], "rationale": "Opus rationale.",
+    }])
+    kimi_json = json.dumps([{
+        "statute_chunk_id": "cc-587", "statute_excerpt": "x",
+        "obligation_summary": obligation_summary,
+        "status": kimi_status, "evidence_fact_ids": ["doc1-f001"], "rationale": "Kimi rationale.",
+    }])
+    if opus_status == kimi_status:
+        shared_obligations = [{
+            "obligation_summary": obligation_summary,
+            "opus_verdict": opus_status, "kimi_verdict": kimi_status,
+        }]
+        divergent_obligations = []
+    else:
+        shared_obligations = []
+        divergent_obligations = [{
+            "obligation_summary": obligation_summary,
+            "opus_verdict": opus_status, "kimi_verdict": kimi_status,
+            "crux": "test crux", "stronger_side": "opus", "why": "test why",
+        }]
+    divergence_json = json.dumps({
+        "shared_obligations": shared_obligations,
+        "divergent_obligations": divergent_obligations,
+        "meta_summary": "Résumé de test.",
+    })
+    return {
+        "anthropic/claude-opus-4.7": opus_json,
+        "moonshotai/kimi-k3": kimi_json,
+        "anthropic/claude-haiku-4.5": divergence_json,
+    }
+
+
+def _mock_compare_client(model_to_content: dict[str, str], cost: float = 0.005) -> MagicMock:
+    """Like _mock_compliance_client, but dispatches on the `model` kwarg —
+    compare_compliance_for_role's three calls (Opus, Kimi, Haiku divergence)
+    each need their own canned response, unlike the single-model matrix
+    flow's one-content-fits-all mock."""
+    client = MagicMock()
+
+    def _create(*, model, **kwargs):
+        response = MagicMock()
+        response.choices = [MagicMock(message=MagicMock(content=model_to_content[model]))]
+        response.usage = MagicMock(prompt_tokens=10, completion_tokens=5, cost=cost)
+        return response
+
+    client.chat.completions.create.side_effect = _create
+    return client
+
+
+def _mutate_fact_verbatim(base_dir: Path, case_id: str, fact_id: str, new_verbatim: str) -> None:
+    """Rewrite one fact's verbatim_quote in facts.jsonl, keeping its fact_id
+    unchanged — used to verify compare_compliance_for_role's cache
+    invalidates on fact content changes, not just fact-id membership."""
+    facts_path = base_dir / case_id / "facts.jsonl"
+    rewritten = []
+    for line in facts_path.read_text(encoding="utf-8").splitlines():
+        obj = json.loads(line)
+        if obj["fact_id"] == fact_id:
+            obj["verbatim_quote"] = new_verbatim
+        rewritten.append(json.dumps(obj, ensure_ascii=False))
+    facts_path.write_text("\n".join(rewritten) + "\n", encoding="utf-8")
+
+
+def test_compare_compliance_calls_both_models_with_distinct_model_ids(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    called_models = [
+        call.kwargs.get("model") for call in client.chat.completions.create.call_args_list
+    ]
+    assert called_models.count("anthropic/claude-opus-4.7") == 1
+    assert called_models.count("moonshotai/kimi-k3") == 1
+    assert called_models.count("anthropic/claude-haiku-4.5") == 1
+
+
+def test_compare_compliance_writes_comparative_json_with_expected_schema(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    result = compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    out_path = tmp_path / "testcase" / "compliance_comparative_notaire_redacteur.json"
+    assert out_path.exists()
+    on_disk = json.loads(out_path.read_text(encoding="utf-8"))
+
+    for key in (
+        "case_id", "role_id", "role_label", "generated_at", "inputs_hash",
+        "divergence_prompt_hash", "models", "coverage_diff",
+        "divergence_analysis", "divergence_model_id", "cache_hit",
+    ):
+        assert key in on_disk, f"missing key: {key}"
+
+    assert on_disk["models"]["opus"]["model_id"] == "anthropic/claude-opus-4.7"
+    assert on_disk["models"]["kimi"]["model_id"] == "moonshotai/kimi-k3"
+    assert on_disk["coverage_diff"]["shared_entry_ids"] == result["coverage_diff"]["shared_entry_ids"]
+    assert len(on_disk["coverage_diff"]["shared_entry_ids"]) == 1
+    assert on_disk["divergence_analysis"]["divergent_obligations"]
+    assert on_disk["cache_hit"] is False
+
+
+def test_compare_compliance_is_idempotent_via_inputs_hash(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    first = compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+    first_call_count = client.chat.completions.create.call_count
+    assert first_call_count == 3  # opus + kimi + haiku divergence
+    assert first["cache_hit"] is False
+
+    second = compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    assert client.chat.completions.create.call_count == first_call_count  # no new calls
+    assert second["cache_hit"] is True
+    assert second["inputs_hash"] == first["inputs_hash"]
+
+
+def test_compare_compliance_invalidates_cache_on_fact_change(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+    first_call_count = client.chat.completions.create.call_count
+
+    # Same fact_id, different content — inputs_hash must not treat this as
+    # a cache hit (a plain fact_id-only fingerprint would miss this).
+    _mutate_fact_verbatim(
+        tmp_path, "testcase", "doc1-f001",
+        "Le notaire reçoit la convention de quasi-usufruit (version modifiée).",
+    )
+
+    result = compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    assert client.chat.completions.create.call_count == first_call_count + 3  # re-invoked
+    assert result["cache_hit"] is False
+
+
+def test_compare_compliance_invalidates_cache_on_divergence_prompt_change(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+    first_call_count = client.chat.completions.create.call_count
+
+    # Facts/chunks/persons/models all unchanged — only the divergence
+    # prompt text changed (e.g. a prompt-wording fix) — must still miss.
+    monkeypatch.setattr(
+        compliance, "DIVERGENCE_ANALYSIS_SYSTEM_PROMPT",
+        compliance.DIVERGENCE_ANALYSIS_SYSTEM_PROMPT + "\n(edited)",
+    )
+
+    result = compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    assert client.chat.completions.create.call_count == first_call_count + 3  # re-invoked
+    assert result["cache_hit"] is False
+
+
+def test_divergence_analysis_produces_valid_schema(monkeypatch) -> None:
+    from rag import compliance
+
+    divergence_json = json.dumps({
+        "shared_obligations": [
+            {"obligation_summary": "o1", "opus_verdict": "met", "kimi_verdict": "met"},
+        ],
+        "divergent_obligations": [
+            {
+                "obligation_summary": "o2", "opus_verdict": "met", "kimi_verdict": "breached",
+                "crux": "c", "stronger_side": "opus", "why": "w",
+            },
+        ],
+        "meta_summary": "Résumé.",
+    })
+    client = _mock_compare_client({"anthropic/claude-haiku-4.5": divergence_json})
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+
+    opus_entry = compliance.ComplianceEntry(
+        entry_id="e1", statute_chunk_id="cc-587", statute_excerpt="x",
+        obligation_summary="o1", actor_role="notaire_redacteur", status="met",
+        evidence_fact_ids=["doc1-f001"], rationale="r",
+    )
+    kimi_entry = compliance.ComplianceEntry(
+        entry_id="e1", statute_chunk_id="cc-587", statute_excerpt="x",
+        obligation_summary="o1", actor_role="notaire_redacteur", status="met",
+        evidence_fact_ids=["doc1-f001"], rationale="r",
+    )
+
+    divergence, usage = compliance._call_divergence_analysis(
+        "notaire_redacteur", "Notaire rédacteur", [opus_entry], [kimi_entry], {"e1"},
+    )
+
+    assert set(divergence) == {"shared_obligations", "divergent_obligations", "meta_summary"}
+    assert divergence["shared_obligations"][0]["opus_verdict"] == "met"
+    assert divergence["divergent_obligations"][0]["stronger_side"] == "opus"
+    assert usage["estimated"] is False
+
+
+def test_compare_compliance_does_not_pollute_shared_compliance_cache(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
+
+    assert not (tmp_path / "testcase" / "compliance_cache.jsonl").exists()
