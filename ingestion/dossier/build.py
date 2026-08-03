@@ -34,7 +34,7 @@ import logging
 import time
 from pathlib import Path
 
-from ingestion.dossier import extract, gate, facts, index
+from ingestion.dossier import anonymize, extract, gate, facts, index
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -63,9 +63,18 @@ def _run_stage(name: str, func, *args, **kwargs):
 # ========== pipeline orchestration ==========
 
 def run_pipeline(
-    case_id: str, raw_dir: Path | None = None, step: str = "all", limit: int | None = None
+    case_id: str,
+    raw_dir: Path | None = None,
+    step: str = "all",
+    limit: int | None = None,
+    source_case_id: str = anonymize.DEFAULT_SOURCE_CASE_ID,
 ) -> dict:
     """Run the requested pipeline step(s) for one case; return a summary dict.
+
+    step="anonymize" derives case_id's extracted/*.md from source_case_id's
+    (ADR #59) and verifies the result, raising if any known identifier
+    survives. Deliberately excluded from step="all": it is a one-off
+    derivation from a DIFFERENT case, not a stage of this case's own build.
 
     step="extract" runs only extract.extract_case and returns
     {case_id, step, doc_count, docs} — requires raw_dir. step="gate" runs
@@ -82,6 +91,26 @@ def run_pipeline(
     step="all" runs extract → gate → facts → index in sequence (requires
     raw_dir); any stage failure aborts the remaining stages.
     """
+    if step == "anonymize":
+        summary = _run_stage(
+            "ANONYMIZE", anonymize.anonymize_case, case_id, source_case_id=source_case_id,
+        )
+
+        residual = summary["residual_proper_nouns"]
+        top = sorted(residual.items(), key=lambda kv: -kv[1])[:15]
+        print(
+            f"anonymize summary · case_id={case_id} source={summary['source_case_id']} "
+            f"docs_written={summary['docs_written']} entities_mapped={summary['entities_mapped']} "
+            f"files_verified={summary['files_scanned']} "
+            f"residual_proper_nouns={len(residual)} elapsed={summary['elapsed']:.1f}s"
+        )
+        if top:
+            # The gate proves the KNOWN identifiers are gone; it cannot prove
+            # an unknown one is. These need a human read before publishing.
+            print("  unrecognised proper nouns to review: " + ", ".join(f"{t}({n})" for t, n in top))
+
+        return {"case_id": case_id, "step": step, **summary}
+
     if step == "extract":
         results = _run_stage("EXTRACT", extract.extract_case, case_id, raw_dir, limit=limit)
         return {
@@ -186,12 +215,17 @@ def main() -> None:
     )
     parser.add_argument("--case-id", type=str, required=True, help="case identifier")
     parser.add_argument(
+        "--source-case-id", type=str, default=anonymize.DEFAULT_SOURCE_CASE_ID,
+        help="source case for --step anonymize (ADR #59); ignored by every other step. "
+        f"Default: {anonymize.DEFAULT_SOURCE_CASE_ID}",
+    )
+    parser.add_argument(
         "--raw-dir", type=Path, required=False, default=None,
         help="directory of raw dossier documents for this case "
              "(required for --step extract/all; optional for --step gate/facts/index)",
     )
     parser.add_argument(
-        "--step", choices=["extract", "gate", "facts", "index", "all"], default="all",
+        "--step", choices=["anonymize", "extract", "gate", "facts", "index", "all"], default="all",
         help="which pipeline step(s) to run (default: all)",
     )
     parser.add_argument(
@@ -208,7 +242,10 @@ def main() -> None:
         "dossier build starting · case_id=%s raw_dir=%s step=%s limit=%s",
         args.case_id, args.raw_dir, args.step, args.limit,
     )
-    summary = run_pipeline(args.case_id, args.raw_dir, step=args.step, limit=args.limit)
+    summary = run_pipeline(
+        args.case_id, args.raw_dir, step=args.step, limit=args.limit,
+        source_case_id=args.source_case_id,
+    )
     log.info("dossier build complete · %s · total elapsed %.1fs", summary, time.time() - t_start)
 
 
