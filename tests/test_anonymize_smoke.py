@@ -519,6 +519,168 @@ def test_raise_on_leak_false_returns_the_report_instead(dossier) -> None:
     assert any("VOLTAIRE" in ident for _, ident in report.leaks)
 
 
+# ========== artifact translation (ADR #62) ==========
+
+def _write_source_artifacts(base: Path) -> None:
+    src = base / "src"
+    (src / "facts.jsonl").write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in [
+        {
+            "fact_id": "duchemin_a__00_note-f001",
+            "date": "2024-03-08",
+            "actor_role": "notaire_redacteur",
+            "action": "recevoir une convention",
+            "target": "parts de SCPI PIERRAVENIR",
+            "verbatim_quote": "Ariane VOLTAIRE a reçu la convention le 8 mars 2024.",
+            "source_doc_id": "duchemin_a__00_note",
+            "source_chunk_id": "dossier-src-duchemin_a__00_note-c001",
+            "distilled_context": "VOLTAIRE reçoit la convention.",
+        },
+    ]) + "\n", encoding="utf-8")
+
+    (src / "actor_roles.jsonl").write_text(json.dumps({
+        "role_id": "notaire_redacteur", "label_fr": "Notaire rédacteur",
+        "grounding_note": "Il s'agit de Ariane VOLTAIRE.",
+        "first_seen_doc_id": "duchemin_a__00_note",
+        "fact_count": 1, "confidence": "high",
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    (src / "compliance_matrix.json").write_text(json.dumps({
+        "case_id": "src",
+        "generated_at": "2026-07-30T16:25:43Z",
+        "model_id": "anthropic/claude-opus-4.7",
+        "total_facts_considered": 1,
+        "total_entries": 1,
+        "unresolved_ambiguities": 0,
+        "entries": [{
+            "entry_id": "abc123",
+            "statute_chunk_id": "cc-730-1",
+            "statute_excerpt": "La preuve de la qualité d'héritier peut résulter "
+                               "d'un acte de notoriété, loi du 23 juin 2006.",
+            "obligation_summary": "Le notaire doit viser l'acte de décès.",
+            "actor_role": "notaire_redacteur",
+            "status": "breached",
+            "evidence_fact_ids": ["duchemin_a__00_note-f001"],
+            "rationale": "Ariane VOLTAIRE n'a pas visé l'acte.",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_artifacts_are_translated_not_regenerated(dossier, extras) -> None:
+    """Re-running the LLM pipeline over anonymised markdown costs $25+ on the
+    compliance stage alone and yields a DIFFERENT, unreviewed analysis.
+    Translating publishes exactly the determinations that were paid for."""
+    _write_source_artifacts(dossier)
+    mapping = anonymize.load_or_build_mapping("src")
+    counts = anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    assert counts["facts.jsonl"] == 1
+    assert counts["compliance_matrix.json"] == 1
+
+    fact = json.loads((dossier / "vitrine" / "facts.jsonl").read_text(encoding="utf-8"))
+    assert "VOLTAIRE" not in fact["verbatim_quote"]
+    assert "PIERRAVENIR" not in fact["target"]
+    assert "duchemin" not in fact["fact_id"]
+    assert fact["actor_role"] == "notaire_redacteur", "role ids are the substance, keep them"
+
+
+def test_fact_dates_shift_with_the_documents_they_quote(dossier, extras) -> None:
+    """Fact.date is ISO and no prose pattern matches it. Left unshifted, every
+    fact would sit 829 days from the document it cites and the per-person
+    panel's date filter would contradict its own evidence."""
+    _write_source_artifacts(dossier)
+    mapping = anonymize.load_or_build_mapping("src")
+    anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    fact = json.loads((dossier / "vitrine" / "facts.jsonl").read_text(encoding="utf-8"))
+    assert fact["date"] != "2024-03-08"
+    assert fact["date"] == anonymize._shift_dates("2024-03-08")
+    # The prose date in the quote must land on the same day as the field.
+    assert str(int(fact["date"][:4])) in fact["verbatim_quote"]
+
+
+def test_evidence_fact_ids_still_resolve_after_translation(dossier, extras) -> None:
+    """A matrix that cites fact ids no facts.jsonl contains renders an
+    obligation with no evidence behind it."""
+    _write_source_artifacts(dossier)
+    mapping = anonymize.load_or_build_mapping("src")
+    anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    facts = {
+        json.loads(line)["fact_id"]
+        for line in (dossier / "vitrine" / "facts.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    }
+    matrix = json.loads((dossier / "vitrine" / "compliance_matrix.json").read_text(encoding="utf-8"))
+    for entry in matrix["entries"]:
+        for fact_id in entry["evidence_fact_ids"]:
+            assert fact_id in facts, f"dangling evidence reference {fact_id}"
+
+
+def test_statute_text_and_model_id_survive_untouched(dossier, extras) -> None:
+    """Statute excerpts are public law. Running the date shift over them would
+    silently misdate the articles the whole analysis rests on."""
+    _write_source_artifacts(dossier)
+    mapping = anonymize.load_or_build_mapping("src")
+    anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    matrix = json.loads((dossier / "vitrine" / "compliance_matrix.json").read_text(encoding="utf-8"))
+    entry = matrix["entries"][0]
+    assert "loi du 23 juin 2006" in entry["statute_excerpt"]
+    assert entry["statute_chunk_id"] == "cc-730-1"
+    assert matrix["model_id"] == "anthropic/claude-opus-4.7"
+    assert matrix["case_id"] == "vitrine"
+
+
+def test_source_chunk_id_is_dropped_for_the_index_to_backfill(dossier, extras) -> None:
+    """Translating it would be a guess that silently breaks every citation it
+    does not happen to match; index_dossier recomputes it against the chunks
+    actually written."""
+    _write_source_artifacts(dossier)
+    mapping = anonymize.load_or_build_mapping("src")
+    anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    fact = json.loads((dossier / "vitrine" / "facts.jsonl").read_text(encoding="utf-8"))
+    assert fact["source_chunk_id"] is None
+
+
+def test_unknown_artifact_field_fails_the_build(dossier, extras) -> None:
+    """A field with no policy is either an unreviewed leak or a silently
+    corrupted value. Both are worse than a loud failure."""
+    _write_source_artifacts(dossier)
+    (dossier / "src" / "facts.jsonl").write_text(
+        json.dumps({"fact_id": "d-f001", "surprise_field": "Ariane VOLTAIRE"}) + "\n",
+        encoding="utf-8",
+    )
+    mapping = anonymize.load_or_build_mapping("src")
+    with pytest.raises(RuntimeError, match="no anonymisation policy"):
+        anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+
+def test_persons_merge_into_one_record_per_real_person(dossier, extras) -> None:
+    """Emitting the resolver's split ids unchanged would show the same
+    character three times in the per-person panel."""
+    _write_persons_with_split_identity(dossier, "src")
+    _write_roster(dossier, "src", {
+        "bindings": {"p-split-a": "Son Gohan"},
+        "merge_groups": [["p-split-a", "p-split-b", "p-split-c"]],
+    })
+    (dossier / "src" / "persons.jsonl").write_text(
+        (dossier / "src" / "persons.jsonl").read_text(encoding="utf-8"), encoding="utf-8",
+    )
+    mapping = anonymize.load_or_build_mapping("src")
+    anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
+
+    persons = [
+        json.loads(line)
+        for line in (dossier / "vitrine" / "persons.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    gohan = [p for p in persons if p["canonical_name"] == "Son Gohan"]
+    assert len(gohan) == 1, "split identities must collapse to one record"
+    assert gohan[0]["person_id"] == "vitrine-son-gohan"
+    assert gohan[0]["aliases"] == ["Son Gohan"], "real aliases must not survive"
+
+
 # ========== end-to-end (no LLM) ==========
 
 def test_anonymize_case_end_to_end(dossier) -> None:

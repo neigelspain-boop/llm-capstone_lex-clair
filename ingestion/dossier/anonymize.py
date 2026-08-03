@@ -167,6 +167,11 @@ _DATE_TEXT_RE = re.compile(
 )
 _DATE_NUM_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
 _DATE_COMPACT_RE = re.compile(r"\b(20\d{2})(\d{2})(\d{2})\b")
+# Structured date fields (Fact.date) are ISO, which none of the prose patterns
+# above match. Missing it would leave every fact dated 829 days away from the
+# document it quotes, so the per-person panel's date filter would contradict
+# its own evidence.
+_DATE_ISO_RE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
 
 # French money: "195 572 €", "195572,50 EUR". Narrow/non-breaking spaces count
 # as thousands separators in the extracted markdown.
@@ -538,7 +543,14 @@ def _shift_dates(text: str) -> str:
             return m.group(0)
         return f"{shifted.year}{shifted.month:02d}{shifted.day:02d}"
 
+    def _iso_repl(m: re.Match) -> str:
+        shifted = _shift_date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        if shifted is None:
+            return m.group(0)
+        return shifted.isoformat()
+
     text = _DATE_TEXT_RE.sub(_text_repl, text)
+    text = _DATE_ISO_RE.sub(_iso_repl, text)
     text = _DATE_NUM_RE.sub(_num_repl, text)
     return _DATE_COMPACT_RE.sub(_compact_repl, text)
 
@@ -806,10 +818,18 @@ def anonymize_case(
     target_case_id: str,
     source_case_id: str = DEFAULT_SOURCE_CASE_ID,
     use_llm: bool = True,
+    include_artifacts: bool = True,
 ) -> dict:
-    """Derive target_case_id/extracted/*.md from source_case_id's extracted
-    markdown, then verify. Raises if verification finds a surviving
-    identifier — a failed build is the point, not a warning to be skimmed."""
+    """Derive the target case from the source case, then verify.
+
+    Two halves: the extracted markdown (here) and the analytical artifacts
+    facts/roles/persons/compliance (anonymize_artifacts). Both are needed for
+    a usable public case — markdown alone gives a readable dossier with no
+    analysis behind it, which is what the first showcase build produced.
+
+    Raises if verification finds a surviving identifier — a failed build is
+    the point, not a warning to be skimmed.
+    """
     t0 = time.time()
     src_dir = DOSSIER_DIR / source_case_id / "extracted"
     if not src_dir.exists():
@@ -829,6 +849,10 @@ def anonymize_case(
         written += 1
         log.info("anonymize: %s -> %s", md_path.name, f"{out_name}.md")
 
+    artifacts: dict[str, int] = {}
+    if include_artifacts:
+        artifacts = anonymize_artifacts(target_case_id, source_case_id, mapping, extras)
+
     report = verify_anonymization(target_case_id, source_case_id=source_case_id)
     elapsed = time.time() - t0
 
@@ -837,10 +861,285 @@ def anonymize_case(
         "source_case_id": source_case_id,
         "docs_written": written,
         "entities_mapped": len(mapping),
+        "artifacts": artifacts,
         "files_scanned": report.files_scanned,
         "residual_proper_nouns": report.residual_proper_nouns,
         "elapsed": elapsed,
     }
+
+
+# ========== artifact translation ==========
+
+# Field policies. Explicit rather than heuristic, because the obvious
+# heuristic ("scrub anything ending in _id") is wrong in both directions here:
+# statute_chunk_id ("cc-730-1") and model_id are public references that must
+# survive untouched, while `date` carries no "_id" and must still be shifted.
+KEEP = "keep"            # copied verbatim
+TEXT = "text"            # full free-text layers (names, PII, dates, amounts)
+IDENT = "ident"          # a document-derived id, rewritten via anonymize_doc_id
+IDENT_LIST = "ident[]"   # a list of the above
+DROP = "drop"            # emitted as null, recomputed downstream
+
+ARTIFACT_POLICIES: dict[str, dict[str, str]] = {
+    "facts.jsonl": {
+        "fact_id": IDENT,
+        "source_doc_id": IDENT,
+        # Recomputed by index.index_dossier's backfill against the chunks it
+        # actually writes. Translating the old value would be a guess that
+        # silently breaks every citation it does not happen to match.
+        "source_chunk_id": DROP,
+        "date": TEXT,
+        "actor_role": KEEP,
+        "action": TEXT,
+        "target": TEXT,
+        "verbatim_quote": TEXT,
+        "distilled_context": TEXT,
+    },
+    "actor_roles.jsonl": {
+        "role_id": KEEP,
+        "label_fr": TEXT,
+        "grounding_note": TEXT,
+        "first_seen_doc_id": IDENT,
+        "fact_count": KEEP,
+        "confidence": KEEP,
+    },
+    "role_ambiguities.jsonl": {
+        "ambiguity_id": IDENT,
+        "source_doc_id": IDENT,
+        "verbatim_quote": TEXT,
+        "candidate_role_ids": KEEP,
+        "note": TEXT,
+        "fact_ids": IDENT_LIST,
+    },
+}
+
+COMPLIANCE_TOP_POLICY = {
+    "case_id": KEEP,          # overwritten with the target case id
+    "generated_at": KEEP,
+    "model_id": KEEP,
+    "total_facts_considered": KEEP,
+    "total_entries": KEEP,
+    "unresolved_ambiguities": KEEP,
+    "entries": KEEP,          # handled element-wise
+}
+
+COMPLIANCE_ENTRY_POLICY = {
+    "entry_id": KEEP,
+    # Statute text is public law and must stay accurate to the letter. Running
+    # the date shift over it would silently misdate the articles the whole
+    # analysis rests on.
+    "statute_chunk_id": KEEP,
+    "statute_excerpt": KEEP,
+    "obligation_summary": TEXT,
+    "actor_role": KEEP,
+    "status": KEEP,
+    "evidence_fact_ids": IDENT_LIST,
+    "rationale": TEXT,
+    "persons_named": TEXT,
+}
+
+
+def _slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", _fold(value)).strip("-")
+
+
+def _rewrite_fact_id(value: str, mapping: dict[str, str], extras: dict[str, str]) -> str:
+    """Rewrite a "<doc_id>-fNNN" / "<doc_id>-aNNN" identifier.
+
+    The doc_id half is anonymised; the ordinal suffix is preserved verbatim so
+    the id keeps its shape and stays joinable. Splitting on the LAST hyphen is
+    what makes that safe — source doc_ids contain hyphens of their own.
+    """
+    head, sep, suffix = value.rpartition("-")
+    if not sep or not re.fullmatch(r"[a-z]\d+", suffix):
+        return anonymize_doc_id(value, mapping, extras)
+    return f"{anonymize_doc_id(head, mapping, extras)}-{suffix}"
+
+
+def _apply_policy(value, policy: str, mapping, extras):
+    if value is None or policy == KEEP:
+        return value
+    if policy == DROP:
+        return None
+    if policy == IDENT:
+        return _rewrite_fact_id(str(value), mapping, extras)
+    if policy == IDENT_LIST:
+        return [_rewrite_fact_id(str(v), mapping, extras) for v in value]
+    if policy == TEXT:
+        if isinstance(value, list):
+            return [_apply_policy(v, TEXT, mapping, extras) for v in value]
+        if not isinstance(value, str):
+            return value
+        return anonymize_text(value, mapping, "artifact", extras, use_llm=False)
+    raise ValueError(f"unknown field policy {policy!r}")
+
+
+def _translate_record(record: dict, policy: dict[str, str], mapping, extras, where: str) -> dict:
+    """Apply a field policy to one record, refusing unknown fields.
+
+    Unknown fields fail the build rather than defaulting. Either default is
+    wrong on a privacy path: defaulting to KEEP publishes whatever a new field
+    holds, and defaulting to TEXT silently corrupts the next structured field
+    someone adds. A loud failure is the only option that cannot lose.
+    """
+    unknown = set(record) - set(policy)
+    if unknown:
+        raise RuntimeError(
+            f"{where}: no anonymisation policy for field(s) {sorted(unknown)}. "
+            "Add them to ARTIFACT_POLICIES — a field with no policy is either "
+            "an unreviewed leak or a silently corrupted value."
+        )
+    return {k: _apply_policy(v, policy[k], mapping, extras) for k, v in record.items()}
+
+
+def _read_jsonl(path: Path) -> list[dict]:
+    return [
+        json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def _write_jsonl(path: Path, records: list[dict]) -> None:
+    path.write_text(
+        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records), encoding="utf-8",
+    )
+
+
+def _translate_persons(
+    records: list[dict], target_case_id: str, roster: personas.Roster, mapping, extras,
+) -> list[dict]:
+    """Collapse the source case's persons onto one record per real person.
+
+    persons.jsonl is the one artifact a field policy cannot express, because
+    translating it is not a per-record rewrite: the resolver split several
+    real people across multiple person_ids, and emitting those unchanged would
+    show the same character three times in the per-person panel.
+
+    Aliases are NOT translated one by one — every alias of a person maps to
+    the same character, so the output would be a list of duplicates. The
+    fictional name is the only alias the public case has.
+    """
+    merged: dict[str, dict] = {}
+    for record in records:
+        person_id = record.get("person_id", "")
+        head = roster.head_of(person_id)
+        character = mapping.get(_fold(record.get("canonical_name", "")), "")
+
+        entry = merged.setdefault(head, {
+            "person_id": f"{target_case_id}-{_slug(character or head)}",
+            "canonical_name": character,
+            "aliases": [character] if character else [],
+            "person_type": record.get("person_type", "natural_person"),
+            "confidence": record.get("confidence", "medium"),
+            "ambiguity_note": None,
+            "role_assignments": [],
+        })
+
+        notes = [
+            n for n in (
+                entry["ambiguity_note"],
+                _apply_policy(record.get("ambiguity_note"), TEXT, mapping, extras),
+            ) if n
+        ]
+        entry["ambiguity_note"] = " · ".join(dict.fromkeys(notes)) or None
+
+        by_role = {a["role_id"]: a for a in entry["role_assignments"]}
+        for assignment in record.get("role_assignments") or []:
+            role_id = assignment.get("role_id")
+            evidence = _apply_policy(
+                assignment.get("evidence_fact_ids") or [], IDENT_LIST, mapping, extras,
+            )
+            existing = by_role.get(role_id)
+            if existing is None:
+                by_role[role_id] = {
+                    "role_id": role_id,
+                    "confidence": assignment.get("confidence", "medium"),
+                    "ambiguity_note": _apply_policy(
+                        assignment.get("ambiguity_note"), TEXT, mapping, extras,
+                    ),
+                    "evidence_fact_ids": list(dict.fromkeys(evidence)),
+                }
+            else:
+                existing["evidence_fact_ids"] = list(
+                    dict.fromkeys([*existing["evidence_fact_ids"], *evidence])
+                )
+        entry["role_assignments"] = sorted(by_role.values(), key=lambda a: a["role_id"])
+
+    return sorted(merged.values(), key=lambda r: r["person_id"])
+
+
+def anonymize_artifacts(
+    target_case_id: str,
+    source_case_id: str,
+    mapping: dict[str, str],
+    extras: dict[str, str],
+) -> dict[str, int]:
+    """Derive the target case's analytical artifacts from the source case's.
+
+    The alternative is re-running facts -> mentions -> resolve -> distill ->
+    compliance over the anonymised markdown, which costs $25+ on the
+    compliance stage alone and produces a DIFFERENT analysis — one nobody has
+    reviewed. Translating instead publishes exactly the determinations that
+    were paid for and read, with every identifier removed.
+
+    Deterministic throughout (no LLM sweep), which is also what keeps the
+    markdown, the facts and the chunks in agreement: a sweep rewrites the
+    markdown but cannot be replayed identically over a quote, so quotes stop
+    matching chunks and the index backfill degrades.
+
+    verify_anonymization already scans every file written here — it was
+    written for this and only ever had the markdown half implemented.
+    """
+    src_dir = DOSSIER_DIR / source_case_id
+    out_dir = DOSSIER_DIR / target_case_id
+    out_dir.mkdir(parents=True, exist_ok=True)
+    roster = personas.load_roster(source_case_id)
+    counts: dict[str, int] = {}
+
+    for name, policy in ARTIFACT_POLICIES.items():
+        src = src_dir / name
+        if not src.exists():
+            continue
+        records = [
+            _translate_record(r, policy, mapping, extras, f"{name}[{i}]")
+            for i, r in enumerate(_read_jsonl(src))
+        ]
+        _write_jsonl(out_dir / name, records)
+        counts[name] = len(records)
+        log.info("anonymize artifacts: %s -> %d record(s)", name, len(records))
+
+    src_persons = src_dir / "persons.jsonl"
+    if src_persons.exists():
+        persons = _translate_persons(
+            _read_jsonl(src_persons), target_case_id, roster, mapping, extras,
+        )
+        _write_jsonl(out_dir / "persons.jsonl", persons)
+        counts["persons.jsonl"] = len(persons)
+        log.info("anonymize artifacts: persons.jsonl -> %d merged person(s)", len(persons))
+
+    src_matrix = src_dir / "compliance_matrix.json"
+    if src_matrix.exists():
+        matrix = json.loads(src_matrix.read_text(encoding="utf-8"))
+        translated = _translate_record(
+            matrix, COMPLIANCE_TOP_POLICY, mapping, extras, "compliance_matrix.json",
+        )
+        translated["case_id"] = target_case_id
+        translated["entries"] = [
+            _translate_record(
+                e, COMPLIANCE_ENTRY_POLICY, mapping, extras, f"compliance_matrix.entries[{i}]",
+            )
+            for i, e in enumerate(matrix.get("entries") or [])
+        ]
+        (out_dir / "compliance_matrix.json").write_text(
+            json.dumps(translated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+        )
+        counts["compliance_matrix.json"] = len(translated["entries"])
+        log.info(
+            "anonymize artifacts: compliance_matrix.json -> %d entries",
+            len(translated["entries"]),
+        )
+
+    return counts
 
 
 # ========== verification gate ==========
