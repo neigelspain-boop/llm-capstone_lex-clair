@@ -1259,3 +1259,100 @@ def test_compare_compliance_does_not_pollute_shared_compliance_cache(tmp_path, m
     compliance.compare_compliance_for_role("testcase", "notaire_redacteur")
 
     assert not (tmp_path / "testcase" / "compliance_cache.jsonl").exists()
+
+
+# ========== single-model per-role analysis (ADR #57, D8) ==========
+
+def test_run_compliance_for_role_calls_only_the_selected_model(tmp_path, monkeypatch) -> None:
+    """The whole point of the UI model toggle: selecting one model must fire
+    exactly that model once, and neither the other frontier model nor the
+    divergence model at all."""
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.run_compliance_for_role(
+        "testcase", "notaire_redacteur", compliance_model_id="moonshotai/kimi-k3",
+    )
+
+    called_models = [
+        call.kwargs.get("model") for call in client.chat.completions.create.call_args_list
+    ]
+    assert called_models == ["moonshotai/kimi-k3"]
+
+
+def test_run_compliance_for_role_cache_is_per_model(tmp_path, monkeypatch) -> None:
+    """Opus and Kimi results for the same role must not share a cache slot.
+
+    A shared slot would let the panel display one model's verdicts under the
+    other model's name — the exact failure _single_inputs_hash and the
+    per-model filename exist to prevent.
+    """
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses(opus_status="met", kimi_status="breached"))
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    opus = compliance.run_compliance_for_role(
+        "testcase", "notaire_redacteur", compliance_model_id="anthropic/claude-opus-4.7",
+    )
+    assert opus["cache_hit"] is False
+    assert client.chat.completions.create.call_count == 1
+
+    # Toggling the model must MISS, not serve the Opus result back.
+    kimi = compliance.run_compliance_for_role(
+        "testcase", "notaire_redacteur", compliance_model_id="moonshotai/kimi-k3",
+    )
+    assert kimi["cache_hit"] is False
+    assert client.chat.completions.create.call_count == 2
+    assert kimi["inputs_hash"] != opus["inputs_hash"]
+    assert kimi["model"]["model_id"] == "moonshotai/kimi-k3"
+    assert kimi["model"]["entries"][0]["status"] == "breached"
+    assert opus["model"]["entries"][0]["status"] == "met"
+
+    # Both results coexist on disk under model-scoped filenames.
+    case_dir = tmp_path / "testcase"
+    assert (case_dir / "compliance_single_notaire_redacteur_anthropic_claude-opus-4.7.json").exists()
+    assert (case_dir / "compliance_single_notaire_redacteur_moonshotai_kimi-k3.json").exists()
+
+    # Re-selecting the first model serves its own cache, with no new call.
+    again = compliance.run_compliance_for_role(
+        "testcase", "notaire_redacteur", compliance_model_id="anthropic/claude-opus-4.7",
+    )
+    assert again["cache_hit"] is True
+    assert client.chat.completions.create.call_count == 2
+    assert again["model"]["entries"][0]["status"] == "met"
+
+
+def test_run_compliance_for_role_does_not_pollute_shared_compliance_cache(tmp_path, monkeypatch) -> None:
+    """Mirrors the compare-mode guard: the shared compliance_cache.jsonl key
+    has no model dimension, so this path must never write to it."""
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    client = _mock_compare_client(_compare_model_responses())
+    monkeypatch.setattr(compliance, "get_openrouter_client", lambda: client)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    compliance.run_compliance_for_role("testcase", "notaire_redacteur")
+
+    assert not (tmp_path / "testcase" / "compliance_cache.jsonl").exists()
+
+
+def test_run_compliance_for_role_raises_on_unknown_role(tmp_path, monkeypatch) -> None:
+    from rag import compliance
+
+    _write_fixture_case(tmp_path, "testcase")
+    monkeypatch.setattr(compliance, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(compliance, "retrieve", lambda *a, **k: _mock_chunks())
+
+    with pytest.raises(ValueError, match="role_id"):
+        compliance.run_compliance_for_role("testcase", "role_qui_nexiste_pas")
