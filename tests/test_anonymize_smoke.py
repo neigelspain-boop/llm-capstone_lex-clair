@@ -344,6 +344,43 @@ def test_placed_fiction_is_not_reported_as_a_residual_identifier(dossier) -> Non
     assert "Namek" not in report.residual_proper_nouns
 
 
+def test_legal_persons_keep_their_real_names_when_the_roster_says_so(dossier, extras) -> None:
+    """A bank or a tax office does not identify a private family, and naming
+    them makes the published case concrete (ADR #62). The gate must agree, or
+    the build fails on the very names it was told to publish."""
+    _write_roster(dossier, "src", {"keep_real_legal_persons": True})
+    mapping = anonymize.load_or_build_mapping("src")
+
+    out = anonymize.anonymize_text(
+        "GRANIMMO PATRIMOINE gère les parts ; DUCHEMIN Alphonse est héritier.",
+        mapping, "d1", extras, use_llm=False,
+    )
+    assert "GRANIMMO PATRIMOINE" in out, "legal person must survive untouched"
+    assert "DUCHEMIN" not in out, "natural persons are still anonymised"
+
+    _prepare_target(dossier, "## Page 1\n\nGRANIMMO PATRIMOINE gère les parts.")
+    report = anonymize.verify_anonymization("vitrine", source_case_id="src", raise_on_leak=False)
+    assert report.ok, "a name the roster keeps real must not count as a leak"
+
+
+def test_cascade_guard_catches_a_pseudonym_that_is_also_a_key(dossier) -> None:
+    """Replacement is a sequence of passes over one growing string, so a
+    pseudonym that is also another entry's key gets rewritten by a later pass
+    and one person silently takes another's name. Nothing about that is
+    visible in the output, so it cannot be left to a human read."""
+    mapping = {"duchemin": "Ariane VOLTAIRE", "voltaire": "MERCIER"}
+    with pytest.raises(RuntimeError, match="replacement cascade"):
+        anonymize.assert_no_replacement_cascade(mapping, {})
+
+
+def test_cascade_guard_allows_an_identity_entry(dossier) -> None:
+    """A key mapped to itself marks a name the policy deliberately keeps.
+    Rewriting it to itself is a no-op, not a cascade."""
+    anonymize.assert_no_replacement_cascade(
+        {"duchemin": "MERCIER"}, {"PIERRAVENIR": "PIERRAVENIR"},
+    )
+
+
 # ========== layer 2: structured PII ==========
 
 @pytest.mark.parametrize("raw", [
@@ -380,40 +417,7 @@ def test_gate_does_not_fire_on_ordinary_words_containing_a_name_fragment() -> No
     assert not re.search(r"(?<![a-z0-9])vaillan(?![a-z0-9])", folded)
 
 
-# ========== layer 3: dates and amounts ==========
-
-def test_dates_shift_consistently_preserving_intervals() -> None:
-    """Compliance reasoning depends on the gap between events, so one shared
-    offset must move every date by the same amount."""
-    out = anonymize._shift_dates("convention du 8 mars 2024, décès le 09/01/2026")
-    assert "8 mars 2024" not in out
-    assert "09/01/2026" not in out
-
-    year_text = int(re.search(r"(\d{4})", out).group(1))
-    assert year_text < 2024, "offset should move dates backwards"
-
-
-def test_date_shift_keeps_written_format() -> None:
-    prose = anonymize._shift_dates("le 8 mars 2024")
-    numeric = anonymize._shift_dates("le 09/01/2026")
-    assert "/" not in prose
-    assert "/" in numeric
-
-
-def test_amounts_scale_by_a_single_factor_preserving_ratios() -> None:
-    out_small = anonymize._scale_amounts("10 000 €")
-    out_large = anonymize._scale_amounts("20 000 €")
-    small = int(re.sub(r"\D", "", out_small))
-    large = int(re.sub(r"\D", "", out_large))
-    assert small != 10000
-    assert abs(large / small - 2.0) < 0.01, "ratio between amounts must survive scaling"
-
-
-def test_share_counts_are_not_scaled() -> None:
-    """Only money scales. Scaling "377 parts" would break its arithmetic
-    against the scaled totals."""
-    assert "377 parts" in anonymize._scale_amounts("377 parts de SCPI")
-
+# ========== layer 3: named products and places ==========
 
 def test_named_products_and_places_are_generalised(extras) -> None:
     out = anonymize._apply_extra_identifiers(
@@ -583,19 +587,24 @@ def test_artifacts_are_translated_not_regenerated(dossier, extras) -> None:
     assert fact["actor_role"] == "notaire_redacteur", "role ids are the substance, keep them"
 
 
-def test_fact_dates_shift_with_the_documents_they_quote(dossier, extras) -> None:
-    """Fact.date is ISO and no prose pattern matches it. Left unshifted, every
-    fact would sit 829 days from the document it cites and the per-person
-    panel's date filter would contradict its own evidence."""
+def test_dates_and_amounts_pass_through_unchanged(dossier, extras) -> None:
+    """ADR #62 accepts the residual risk of publishing real figures. A worked
+    example whose numbers do not add up against the deed it quotes is worth
+    less than the protection it buys, and the protection only ever bound
+    against someone who already knew the case."""
     _write_source_artifacts(dossier)
     mapping = anonymize.load_or_build_mapping("src")
     anonymize.anonymize_artifacts("vitrine", "src", mapping, extras)
 
     fact = json.loads((dossier / "vitrine" / "facts.jsonl").read_text(encoding="utf-8"))
-    assert fact["date"] != "2024-03-08"
-    assert fact["date"] == anonymize._shift_dates("2024-03-08")
-    # The prose date in the quote must land on the same day as the field.
-    assert str(int(fact["date"][:4])) in fact["verbatim_quote"]
+    assert fact["date"] == "2024-03-08"
+    assert "8 mars 2024" in fact["verbatim_quote"]
+
+    out = anonymize.anonymize_text(
+        "créance de 195 572 € née le 8 mars 2024", mapping, "d1", extras, use_llm=False,
+    )
+    assert "195 572 €" in out
+    assert "8 mars 2024" in out
 
 
 def test_evidence_fact_ids_still_resolve_after_translation(dossier, extras) -> None:
@@ -703,13 +712,14 @@ def test_anonymize_case_end_to_end(dossier) -> None:
     assert "duchemin" not in out_files[0].name
 
     text = out_files[0].read_text(encoding="utf-8")
-    for leaked in (
-        "DUCHEMIN", "VOLTAIRE", "PIERRAVENIR", "GRANIMMO", "etude@example.fr", "195 572",
-    ):
+    for leaked in ("DUCHEMIN", "VOLTAIRE", "PIERRAVENIR", "GRANIMMO", "etude@example.fr"):
         assert leaked not in text, f"leaked: {leaked}"
-    # The legal substance must survive — that is what makes the showcase useful.
+    # The legal substance must survive — that is what makes the showcase
+    # useful — and so must the figures, which ADR #62 publishes verbatim.
     assert "quasi-usufruit" in text
     assert "convention" in text
+    assert "195 572 €" in text
+    assert "8 mars 2024" in text
 
 
 # ========== repo-level guard (runs against real committed artifacts) ==========

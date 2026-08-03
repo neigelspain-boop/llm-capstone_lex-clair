@@ -3,39 +3,57 @@
 anonymize.py replaces every resolved entity with a pseudonym. Which pseudonym
 is a presentation decision, and this module owns it.
 
-The original vocabulary was "Personne A" / "Organisme B" — deliberately
-obvious placeholders, chosen so a reader could never mistake a substitute for
-a real person (ADR #59). It works as a privacy device and fails as a document:
-a succession argument written in letters cannot be read, and the showcase case
-opened with lines like "Nus-propriétaires Personne W ép. [nom] · Personne N".
-Nobody can follow who owes what to whom.
+The convention here is the one courts and anonymised casebooks use: **ordinary,
+neutral French names**. It was reached by eliminating the two alternatives.
 
-Named fictional characters restore readability **without weakening** the
-original property, and arguably strengthen it. "Personne A" is unmistakable
-but unreadable; a plausible substitute name like "Marc Dupont" would be
-readable but invites a reader to believe it and can collide with a real
-person. A character from a well-known cartoon is both readable AND
-unmistakably fictional — no reader will take "Maître Beerus, notaire" for a
-real notaire, and no real French notaire is named Beerus.
+"Personne A" / "Organisme B" was the first attempt (ADR #59) — deliberately
+obvious placeholders, chosen so a reader could never mistake a substitute for
+a real person. It works as a privacy device and fails as a document: a
+succession argument written in letters cannot be read, and the showcase case
+opened with "Nus-propriétaires Personne W ép. [nom] · Personne N".
+
+Well-known cartoon characters were the second. They are readable in isolation
+and unmistakably fictional, which looked like a strict improvement. In a
+55-document succession file they are worse than the letters: eight family
+members sharing one invented surname plus five exotic names for the étude is
+more to hold in your head, not less, for a human reader and for the model
+reasoning over the corpus.
+
+Ordinary names are what the domain already does. "Mme Camille MARTIN a mis en
+demeure Maître Claire DUBOIS le 30 juin 2026" parses on first read because it
+is shaped exactly like the sentence it replaced. The cost is real and is paid
+elsewhere: a plausible name invites a reader to believe it, so the published
+case MUST carry a visible notice that every name is fictional. That notice is
+part of this decision, not a nicety attached to it.
 
 **This module contains no real identifiers and must never contain any.**
-The bindings — which real person_id becomes which character — are a
+The bindings — which real person_id becomes which name — are a
 re-identification key, and live with the other keys under the gitignored
 source case directory (`_persona_roster.json`), never here. This file holds
-only the fiction and the loader.
+only the fictional vocabulary and the loader.
 
-Two things the roster must get right, both learned from the real corpus:
+Three things the roster must get right, all learned from the real corpus:
 
   1. **Merging.** The resolver splits one real person across several
      person_ids (a bare given name, a full civil-status form, a married
      name). Left alone, the three grandchildren of the showcase case render
-     as eight different characters and the family tree reads as nonsense.
-     `merge_groups` collapses them onto one character each.
-  2. **Gate safety.** anonymize.py's verification gate re-runs the
+     as eight different people and the family tree reads as nonsense.
+     `merge_groups` collapses them onto one name each.
+  2. **Token overrides.** A person maps to a full form ("Camille MARTIN"),
+     but documents also use bare tokens — a lone surname, a lone given name.
+     Mapping a bare given name to the full form yields "Camille MARTIN
+     MARTIN"; mapping the shared family surname by ownership yields "[nom]",
+     since nine people own it. `token_overrides` names each bare token
+     explicitly, which is the only thing that produces a readable family.
+  3. **Gate safety.** anonymize.py's verification gate re-runs the
      structured-PII regexes over its own output, so a replacement that looks
-     like real PII fails the build. Fictional addresses are therefore shaped
+     like real PII fails the build. Fictional locations are therefore shaped
      to be regex-inert — no "<number> <street type>" opening, no bare 5-digit
      run. See assert_gate_safe().
+
+Note that no civility title is ever baked into a name here. The source
+documents supply their own "Maître" / "Madame", and a title inside the
+replacement prints twice ("Maître Maître DUBOIS" — observed 13 times).
 """
 from __future__ import annotations
 
@@ -51,36 +69,43 @@ from ingestion.dossier.index import DOSSIER_DIR
 
 ROSTER_FILENAME = "_persona_roster.json"
 
-# Characters held back for the LLM residual sweep, so a name it introduces is
+# Names held back for the LLM residual sweep, so a name it introduces is
 # visibly distinct from a name the deterministic layers placed. Never assigned
 # to a person_id by the roster.
-RESIDUAL_NATURAL_POOL = ("Krilin", "Ten Shin Han", "Chaozu", "Yajirobé", "Dendé")
-RESIDUAL_LEGAL_POOL = ("Organisation Pilaf", "Patrouilleurs Galactiques")
+RESIDUAL_NATURAL_POOL = ("Yves DELMAS", "Anne PERROT", "Marc VIDAL")
+RESIDUAL_LEGAL_POOL = ("Société Ardennes", "Groupe Solane")
 
 # Fallback pools for entities the roster does not name. Ordered, and consumed
-# deterministically, so an unrostered person still gets a stable character
-# rather than being left in place — silence here would be a leak.
+# deterministically, so an unrostered person still gets a stable name rather
+# than being left in place — silence here would be a leak.
+#
+# Surnames are drawn from the ordinary French stock a casebook would use.
+# Deliberately excluded: any surname that is also a common French word
+# ("Petit", "Leblanc", "Roy"), because replacement is word-anchored on the
+# REAL token, not this one, but the residual-identifier report reads the
+# OUTPUT — and a pseudonym that doubles as vocabulary makes that report
+# unreadable in exactly the way this whole change is meant to fix.
 FALLBACK_NATURAL_POOL = (
-    "Yamcha", "Piccolo", "Tenshinhan", "Bulma", "Chichi", "Videl", "Bardock",
-    "Raditz", "Nappa", "Freezer", "Cell", "Broly", "Zarbon", "Dodoria",
-    "Ginyu", "Jeice", "Burter", "Recoome", "Guldo", "Tarblé", "Paragus",
-    "Kaiô Shin", "Kibito", "Mister Satan", "Boubou", "Pan", "Maron", "Puar",
+    "MERCIER", "FONTAINE", "CHEVALIER", "GIRARD", "LEFEVRE", "ROUSSEAU",
+    "VINCENT", "MULLER", "LEMAIRE", "DUPUIS", "MARCHAND", "GAUTIER",
+    "PERRIN", "MORIN", "NICOLAS", "HENRY", "CLEMENT", "RENAUD", "COLIN",
+    "BRUNET", "BARBIER", "SCHMITT", "ARNAUD", "PICARD", "CARON", "GUERIN",
+    "BRETON", "AUBERT", "OLIVIER", "REY",
 )
+# Only used when the roster does NOT set keep_real_legal_persons. Neutral
+# trading names with no real-world referent.
 FALLBACK_LEGAL_POOL = (
-    "Capsule Corporation", "Pilaf Gestion", "Banque du Mont Paozu",
-    "Caisse Céleste des Dépôts", "Caisse de retraite Kamé",
-    "Compagnie Kaiô", "Réseau Kaiô", "Tour de Karin", "Temple de Dendé",
-    "Armée du Ruban Rouge", "Team Ginyu", "Corp. Namek",
+    "Gérimmo Patrimoine", "Valorim Gestion", "Banque Régionale du Centre",
+    "Caisse Nationale de Dépôts", "Caisse de retraite Interpro",
+    "Compagnie Générale d'Énergie", "Réseau Distribution", "Société Ardennes",
+    "Groupe Solane", "Mutuelle du Levant", "Cabinet Verriers", "Foncière Adrets",
 )
 
-# Places. Communes and planets both name "where a thing is", which is what
-# makes the substitution read naturally in a French deed.
-# Deliberately excludes the canonical Saiyan homeworld: its name contains a
-# real surname from the source corpus as a substring. The gate's word-anchored
-# matching makes that harmless, but a fiction that reads as a hit on a naive
-# substring search is not worth keeping when the pool is this large.
+# Communes. A short, closed set: the demo reads better when the geography is
+# three places a reader can keep straight than when every commune in the file
+# gets its own invented name.
 PLACE_POOL = (
-    "Namek", "Yardrat", "Tsufuru", "Kanassa", "Konats", "Mont Paozu",
+    "Villeneuve", "Beaumont", "Port-Louis",
 )
 
 
@@ -151,17 +176,28 @@ class Roster:
     Callers need it for the other half of merging: collapsing several
     person records into one output record.
 
-    `token_overrides` maps a folded bare word-token to a replacement, and
-    exists for the shared family surname. Grouping by person_id cannot decide
-    what a surname owned by nine different people should become, so the
-    generated scheme degrades it to "[nom]" — which is exactly how the
-    showcase ended up reading "Personne W ép. [nom]". An override lets the
-    family share one fictional surname and the tree read as a tree.
+    `token_overrides` maps a folded bare word-token to a replacement. It
+    exists for the shared family surname and for bare given names: grouping
+    by person_id cannot decide what a surname owned by nine people should
+    become, so the generated scheme degrades it to "[nom]" — which is exactly
+    how the showcase came to read "Personne W ép. [nom]" — while a bare given
+    name resolves to its owner's FULL pseudonym and yields "Camille MARTIN
+    MARTIN". Naming each token explicitly is what makes the family readable.
+
+    `keep_real_legal_persons` leaves companies, banks and public bodies under
+    their real names. They are not what the anonymisation protects: a national
+    bank or a tax office does not identify a private family, and naming them
+    makes the published case markedly more concrete. It is a deliberate
+    narrowing of the search space for someone already close to the case, and
+    it is why the geography in the roster is fictional even when the brand is
+    not — otherwise "SIP <commune>" would re-publish the exact locality the
+    address redaction just removed.
     """
 
     bindings: dict[str, str] = field(default_factory=dict)
     canonical: dict[str, str] = field(default_factory=dict)
     token_overrides: dict[str, str] = field(default_factory=dict)
+    keep_real_legal_persons: bool = False
 
     def character_for(self, person_id: str) -> str | None:
         return self.bindings.get(person_id)
@@ -229,4 +265,9 @@ def load_roster(source_case_id: str) -> Roster:
             )
         seen[character] = head
 
-    return Roster(bindings=bindings, canonical=canonical, token_overrides=token_overrides)
+    return Roster(
+        bindings=bindings,
+        canonical=canonical,
+        token_overrides=token_overrides,
+        keep_real_legal_persons=bool(raw.get("keep_real_legal_persons", False)),
+    )

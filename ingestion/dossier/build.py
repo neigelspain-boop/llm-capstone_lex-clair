@@ -68,13 +68,24 @@ def run_pipeline(
     step: str = "all",
     limit: int | None = None,
     source_case_id: str = anonymize.DEFAULT_SOURCE_CASE_ID,
+    use_llm: bool = False,
 ) -> dict:
     """Run the requested pipeline step(s) for one case; return a summary dict.
 
-    step="anonymize" derives case_id's extracted/*.md from source_case_id's
-    (ADR #59) and verifies the result, raising if any known identifier
-    survives. Deliberately excluded from step="all": it is a one-off
-    derivation from a DIFFERENT case, not a stage of this case's own build.
+    step="anonymize" derives case_id's extracted/*.md AND its analytical
+    artifacts from source_case_id's (ADRs #59, #62), then verifies the result,
+    raising if any known identifier survives. Deliberately excluded from
+    step="all": it is a one-off derivation from a DIFFERENT case, not a stage
+    of this case's own build.
+
+    use_llm gates the anonymiser's residual sweep and defaults OFF, which is
+    the opposite of anonymize_case's own default. Two reasons, both learned
+    from the first showcase build. The sweep rewrites the markdown but cannot
+    be replayed identically over a fact's verbatim_quote, so quotes stop
+    matching chunks and the index backfill degrades. And it is generative: it
+    reconstructed an email address that the structured-PII layer had already
+    redacted, which the gate then caught as a leak. Deterministic-only keeps
+    markdown, facts and chunks in agreement and keeps the output reproducible.
 
     step="extract" runs only extract.extract_case and returns
     {case_id, step, doc_count, docs} — requires raw_dir. step="gate" runs
@@ -93,17 +104,21 @@ def run_pipeline(
     """
     if step == "anonymize":
         summary = _run_stage(
-            "ANONYMIZE", anonymize.anonymize_case, case_id, source_case_id=source_case_id,
+            "ANONYMIZE", anonymize.anonymize_case, case_id,
+            source_case_id=source_case_id, use_llm=use_llm,
         )
 
         residual = summary["residual_proper_nouns"]
         top = sorted(residual.items(), key=lambda kv: -kv[1])[:15]
+        artifacts = " ".join(f"{k}={v}" for k, v in sorted(summary["artifacts"].items()))
         print(
             f"anonymize summary · case_id={case_id} source={summary['source_case_id']} "
             f"docs_written={summary['docs_written']} entities_mapped={summary['entities_mapped']} "
             f"files_verified={summary['files_scanned']} "
             f"residual_proper_nouns={len(residual)} elapsed={summary['elapsed']:.1f}s"
         )
+        if artifacts:
+            print(f"  artifacts translated: {artifacts}")
         if top:
             # The gate proves the KNOWN identifiers are gone; it cannot prove
             # an unknown one is. These need a human read before publishing.
@@ -232,6 +247,12 @@ def main() -> None:
         "--limit", type=int, default=None,
         help="cap the number of documents processed (extract step only)",
     )
+    parser.add_argument(
+        "--llm-sweep", action="store_true",
+        help="enable the LLM residual sweep during --step anonymize (default: off). "
+             "The sweep is generative: it degrades fact/chunk agreement and has "
+             "reconstructed redacted PII. Use it to hunt residuals, not to publish.",
+    )
     args = parser.parse_args()
 
     if args.step in STAGES_REQUIRING_RAW_DIR and args.raw_dir is None:
@@ -244,7 +265,7 @@ def main() -> None:
     )
     summary = run_pipeline(
         args.case_id, args.raw_dir, step=args.step, limit=args.limit,
-        source_case_id=args.source_case_id,
+        source_case_id=args.source_case_id, use_llm=args.llm_sweep,
     )
     log.info("dossier build complete · %s · total elapsed %.1fs", summary, time.time() - t_start)
 

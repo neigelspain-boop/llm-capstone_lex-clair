@@ -45,7 +45,6 @@ import re
 import time
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import date, timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -68,13 +67,16 @@ SWEEP_MODEL_ID = "anthropic/claude-haiku-4.5"
 SWEEP_MAX_TOKENS = 8192
 SWEEP_TEMPERATURE = 0.0
 
-# Fixed, deterministic transforms. Backwards in time so the showcase reads as
-# a historical matter rather than dated in the future. Amounts scale by a
-# single factor so ratios between figures in the dossier stay coherent; share
-# counts are deliberately NOT scaled (they are not monetary and scaling them
-# would break "N parts" arithmetic against the scaled totals).
-DATE_OFFSET_DAYS = -829
-AMOUNT_SCALE = 1.27
+# Dates and amounts pass through UNCHANGED (ADR #62). An earlier version
+# shifted every date by a fixed offset and scaled every amount by a fixed
+# factor, on the reasoning that an exact sum plus exact dates identifies a
+# case even with the names gone. That reasoning still holds and the risk is
+# accepted deliberately: the published case exists to be read as a worked
+# example, and a worked example whose figures do not add up against the deed
+# it quotes is worth less than the residual risk it avoids. The transform
+# also had to be replayed identically across markdown, facts and the
+# compliance matrix to keep them consistent — three chances to disagree, for
+# a protection that only binds against someone who already knows the case.
 
 # The minimum length at which a known entity string is safe to replace
 # literally. Shorter strings ("CDC", "SCP") collide with ordinary words and
@@ -114,6 +116,85 @@ ALLOWED_PROPER_NOUNS = {
     "abattement", "message", "courrier", "email", "web", "tel", "ttc", "ht",
     "tva", "les", "des", "nous", "vous", "pour", "votre", "notre", "cette",
     "ces", "par", "non", "oui", "bonjour", "madame", "cordialement",
+    # Shouted form headings, field labels and body text from the scanned forms
+    # (déclaration de succession, avis d'impôt, donation-partage, mandat de
+    # vente). Measured: these accounted for the large majority of a 521-token
+    # residual report, and every one of them buried a token that mattered.
+    "presentation", "projet", "avis", "opere", "paye", "fact", "ssion",
+    "autorisation", "deblocage", "soussigne", "soussignes", "soussignee",
+    "prient", "portefeuille", "document", "documents", "retourner",
+    "imperativement", "prenom", "prenoms", "important", "conditions",
+    "paiement", "uniquement", "virement", "identite", "bancaire", "credit",
+    "agricole", "immobilier", "immobiliere", "asset", "management",
+    "donation", "donations", "partage", "partages", "usage", "representant",
+    "legal", "nouvelle", "nationalite", "francaise", "fixe", "mobile",
+    "conjoint", "adresse", "profession", "situation", "famille", "regime",
+    "matrimonial", "fonds", "titres", "requete", "premiere", "premier",
+    "deuxieme", "troisieme", "quatrieme", "devolution", "devolutive",
+    "successorale", "successoral", "tiers", "qualites", "qualite",
+    "hereditaires", "hereditaire", "composition", "liquidites", "placements",
+    "patrimoine", "reconnaissance", "constitution", "conventionnel", "detail",
+    "enregistrement", "mention", "donnees", "personnelles", "formalisme",
+    "recu", "present", "notoriete", "expose", "quart", "douzieme", "effets",
+    "effet", "absence", "inventaire", "aide", "assistance", "sociale",
+    "deces", "fichier", "dispositions", "dernieres", "volontes", "sort",
+    "dematerialisees", "justificatives", "produites", "informations",
+    "information", "acceptation", "pure", "simple", "attestation",
+    "obligations", "fiscales", "avertissement", "contrats", "assurance",
+    "avant", "compter", "destruction", "associes", "declaration",
+    "declarations", "declarant", "declares", "cadre", "cadres", "remplir",
+    "deposant", "enfants", "petits", "option", "creance", "observations",
+    "preliminaires", "communaute", "espece", "plan", "actions", "mondiale",
+    "brut", "restitution", "exigible", "jour", "usufruitiers", "balance",
+    "imposables", "imposable", "liquidation", "payer", "acomptes", "verses",
+    "reste", "impot", "revenu", "reductions", "credits", "imputations",
+    "suite", "jointe", "prelevements", "prelevement", "sociaux", "prel",
+    "base", "calcul", "solde", "psol", "tenu", "elements", "sera",
+    "rembourse", "remboursement", "automatique", "aucune", "demarche",
+    "faire", "complementaires", "complementaire", "source", "autres",
+    "autre", "contacter", "clients", "adresser", "cheque", "energie",
+    "procuration", "procurations", "protegee", "requerant", "modalites",
+    "temporaire", "viager", "autorisations", "faculte", "substitution",
+    "applicable", "remuneration", "pluri", "representation", "decharge",
+    "dedie", "onze", "anticipe", "presence", "capacite", "mariage",
+    "posterite", "rappel", "anterieure", "masse", "partager", "numero",
+    "incorporees", "rapportees", "caractere", "relatif", "relative",
+    "acquisition", "exercice", "retour", "interdiction", "aliener",
+    "hypothequer", "nantir", "mutation", "publicite", "fonciere",
+    "normalisee", "repression", "insuffisances", "dissimulations", "copie",
+    "authentique", "achat", "maison", "telephone", "favoris", "centre",
+    "gare", "commerces", "ecole", "econome", "energivore", "faible",
+    "forte", "emission", "identification", "vendre", "engager",
+    "financieres", "acquereur", "duree", "renouvellement", "resiliation",
+    "mois", "consommation", "particulieres", "mediation", "election",
+    "exclusif", "vente", "avec", "delegation", "negociation", "relance",
+    "manquantes", "residence", "hameau", "republique", "passeport",
+    "passport", "certificado", "registro", "ciudadano", "union", "unión",
+    "registration", "certificate", "citizen", "central", "avda", "avenida",
+    "agence", "filiere", "disponible", "historique", "evenements",
+    "demande", "reponse", "dossiers", "actifs", "passifs", "etat",
+    "special", "immeuble", "formulee", "pluralite", "ayants", "encaissement",
+    "prealable", "opposition", "distributions", "electronique", "calendrier",
+    "previsionnel", "delai", "mise", "disposition", "reserve", "reserves",
+    "expresse", "clôture", "cloture", "refus", "prise", "ecris", "lequel",
+    "donateur", "donataire", "donnes", "jouissance", "logement", "pouvoirs",
+    "droit", "droits", "parties", "partie", "compte", "rendu",
+    "interrogation", "ouverte", "matin", "quoi", "dans", "sous", "vent",
+    "iles", "via", "documento", "acceder", "seize", "soixante", "quatorze",
+    "quarante", "cinquante", "conq", "centj", "vingt-cinq",
+    "quatre-vingt-quinze", "trente-six", "bleu-vert", "mari", "tips",
+    "chef", "quasi-usufruitier", "quasi-usufruits", "quasi-usufruit",
+    "decedee", "decedes", "donation-partage",
+    # Public registries, professional bodies and payment schemes. Named in
+    # every French succession file; none of them identifies THIS one.
+    "ficoba", "ficovie", "ciclade", "carsat", "cpam", "cnil", "anssi",
+    "sepa", "adsn", "crpcen", "camca", "cecmc", "fcddv", "spfe", "dasc",
+    "agira", "yousign", "lrar", "trve", "cher", "crds",
+    # Residual-report hygiene: single words the scan still surfaced after the
+    # sweep above. Composites are matched part by part, so a hyphenated term
+    # needs each of its parts here, not the joined form.
+    "mandat", "releve", "frais", "domicile", "dont", "avez", "designation",
+    "viii", "bleu", "vert", "usufruits", "quinze",
 }
 
 
@@ -127,18 +208,26 @@ _PII_PATTERNS: list[tuple[re.Pattern, str]] = [
     # run, so no name-matching layer can reach it. Redact the whole zone
     # rather than trying to parse it.
     (re.compile(r"[A-Z0-9<]*<<[A-Z0-9<]*"), "[MRZ]"),
+    # OCR of a 2D barcode / datamatrix on a scanned tax or notarial form,
+    # which comes through as an unbroken run of capitals. No French word is
+    # 20 letters of solid uppercase, and the run may encode the very fields
+    # printed beside it, so it is redacted rather than reviewed.
+    (re.compile(r"\b[A-Z]{20,}\b"), "[code-barres]"),
     (re.compile(r"\b[A-Z]{2}\d{2}[A-Z]{3}\d{4,}\b"), "[ICS]"),
     (re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"), "[email]"),
     (re.compile(r"\b[A-Z]{2}\d{2}(?:[ ]?[A-Z0-9]{4}){2,7}\b"), "[IBAN]"),
     (re.compile(r"\b(?:\+33|0)\s?[1-9](?:[\s.-]?\d{2}){4}\b"), "[telephone]"),
     (re.compile(r"\b\d{3}[ ]?\d{3}[ ]?\d{3}[ ]?\d{5}\b"), "[SIRET]"),
     (re.compile(r"\b\d{3}[ ]?\d{3}[ ]?\d{3}\b(?=\s*(?:RCS|SIREN))"), "[SIREN]"),
-    # Street line: number + type + name, up to a comma or end of line.
+    # Street line: number + type + name, up to a comma, a marker or end of
+    # line. The tail stops at "[" because the patterns above have already
+    # placed markers on this line — without it a 40-character tail slices
+    # through "[SIREN]" and leaves "[adresse]IREN]" in the published text.
     (
         re.compile(
             r"\b\d{1,4}\s?(?:bis|ter)?\s*"
             r"(?:bd|boulevard|av|avenue|rue|place|impasse|chemin|route|quai|allee|allée)\b"
-            r"[^,\n]{0,40}",
+            r"[^,\n\[]{0,40}",
             re.IGNORECASE,
         ),
         "[adresse]",
@@ -149,37 +238,6 @@ _PII_PATTERNS: list[tuple[re.Pattern, str]] = [
     (re.compile(r"\b[Nn]°\s?[A-Z]?\d[\w/.-]{5,}\b"), "[réf.]"),
     (re.compile(r"\bacte\s+n[°o]\s?\d[\w/.-]*", re.IGNORECASE), "acte n° [réf.]"),
 ]
-
-_MONTHS_FR = {
-    "janvier": 1, "février": 2, "fevrier": 2, "mars": 3, "avril": 4, "mai": 5,
-    "juin": 6, "juillet": 7, "août": 8, "aout": 8, "septembre": 9,
-    "octobre": 10, "novembre": 11, "décembre": 12, "decembre": 12,
-}
-_MONTHS_FR_REV = {
-    1: "janvier", 2: "février", 3: "mars", 4: "avril", 5: "mai", 6: "juin",
-    7: "juillet", 8: "août", 9: "septembre", 10: "octobre", 11: "novembre",
-    12: "décembre",
-}
-
-_DATE_TEXT_RE = re.compile(
-    r"\b(\d{1,2})(?:er)?\s+(" + "|".join(_MONTHS_FR) + r")\s+(\d{4})\b",
-    re.IGNORECASE,
-)
-_DATE_NUM_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
-_DATE_COMPACT_RE = re.compile(r"\b(20\d{2})(\d{2})(\d{2})\b")
-# Structured date fields (Fact.date) are ISO, which none of the prose patterns
-# above match. Missing it would leave every fact dated 829 days away from the
-# document it quotes, so the per-person panel's date filter would contradict
-# its own evidence.
-_DATE_ISO_RE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
-
-# French money: "195 572 €", "195572,50 EUR". Narrow/non-breaking spaces count
-# as thousands separators in the extracted markdown.
-_AMOUNT_RE = re.compile(
-    r"\b(\d{1,3}(?:[   ]\d{3})+|\d{4,})(?:,(\d{1,2}))?\s?(€|EUR\b|euros\b)",
-    re.IGNORECASE,
-)
-
 
 # ========== models ==========
 
@@ -324,12 +382,14 @@ def _build_pseudonym_map(
     placeholder unless the roster names it — never guessed at, never left
     in place.
 
-    Pseudonyms must be unmistakably fictional: a realistic substitute name
-    invites a reader to believe it and could collide with a real person. The
-    roster satisfies that with named cartoon characters, which are readable
-    as well as unmistakable; the generated fallback satisfies it with
-    "Personne A" / "Organisme B", which are only unmistakable. See
-    personas.py for why the first is preferred.
+    Pseudonyms follow the court/casebook convention — ordinary French names,
+    readable as the sentence they replace. That readability is bought with a
+    real cost: a plausible name invites a reader to believe it, so the
+    published case must carry a visible fiction notice. See personas.py for
+    why this beats both "Personne A" and unmistakably-fictional alternatives.
+    The generated fallback remains "Personne A" / "Organisme B", which is
+    unmistakable but unreadable — acceptable because it only ever covers
+    entities the roster forgot.
     """
     roster = roster or personas.Roster()
     by_person = assign_personas(entities, roster, pinned=pinned)
@@ -339,18 +399,44 @@ def _build_pseudonym_map(
     token_type: dict[str, str] = {}
 
     for name, person_type, person_id in entities:
-        mapping[_fold(name)] = by_person[roster.head_of(person_id)]
+        head = roster.head_of(person_id)
+        # An entity with no assignment is one the roster chose to leave alone
+        # (keep_real_legal_persons). It must contribute NO mapping entry and
+        # NO token ownership — a token it owned would otherwise be rewritten
+        # on its behalf, which is the opposite of keeping the name real.
+        if head not in by_person:
+            continue
+        key = _fold(name)
+        # Two person records claiming the same MULTI-WORD name means the
+        # resolver split one person in two — the later record silently wins
+        # the key and the earlier one's roles end up attributed to a different
+        # name. It is invisible in the output (both names are plausible), so
+        # it is logged here rather than left to a human read. Fix by adding
+        # the ids to a merge group; the shared alias is the evidence.
+        #
+        # Bare surnames are excluded: in a succession file the whole family
+        # lists the same one, which is expected and is what token_overrides
+        # exists to resolve.
+        shared_bare_surname = len(re.findall(r"[a-z0-9à-ÿ]+", key)) < 2
+        if key in mapping and mapping[key] != by_person[head] and not shared_bare_surname:
+            log.warning(
+                "anonymize: name %r is claimed by two unmerged people (%r and %r) — "
+                "one will be attributed to the other; add them to merge_groups",
+                name, mapping[key], by_person[head],
+            )
+        mapping[key] = by_person[head]
         for token in _distinctive_tokens(name):
-            token_owners.setdefault(token, set()).add(roster.head_of(person_id))
+            token_owners.setdefault(token, set()).add(head)
             token_type[token] = person_type
 
     for token, owners in token_owners.items():
         if token in mapping:
             continue
         if token in roster.token_overrides:
-            # The shared family surname. Owned by everyone, so the ambiguity
-            # rule below would degrade it to "[nom]" and strip the family from
-            # the family tree; the roster names it explicitly instead.
+            # The shared family surname, and bare given names. Owned by
+            # several people or resolving to a full form, so the rules below
+            # would degrade them to "[nom]" or duplicate the surname; the
+            # roster names each token explicitly instead.
             mapping[token] = roster.token_overrides[token]
         elif len(owners) == 1:
             mapping[token] = by_person[next(iter(owners))]
@@ -404,6 +490,10 @@ def assign_personas(
         if head in by_person:
             continue
         bucket = "legal_person" if person_type == "legal_person" else "natural_person"
+        if bucket == "legal_person" and roster.keep_real_legal_persons:
+            # No assignment at all, so no mapping entry is created and the
+            # name passes through untouched (ADR #62).
+            continue
         character = roster.character_for(person_id) or pinned.get(head)
         if character:
             by_person[head] = character
@@ -508,73 +598,7 @@ def _apply_structured_pii(text: str) -> str:
     return text
 
 
-# ========== layer 3: date / amount / product transforms ==========
-
-def _shift_date(day: int, month: int, year: int) -> date | None:
-    try:
-        return date(year, month, day) + timedelta(days=DATE_OFFSET_DAYS)
-    except ValueError:
-        return None
-
-
-def _shift_dates(text: str) -> str:
-    """Apply DATE_OFFSET_DAYS to every recognisable date, preserving the
-    written format so "8 mars 2024" stays prose and "09/01/2026" stays
-    numeric. A single shared offset keeps every interval in the dossier —
-    the gap between a convention and a death, a notice period — exactly as
-    it was, which is what the compliance reasoning depends on."""
-
-    def _text_repl(m: re.Match) -> str:
-        month = _MONTHS_FR.get(_fold(m.group(2)))
-        shifted = _shift_date(int(m.group(1)), month, int(m.group(3))) if month else None
-        if shifted is None:
-            return m.group(0)
-        return f"{shifted.day} {_MONTHS_FR_REV[shifted.month]} {shifted.year}"
-
-    def _num_repl(m: re.Match) -> str:
-        shifted = _shift_date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
-        if shifted is None:
-            return m.group(0)
-        return f"{shifted.day:02d}/{shifted.month:02d}/{shifted.year}"
-
-    def _compact_repl(m: re.Match) -> str:
-        shifted = _shift_date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
-        if shifted is None:
-            return m.group(0)
-        return f"{shifted.year}{shifted.month:02d}{shifted.day:02d}"
-
-    def _iso_repl(m: re.Match) -> str:
-        shifted = _shift_date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
-        if shifted is None:
-            return m.group(0)
-        return shifted.isoformat()
-
-    text = _DATE_TEXT_RE.sub(_text_repl, text)
-    text = _DATE_ISO_RE.sub(_iso_repl, text)
-    text = _DATE_NUM_RE.sub(_num_repl, text)
-    return _DATE_COMPACT_RE.sub(_compact_repl, text)
-
-
-def _scale_amounts(text: str) -> str:
-    """Multiply every euro amount by AMOUNT_SCALE, keeping French formatting
-    (space thousands separator, comma decimal). Ratios between figures are
-    preserved because one factor is used everywhere."""
-
-    def _repl(m: re.Match) -> str:
-        whole = re.sub(r"[   ]", "", m.group(1))
-        cents = m.group(2) or "0"
-        value = float(f"{whole}.{cents.ljust(2, '0')}")
-        scaled = round(value * AMOUNT_SCALE, 2)
-        integral = int(scaled)
-        grouped = f"{integral:,}".replace(",", " ")
-        frac = round((scaled - integral) * 100)
-        unit = m.group(3)
-        if frac:
-            return f"{grouped},{frac:02d} {unit}"
-        return f"{grouped} {unit}"
-
-    return _AMOUNT_RE.sub(_repl, text)
-
+# ========== layer 3: named products, places and firm fragments ==========
 
 def _apply_extra_identifiers(text: str, extras: dict[str, str]) -> str:
     """Places, financial products and firm fragments that persons.jsonl does
@@ -670,16 +694,20 @@ def anonymize_text(
     extras: dict[str, str],
     use_llm: bool = True,
 ) -> str:
-    """Run all four layers over one document's markdown, in order."""
-    text = _apply_entity_map(text, mapping)
-    # Structured PII BEFORE extra identifiers: generalising a commune name
-    # first turns "<code postal> <commune>" into "<code postal> <fiction>",
-    # which no longer matches the postal-code pattern and strands the code in
-    # the output.
+    """Run all four layers over one document's markdown, in order.
+
+    Structured PII runs FIRST, against the raw text, because its patterns
+    recognise real formats and a name replaced ahead of them destroys the
+    format they match on. Two ways that goes wrong, both observed:
+    generalising a commune turns "<code postal> <commune>" into
+    "<code postal> <fiction>", which no longer matches the postal pattern and
+    strands the code; and where the pattern still fires it consumes the first
+    words of the replacement, publishing "[code postal] [ville] des impôts de
+    Yardrat" — a marker with the tail of a pseudonym hanging off it.
+    """
     text = _apply_structured_pii(text)
+    text = _apply_entity_map(text, mapping)
     text = _apply_extra_identifiers(text, extras)
-    text = _shift_dates(text)
-    text = _scale_amounts(text)
     if use_llm:
         text = _llm_sweep(text, doc_id)
     return text
@@ -746,6 +774,44 @@ def anonymize_doc_id(doc_id: str, mapping: dict[str, str], extras: dict[str, str
     folded = re.sub(r"\d{5,}", "ref", folded)
     folded = re.sub(r"[^a-z0-9]+", "_", folded).strip("_")
     return folded or "document"
+
+
+def assert_no_replacement_cascade(mapping: dict[str, str], extras: dict[str, str]) -> None:
+    """Raise if any replacement VALUE is itself a replacement KEY.
+
+    Replacement is a sequence of passes over one growing string, so a value
+    written by an early pass is still visible to every later one. When a
+    pseudonym happens to be another entry's key, the later pass rewrites it
+    and one person silently takes another's name: "Claire DUBOIS" became
+    "Nicole DUBOIS" on the first court-style build, because a different
+    person's middle name was "Claire".
+
+    Nothing about that failure is visible in the output — it looks like a
+    perfectly ordinary name — so it cannot be left to a human read. Checked
+    across mapping AND extras together, since the two are applied in sequence
+    over the same text.
+
+    Identity entries (a key deliberately mapped to itself, marking a name the
+    policy keeps real) are exempt: rewriting them to themselves is a no-op.
+    """
+    combined = {**mapping, **{_fold(k): v for k, v in extras.items()}}
+    collisions: list[str] = []
+    for key, value in combined.items():
+        for token in re.split(r"[^a-zA-Z0-9À-ÿ]+", _fold(value)):
+            if not token or token not in combined:
+                continue
+            if _fold(combined[token]) == token:
+                continue
+            collisions.append(
+                f"  {key!r} -> {value!r}, but {token!r} is itself a key -> {combined[token]!r}"
+            )
+    if collisions:
+        preview = "\n".join(sorted(set(collisions))[:10])
+        raise RuntimeError(
+            "replacement cascade: a pseudonym would be rewritten by a later "
+            "pass, silently giving one person another's name. Choose a "
+            f"pseudonym that is not also a key:\n{preview}"
+        )
 
 
 def _map_path(source_case_id: str) -> Path:
@@ -837,6 +903,7 @@ def anonymize_case(
 
     mapping = load_or_build_mapping(source_case_id)
     extras = load_extra_identifiers(source_case_id)
+    assert_no_replacement_cascade(mapping, extras)
     out_dir = DOSSIER_DIR / target_case_id / "extracted"
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1023,7 +1090,16 @@ def _translate_persons(
     for record in records:
         person_id = record.get("person_id", "")
         head = roster.head_of(person_id)
-        character = mapping.get(_fold(record.get("canonical_name", "")), "")
+        real_name = record.get("canonical_name", "")
+        # No mapping entry means the roster chose to keep this entity's name
+        # real (keep_real_legal_persons). The name still has to go through the
+        # free-text layers, not straight out: an organisation's name carries
+        # the geography this policy generalises, so "SIP <commune>" would
+        # otherwise republish the exact locality the address redaction removed
+        # — which is precisely what the gate caught on the first run.
+        character = mapping.get(_fold(real_name)) or _apply_policy(
+            real_name, TEXT, mapping, extras,
+        )
 
         entry = merged.setdefault(head, {
             "person_id": f"{target_case_id}-{_slug(character or head)}",
@@ -1191,6 +1267,17 @@ def _placed_replacement_tokens(source_case_id: str, extras: dict[str, str]) -> s
         *personas.PLACE_POOL, *extras.values(),
     ]
 
+    # Names the roster deliberately keeps real are output this pipeline chose
+    # to write, exactly like a pseudonym. Counting them buries the report:
+    # the counterparty organisations alone accounted for 150+ hits, which is
+    # what the report exists to make visible.
+    roster = personas.load_roster(source_case_id)
+    if roster.keep_real_legal_persons:
+        values.extend(
+            name for name, person_type, _pid in _load_known_entities(source_case_id)
+            if person_type == "legal_person"
+        )
+
     path = _map_path(source_case_id)
     if path.exists():
         stored = json.loads(path.read_text(encoding="utf-8"))
@@ -1229,8 +1316,20 @@ def verify_anonymization(
     report = AnonymizationReport(case_id=case_id)
 
     extras = load_extra_identifiers(source_case_id)
-    needles: list[str] = [name for name, _type, _pid in _load_known_entities(source_case_id)]
-    needles.extend(extras)
+    roster = personas.load_roster(source_case_id)
+
+    # A name the roster deliberately keeps real is not a leak. Searching for
+    # it anyway would fail the build on exactly the names it was just told to
+    # publish, so the exclusion has to happen here and not only in the mapping.
+    needles: list[str] = [
+        name for name, person_type, _pid in _load_known_entities(source_case_id)
+        if not (person_type == "legal_person" and roster.keep_real_legal_persons)
+    ]
+    # An extras entry mapped to ITSELF is a deliberate keep, not a needle:
+    # it exists to register the token as output this pipeline chose to write,
+    # so the residual report stops flagging it. Searching for it here would
+    # fail the build on a name the table just said to publish.
+    needles.extend(k for k, v in extras.items() if _fold(k) != _fold(v))
     folded_needles = {_fold(n): n for n in needles if len(n) >= MIN_ENTITY_LEN}
     allowed = ALLOWED_PROPER_NOUNS | _placed_replacement_tokens(source_case_id, extras)
 
@@ -1260,8 +1359,12 @@ def verify_anonymization(
             candidates += _TITLED_RE.findall(raw)
             candidates += _STREET_WORD_RE.findall(raw)
             for token in candidates:
-                key = _fold(token)
-                if key in allowed or key.isdigit():
+                # Compare part by part, not whole-string: the shouted pattern
+                # captures hyphenated composites ("Whis-Maître"), and a
+                # composite built entirely from words we already allow is not
+                # a residual identifier — it is our own fiction, hyphenated.
+                parts = [p for p in re.split(r"[^a-zA-Z0-9À-ÿ]+", _fold(token)) if p]
+                if parts and all(p in allowed or p.isdigit() for p in parts):
                     continue
                 report.residual_proper_nouns[token] = report.residual_proper_nouns.get(token, 0) + 1
 
