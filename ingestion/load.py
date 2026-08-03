@@ -1,4 +1,11 @@
-"""Load offline ingestion artifacts into a hybrid BM25 + dense retriever."""
+"""Load offline ingestion artifacts into a hybrid BM25 + dense retriever.
+
+The retriever's row table is assembled at load time from two kinds of
+source (ADR #58): the tracked statute CSV (data/chunks.csv) plus every
+per-case dossier CSV under data/dossier/*/chunks.csv, which are gitignored
+for private cases. Dossier text is deliberately never written into the
+tracked statute CSV — see _read_dossier_chunks.
+"""
 from __future__ import annotations
 
 import logging
@@ -25,12 +32,58 @@ log = logging.getLogger(__name__)
 
 # Reciprocal Rank Fusion constant used for score aggregation.
 RRF_K = 60
+
+# BM25 over-fetch when a scope filter is active — see search()'s fetch_n.
+SCOPED_BM25_FETCH = 200
 DEFAULT_BM25_BOOST = {
     "texte": 1.0,
     "titre": 1.0,
     "section_path": 1.0,
     "num": 1.0,
 }
+
+
+# Per-case dossier chunk CSVs, merged into the row table at load time.
+DOSSIER_DIR = CHUNKS_CSV.parent / "dossier"
+
+
+# ========== dossier chunk merge (ADR #58) ==========
+
+def _read_dossier_chunks(statute_columns: list[str], dossier_dir: Path) -> list[pd.DataFrame]:
+    """Read every per-case data/dossier/<case_id>/chunks.csv, aligned onto
+    the statute CSV's column set.
+
+    load_index() needs a row for every chunk_id Chroma can return, or
+    search() raises KeyError when hydrating a dossier hit (ADR #39). That
+    used to be satisfied by appending dossier rows into the shared,
+    git-tracked data/chunks.csv — which put real client names one `git add`
+    away from being published, and the project's filename-based privacy grep
+    would not have caught it. Merging here instead keeps the tracked CSV
+    statute-only by construction: dossier text lives only in paths that are
+    already gitignored for private cases, and no code path can move it out.
+
+    Missing, empty, and header-less files are skipped rather than raised on:
+    one zero-byte chunks.csv would otherwise abort load_index and take the
+    whole app down with it, and a case with no indexed documents is a normal
+    state, not a corpus error. Statute-only columns (etat, date_debut,
+    date_fin, legiarti_id) fill as "" for dossier rows, never NaN, per
+    project convention.
+    """
+    if not dossier_dir.exists():
+        return []
+
+    frames: list[pd.DataFrame] = []
+    for case_csv in sorted(dossier_dir.glob("*/chunks.csv")):
+        try:
+            case_chunks = pd.read_csv(case_csv, keep_default_na=False)
+        except pd.errors.EmptyDataError:
+            log.warning("load_index: skipping empty dossier chunks file %s", case_csv)
+            continue
+        if case_chunks.empty or "chunk_id" not in case_chunks.columns:
+            continue
+        frames.append(case_chunks.reindex(columns=statute_columns, fill_value=""))
+        log.info("load_index: merged %d dossier chunks from %s", len(case_chunks), case_csv)
+    return frames
 
 
 # ========== source_scope filtering (ADR #41) ==========
@@ -74,6 +127,41 @@ class HybridRetriever:
     device: str = field(default="cpu")                   # GPU/CPU runtime device
     bm25_boost_dict: dict[str, float] = field(default_factory=lambda: DEFAULT_BM25_BOOST.copy())
 
+    def _dossier_sources(self) -> list[str]:
+        """The `source` metadata values belonging to dossier chunks
+        ("dossier-<case_id>"), derived from the row table so no separate
+        registry can drift out of sync with what is actually indexed."""
+        dossier_ids = [
+            cid for cid in self.chunks.index if str(cid).startswith("dossier-")
+        ]
+        if not dossier_ids:
+            return []
+        return sorted(set(self.chunks.loc[dossier_ids, "source"].astype(str)))
+
+    def _chroma_scope_filter(self, source_scope: str) -> dict | None:
+        """Translate source_scope into a Chroma `where` clause, or None for
+        no server-side filter.
+
+        This is what makes scope filtering exact on the dense side rather
+        than a post-hoc cut of a fixed candidate pool: Chroma returns k*3
+        documents that already match the scope, so a narrow scope can never
+        starve (ADR #58, tightening ADR #41).
+
+        Returns None when there is nothing to exclude — an all-statute
+        corpus, or "blended" — so a corpus with no dossier indexed behaves
+        exactly as it did before.
+        """
+        dossier_sources = self._dossier_sources()
+        if source_scope == "blended" or not dossier_sources:
+            return None
+        if source_scope == "statute":
+            return {"source": {"$nin": dossier_sources}}
+        if source_scope == "dossier":
+            return {"source": {"$in": dossier_sources}}
+        if source_scope.startswith("case:"):
+            return {"source": f"dossier-{source_scope.removeprefix('case:')}"}
+        return None
+
     def search(
         self,
         query: str,
@@ -93,6 +181,17 @@ class HybridRetriever:
         if mode not in ("bm25", "vector", "hybrid"):
             raise ValueError("mode must be one of 'bm25', 'vector', or 'hybrid'")
 
+        # Candidate budget. Both backends return their top-N over the WHOLE
+        # corpus and the scope predicate is applied to the fused pool
+        # afterwards, so once statute and dossier share one index a scope can
+        # starve: a dossier-flavoured query fills every slot with dossier
+        # chunks and source_scope="statute" (the default!) filters them all
+        # out, returning nothing. Chroma is filtered server-side below, which
+        # fixes the dense half exactly. BM25 has no equivalent negation
+        # filter, so it over-fetches instead — the index is in-memory and a
+        # few thousand rows, so a wider fetch is free (ADR #58).
+        fetch_n = k * 3 if source_scope == "blended" else max(k * 3, SCOPED_BM25_FETCH)
+
         # encode the query with the same embedding flags used for index building
         qvec = self.embed_model.encode(
             [query],
@@ -108,14 +207,18 @@ class HybridRetriever:
             bm25_hits = self.bm25.search(
                 query=query,
                 boost_dict=boost_dict or self.bm25_boost_dict,
-                num_results=k * 3,
+                num_results=fetch_n,
             )
 
         if mode in ("vector", "hybrid"):
-            vec_result = self.vectors.query(
-                query_embeddings=[qvec.tolist()],
-                n_results=k * 3,
-            )
+            query_kwargs: dict = {
+                "query_embeddings": [qvec.tolist()],
+                "n_results": k * 3,
+            }
+            where = self._chroma_scope_filter(source_scope)
+            if where is not None:
+                query_kwargs["where"] = where
+            vec_result = self.vectors.query(**query_kwargs)
             vec_ids = vec_result["ids"][0]
 
         # reciprocal rank fusion across BM25 and dense results
@@ -158,14 +261,32 @@ def load_index(
     chroma_dir: Path = CHROMA_DIR,
     collection_name: str = COLLECTION,
     device: str | None = None,
+    dossier_dir: Path | None = None,
 ) -> HybridRetriever:
-    """Load persisted ingestion artifacts and return a query retriever."""
+    """Load persisted ingestion artifacts and return a query retriever.
+
+    The row table and BM25 index are built from the statute CSV plus every
+    per-case dossier CSV (ADR #58, see _read_dossier_chunks). Retrieval
+    stays statute-only by default regardless: source_scope defaults to
+    "statute" (ADR #41), so merged dossier rows are only reachable through
+    an explicit dossier/blended/case:<id> scope.
+    """
     device = infer_device(device)
     log.info("load_index: device=%s", device)
 
     # read chunks and index by chunk_id
     log.info("reading chunks from %s", src)
-    chunks = pd.read_csv(src, keep_default_na=False)
+    statute_chunks = pd.read_csv(src, keep_default_na=False)
+    frames = [statute_chunks, *_read_dossier_chunks(
+        list(statute_chunks.columns), dossier_dir or DOSSIER_DIR
+    )]
+    chunks = (
+        pd.concat(frames, ignore_index=True) if len(frames) > 1 else statute_chunks
+    )
+    log.info(
+        "load_index: %d chunks total (%d statute, %d dossier)",
+        len(chunks), len(statute_chunks), len(chunks) - len(statute_chunks),
+    )
     chunks_indexed = chunks.set_index("chunk_id", drop=False)
 
     # rebuild BM25 from chunk rows

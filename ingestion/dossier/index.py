@@ -9,27 +9,30 @@ Chroma directory; that path would destroy the statute corpus embeddings
 every time a new case dossier is indexed.
 
 BM25 has no append mechanism (ingestion.index.build_bm25 is a pure
-in-memory rebuild), but ingestion.load.load_index() rebuilds it fresh
-from data/chunks.csv on every cold boot — so keeping that file in sync
-is sufficient without touching load.py. That file is also what
-HybridRetriever.chunks (ingestion/load.py) is built from, and search()
-does a row lookup against it for every hit regardless of retrieval
-mode; a dossier chunk_id with no row there raises KeyError. Dossier
-chunks are therefore written to three surfaces (see ADR #39 in
-docs/decisions.md, correcting ADR #38's original two-surface design).
+in-memory rebuild), but ingestion.load.load_index() rebuilds it fresh on
+every cold boot. HybridRetriever.chunks (ingestion/load.py) does a row
+lookup for every hit regardless of retrieval mode, so a dossier chunk_id
+with no row there raises KeyError (ADR #39, correcting ADR #38).
+
+ADR #58 changed where that row comes from. This module previously wrote
+dossier rows into the shared, git-tracked data/chunks.csv; load_index now
+merges every per-case data/dossier/*/chunks.csv at load time instead. The
+tracked statute CSV therefore stays statute-only by construction, and
+private client names cannot reach a tracked file at all — the earlier
+design left them one `git add` away from publication, past a privacy gate
+that greps filenames rather than content.
 
 Inputs:  data/dossier/<case_id>/extracted/<doc_id>.md
          data/dossier/<case_id>/facts.jsonl
 Outputs: - data/dossier/<case_id>/chunks.csv — this case's dossier chunk
-            rows (audit surface, case-scoped)
-         - data/chunks.csv — the shared CSV ingestion.load.load_index()
-            reads for both BM25 rebuild and row-lookup hydration;
-            dossier-<case_id>- prefixed rows replaced idempotently
+            rows; both the audit surface and what load_index merges
          - the existing Chroma collection (ingestion.index.COLLECTION) —
             appended to via collection.add(), not recreated
          - data/dossier/<case_id>/facts.jsonl — rewritten with each Fact's
             source_chunk_id backfilled
          chunk_id format: dossier-<case_id>-<doc_id>-c<chunk_num:03d>
+
+CLI: python -m ingestion.dossier.index --case-id <id>
 
 Every `pd.read_csv` call added to this module's implementation MUST pass
 `keep_default_na=False` (project-wide convention — see ingestion/chunk.py,
@@ -37,6 +40,7 @@ ingestion/index.py; guards against the pandas NaN silent-failure trap).
 """
 from __future__ import annotations
 
+import argparse
 import logging
 import re
 import time
@@ -267,55 +271,20 @@ def append_to_dossier_chunks_csv(chunks: pd.DataFrame, case_id: str) -> Path:
 
     Full overwrite, not a literal line-append — chunking is deterministic
     so the file's content is idempotent across re-runs, and it only ever
-    holds this case's own rows. This is the audit surface; the shared
-    data/chunks.csv (append_to_statute_chunks_csv) is the retriever-
-    consumed copy.
+    holds this case's own rows.
+
+    This is both the audit surface and the retriever's source of dossier
+    rows: ingestion.load.load_index merges every per-case file at load time
+    (ADR #58). Dossier text is deliberately never written into the shared,
+    git-tracked data/chunks.csv — the earlier append_to_statute_chunks_csv
+    did exactly that and put private client names one `git add` away from
+    publication.
     """
     path = DOSSIER_DIR / case_id / "chunks.csv"
     path.parent.mkdir(parents=True, exist_ok=True)
     chunks.to_csv(path, index=False)
     log.info("wrote %d dossier chunk rows to %s", len(chunks), path)
     return path
-
-
-def append_to_statute_chunks_csv(chunks: pd.DataFrame, case_id: str) -> Path:
-    """Append this case's dossier chunk rows to the shared CHUNKS_CSV.
-
-    ingestion.load.load_index() reads CHUNKS_CSV to rebuild BM25 and to
-    populate HybridRetriever.chunks — the row-lookup table search() uses
-    to hydrate every hit, including ones Chroma returns from dense
-    retrieval. Without this, a dossier chunk_id returned by vector search
-    has no row here and search() raises KeyError (see ADR #39). The
-    per-case chunks.csv from append_to_dossier_chunks_csv remains the
-    audit surface; this is the retriever-consumed copy.
-
-    Idempotent: drops any existing rows whose chunk_id starts with
-    'dossier-<case_id>-', then appends the fresh batch, reindexed onto
-    the statute CSV's column set (extra statute-only columns such as
-    etat/date_debut/date_fin/legiarti_id fill as "" for dossier rows,
-    never NaN, per project convention).
-    """
-    if not CHUNKS_CSV.exists():
-        raise RuntimeError(
-            f"{CHUNKS_CSV} does not exist. Run the statute ingestion "
-            "pipeline first (uv run python -m ingestion.index)."
-        )
-
-    existing = pd.read_csv(CHUNKS_CSV, keep_default_na=False)
-    prefix = f"dossier-{case_id}-"
-    retained = existing[~existing["chunk_id"].astype(str).str.startswith(prefix)]
-    removed = len(existing) - len(retained)
-    if removed:
-        log.info("removed %d stale rows for case_id=%s from %s", removed, case_id, CHUNKS_CSV)
-
-    dossier_aligned = chunks.reindex(columns=list(existing.columns), fill_value="")
-    combined = pd.concat([retained, dossier_aligned], ignore_index=True)
-    combined.to_csv(CHUNKS_CSV, index=False)
-    log.info(
-        "appended %d dossier chunk rows to %s (total rows: %d)",
-        len(chunks), CHUNKS_CSV, len(combined),
-    )
-    return CHUNKS_CSV
 
 
 # ========== facts backfill ==========
@@ -430,7 +399,6 @@ def index_dossier(case_id: str) -> DossierIndexResult:
         _validate_chunk_schema(chunks)
 
     append_to_dossier_chunks_csv(chunks, case_id)
-    append_to_statute_chunks_csv(chunks, case_id)
     append_to_chroma(chunks, case_id)
     facts_backfilled, facts_unmatched = _backfill_fact_chunk_ids(case_id, chunks)
 
@@ -442,3 +410,32 @@ def index_dossier(case_id: str) -> DossierIndexResult:
         facts_unmatched=facts_unmatched,
         elapsed=time.time() - t0,
     )
+
+
+# ========== CLI entrypoint ==========
+
+def main() -> None:
+    """Command-line entrypoint: python -m ingestion.dossier.index --case-id <id>
+
+    Re-running is safe: chunking is deterministic, the per-case CSV is a full
+    overwrite, append_to_chroma deletes this case's stale rows before re-adding,
+    and the facts backfill is idempotent.
+    """
+    parser = argparse.ArgumentParser(
+        description="Chunk one case's extracted documents, append them to the "
+        "shared Chroma collection, and backfill source_chunk_id on its facts. "
+        "Never writes to the git-tracked data/chunks.csv (ADR #58)."
+    )
+    parser.add_argument("--case-id", type=str, required=True, help="case identifier")
+    args = parser.parse_args()
+
+    result = index_dossier(args.case_id)
+    print(
+        f"dossier index · case_id={result.case_id} docs={result.docs_indexed} "
+        f"chunks={result.chunks_created} facts_backfilled={result.facts_backfilled} "
+        f"facts_unmatched={result.facts_unmatched} elapsed={result.elapsed:.1f}s"
+    )
+
+
+if __name__ == "__main__":
+    main()

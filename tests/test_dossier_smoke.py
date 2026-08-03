@@ -849,7 +849,7 @@ def isolated_chroma(tmp_path, monkeypatch):
 @pytest.fixture
 def isolated_chunks_csv(tmp_path, monkeypatch):
     """Redirect index.CHUNKS_CSV into an isolated tmp CSV seeded with two
-    dummy statute rows, so append_to_statute_chunks_csv never touches the
+    dummy statute rows, so no test run can ever touch the
     real, tracked data/chunks.csv — and so tests can assert statute rows
     survive dossier appends untouched.
 
@@ -936,9 +936,15 @@ def test_index_dossier_end_to_end_demo(
     written = pd.read_csv(tmp_path / "demo" / "chunks.csv", keep_default_na=False)
     assert any(cid.startswith("dossier-demo-") for cid in written["chunk_id"])
 
+    # ADR #58: the shared statute CSV is git-tracked, so dossier rows must
+    # never reach it. load_index merges the per-case file above at load time
+    # instead. Inverted from the pre-#58 assertion that required them here.
     written_shared = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
-    dossier_rows = written_shared[written_shared["chunk_id"].str.startswith("dossier-demo-")]
-    assert len(dossier_rows) == result.chunks_created
+    dossier_rows = written_shared[written_shared["chunk_id"].str.startswith("dossier-")]
+    assert dossier_rows.empty, (
+        f"dossier rows leaked into the tracked statute CSV: "
+        f"{list(dossier_rows['chunk_id'])[:5]}"
+    )
     assert list(written_shared.columns) == [
         "chunk_id", "source", "source_label", "num", "section_path", "titre",
         "texte", "etat", "date_debut", "date_fin", "legiarti_id", "url",
@@ -963,9 +969,6 @@ def test_index_dossier_idempotent(
     initial_statute_count = len(initial[~initial["chunk_id"].str.startswith("dossier-")])
 
     result1 = index.index_dossier("demo")
-    after_run1 = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
-    dossier_count_1 = int(after_run1["chunk_id"].str.startswith("dossier-demo-").sum())
-
     result2 = index.index_dossier("demo")
 
     assert result1.chunks_created == result2.chunks_created
@@ -975,11 +978,12 @@ def test_index_dossier_idempotent(
     assert len(written) == result2.chunks_created
     assert written["chunk_id"].is_unique
 
+    # The tracked statute CSV must be untouched by either run (ADR #58):
+    # no dossier rows added, no statute rows lost.
     after_run2 = pd.read_csv(isolated_chunks_csv, keep_default_na=False)
-    dossier_count_2 = int(after_run2["chunk_id"].str.startswith("dossier-demo-").sum())
     statute_count_2 = len(after_run2[~after_run2["chunk_id"].str.startswith("dossier-")])
 
-    assert dossier_count_1 == dossier_count_2 == result2.chunks_created
+    assert not after_run2["chunk_id"].str.startswith("dossier-").any()
     assert statute_count_2 == initial_statute_count
 
 

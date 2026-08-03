@@ -674,3 +674,147 @@ def test_flow_run_passes_source_scope_through(monkeypatch) -> None:
     flow.run("Qu'est-ce que le quasi-usufruit ?", source_scope="case:demo")
 
     assert mock_retrieve.call_args.kwargs["source_scope"] == "case:demo"
+
+# ========== dossier chunk merge at load time (ADR #58) ==========
+
+def _write_csv(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(path, index=False)
+
+
+def _statute_columns() -> list[str]:
+    return ["chunk_id", "source", "source_label", "num", "titre",
+            "section_path", "texte", "url", "etat", "legiarti_id"]
+
+
+def test_read_dossier_chunks_merges_every_case(tmp_path) -> None:
+    from ingestion.load import _read_dossier_chunks
+
+    _write_csv(tmp_path / "demo" / "chunks.csv", [
+        {"chunk_id": "dossier-demo-d1-c001", "source": "dossier-demo", "texte": "a"},
+    ])
+    _write_csv(tmp_path / "acme" / "chunks.csv", [
+        {"chunk_id": "dossier-acme-d1-c001", "source": "dossier-acme", "texte": "b"},
+        {"chunk_id": "dossier-acme-d1-c002", "source": "dossier-acme", "texte": "c"},
+    ])
+
+    frames = _read_dossier_chunks(_statute_columns(), tmp_path)
+    merged = pd.concat(frames, ignore_index=True)
+
+    assert len(merged) == 3
+    assert set(merged["chunk_id"]) == {
+        "dossier-demo-d1-c001", "dossier-acme-d1-c001", "dossier-acme-d1-c002",
+    }
+
+
+def test_read_dossier_chunks_aligns_columns_without_nan(tmp_path) -> None:
+    """Statute-only columns must fill as "" for dossier rows, never NaN
+    (project-wide pandas convention)."""
+    from ingestion.load import _read_dossier_chunks
+
+    _write_csv(tmp_path / "demo" / "chunks.csv", [
+        {"chunk_id": "dossier-demo-d1-c001", "source": "dossier-demo", "texte": "a"},
+    ])
+
+    merged = pd.concat(_read_dossier_chunks(_statute_columns(), tmp_path), ignore_index=True)
+
+    assert list(merged.columns) == _statute_columns()
+    assert merged["etat"].iloc[0] == ""
+    assert merged["legiarti_id"].iloc[0] == ""
+    assert not merged.isna().any().any()
+
+
+def test_read_dossier_chunks_skips_empty_and_missing(tmp_path) -> None:
+    from ingestion.load import _read_dossier_chunks
+
+    assert _read_dossier_chunks(_statute_columns(), tmp_path / "nope") == []
+
+    (tmp_path / "zerobyte").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "zerobyte" / "chunks.csv").write_text("", encoding="utf-8")
+    _write_csv(tmp_path / "empty" / "chunks.csv", [])
+    _write_csv(tmp_path / "real" / "chunks.csv", [
+        {"chunk_id": "dossier-real-d1-c001", "source": "dossier-real", "texte": "x"},
+    ])
+    frames = _read_dossier_chunks(_statute_columns(), tmp_path)
+    assert len(frames) == 1
+    assert frames[0]["chunk_id"].iloc[0] == "dossier-real-d1-c001"
+
+
+def test_merged_dossier_rows_keep_scope_predicate_prefix(tmp_path) -> None:
+    """The merged rows must still satisfy _scope_predicate, which filters on
+    the dossier-<case_id>- chunk_id prefix — this is what keeps statute scope
+    from leaking dossier text once the two corpora share one row table."""
+    from ingestion.load import _read_dossier_chunks, _scope_predicate
+
+    _write_csv(tmp_path / "demo" / "chunks.csv", [
+        {"chunk_id": "dossier-demo-d1-c001", "source": "dossier-demo", "texte": "a"},
+    ])
+    _write_csv(tmp_path / "acme" / "chunks.csv", [
+        {"chunk_id": "dossier-acme-d1-c001", "source": "dossier-acme", "texte": "b"},
+    ])
+    merged = pd.concat(_read_dossier_chunks(_statute_columns(), tmp_path), ignore_index=True)
+    ids = list(merged["chunk_id"])
+
+    assert [cid for cid in ids if _scope_predicate("statute")(cid)] == []
+    assert [cid for cid in ids if _scope_predicate("case:demo")(cid)] == ["dossier-demo-d1-c001"]
+    assert len([cid for cid in ids if _scope_predicate("dossier")(cid)]) == 2
+
+
+def test_dossier_text_never_enters_the_tracked_statute_csv() -> None:
+    """The whole point of ADR #58: data/chunks.csv is git-tracked, so a single
+    dossier row in it would put real client names one `git add` from
+    publication. Guards against the retired append_to_statute_chunks_csv
+    being reintroduced."""
+    import ingestion.dossier.index as dossier_index
+    from ingestion.index import CHUNKS_CSV
+
+    assert not hasattr(dossier_index, "append_to_statute_chunks_csv")
+
+    if CHUNKS_CSV.exists():
+        tracked = pd.read_csv(CHUNKS_CSV, keep_default_na=False)
+        leaked = [c for c in tracked["chunk_id"] if str(c).startswith("dossier-")]
+        assert not leaked, f"dossier rows found in tracked {CHUNKS_CSV}: {leaked[:5]}"
+
+
+def test_chroma_scope_filter_prevents_candidate_starvation() -> None:
+    """Scope filtering must be pushed into Chroma, not applied after a fixed
+    candidate pull.
+
+    Once statute and dossier share one collection, a dossier-flavoured query
+    can fill every one of the k*3 candidate slots with dossier chunks, and
+    source_scope="statute" — the DEFAULT — then filters them all out and
+    returns nothing. Server-side filtering makes that impossible (ADR #58).
+    """
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": "cc-587", "source": "cc_usufruit", "texte": "a"},
+        {"chunk_id": "dossier-private-d1-c001", "source": "dossier-private", "texte": "b"},
+        {"chunk_id": "dossier-acme-d1-c001", "source": "dossier-acme", "texte": "c"},
+    ]).set_index("chunk_id", drop=False)
+    r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
+
+    assert r._dossier_sources() == ["dossier-acme", "dossier-private"]
+    assert r._chroma_scope_filter("statute") == {
+        "source": {"$nin": ["dossier-acme", "dossier-private"]}
+    }
+    assert r._chroma_scope_filter("dossier") == {
+        "source": {"$in": ["dossier-acme", "dossier-private"]}
+    }
+    assert r._chroma_scope_filter("case:private") == {"source": "dossier-private"}
+    assert r._chroma_scope_filter("blended") is None
+
+
+def test_chroma_scope_filter_is_inert_on_a_statute_only_corpus() -> None:
+    """A corpus with no dossier indexed must behave exactly as it did before
+    ADR #58 — no `where` clause sent to Chroma at all."""
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": "cc-587", "source": "cc_usufruit", "texte": "a"},
+    ]).set_index("chunk_id", drop=False)
+    r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
+
+    assert r._dossier_sources() == []
+    for scope in ("statute", "dossier", "case:private", "blended"):
+        assert r._chroma_scope_filter(scope) is None
