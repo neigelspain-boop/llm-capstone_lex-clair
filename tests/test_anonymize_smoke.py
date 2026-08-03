@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-from ingestion.dossier import anonymize
+from ingestion.dossier import anonymize, personas
 
 
 # ========== fixtures (invented identifiers only) ==========
@@ -69,7 +69,11 @@ def _write_source_case(base: Path, case_id: str) -> None:
 
 @pytest.fixture
 def dossier(tmp_path, monkeypatch) -> Path:
+    # Both modules import DOSSIER_DIR by value, so each holds its own binding
+    # and both have to be redirected or the roster silently loads from the
+    # real data directory.
     monkeypatch.setattr(anonymize, "DOSSIER_DIR", tmp_path)
+    monkeypatch.setattr(personas, "DOSSIER_DIR", tmp_path)
     _write_source_case(tmp_path, "src")
     return tmp_path
 
@@ -77,6 +81,32 @@ def dossier(tmp_path, monkeypatch) -> Path:
 @pytest.fixture
 def extras(dossier) -> dict[str, str]:
     return anonymize.load_extra_identifiers("src")
+
+
+# One real person as the resolver actually leaves them: three person_ids, a
+# married name, an initialised form, and no single alias common to all three.
+_SPLIT_IDENTITY = [
+    {
+        "person_id": "p-split-a", "canonical_name": "Roxane MARTIN",
+        "aliases": ["Roxane MARTIN"], "person_type": "natural_person",
+    },
+    {
+        "person_id": "p-split-b", "canonical_name": "MARTIN Roxane épouse BERNARD",
+        "aliases": ["MARTIN Roxane épouse BERNARD"], "person_type": "natural_person",
+    },
+    {
+        "person_id": "p-split-c", "canonical_name": "R. MARTIN",
+        "aliases": ["R. MARTIN"], "person_type": "natural_person",
+    },
+]
+
+
+def _write_persons_with_split_identity(base: Path, case_id: str) -> None:
+    (base / case_id / "persons.jsonl").write_text(
+        "\n".join(json.dumps(r, ensure_ascii=False) for r in [*_PERSONS, *_SPLIT_IDENTITY]) + "\n",
+        encoding="utf-8",
+    )
+    (base / case_id / "_anonymization_map.json").unlink(missing_ok=True)
 
 
 # ========== identifier tables live outside tracked source ==========
@@ -112,16 +142,21 @@ def test_longest_first_leaves_no_dangling_given_name(dossier, extras) -> None:
 
 
 def test_aliases_of_one_person_collapse_to_one_pseudonym(dossier, extras) -> None:
-    """A bare surname and "Given SURNAME" must not read as two people."""
+    """A bare surname and "Given SURNAME" must not read as two people.
+
+    Asserted on the mapping rather than on label text, so the test survives a
+    change of persona vocabulary — the property is "one person, one
+    pseudonym", not "the pseudonym looks like this".
+    """
     mapping = anonymize.load_or_build_mapping("src")
+    forms = ["DUCHEMIN", "DUCHEMIN Alphonse", "Alphonse DUCHEMIN"]
+    assert len({mapping[anonymize._fold(f)] for f in forms}) == 1
+
     out = anonymize.anonymize_text(
         "DUCHEMIN a signé. Alphonse DUCHEMIN a confirmé. DUCHEMIN Alphonse est décédé.",
         mapping, "d1", extras, use_llm=False,
     )
-    assert anonymize._fold("duchemin") not in anonymize._fold(out)
-    # One person, one label: every replacement in the sentence is identical.
-    labels = set(re.findall(r"Personne [A-Z]+", out))
-    assert len(labels) == 1, f"aliases split across pseudonyms: {out}"
+    assert "duchemin" not in anonymize._fold(out)
 
 
 def test_replacement_is_accent_and_case_insensitive(dossier, extras) -> None:
@@ -133,13 +168,16 @@ def test_replacement_is_accent_and_case_insensitive(dossier, extras) -> None:
         assert anonymize._fold(spelling) not in anonymize._fold(out), spelling
 
 
-def test_natural_and_legal_persons_get_distinct_label_families(dossier, extras) -> None:
+def test_natural_and_legal_persons_get_distinct_label_families(dossier) -> None:
+    """A company must never be given a person's name. The pools are separate
+    so a reader can tell an heir from a bank at a glance."""
     mapping = anonymize.load_or_build_mapping("src")
-    out = anonymize.anonymize_text(
-        "VOLTAIRE et GRANIMMO PATRIMOINE.", mapping, "d1", extras, use_llm=False,
-    )
-    assert "Personne" in out
-    assert "Organisme" in out
+    natural = mapping[anonymize._fold("Ariane VOLTAIRE")]
+    legal = mapping[anonymize._fold("GRANIMMO PATRIMOINE")]
+
+    assert natural in personas.FALLBACK_NATURAL_POOL or natural.startswith("Personne ")
+    assert legal in personas.FALLBACK_LEGAL_POOL or legal.startswith("Organisme ")
+    assert natural != legal
 
 
 def test_mapping_is_stable_across_runs(dossier) -> None:
@@ -163,6 +201,147 @@ def test_refuses_to_run_without_the_known_entity_list(dossier) -> None:
     strongest layer and still look successful."""
     with pytest.raises(RuntimeError, match="persons.jsonl"):
         anonymize.load_or_build_mapping("case_with_no_persons_file")
+
+
+# ========== the persona roster (ADR #62) ==========
+
+def _write_roster(base: Path, case_id: str, payload: dict) -> None:
+    (base / case_id / personas.ROSTER_FILENAME).write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8",
+    )
+
+
+def test_roster_pins_a_named_character_to_a_person(dossier, extras) -> None:
+    """The readability point of the whole change: a succession argument
+    written in letters cannot be followed."""
+    monkeypatch_roster = {"bindings": {"p-voltaire": "Maître Beerus"}}
+    _write_roster(dossier, "src", monkeypatch_roster)
+
+    mapping = anonymize.load_or_build_mapping("src")
+    out = anonymize.anonymize_text(
+        "Maître VOLTAIRE a reçu l'acte.", mapping, "d1", extras, use_llm=False,
+    )
+    assert "Maître Beerus" in out
+
+
+def test_merge_group_collapses_split_person_ids_onto_one_character(dossier, extras) -> None:
+    """The resolver splits one real person across several person_ids. Left
+    alone the three grandchildren of the showcase case rendered as eight
+    different people and the family tree read as nonsense."""
+    _write_persons_with_split_identity(dossier, "src")
+    _write_roster(dossier, "src", {
+        "bindings": {"p-split-a": "Son Gohan"},
+        "merge_groups": [["p-split-a", "p-split-b", "p-split-c"]],
+    })
+
+    mapping = anonymize.load_or_build_mapping("src")
+    forms = ["Roxane MARTIN", "MARTIN Roxane épouse BERNARD", "R. MARTIN"]
+    assert {mapping[anonymize._fold(f)] for f in forms} == {"Son Gohan"}
+
+
+def test_roster_rejects_one_character_bound_to_two_unmerged_people(dossier) -> None:
+    """Merging a notaire with an heir is the exact failure the generated
+    scheme produced; the roster must not be able to reintroduce it."""
+    _write_roster(dossier, "src", {
+        "bindings": {"p-voltaire": "Maître Beerus", "p-duchemin-alphonse": "Maître Beerus"},
+    })
+    with pytest.raises(ValueError, match="bound to two unmerged people"):
+        personas.load_roster("src")
+
+
+def test_roster_rejects_a_replacement_the_gate_would_flag(dossier) -> None:
+    """verify_anonymization re-runs the PII regexes over its own output, so a
+    realistic fictional address fails the build it is meant to pass. Catch it
+    at the roster, where it can be fixed, not 54 documents later."""
+    _write_roster(dossier, "src", {"bindings": {"p-voltaire": "12 avenue Kamé, 77000 Namek"}})
+    with pytest.raises(ValueError, match="not gate-safe"):
+        personas.load_roster("src")
+
+
+@pytest.mark.parametrize("unsafe", [
+    "12 avenue Kamé",
+    "secteur 77590",
+    "beerus@etude-namek.fr",
+    "FR76 Namek",
+])
+def test_gate_safety_contract_rejects_pii_shaped_replacements(unsafe) -> None:
+    with pytest.raises(ValueError, match="not gate-safe"):
+        personas.assert_gate_safe([unsafe])
+
+
+@pytest.mark.parametrize("safe", [
+    "Résidence Kamé, Namek",
+    "secteur 4, Namek",
+    "Maître Beerus",
+    "Capsule Corporation",
+])
+def test_gate_safe_fictional_addresses_are_accepted(safe) -> None:
+    personas.assert_gate_safe([safe])
+
+
+def test_unrostered_entity_is_still_anonymised(dossier, extras) -> None:
+    """A roster is a readability upgrade, never a privacy prerequisite.
+    Leaving an unnamed person in place would be a leak."""
+    _write_roster(dossier, "src", {"bindings": {"p-voltaire": "Maître Beerus"}})
+    mapping = anonymize.load_or_build_mapping("src")
+    out = anonymize.anonymize_text(
+        "DUCHEMIN Alphonse et GRANIMMO PATRIMOINE.", mapping, "d1", extras, use_llm=False,
+    )
+    assert "DUCHEMIN" not in out
+    assert "GRANIMMO" not in out
+
+
+def test_token_override_names_the_shared_family_surname(dossier, extras) -> None:
+    """A surname owned by several people is ambiguous, so the generated
+    scheme degrades it to "[nom]" — which is how the showcase came to read
+    "Personne W ép. [nom]". The roster names it instead."""
+    _write_persons_with_split_identity(dossier, "src")
+    _write_roster(dossier, "src", {"token_overrides": {"martin": "Son"}})
+
+    mapping = anonymize.load_or_build_mapping("src")
+    out = anonymize.anonymize_text(
+        "La famille MARTIN est indivise.", mapping, "d1", extras, use_llm=False,
+    )
+    assert "Son" in out
+    assert "[nom]" not in out
+
+
+def test_stale_persisted_assignment_cannot_resurrect_a_merged_person(dossier) -> None:
+    """The collision this fix exists for: replaying a flattened map with
+    `mapping.update(existing)` let a stale entry beat the fresh assignment,
+    putting two different people on one label and leaving another unused."""
+    _write_persons_with_split_identity(dossier, "src")
+    anonymize.load_or_build_mapping("src")  # persist a pre-merge map
+
+    _write_roster(dossier, "src", {
+        "bindings": {"p-split-a": "Son Gohan"},
+        "merge_groups": [["p-split-a", "p-split-b", "p-split-c"]],
+    })
+    mapping = anonymize.load_or_build_mapping("src")
+
+    forms = ["Roxane MARTIN", "MARTIN Roxane épouse BERNARD", "R. MARTIN"]
+    assert {mapping[anonymize._fold(f)] for f in forms} == {"Son Gohan"}
+
+
+def test_pseudonyms_do_not_move_between_runs(dossier) -> None:
+    """Person-level pinning is what keeps reruns idempotent now that the
+    flattened map is no longer replayed."""
+    first = anonymize.load_or_build_mapping("src")
+    second = anonymize.load_or_build_mapping("src")
+    assert first == second
+
+
+def test_placed_fiction_is_not_reported_as_a_residual_identifier(dossier) -> None:
+    """"Maître Beerus" appears on nearly every page; _TITLED_RE would flag
+    "Beerus" every time and drown the report the human read depends on."""
+    _write_roster(dossier, "src", {"bindings": {"p-voltaire": "Maître Beerus"}})
+    anonymize.load_or_build_mapping("src")
+    _prepare_target(dossier, "## Page 1\n\nMaître Beerus a reçu l'acte à Namek.")
+
+    report = anonymize.verify_anonymization("vitrine", source_case_id="src", raise_on_leak=False)
+    assert report.ok
+    assert "Beerus" not in report.residual_proper_nouns
+    assert "Namek" not in report.residual_proper_nouns
 
 
 # ========== layer 2: structured PII ==========

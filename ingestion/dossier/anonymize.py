@@ -51,6 +51,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from ingestion.clients import get_openrouter_client
+from ingestion.dossier import personas
 from ingestion.dossier.index import DOSSIER_DIR
 
 load_dotenv()
@@ -298,53 +299,128 @@ def _distinctive_tokens(name: str) -> set[str]:
     }
 
 
-def _build_pseudonym_map(entities: list[tuple[str, str, str]]) -> dict[str, str]:
-    """Assign one stable pseudonym per person_id, shared by all their aliases.
+def _build_pseudonym_map(
+    entities: list[tuple[str, str, str]],
+    roster: personas.Roster | None = None,
+    pinned: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """Assign one stable pseudonym per person, shared by all their aliases.
 
     Aliases of one entity must collapse to the SAME pseudonym (a bare surname
     and "<given name> <SURNAME>" are not two people), while distinct entities
-    must stay distinct — both properties come free from grouping on person_id.
+    must stay distinct — both properties come free from grouping on person_id,
+    and the roster's merge groups extend the first property across the several
+    person_ids the resolver splits one real person into.
 
     Bare distinctive tokens are mapped too, since documents use them where
     persons.jsonl only records full forms. A token owned by exactly one
     person maps to that person's pseudonym; a token shared by several (a
     family surname) is inherently ambiguous, so it maps to a neutral
-    placeholder rather than being guessed at or, worse, left in place.
+    placeholder unless the roster names it — never guessed at, never left
+    in place.
 
-    Pseudonyms are deliberately obvious placeholders ("Personne A",
-    "Organisme B") rather than plausible substitute names: a realistic fake
-    name invites a reader to believe it, and could collide with a real person.
+    Pseudonyms must be unmistakably fictional: a realistic substitute name
+    invites a reader to believe it and could collide with a real person. The
+    roster satisfies that with named cartoon characters, which are readable
+    as well as unmistakable; the generated fallback satisfies it with
+    "Personne A" / "Organisme B", which are only unmistakable. See
+    personas.py for why the first is preferred.
     """
-    by_person: dict[str, str] = {}
-    counters = {"natural_person": 0, "legal_person": 0}
-    for _, person_type, person_id in entities:
-        if person_id in by_person:
-            continue
-        bucket = "legal_person" if person_type == "legal_person" else "natural_person"
-        label = "Organisme" if bucket == "legal_person" else "Personne"
-        by_person[person_id] = f"{label} {_letter(counters[bucket])}"
-        counters[bucket] += 1
+    roster = roster or personas.Roster()
+    by_person = assign_personas(entities, roster, pinned=pinned)
 
     mapping: dict[str, str] = {}
     token_owners: dict[str, set[str]] = {}
     token_type: dict[str, str] = {}
 
     for name, person_type, person_id in entities:
-        mapping[_fold(name)] = by_person[person_id]
+        mapping[_fold(name)] = by_person[roster.head_of(person_id)]
         for token in _distinctive_tokens(name):
-            token_owners.setdefault(token, set()).add(person_id)
+            token_owners.setdefault(token, set()).add(roster.head_of(person_id))
             token_type[token] = person_type
 
     for token, owners in token_owners.items():
         if token in mapping:
             continue
-        if len(owners) == 1:
+        if token in roster.token_overrides:
+            # The shared family surname. Owned by everyone, so the ambiguity
+            # rule below would degrade it to "[nom]" and strip the family from
+            # the family tree; the roster names it explicitly instead.
+            mapping[token] = roster.token_overrides[token]
+        elif len(owners) == 1:
             mapping[token] = by_person[next(iter(owners))]
         else:
             mapping[token] = (
                 "[organisme]" if token_type.get(token) == "legal_person" else "[nom]"
             )
+
+    # Overrides for tokens no entity name contains — a family surname the
+    # resolver only ever saw inside longer strings still has to be nameable.
+    for token, replacement in roster.token_overrides.items():
+        mapping.setdefault(token, replacement)
     return mapping
+
+
+def assign_personas(
+    entities: list[tuple[str, str, str]],
+    roster: personas.Roster,
+    pinned: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """canonical person_id -> pseudonym, in three tiers.
+
+    1. The roster's character for that person. The roster is an explicit
+       human decision and outranks everything: editing it must change the
+       output, not lose a race with a file the last run happened to write.
+    2. `pinned` — assignments persisted from an earlier run, which is what
+       keeps reruns idempotent for everyone the roster does NOT name. Kept
+       only for person_ids that still exist; a stale entry for a person since
+       merged away must not resurrect them, which is the bug that put two
+       different people on one label in the first place.
+    3. The fallback pools, then the "Personne A" / "Organisme B" letter
+       scheme once a pool is exhausted. An unrostered entity is still
+       anonymised — leaving it in place would be a leak, and a roster is a
+       readability feature, not a privacy one.
+
+    Merged person_ids collapse here: every id in a merge group resolves to
+    the group head, so all of them get the same pseudonym.
+    """
+    pinned = pinned or {}
+    by_person: dict[str, str] = {}
+    used: set[str] = set()
+    counters = {"natural_person": 0, "legal_person": 0}
+    pools = {
+        "natural_person": list(personas.FALLBACK_NATURAL_POOL),
+        "legal_person": list(personas.FALLBACK_LEGAL_POOL),
+    }
+
+    ordered: list[tuple[str, str]] = []
+    for _name, person_type, person_id in entities:
+        head = roster.head_of(person_id)
+        if head in by_person:
+            continue
+        bucket = "legal_person" if person_type == "legal_person" else "natural_person"
+        character = roster.character_for(person_id) or pinned.get(head)
+        if character:
+            by_person[head] = character
+            used.add(character)
+        else:
+            ordered.append((head, bucket))
+
+    # Unnamed entities are assigned only after every pinned and rostered
+    # character is known, so a fallback can never steal a name the roster
+    # wanted for someone else.
+    for head, bucket in ordered:
+        character = next((c for c in pools[bucket] if c not in used), None)
+        if character is None:
+            label = "Organisme" if bucket == "legal_person" else "Personne"
+            while f"{label} {_letter(counters[bucket])}" in used:
+                counters[bucket] += 1
+            character = f"{label} {_letter(counters[bucket])}"
+            counters[bucket] += 1
+        by_person[head] = character
+        used.add(character)
+
+    return by_person
 
 
 def _letter(index: int) -> str:
@@ -503,25 +579,32 @@ def _apply_extra_identifiers(text: str, extras: dict[str, str]) -> str:
 
 # ========== layer 4: LLM residual sweep ==========
 
-SWEEP_SYSTEM_PROMPT = """\
+SWEEP_SYSTEM_PROMPT = f"""\
 Tu es un agent d'anonymisation de documents juridiques français. On te donne \
-un document déjà partiellement anonymisé : les noms connus ont été remplacés \
-par des étiquettes ("Personne A", "Organisme B"), les adresses, emails et \
-téléphones par des marqueurs entre crochets ("[adresse]", "[email]").
+un document déjà anonymisé par un traitement déterministe : les noms réels ont \
+été remplacés par des noms de personnages de fiction (Dragon Ball), les lieux \
+par des noms de planètes, et les adresses, emails et téléphones par des \
+marqueurs entre crochets ("[email]", "[telephone]").
 
-Ta tâche : supprimer les identifiants RÉSIDUELS que le traitement automatique \
-a manqués — un prénom ou nom de famille isolé, une commune, un lieu-dit, un \
-nom d'étude ou de société, un numéro de dossier, une fonction nominative.
+Ces noms de fiction sont VOULUS. Ils ne sont pas des identifiants résiduels : \
+tu dois les conserver mot pour mot, sans exception.
+
+Ta tâche : supprimer les identifiants RÉELS RÉSIDUELS que le traitement \
+automatique a manqués — un prénom ou nom de famille français isolé, une \
+commune, un lieu-dit, un nom d'étude ou de société, un numéro de dossier.
 
 Règles strictes :
-- Remplace un nom de personne résiduel par "Personne Z", une organisation par \
-"Organisme Z", un lieu par "[lieu]", une référence par "[réf.]".
+- Remplace un nom de personne résiduel par l'un de : \
+{", ".join(personas.RESIDUAL_NATURAL_POOL)}. Une organisation par l'un de : \
+{", ".join(personas.RESIDUAL_LEGAL_POOL)}. Un lieu par l'un de : \
+{", ".join(personas.PLACE_POOL)}. Une référence par "[réf.]".
+- N'invente JAMAIS d'adresse email, de téléphone, d'IBAN ni de code postal, \
+même à titre de remplacement. Un marqueur déjà posé reste tel quel.
 - NE modifie RIEN d'autre : ni les dates, ni les montants, ni les articles de \
 loi, ni les termes juridiques (quasi-usufruit, nue-propriété, notaire, \
 succession...), ni la structure du document, ni les en-têtes "## Page N".
 - Ne reformule pas, ne résume pas, ne corrige pas la langue. Le document doit \
 rester mot pour mot identique en dehors des identifiants remplacés.
-- Conserve les étiquettes déjà posées telles quelles.
 
 Retourne UNIQUEMENT le document anonymisé, sans préambule ni commentaire.
 """
@@ -664,8 +747,21 @@ def _map_path(source_case_id: str) -> Path:
 
 
 def load_or_build_mapping(source_case_id: str) -> dict[str, str]:
-    """Load the persisted pseudonym mapping, extending it for any entity
-    added since the last run. Persisting is what makes reruns idempotent."""
+    """Build the pseudonym mapping, reusing persisted PERSON assignments.
+
+    What is persisted is `by_person` — person_id -> pseudonym — not the
+    flattened string map. That distinction is the whole fix. The previous
+    version persisted the flattened map and replayed it with
+    `mapping.update(existing)`, so a stale entry beat the fresh assignment
+    and two different people ended up on one label while another label went
+    unused. Pinning at the person level instead keeps reruns idempotent
+    (nobody is renumbered) without letting yesterday's map override today's
+    roster.
+
+    Legacy flat maps are discarded rather than migrated: they carry exactly
+    the assignments this fix exists to overrule, and the derived case is
+    regenerated wholesale anyway.
+    """
     entities = _load_known_entities(source_case_id)
     if not entities:
         raise RuntimeError(
@@ -674,18 +770,35 @@ def load_or_build_mapping(source_case_id: str) -> dict[str, str]:
             "(run the persons pipeline first)"
         )
 
-    path = _map_path(source_case_id)
-    existing: dict[str, str] = {}
-    if path.exists():
-        existing = json.loads(path.read_text(encoding="utf-8"))
+    roster = personas.load_roster(source_case_id)
 
-    mapping = _build_pseudonym_map(entities)
-    mapping.update(existing)  # persisted assignments win, so pseudonyms never move
-    for key, value in _build_pseudonym_map(entities).items():
-        mapping.setdefault(key, value)
+    path = _map_path(source_case_id)
+    pinned: dict[str, str] = {}
+    if path.exists():
+        stored = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(stored, dict) and "by_person" in stored:
+            pinned = stored["by_person"]
+        else:
+            log.warning(
+                "anonymize: discarding legacy pseudonym map at %s (no by_person section) "
+                "— pseudonyms will be reassigned from the roster", path,
+            )
+
+    # Only pin people who still exist, and only under their merged identity.
+    # A pin on a person_id that has since been merged away would reinstate the
+    # split this roster exists to close.
+    live_heads = {roster.head_of(pid) for _n, _t, pid in entities}
+    pinned = {pid: name for pid, name in pinned.items() if pid in live_heads}
+
+    by_person = assign_personas(entities, roster, pinned=pinned)
+    mapping = _build_pseudonym_map(entities, roster, pinned=pinned)
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(mapping, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps({"by_person": by_person, "mapping": mapping}, ensure_ascii=False, indent=2)
+        + "\n",
+        encoding="utf-8",
+    )
     return mapping
 
 
@@ -761,6 +874,39 @@ _STREET_WORD_RE = re.compile(
 )
 
 
+def _placed_replacement_tokens(source_case_id: str, extras: dict[str, str]) -> set[str]:
+    """Folded word-tokens of every replacement this pipeline itself places.
+
+    The residual-proper-noun report exists to surface names nobody chose. A
+    name the anonymiser deliberately wrote is the opposite of that, and
+    counting it drowns the report — "Maître Beerus" appears on nearly every
+    page of the showcase, and _TITLED_RE would flag "Beerus" every time.
+
+    Drawn from the persona pools, the extra-identifier replacements, and the
+    persisted person assignments, so this stays correct as the roster changes
+    without anyone remembering to update a constant.
+    """
+    values: list[str] = [
+        *personas.RESIDUAL_NATURAL_POOL, *personas.RESIDUAL_LEGAL_POOL,
+        *personas.FALLBACK_NATURAL_POOL, *personas.FALLBACK_LEGAL_POOL,
+        *personas.PLACE_POOL, *extras.values(),
+    ]
+
+    path = _map_path(source_case_id)
+    if path.exists():
+        stored = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(stored, dict):
+            values.extend(str(v) for v in (stored.get("by_person") or {}).values())
+            values.extend(str(v) for v in (stored.get("mapping") or {}).values())
+
+    tokens: set[str] = set()
+    for value in values:
+        for token in re.split(r"[^a-zA-Z0-9À-ÿ]+", _fold(value)):
+            if token:
+                tokens.add(token)
+    return tokens
+
+
 def verify_anonymization(
     case_id: str,
     source_case_id: str = DEFAULT_SOURCE_CASE_ID,
@@ -783,9 +929,11 @@ def verify_anonymization(
     """
     report = AnonymizationReport(case_id=case_id)
 
+    extras = load_extra_identifiers(source_case_id)
     needles: list[str] = [name for name, _type, _pid in _load_known_entities(source_case_id)]
-    needles.extend(load_extra_identifiers(source_case_id))
+    needles.extend(extras)
     folded_needles = {_fold(n): n for n in needles if len(n) >= MIN_ENTITY_LEN}
+    allowed = ALLOWED_PROPER_NOUNS | _placed_replacement_tokens(source_case_id, extras)
 
     for path in _scan_targets(case_id):
         report.files_scanned += 1
@@ -814,7 +962,7 @@ def verify_anonymization(
             candidates += _STREET_WORD_RE.findall(raw)
             for token in candidates:
                 key = _fold(token)
-                if key in ALLOWED_PROPER_NOUNS or key.isdigit():
+                if key in allowed or key.isdigit():
                     continue
                 report.residual_proper_nouns[token] = report.residual_proper_nouns.get(token, 0) + 1
 
