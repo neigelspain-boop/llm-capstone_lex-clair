@@ -10,18 +10,28 @@ turns, and feedback all live in relational tables. Kill switch in
 monitoring.db surfaces to the UI as a persistent warning banner when
 the DB is unreachable — the app keeps rendering in-memory state.
 
+Two tabs (ADR #57): "Assistant" holds the chat, "Analyse comparative"
+holds the per-role compliance panel. Tabs use on_change="rerun" so `.open`
+is readable server-side — that gates the panel's file I/O out of chat turns
+AND keeps `st.chat_input` in the page body, where it stays pinned to the
+viewport bottom (nested in a tab it would render inline instead).
+
 Public surface: Streamlit runs this file directly. Plane II is
-consumed via `rag.flow.run(query)` per ADR #10.
+consumed via `rag.flow.run(query)` per ADR #10 and, for the compliance
+panel, `rag.compliance.run_compliance_for_role` /
+`compare_compliance_for_role` per ADRs #57 and #56.
 """
 
 from __future__ import annotations
 
+import json
 import os
 import traceback
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -169,6 +179,56 @@ COST_HINTS = {
 }
 
 
+# ========== compliance analysis panel (ADR #57) ==========
+
+DOSSIER_DIR = PROJECT_ROOT / "data" / "dossier"
+
+TAB_CHAT = "💬 Assistant"
+TAB_ANALYSIS = "🔬 Analyse comparative"
+
+# Keys must match rag.compliance.COMPLIANCE_MODEL_ALTERNATIVES — the panel
+# offers exactly the two models that module is willing to run.
+COMPLIANCE_MODEL_LABELS = {
+    "anthropic/claude-opus-4.7": "🧠 Claude Opus 4.7",
+    "moonshotai/kimi-k3": "🔬 Kimi K3",
+}
+DEFAULT_COMPLIANCE_MODEL = "anthropic/claude-opus-4.7"
+DIVERGENCE_MODEL_LABEL = "Haiku 4.5"
+
+STATUS_BADGES = {
+    "met": "🟢",
+    "breached": "🔴",
+    "ambiguous": "🟡",
+    "insufficient_evidence": "⚪",
+}
+STATUS_LABELS = {
+    "met": "Respectée",
+    "breached": "Manquement",
+    "ambiguous": "Ambiguë",
+    "insufficient_evidence": "Preuves insuffisantes",
+}
+
+# Previews shown before the user spends anything. USD, not EUR — OpenRouter
+# bills in dollars and every usage.cost_usd the backend returns is dollars.
+# (The sidebar COST_HINTS above mislabel USD as €; correcting them is an
+# ADR #57 follow-up, not this deliverable.)
+#
+# Calibrated 2026-08-03 from `--dry-run` on data/dossier/private: Opus ran
+# $0.46 (small cluster) to $0.59 (42 facts, capped to 30), Kimi $0.12 on the
+# same 30-fact cluster — the ~5x spread is the published rate difference
+# ($15/$75 vs $3/$15 per M), so ONE flat constant across both models would
+# misprice whichever is not selected. Re-check with --dry-run if the model
+# palette or MAX_FACTS_PER_ROLE changes.
+COST_PREVIEW_USD = {
+    "anthropic/claude-opus-4.7": 0.55,
+    "moonshotai/kimi-k3": 0.12,
+}
+COST_PREVIEW_FALLBACK_USD = 0.55
+COST_COMPARE_USD = 0.70  # Opus + Kimi + Haiku meta-analysis
+
+MATRIX_CACHE_TTL_SECONDS = 300
+
+
 # ========== feedback wrapper (delegates to monitoring.db) ==========
 
 def _append_feedback(row: dict) -> None:
@@ -276,6 +336,329 @@ def _translate_to_english(french_text: str) -> str | None:
         return None
 
 
+# ========== compliance panel: data access ==========
+
+@st.cache_resource
+def get_compliance():
+    """Cache the compliance module across sessions. Importing it pulls in
+    rag.retrieve (BGE-M3 + reranker), so this must not happen per rerun."""
+    from rag import compliance
+
+    return compliance
+
+
+@st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
+def _load_compliance_matrix(case_id: str) -> dict:
+    """Read one case's compliance_matrix.json. Cached — the private matrix is
+    ~87 KB and would otherwise re-parse on every rerun of the panel."""
+    path = DOSSIER_DIR / case_id / "compliance_matrix.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
+def _list_cases_with_matrix() -> list[str]:
+    """Case ids that have a compliance_matrix.json on disk.
+
+    Cases with at least one entry sort first, so the panel opens on
+    something analysable: data/dossier/demo/ is an empty fixture and would
+    otherwise win on alphabetical order and leave the tab looking dead.
+    Empty cases still appear rather than silently vanishing — the role
+    selector explains why they have nothing to offer.
+    """
+    if not DOSSIER_DIR.exists():
+        return []
+    case_ids = [p.parent.name for p in DOSSIER_DIR.glob("*/compliance_matrix.json")]
+    return sorted(case_ids, key=lambda c: (not _role_options(c), c))
+
+
+@st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
+def _role_options(case_id: str) -> list[tuple[str, int]]:
+    """(role_id, entry_count) for every role that produced matrix entries,
+    sorted by role_id. Roles come from the matrix rather than facts.jsonl so
+    the dropdown only ever offers roles an analysis has actually covered."""
+    matrix = _load_compliance_matrix(case_id)
+    counts: dict[str, int] = {}
+    for entry in matrix.get("entries") or []:
+        role = entry.get("actor_role")
+        if role:
+            counts[role] = counts.get(role, 0) + 1
+    return sorted(counts.items())
+
+
+# ========== compliance panel: cost + rendering helpers ==========
+
+def _fmt_usd(amount: float) -> str:
+    """French decimal comma, explicit USD unit."""
+    return f"{amount:.2f} $US".replace(".", ",")
+
+
+def _result_cost_usd(result: dict) -> float:
+    """Total spend for one result, single-model or comparative.
+
+    Reads the usage dicts the backend attaches rather than re-deriving from
+    the cost constants, so the figure shown is what was actually billed.
+    """
+    if "model" in result:
+        return (result["model"].get("usage") or {}).get("cost_usd") or 0.0
+    models = result.get("models") or {}
+    total = 0.0
+    for side in models.values():
+        total += (side.get("usage") or {}).get("cost_usd") or 0.0
+    total += (result.get("divergence_usage") or {}).get("cost_usd") or 0.0
+    return total
+
+
+def _render_cost_footer(result: dict) -> None:
+    if result.get("cache_hit"):
+        st.caption("Analyse mise en cache — coût 0,00 $US")
+    else:
+        st.caption(f"Nouvelle analyse — coût {_fmt_usd(_result_cost_usd(result))}")
+
+
+def _render_entry_card(entry: dict) -> None:
+    """One obligation determination: badge + summary, details behind an
+    expander. persons_named renders only when non-empty — it is [] on every
+    entry today (Fact.mentioned_person_ids was never backfilled, ADR #53),
+    and an unconditional section would be permanently blank."""
+    status = entry.get("status", "")
+    badge = STATUS_BADGES.get(status, "⚪")
+    label = STATUS_LABELS.get(status, status)
+    chunk_id = entry.get("statute_chunk_id", "")
+
+    with st.container(border=True):
+        st.markdown(f"{badge} **{label}** · `{chunk_id}`")
+        st.markdown(entry.get("obligation_summary", ""))
+
+        with st.expander("Justification"):
+            st.markdown(entry.get("rationale", "") or "_Aucune justification fournie._")
+
+            excerpt = entry.get("statute_excerpt")
+            if excerpt:
+                st.caption(f"**Extrait de l'article :** {excerpt}")
+
+            fact_ids = entry.get("evidence_fact_ids") or []
+            if fact_ids:
+                st.caption("**Faits invoqués :** " + ", ".join(f"`{f}`" for f in fact_ids))
+
+            persons = entry.get("persons_named") or []
+            if persons:
+                st.markdown("**Personnes impliquées**")
+                for person in persons:
+                    name = person.get("canonical_name") or person.get("person_id", "")
+                    st.markdown(f"- {name}")
+
+
+def _render_single_result(result: dict) -> None:
+    model_id = result["model"]["model_id"]
+    entries = result["model"].get("entries") or []
+
+    st.markdown(f"#### {COMPLIANCE_MODEL_LABELS.get(model_id, model_id)}")
+    st.caption(f"{result.get('role_label', result['role_id'])} · {len(entries)} obligation(s)")
+
+    if not entries:
+        st.info("Aucune obligation identifiée pour ce rôle.")
+    for idx, entry in enumerate(entries):
+        _render_entry_card(entry)
+
+    _render_cost_footer(result)
+
+
+def _render_divergence_table(divergent: list[dict]) -> None:
+    st.markdown("#### Divergences détaillées")
+    if not divergent:
+        st.success("Aucune divergence : les deux modèles concordent sur toutes les obligations partagées.")
+        return
+    rows = [
+        {
+            "Obligation": d.get("obligation_summary", ""),
+            "Verdict Opus": STATUS_LABELS.get(d.get("opus_verdict", ""), d.get("opus_verdict", "")),
+            "Verdict Kimi": STATUS_LABELS.get(d.get("kimi_verdict", ""), d.get("kimi_verdict", "")),
+            "Crux": d.get("crux", ""),
+            "Modèle plus fort": d.get("stronger_side", ""),
+            "Raison": d.get("why", ""),
+        }
+        for d in divergent
+    ]
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+
+
+def _render_comparative_result(result: dict) -> None:
+    """Side-by-side verdicts + divergence meta-analysis.
+
+    Rows align by entry_id via the backend's coverage_diff (ADR #56), not by
+    obligation-summary similarity: entry_id is a hash of statute_chunk_id +
+    actor_role, so both models land on the same id for the same obligation,
+    and it is the same pairing the Haiku meta-analysis above used. Matching
+    on string similarity here could pair rows the callout says are unrelated.
+    """
+    divergence = result.get("divergence_analysis") or {}
+    meta_summary = divergence.get("meta_summary")
+    if meta_summary:
+        st.info(f"**Méta-analyse ({DIVERGENCE_MODEL_LABEL})** — {meta_summary}")
+
+    models = result.get("models") or {}
+    opus_by_id = {e["entry_id"]: e for e in (models.get("opus", {}).get("entries") or [])}
+    kimi_by_id = {e["entry_id"]: e for e in (models.get("kimi", {}).get("entries") or [])}
+    coverage = result.get("coverage_diff") or {}
+
+    col_opus, col_kimi = st.columns([1, 1])
+    with col_opus:
+        st.markdown("#### 🧠 Opus 4.7 (max)")
+    with col_kimi:
+        st.markdown("#### 🔬 Kimi K3 (max)")
+
+    # Shared obligations first, one per row, so the two columns stay aligned.
+    for entry_id in coverage.get("shared_entry_ids") or []:
+        col_opus, col_kimi = st.columns([1, 1])
+        with col_opus:
+            _render_entry_card(opus_by_id[entry_id])
+        with col_kimi:
+            _render_entry_card(kimi_by_id[entry_id])
+
+    # Then obligations only one model surfaced, at the foot of its own column.
+    opus_only = coverage.get("opus_only_entry_ids") or []
+    kimi_only = coverage.get("kimi_only_entry_ids") or []
+    if opus_only or kimi_only:
+        col_opus, col_kimi = st.columns([1, 1])
+        with col_opus:
+            if opus_only:
+                st.caption("Relevé uniquement par Opus")
+                for entry_id in opus_only:
+                    _render_entry_card(opus_by_id[entry_id])
+        with col_kimi:
+            if kimi_only:
+                st.caption("Relevé uniquement par Kimi")
+                for entry_id in kimi_only:
+                    _render_entry_card(kimi_by_id[entry_id])
+
+    st.divider()
+    _render_divergence_table(divergence.get("divergent_obligations") or [])
+    _render_cost_footer(result)
+
+
+# ========== compliance panel: orchestration ==========
+
+def _run_and_cache(cache_key: tuple, spinner_msg: str, runner) -> None:
+    """Execute one analysis, storing the result under cache_key.
+
+    Errors are surfaced to the user and the traceback printed to the server
+    log, matching _render_turn's soft-fail idiom — a failed analysis must not
+    take down the panel.
+    """
+    with st.spinner(spinner_msg):
+        try:
+            st.session_state.compare_result_cache[cache_key] = runner()
+        except Exception:  # noqa: BLE001 — user-facing fallback
+            traceback.print_exc()
+            st.error(
+                "L'analyse a échoué. Vérifiez la connexion au fournisseur de "
+                "modèles et réessayez. Détails techniques dans les logs du serveur."
+            )
+
+
+def _render_analysis_panel() -> None:
+    st.subheader("Analyse de conformité par rôle")
+    st.caption(
+        "Évalue les obligations légales d'un rôle d'acteur du dossier à partir "
+        "des faits extraits et des articles de loi correspondants."
+    )
+
+    cases = _list_cases_with_matrix()
+    if not cases:
+        st.info(
+            "Aucun dossier analysé pour l'instant. Générez d'abord une matrice "
+            "de conformité : `python -m rag.compliance --case-id <dossier>`."
+        )
+        return
+
+    col_case, col_role = st.columns([1, 2])
+    with col_case:
+        case_id = st.selectbox("Dossier", cases, key="compare_case_id")
+
+    roles = _role_options(case_id)
+    if not roles:
+        with col_role:
+            st.selectbox("Rôle", ["—"], disabled=True, key="compare_role_empty")
+        st.info("Aucun rôle analysable pour ce dossier.")
+        return
+
+    counts = dict(roles)
+    with col_role:
+        role_id = st.selectbox(
+            "Rôle",
+            [r for r, _ in roles],
+            format_func=lambda r: f"{r} — {counts[r]} obligation(s)",
+            key="compare_selected_role",
+        )
+
+    st.divider()
+
+    # --- Primary path: one model, one charge (ADR #57) ---
+    model_labels = list(COMPLIANCE_MODEL_LABELS.values())
+    label_to_id = {v: k for k, v in COMPLIANCE_MODEL_LABELS.items()}
+    chosen_label = st.segmented_control(
+        "Modèle",
+        options=model_labels,
+        default=COMPLIANCE_MODEL_LABELS[DEFAULT_COMPLIANCE_MODEL],
+        key="compare_model_selector",
+    )
+    model_id = label_to_id.get(chosen_label or "", DEFAULT_COMPLIANCE_MODEL)
+    st.session_state.compare_model = model_id
+
+    col_run, col_cost = st.columns([1, 3], vertical_alignment="center")
+    with col_run:
+        launch = st.button("Lancer l'analyse", type="primary", width="stretch")
+    with col_cost:
+        preview = COST_PREVIEW_USD.get(model_id, COST_PREVIEW_FALLBACK_USD)
+        st.caption(
+            f"≈ {_fmt_usd(preview)} — seul le modèle sélectionné est interrogé. "
+            "Le coût varie avec le nombre de faits du rôle."
+        )
+
+    single_key = (case_id, role_id, "single", model_id)
+    if launch:
+        compliance = get_compliance()
+        _run_and_cache(
+            single_key,
+            f"Analyse en cours ({COMPLIANCE_MODEL_LABELS[model_id]})…",
+            lambda: compliance.run_compliance_for_role(
+                case_id, role_id, compliance_model_id=model_id
+            ),
+        )
+
+    single_result = st.session_state.compare_result_cache.get(single_key)
+    if single_result:
+        st.divider()
+        _render_single_result(single_result)
+
+    # --- Opt-in path: both models + meta-analysis (ADR #56) ---
+    st.divider()
+    with st.expander(f"Comparer les deux modèles — ≈ {_fmt_usd(COST_COMPARE_USD)}"):
+        st.caption(
+            "Interroge Opus 4.7 **et** Kimi K3 sur les mêmes faits, puis fait "
+            "analyser leurs accords et divergences par Haiku 4.5. Utile quand un "
+            "verdict doit être défendu : deux modèles d'accord sont plus solides, "
+            "et un désaccord signale le point juridique à creuser."
+        )
+        compare_clicked = st.button(
+            "Lancer l'analyse comparative", key="compare_launch", width="stretch"
+        )
+
+        compare_key = (case_id, role_id, "compare", None)
+        if compare_clicked:
+            compliance = get_compliance()
+            _run_and_cache(
+                compare_key,
+                "Analyse en cours (Opus + Kimi + méta-analyse Haiku)…",
+                lambda: compliance.compare_compliance_for_role(case_id, role_id),
+            )
+
+        compare_result = st.session_state.compare_result_cache.get(compare_key)
+        if compare_result:
+            st.divider()
+            _render_comparative_result(compare_result)
+
+
 # ========== session state initialisation ==========
 
 def _init_session_state() -> None:
@@ -286,6 +669,12 @@ def _init_session_state() -> None:
     lang: 'fr' | 'en'
     models_warm: bool
     answer_model: str — ANSWER_MODELS catalog key (ADR #46)
+    compare_model: str — selected compliance model id (ADR #57)
+    compare_result_cache: dict — analysis results keyed by
+        (case_id, role_id, mode, model_id), mode in {'single', 'compare'}.
+        The model id is part of the key on purpose: without it, toggling
+        Opus -> Kimi would redisplay the Opus result under Kimi's name.
+        compare_case_id / compare_selected_role are owned by their widgets.
     """
     if "conversations" not in st.session_state:
         # Idempotent — no-op after first session if Postgres already has
@@ -299,6 +688,8 @@ def _init_session_state() -> None:
     if "models_warm" not in st.session_state:
         st.session_state.models_warm = False
     st.session_state.setdefault("answer_model", "gpt-4o-mini")
+    st.session_state.setdefault("compare_model", DEFAULT_COMPLIANCE_MODEL)
+    st.session_state.setdefault("compare_result_cache", {})
 
 
 # ========== env validation (startup fail-loud) ==========
@@ -643,11 +1034,34 @@ def main() -> None:
     st.title(labels["title"])
     st.caption(labels["subtitle"])
 
-    user_input = st.chat_input(labels["ask_placeholder"])
-    if user_input and user_input.strip():
-        _handle_chat_input(user_input.strip())
+    # on_change="rerun" makes .open readable server-side. That buys two
+    # things: the panel's file I/O is skipped during chat turns, and the
+    # chat input can stay in the page body (below), where Streamlit pins it
+    # to the viewport bottom — nested inside a tab it would render inline.
+    tab_chat, tab_analysis = st.tabs(
+        [TAB_CHAT, TAB_ANALYSIS], on_change="rerun", key="main_tab",
+    )
 
-    # Resolve the active conversation for rendering.
+    with tab_chat:
+        _render_chat(labels)
+
+    with tab_analysis:
+        if tab_analysis.open:
+            _render_analysis_panel()
+
+    if tab_chat.open:
+        user_input = st.chat_input(labels["ask_placeholder"])
+        if user_input and user_input.strip():
+            _handle_chat_input(user_input.strip())
+            st.rerun()
+
+
+def _render_chat(labels: dict) -> None:
+    """The conversation view: welcome state, or every turn of the active thread.
+
+    The chat input itself lives in main()'s page body, not here — see the
+    tab wiring above.
+    """
     active_id = st.session_state.active_conversation_id
     conv = st.session_state.conversations.get(active_id) if active_id else None
 
