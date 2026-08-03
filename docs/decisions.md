@@ -2733,3 +2733,151 @@ follows), ADR #53 (compliance verify-conclude, persons plumbing reused
 by `_persons_context_for_role`, and the shared `compliance_cache.jsonl`
 this ADR deliberately does not touch), ADR #55 (most recent D-work on
 this branch).
+---
+
+## ADR #57 — Streamlit compliance analysis panel with single-model toggle (D8)
+
+**Date:** 2026-08-03 · **Branch:** v2-persons (D8) · **Status:** Accepted
+
+### Context
+
+ADR #56 (D7) shipped `compare_compliance_for_role`, reachable only from the
+CLI. Compliance verdicts therefore live as JSON on disk, which makes them
+inert for the person the project exists to serve: a non-lawyer heir cannot
+read `compliance_matrix.json`. D8 is the first user-facing surface over any
+compliance output.
+
+The comparative view ADR #56 built is a trust-calibration surface — when two
+frontier models agree, a verdict is more defensible; when they diverge, the
+divergence itself is the diagnostic signal, pointing at the statute reading
+or the fact that decides the question. That argues for exposing it.
+
+But ADR #56's function fans out to both frontier models *and* a Haiku
+meta-analysis on every invocation (~$0.60), by design, with no way to run a
+single model. Routine per-role review should not pay the comparative
+premium, and a user asked to "choose which model answers" reasonably expects
+that choosing one means only one runs. There was no public single-model
+per-role entry point: `generate_compliance_matrix` is whole-case and
+Opus-only, and `_call_compliance_llm`'s `compliance_model_id` parameter
+(ADR #56) is private.
+
+Two further constraints came from the app as it actually stood. It had no
+tab bar at all — `app/streamlit_app.py` was a single-page chat, so D8 had to
+introduce tabs rather than add one. And `st.chat_input` pins to the viewport
+bottom only in the page body; nested inside a tab it renders inline, which
+would have silently regressed the shipped chat UX (ADRs #30, #46).
+
+### Decision
+
+**Backend (`rag/compliance.py`).** New public
+`run_compliance_for_role(case_id, role_id, compliance_model_id=COMPLIANCE_MODEL_ID,
+dry_run=False)`: ADR #56's prelude and prompt, one model, no divergence
+pass. Output written atomically to
+`data/dossier/{case_id}/compliance_single_{role_id}_{model_slug}.json`.
+
+The two per-role entry points now share `_prepare_role_inputs`, a
+behaviour-preserving extraction returning a `_RoleInputs` NamedTuple (case
+artifacts, role cluster, role label, filtered persons/entities, retrieved
+chunks, fact fingerprints, chunk ids, persons hash). They must assemble
+inputs identically or their cache hashes stop being comparable and, worse,
+the single and comparative paths would send different prompts to the same
+model for the same role. `_persons_hash` and `_fact_fingerprint` moved into
+that shared section with them.
+
+Cache isolation is the load-bearing detail, and it is two independent
+guards. First, `_single_inputs_hash` mirrors `_comparative_inputs_hash` but
+folds in the one `compliance_model_id` actually called instead of
+`sorted(COMPLIANCE_MODEL_ALTERNATIVES)` + `DIVERGENCE_MODEL_ID`, so toggling
+Opus↔Kimi on an otherwise unchanged role is a cache **miss**. Second, the
+call passes `cache=None` for the same reason ADR #56 does: the shared
+`compliance_cache.jsonl` key has no model dimension (ADR #53), so reusing it
+would let a Kimi run return `generate_compliance_matrix`'s cached Opus
+entries. Either guard failing would display one model's verdicts under the
+other model's name — the precise failure a model toggle must never have.
+`test_run_compliance_for_role_cache_is_per_model` pins both.
+
+CLI gains `--model-id`; `--role-id` without `--compare` is now a
+single-model run.
+
+**UI (`app/streamlit_app.py`).** Two tabs, "💬 Assistant" and
+"🔬 Analyse comparative", created with `on_change="rerun"` and a key so
+`.open` is readable server-side. That single choice buys both open
+questions: the panel's file I/O is skipped during chat turns, and
+`st.chat_input` stays in the page body guarded by `if tab_chat.open`, where
+Streamlit still pins it to the viewport bottom. `main()`'s conversation loop
+moved to `_render_chat`; the chat is otherwise untouched and the app still
+opens on it.
+
+The panel's primary control is a `st.segmented_control` model toggle
+(🧠 Claude Opus 4.7 / 🔬 Kimi K3, keys matching
+`COMPLIANCE_MODEL_ALTERNATIVES`) plus a "Lancer l'analyse" button: exactly
+the selected model is called. ADR #56's dual run stays reachable behind a
+separate `st.expander` labelled with its own price, so nothing fires both
+models without a deliberate second action. Results are
+memoised in `st.session_state.compare_result_cache` keyed by
+`(case_id, role_id, mode, model_id)` — the model id belongs in the key for
+the same reason it belongs in the inputs hash.
+
+Side-by-side rows align by `entry_id` via ADR #56's precomputed
+`coverage_diff`, not by obligation-summary similarity: `entry_id` is a
+content-independent hash of `statute_chunk_id + actor_role`, it is the same
+pairing the Haiku meta-analysis used, and a separate string-similarity
+pairing in the view could contradict the callout rendered directly above it.
+Model-exclusive obligations append to the foot of their own column.
+Divergences render as a `st.dataframe` (Obligation, Verdict Opus, Verdict
+Kimi, Crux, Modèle plus fort, Raison).
+
+Costs are labelled `$US`, not `€`: OpenRouter bills in dollars and every
+`usage.cost_usd` the backend returns is dollars. The cost footer sums the
+returned usage rather than echoing the preview constants, so the figure
+shown is what was billed; a cache hit reads 0,00 $US.
+
+Previews are per model, not one flat constant. Calibrated from `--dry-run`
+against the private case, Opus ran $0.46–$0.59 per role and Kimi $0.12 on
+the same cluster — the ~5x spread is just the published rate difference
+($15/$75 vs $3/$15 per M), so a single shared constant would misprice
+whichever model the user did not select. The panel shows
+`COST_PREVIEW_USD[model_id]` (≈0,55 / ≈0,12 $US) with the caveat that cost
+scales with the role's fact count, and ≈0,70 $US for the comparative run.
+
+### Consequences
+
+- No new dependencies (`st.tabs`, `st.columns`, `st.expander`,
+  `st.dataframe`, pandas — all already present).
+- Selecting Kimi costs ≈$0.12 per role against ≈$0.55 for Opus and ≈$0.70
+  for the comparative run, so the toggle is a real ~5x lever and not just a
+  labelling choice; the comparative premium is paid only on explicit
+  opt-in, and a repeat click is $0.
+- Widens D8 past its originally scoped `app/`-only footprint into
+  `rag/compliance.py`. Additive apart from the `_prepare_role_inputs`
+  extraction, which is covered by the existing ADR #56 compare tests.
+- `ComplianceEntry.persons_named` renders nothing today.
+  `_persons_context_for_role` filters on `Fact.mentioned_person_ids`, which
+  D2 (ADR #54) extracted but never wrote back onto facts, so the field is
+  `[]` on every entry and the panel's "Personnes impliquées" block is
+  rendered conditionally rather than showing a permanently empty section.
+  The ADR #53 plumbing remains inert.
+- `data/dossier/demo/` is an empty fixture (0 facts, 0 entries), so the case
+  selector orders cases with entries first and explains empty ones rather
+  than opening on a dead panel.
+- Streamlit's `AppTest` models `st.tabs` as a `Block`, not a widget, so tab
+  state does not survive a simulated rerun and the panel cannot be reached
+  through the tab in automated tests. Render and wiring coverage therefore
+  comes from driving the panel functions directly; the tab itself is manual
+  smoke. This is an AppTest limitation, not an app behaviour.
+- Rubric evidence for the interface and LLM-evaluation criteria.
+
+### Follow-ups
+
+- (a) batch-compare across roles with a cost cap, reusing
+  `_check_real_run_cost_gate`'s pro-rated pattern (deferred from ADR #56).
+- (b) export an analysis as PDF (bundle with D10).
+- (c) a third tie-breaker model when Opus and Kimi diverge.
+- (d) backfill `Fact.mentioned_person_ids` so `persons_named` activates.
+- (e) correct the sidebar `COST_HINTS`, which label USD figures with `€`.
+
+Related: ADR #56 (extended, not superseded — its comparative path is
+unchanged and still reachable), ADR #53 (persons plumbing; the shared-cache
+model-dimension hazard this ADR guards against twice), ADR #46 (the sidebar
+answer-model toggle whose pattern the panel's model toggle mirrors), ADR #43
+(the compliance prompt both paths send).
