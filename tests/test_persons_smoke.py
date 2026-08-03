@@ -21,7 +21,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ingestion.dossier import distill, mentions
+from ingestion.dossier import distill, mentions, resolve
 
 
 def _fake_chat_response(content: str):
@@ -364,3 +364,301 @@ def test_mentions_handles_missing_extracted_doc(mentions_case_dir, monkeypatch, 
     assert exc_info.value.code != 0
     err = capsys.readouterr().err
     assert "nonexistent" in err
+
+
+# === D3 resolve.py tests ===
+
+_RESOLVE_ROLE_META = {
+    "role_id": "notaire_redacteur",
+    "label_fr": "Notaire rédacteur",
+    "grounding_note": "Notaire ayant reçu l'acte.",
+    "first_seen_doc_id": "doc",
+    "fact_count": 1,
+    "confidence": "high",
+}
+
+_RESOLVE_FACT = {
+    "fact_id": "doc-f001",
+    "date": "2024-03-08",
+    "actor_role": "notaire_redacteur",
+    "action": "recevoir une convention de quasi-usufruit",
+    "target": "parts de SCPI",
+    "verbatim_quote": "Trois petits-enfants sont titulaires d'une creance.",
+    "source_doc_id": "doc",
+    "source_chunk_id": "dossier-acme-doc-c001",
+    "distilled_context": "Maitre MENA recoit la convention le 8 mars 2024.",
+}
+
+
+def _write_jsonl(path, records) -> None:
+    path.write_text(
+        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records), encoding="utf-8"
+    )
+
+
+def _persons_response(canonical_name, evidence_fact_ids=("doc-f001",), aliases=("MENA",)) -> str:
+    return json.dumps([{
+        "canonical_name": canonical_name,
+        "aliases": list(aliases),
+        "person_type": "natural_person",
+        "confidence": "high",
+        "ambiguity_note": None,
+        "evidence_fact_ids": list(evidence_fact_ids),
+    }])
+
+
+@pytest.fixture
+def resolve_case_dir(tmp_path, monkeypatch):
+    """Redirect resolve.DOSSIER_DIR to an isolated tmp dir with one case:
+    1 role (fact_count=1), 1 matching fact, no ambiguities."""
+    monkeypatch.setattr(resolve, "DOSSIER_DIR", tmp_path)
+    case_dir = tmp_path / "acme"
+    case_dir.mkdir(parents=True)
+    _write_jsonl(case_dir / "actor_roles.jsonl", [_RESOLVE_ROLE_META])
+    _write_jsonl(case_dir / "facts.jsonl", [_RESOLVE_FACT])
+    _write_jsonl(case_dir / "role_ambiguities.jsonl", [])
+    return case_dir
+
+
+def test_resolve_role_produces_expected_persons_shape(resolve_case_dir) -> None:
+    """Mocked Haiku returns one person; resolve_role's shape and cache file match spec."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(
+        _persons_response("Maître X")
+    )
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        result = resolve.resolve_role(
+            "acme", "notaire_redacteur", _RESOLVE_ROLE_META, [_RESOLVE_FACT]
+        )
+
+    assert result["from_cache"] is False
+    assert len(result["persons"]) == 1
+    person = result["persons"][0]
+    assert person["canonical_name"] == "Maître X"
+    assert person["person_type"] == "natural_person"
+    assert person["confidence"] == "high"
+    assert person["evidence_fact_ids"] == ["doc-f001"]
+
+    cache_path = resolve_case_dir / "_persons_cache" / "notaire_redacteur.json"
+    assert cache_path.exists()
+    entry = json.loads(cache_path.read_text(encoding="utf-8"))
+    assert entry["schema_version"] == 1
+    assert entry["model"] == "anthropic/claude-haiku-4.5"
+    assert "source_hash" in entry and "generated_at" in entry
+    assert len(entry["persons"]) == 1
+
+
+def test_resolve_case_merges_persons_across_roles(tmp_path, monkeypatch) -> None:
+    """Two roles both resolving to the same canonical person merge into one
+    persons.jsonl record with two role_assignments."""
+    monkeypatch.setattr(resolve, "DOSSIER_DIR", tmp_path)
+    case_dir = tmp_path / "acme"
+    case_dir.mkdir(parents=True)
+
+    role_a = {**_RESOLVE_ROLE_META, "role_id": "role_a"}
+    role_b = {**_RESOLVE_ROLE_META, "role_id": "role_b"}
+    fact_a = {**_RESOLVE_FACT, "fact_id": "doc-fA", "actor_role": "role_a"}
+    fact_b = {**_RESOLVE_FACT, "fact_id": "doc-fB", "actor_role": "role_b"}
+
+    _write_jsonl(case_dir / "actor_roles.jsonl", [role_a, role_b])
+    _write_jsonl(case_dir / "facts.jsonl", [fact_a, fact_b])
+    _write_jsonl(case_dir / "role_ambiguities.jsonl", [])
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [
+        _fake_chat_response(
+            _persons_response("Maître Eve-Marie MENA", evidence_fact_ids=["doc-fA"])
+        ),
+        _fake_chat_response(
+            _persons_response("MAÎTRE EVE-MARIE MENA", evidence_fact_ids=["doc-fB"])
+        ),
+    ]
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        resolve.resolve_case("acme")
+
+    persons_path = case_dir / "persons.jsonl"
+    persons = [
+        json.loads(l) for l in persons_path.read_text(encoding="utf-8").splitlines() if l.strip()
+    ]
+
+    assert len(persons) == 1
+    assert len(persons[0]["role_assignments"]) == 2
+    role_ids = {ra["role_id"] for ra in persons[0]["role_assignments"]}
+    assert role_ids == {"role_a", "role_b"}
+
+
+def test_resolve_case_deterministic_person_ids(resolve_case_dir) -> None:
+    """The same canonical person, differing only in casing/whitespace/accents
+    across separate runs, resolves to the same person_id."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(
+        _persons_response("Maître Eve-Marie MENA")
+    )
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        resolve.resolve_case("acme", force=True)
+    persons_path = resolve_case_dir / "persons.jsonl"
+    first = json.loads(persons_path.read_text(encoding="utf-8").splitlines()[0])
+
+    mock_client2 = MagicMock()
+    mock_client2.chat.completions.create.return_value = _fake_chat_response(
+        _persons_response("  MAITRE   ÉVE-MARIE MENA  ")
+    )
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client2):
+        resolve.resolve_case("acme", force=True)
+    second = json.loads(persons_path.read_text(encoding="utf-8").splitlines()[0])
+
+    assert first["person_id"] == second["person_id"]
+
+
+def test_resolve_excludes_facts_flagged_in_role_ambiguities(tmp_path) -> None:
+    """A fact whose fact_id is flagged in role_ambiguities.jsonl is excluded
+    from its role's grouped facts."""
+    case_dir = tmp_path / "acme"
+    case_dir.mkdir(parents=True)
+
+    fact_ok = {**_RESOLVE_FACT, "fact_id": "doc-f001"}
+    fact_flagged = {**_RESOLVE_FACT, "fact_id": "doc-f002"}
+    facts_path = case_dir / "facts.jsonl"
+    _write_jsonl(facts_path, [fact_ok, fact_flagged])
+
+    ambiguity = {
+        "ambiguity_id": "doc-a001",
+        "source_doc_id": "doc",
+        "verbatim_quote": "...",
+        "candidate_role_ids": ["notaire_redacteur", "notaire_collaborateur"],
+        "note": "ambiguous",
+        "fact_ids": ["doc-f002"],
+    }
+    ambiguities_path = case_dir / "role_ambiguities.jsonl"
+    _write_jsonl(ambiguities_path, [ambiguity])
+
+    grouped = resolve._group_facts_by_role(facts_path, ambiguities_path)
+
+    assert [f["fact_id"] for f in grouped["notaire_redacteur"]] == ["doc-f001"]
+
+
+def test_resolve_case_idempotent_on_rerun(resolve_case_dir) -> None:
+    """Second run on unchanged input is all cache hits; persons.jsonl is byte-identical."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(
+        _persons_response("Maître X")
+    )
+    persons_path = resolve_case_dir / "persons.jsonl"
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        resolve.resolve_case("acme")
+        bytes_after_first = persons_path.read_bytes()
+
+        summary2 = resolve.resolve_case("acme")
+        bytes_after_second = persons_path.read_bytes()
+
+    assert summary2["cache_hits"] == summary2["total_roles_processed"] == 1
+    assert mock_client.chat.completions.create.call_count == 1  # never called on the rerun
+    assert bytes_after_first == bytes_after_second
+
+
+def test_resolve_case_dry_run_makes_no_api_call(resolve_case_dir) -> None:
+    """dry_run=True never calls the LLM, returns a cost estimate, and writes no persons.jsonl."""
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(
+        _persons_response("Maître X")
+    )
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        summary = resolve.resolve_case("acme", dry_run=True)
+
+    mock_client.chat.completions.create.assert_not_called()
+    assert summary["total_cost"] > 0.0
+    assert not (resolve_case_dir / "persons.jsonl").exists()
+
+
+def test_resolve_merges_honorific_variants(tmp_path, monkeypatch) -> None:
+    """Two roles resolving to honorific-differing forms of the same person
+    merge into one persons.jsonl record with both role_assignments, and the
+    longer (honorific-bearing) form wins as canonical_name."""
+    monkeypatch.setattr(resolve, "DOSSIER_DIR", tmp_path)
+    case_dir = tmp_path / "acme"
+    case_dir.mkdir(parents=True)
+
+    role_a = {**_RESOLVE_ROLE_META, "role_id": "role_a"}
+    role_b = {**_RESOLVE_ROLE_META, "role_id": "role_b"}
+    fact_a = {**_RESOLVE_FACT, "fact_id": "doc-fA", "actor_role": "role_a"}
+    fact_b = {**_RESOLVE_FACT, "fact_id": "doc-fB", "actor_role": "role_b"}
+
+    _write_jsonl(case_dir / "actor_roles.jsonl", [role_a, role_b])
+    _write_jsonl(case_dir / "facts.jsonl", [fact_a, fact_b])
+    _write_jsonl(case_dir / "role_ambiguities.jsonl", [])
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = [
+        _fake_chat_response(
+            _persons_response("Eve-Marie MENA", evidence_fact_ids=["doc-fA"])
+        ),
+        _fake_chat_response(
+            _persons_response("Maître Eve-Marie MENA", evidence_fact_ids=["doc-fB"])
+        ),
+    ]
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        resolve.resolve_case("acme")
+
+    persons_path = case_dir / "persons.jsonl"
+    persons = [
+        json.loads(l) for l in persons_path.read_text(encoding="utf-8").splitlines() if l.strip()
+    ]
+
+    assert len(persons) == 1
+    assert persons[0]["canonical_name"] == "Maître Eve-Marie MENA"
+    role_ids = {ra["role_id"] for ra in persons[0]["role_assignments"]}
+    assert role_ids == {"role_a", "role_b"}
+
+
+def test_resolve_drops_bare_surname_placeholder(resolve_case_dir, caplog) -> None:
+    """A bare "Monsieur SURNAME" candidate is dropped from resolve_role's
+    output when a fully-named same-surname candidate is present in the
+    same role's Haiku response; a warning names the dropped record."""
+    two_persons_json = json.dumps([
+        {
+            "canonical_name": "Eric BOSSAVIT", "aliases": ["BOSSAVIT"],
+            "person_type": "natural_person", "confidence": "high",
+            "ambiguity_note": None, "evidence_fact_ids": ["doc-f001"],
+        },
+        {
+            "canonical_name": "Monsieur BOSSAVIT", "aliases": [],
+            "person_type": "natural_person", "confidence": "medium",
+            "ambiguity_note": None, "evidence_fact_ids": ["doc-f001"],
+        },
+    ])
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = _fake_chat_response(two_persons_json)
+
+    with patch("ingestion.dossier.resolve.get_openrouter_client", return_value=mock_client):
+        with caplog.at_level("WARNING"):
+            result = resolve.resolve_role(
+                "acme", "notaire_redacteur", _RESOLVE_ROLE_META, [_RESOLVE_FACT]
+            )
+
+    names = [p["canonical_name"] for p in result["persons"]]
+    assert names == ["Eric BOSSAVIT"]
+    assert "Monsieur BOSSAVIT" in caplog.text
+    assert "notaire_redacteur" in caplog.text
+
+
+def test_person_merge_key_deterministic() -> None:
+    """_person_merge_key folds accents/case/whitespace and strips a leading
+    honorific so all surface variants of the same formal name collapse to
+    one key, while distinct people remain distinct."""
+    variants = [
+        "Maître Eve-Marie MENA",
+        "Eve-Marie MENA",
+        "eve-marie mena",
+        "  Maître   Eve-Marie MENA ",
+    ]
+    keys = {resolve._person_merge_key(v) for v in variants}
+    assert len(keys) == 1
+
+    assert resolve._person_merge_key("Bruno PAVY") != resolve._person_merge_key(
+        "Maître Eve-Marie MENA"
+    )

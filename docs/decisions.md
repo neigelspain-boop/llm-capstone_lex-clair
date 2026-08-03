@@ -2454,3 +2454,144 @@ References: ADR #52 (D5, distillation — cache-file and atomic-write
 precedent), ADR #53 (D6, compliance verify-conclude — the inert plumbing D2
 is the first step toward activating), `plan_attempt2_full.md` (local, not
 committed) D2 section.
+
+## ADR #55 — Role-scoped person resolution direct from distilled_context (D3)
+
+**Date:** 2026-08-02 · **Branch:** v2-persons (D3) · **Status:** Accepted
+
+### Context
+
+ADR #54's Follow-ups stated D3 `resolve.py` would perform "deterministic
+clustering of `_mentions/*.json` entries into canonical `persons.jsonl`
+entities" — i.e. consume D2's per-doc raw mention lists. This ADR
+supersedes that specific assumption (ADR #54's Follow-ups), while leaving
+`mentions.py` itself unchanged, shipped, and dormant as code — D2 is not
+superseded, only the plan for what feeds D3.
+
+The private case's `facts.jsonl` (235 facts) already carries `actor_role`
+(Attempt 1's D0 extractor) **and** `distilled_context` (D5, ADR #52) on
+every fact — a spot-check found zero null `distilled_context` values, and
+distillation quality preserves full names, dates, article citations, and
+dossier numbers (the whole point of ADR #52's ceremony-stripping design).
+Given that, routing D3 through `_mentions/*.json` would require a resolver
+to cross-reference D2's raw per-doc entity list back against the same
+`distilled_context` to figure out which role each entity plays — the
+signal `mentions.py` would add over `distilled_context` + `actor_role`
+directly is effectively zero for a case with good distillation coverage.
+`actor_roles.jsonl` (60 roles, `role_ambiguities.jsonl` 22 ambiguities)
+already provide the role taxonomy and the flagged-uncertain assignments
+D3 needs to scope and clean its input.
+
+D6's `persons_named` field (ADR #53) and the "Personnes impliquées" prompt
+block remain inert until `data/dossier/{case_id}/persons.jsonl` exists.
+D3 is the step that produces it.
+
+### Decision
+
+New `ingestion/dossier/resolve.py`, structurally closer to `mentions.py`
+than to `distill.py` (JSON output, content-hash cache with
+`schema_version`, defensive parsing) but reads only `facts.jsonl`,
+`actor_roles.jsonl`, and `role_ambiguities.jsonl` — never `_mentions/*.json`.
+
+For each `actor_role` with `fact_count > 0`: facts whose `fact_id` appears
+in any `role_ambiguities.jsonl` entry's `fact_ids` are excluded (ambiguous
+facts don't contribute reliable signal to who plays a role), the remainder
+sorted by date and capped at `MAX_FACTS_PER_ROLE = 20`. `anthropic/claude-haiku-4.5`
+(temperature 0.0, matching D2/D5's model choice) receives the role's
+`label_fr` + `grounding_note` plus each fact as
+`"fact_id: ... | date: ... | distilled: {distilled_context or verbatim_quote}"`,
+and returns a strict JSON array of canonical persons: `canonical_name`,
+`aliases`, `person_type`, `confidence`, `ambiguity_note`,
+`evidence_fact_ids`. Per-role results are cached at
+`data/dossier/{case_id}/_persons_cache/{role_id}.json`, keyed by a
+content-hash over the role_id and its fact context — mirrors `mentions.py`'s
+cache-file shape.
+
+A post-process step merges per-role persons into case-scoped identities:
+grouped by accent/case/whitespace-normalized `canonical_name` (exact match
+on the normalized key — no fuzzy alias cross-matching, a known limitation
+noted below), with the longer observed `canonical_name` winning as
+canonical on a collision, aliases unioned, and one `role_assignments` entry
+per role the person appears in. Person-level `confidence` is the max across
+`role_assignments`; `ambiguity_note` is the first non-null one.
+`person_id = f"{case_id}-{slugify(canonical_name)}"` (accent-stripped,
+lowercased, hyphen-joined — same normalization family as
+`extract.py::_slugify_segment`, so the ID is stable regardless of which
+role-call happened to produce the winning canonical form). Output
+`data/dossier/{case_id}/persons.jsonl`, one JSON object per line sorted by
+`person_id`, atomic `.tmp` → `os.replace` write — matches exactly what the
+already-written `scripts/enrich_compliance_with_persons.py` post-processor
+expects (`person_id`, `canonical_name`, `role_assignments[].role_id`,
+`confidence`, `ambiguity_note` are the fields it actually reads;
+`aliases`/`person_type`/`evidence_fact_ids` are extra, for future
+consumers).
+
+Dormant by default, same as D2: not wired into `build.py`, invoked via its
+own CLI (`python -m ingestion.dossier.resolve --case-id <id> [--role-id
+<one>] [--force] [--dry-run] [--verbose]`).
+
+### Consequences
+
+- Verified against the real private-case data: of 60 roles, 14 have
+  `fact_count == 0` (skipped) and, after ambiguity exclusion, one more
+  (`notaire_collaboratrice`) drops to zero facts and is also skipped — so
+  the real backfill makes roughly 45 Haiku 4.5 calls, not 46. Two roles
+  (`heritier_nu_proprietaire`: 25 facts, `notaire_redacteur`: 37 facts)
+  exceed `MAX_FACTS_PER_ROLE` and are truncated to their 20 most recent
+  dated facts — the cap is load-bearing on this case, not decorative.
+- D6's `persons_named` plumbing (ADR #53) and
+  `enrich_compliance_with_persons.py`'s post-process path both activate
+  automatically once `persons.jsonl` exists — no changes needed to either.
+- Known limitation: cross-role merge matches on exact
+  accent/case-normalized `canonical_name` only. Two roles where Haiku
+  extracts genuinely different surface forms for the same real person
+  (e.g. "Maître MENA" in one role's output vs. "l'étude PAVY-MENA" in
+  another, with no shared normalized string) will **not** merge into one
+  person — they surface as two separate `persons.jsonl` records instead.
+  This is a direct consequence of skipping the `mentions.py` stage's raw
+  alias inventory; accepted as a reasonable trade-off for this session's
+  scope, and re-evaluated below.
+- `mentions.py` remains shipped, dormant infrastructure — unchanged by
+  this ADR — for future cases where distillation is unavailable or of
+  lower quality; in that scenario D3's direct-from-`distilled_context`
+  shortcut doesn't apply and the original `mentions.py` → resolver path
+  becomes the primary one.
+- Fact schema untouched — `facts.jsonl`, `actor_roles.jsonl`, and
+  `role_ambiguities.jsonl` are read-only inputs to this module, preserving
+  the salvage constraint from ADR #52.
+
+### Follow-ups
+
+- Global entity store (`data/dossier/entities/persons.jsonl`) for
+  cross-case identity — deferred, per ADR #50/#51's original scope.
+- Resolver-quality eval (LLM-as-judge over a sample of role assignments,
+  and/or a fuzzy-alias merge pass to close the cross-role gap noted above)
+  — deferred to Attempt 3.
+- If a future case lacks D5 distillation coverage, `mentions.py` + a
+  distinct `_mentions/*.json`-consuming resolver (the originally planned
+  D3 shape) becomes the primary path instead of this direct-extraction
+  shortcut.
+- (d) honorific-stripping and bare-surname-drop shipped as hotfix;
+  resolve.py's `_person_merge_key` normalizes French legal honorifics
+  before cross-role merge, tightens `SYSTEM_PROMPT` against duplicate
+  records, and drops bare-surname placeholders when a fully-named
+  same-surname candidate exists in the same role.
+- (e) Known residual duplicate this hotfix does not catch (a
+  missing-middle-name variant, not honorific-only): "M. BOSSAVIT JEAN
+  MARIE" (role `titulaire_contrat`) vs "Monsieur Jean Marie Robert
+  BOSSAVIT" (roles `defunt`, `defunt_quasi_usufruitier`,
+  `personne_decedee`, `quasi_usufruitier`) — missing "Robert". Left for
+  the fuzzy-alias merge pass already noted above (Attempt 3). A second
+  word-order duplicate flagged during planning ("Monsieur BOSSAVIT
+  François" vs "François Bossavit") merged successfully in the actual
+  private-case backfill run — Haiku's own extraction happened to use
+  firstname-first order this time, likely encouraged by this hotfix's
+  new canonical_name-ordering instruction above — but that's LLM output
+  variance, not something this fix structurally guarantees, so a
+  surname-first extraction could still slip through on a future rerun.
+
+References: ADR #52 (D5, distillation — the `distilled_context` field this
+module reads), ADR #53 (D6, compliance verify-conclude — the
+`persons_named` plumbing this module activates), ADR #54 (D2, mention
+extraction — the stage this ADR's Decision supersedes as D3's input
+source, while leaving `mentions.py` itself shipped and dormant).
