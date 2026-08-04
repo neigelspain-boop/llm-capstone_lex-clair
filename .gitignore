@@ -36,3 +36,6 @@ tmp-chroma-test/
 
 # Streamlit secrets (dossier passphrase, ADR #58) — never commit
 .streamlit/secrets.toml
+audit/
+deletion_audit.py
+profile.svg
