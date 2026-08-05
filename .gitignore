@@ -24,10 +24,15 @@ eval_run.pid
 eval_resume.log
 
 # v2 dossier work
-# Rule: private case fully ignored; demo case fully committed as fixture.
+# Rule: private case fully ignored; demo and vitrine cases fully committed.
+# vitrine is the anonymised public demo derived from private (ADR #59, #62)
+# and is the case the README's walkthrough commands use; it stayed untracked
+# until ADR #65, so every one of those commands failed on a fresh clone.
 data/dossier/private/
 !data/dossier/demo/
 !data/dossier/demo/**
+!data/dossier/vitrine/
+!data/dossier/vitrine/**
 
 # Backups
 *.bak
@@ -36,6 +41,7 @@ tmp-chroma-test/
 
 # Streamlit secrets (dossier passphrase, ADR #58) — never commit
 .streamlit/secrets.toml
+
+# Local audit harness output (scripts/local_audit/ itself is tracked) —
+# machine-local findings/cache, regenerated every run.
 audit/
-deletion_audit.py
-profile.svg

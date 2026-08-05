@@ -1,0 +1,974 @@
+{
+  "case_id": "vitrine",
+  "generated_at": "2026-07-30T16:25:43.772984Z",
+  "model_id": "anthropic/claude-opus-4.7",
+  "total_facts_considered": 235,
+  "total_entries": 77,
+  "entries": [
+    {
+      "entry_id": "92071ca1c91e",
+      "statute_chunk_id": "cc-730-1",
+      "statute_excerpt": "La preuve de la qualité d'héritier peut résulter d'un acte de notoriété dressé par un notaire, à la demande d'un ou plusieurs ayants droit. L'acte de notoriété doit viser l'acte de décès...",
+      "obligation_summary": "Le notaire qui dresse l'acte de notoriété doit y viser l'acte de décès, mentionner les pièces justificatives, recueillir l'affirmation signée des ayants droit et faire porter mention de l'acte en marge de l'acte de décès.",
+      "actor_role": "autre",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_attestation_devolutive_acte_n_ref_ref-f006"
+      ],
+      "rationale": "Les faits établissent que Michel MOREAU, notaire à Port-Louis, a dressé une notoriété après le décès de Paul MARTIN le 2 décembre 2022. Toutefois, aucun élément factuel ne renseigne sur le contenu de cet acte (visa de l'acte de décès, mention des pièces justificatives, affirmation signée des ayants droit, mention marginale sur l'acte de décès). Le respect des exigences formelles de l'article 730-1 ne peut donc être vérifié."
+    },
+    {
+      "entry_id": "56c79835ea96",
+      "statute_chunk_id": "ord45-2590-1",
+      "statute_excerpt": "Les notaires sont les officiers publics, établis pour recevoir tous les actes et contrats auxquels les parties doivent ou veulent faire donner le caractère d'authenticité attaché aux actes de l'autorité publique",
+      "obligation_summary": "Le notaire, en qualité d'officier public, doit recevoir les actes que les parties souhaitent revêtir du caractère authentique et en assurer la date, le dépôt et la délivrance.",
+      "actor_role": "autre",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_attestation_devolutive_acte_n_ref_ref-f006"
+      ],
+      "rationale": "Michel MOREAU est intervenu en qualité d'officier public en dressant l'acte de notoriété du 2 décembre 2022, exerçant ainsi la fonction authentique définie par l'ordonnance de 1945. Cette intervention est cohérente avec le rôle institutionnel du notaire, indépendamment de la vérification du contenu détaillé de l'acte."
+    },
+    {
+      "entry_id": "dba4b88c3c14",
+      "statute_chunk_id": "cc-758-4",
+      "statute_excerpt": "Le conjoint est réputé avoir opté pour l'usufruit s'il décède sans avoir pris parti.",
+      "obligation_summary": "Le conjoint survivant doit exercer son option successorale ; à défaut, s'il décède sans avoir pris parti, il est réputé avoir opté pour l'usufruit.",
+      "actor_role": "conjoint_survivant",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_declaration_x_mme_nomne_martin_ref-f006"
+      ],
+      "rationale": "Henri MARTIN, conjoint survivant de Jeanne MARTIN, est décédé le 9 janvier 2026 sans avoir pu opter dans la succession de son épouse. La présomption légale de l'article 758-4 du Code civil s'applique alors de plein droit : il est réputé avoir opté pour l'usufruit. La question de l'option successorale du conjoint est ainsi résolue automatiquement par l'effet de la loi, sans qu'aucun manquement ne puisse être imputé au conjoint survivant."
+    },
+    {
+      "entry_id": "216979fd5f46",
+      "statute_chunk_id": "cc-758-1",
+      "statute_excerpt": "Lorsque le conjoint a le choix de la propriété ou de l'usufruit, ses droits sont incessibles tant qu'il n'a pas exercé son option.",
+      "obligation_summary": "Le conjoint survivant ne peut céder ses droits successoraux tant qu'il n'a pas exercé son option entre propriété et usufruit.",
+      "actor_role": "conjoint_survivant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_declaration_x_mme_nomne_martin_ref-f006"
+      ],
+      "rationale": "Les faits établissent uniquement que Henri MARTIN est décédé avant d'avoir opté, sans indiquer qu'il aurait tenté de céder ses droits successoraux durant la période intercalaire. Aucun élément du dossier ne permet donc d'apprécier le respect ou le manquement à la règle d'incessibilité prévue par l'article 758-1."
+    },
+    {
+      "entry_id": "355248a05294",
+      "statute_chunk_id": "ord45-2590-5",
+      "statute_excerpt": "Il procède : a) A l'examen de toutes réclamations formulées à l'encontre d'un professionnel relevant de sa compétence dans les conditions prévues par décret en Conseil d'Etat",
+      "obligation_summary": "Le conseil régional doit procéder à l'examen des réclamations formulées à l'encontre d'un notaire relevant de son ressort.",
+      "actor_role": "conseil_regional_des_notaires",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_conseil_regional_des_notaires_de_la_cour_d_appel_de_beaumont_ii_confirmation_de_reception_de_saisine_77-f002",
+        "camille_martin_s_04_precontentieux_ref_conseil_regional_des_notaires_de_la_cour_d_appel_de_beaumont_ii_confirmation_de_reception_de_saisine_77-f003"
+      ],
+      "rationale": "Le conseil régional a formellement accusé réception de la réclamation formulée à l'encontre d'un notaire du ressort de la cour d'appel de Beaumont, engageant ainsi la procédure d'examen prévue par l'article. Il s'est en outre engagé à informer le réclamant des suites données à sa demande dans un bref délai, ce qui témoigne de la mise en œuvre du processus d'instruction. L'évaluation porte uniquement sur la phase procédurale initiale envers le réclamant (rôle croisé identifié), l'issue de l'examen n'étant pas documentée dans les faits fournis."
+    },
+    {
+      "entry_id": "fb2f6543e316",
+      "statute_chunk_id": "cgi-768",
+      "statute_excerpt": "les dettes à la charge du défunt sont déduites lorsque leur existence au jour de l'ouverture de la succession est dûment justifiée par tous modes de preuve compatibles avec la procédure écrite",
+      "obligation_summary": "Pour être portée au passif successoral déductible, toute dette du défunt doit voir son existence au jour de l'ouverture de la succession dûment justifiée.",
+      "actor_role": "debit_succesoral",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_acte_facture_n_fref_ref-f002"
+      ],
+      "rationale": "Le seul fait disponible constate un débit de 100 EUR daté du 11/05/2026 sans préciser la date d'ouverture de la succession ni la nature de la charge (dette préexistante du défunt ou frais engagés postérieurement au décès). Les éléments produits ne permettent donc pas d'apprécier si l'existence de la dette au jour du décès est justifiée au sens de l'article 768 du CGI."
+    },
+    {
+      "entry_id": "05ae9d43b501",
+      "statute_chunk_id": "cgi-770",
+      "statute_excerpt": "Les dettes dont la déduction est demandée sont détaillées, article par article, dans un inventaire certifié par le déposant et annexé à la déclaration de la succession.",
+      "obligation_summary": "Chaque dette imputée au passif successoral doit être détaillée article par article dans un inventaire certifié annexé à la déclaration de succession.",
+      "actor_role": "debit_succesoral",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_acte_facture_n_fref_ref-f002"
+      ],
+      "rationale": "Le débit de 100 EUR figure dans un document isolé sans référence à un inventaire certifié ni à une déclaration de succession déposée. Les faits transmis ne permettent pas de déterminer si cette écriture a été intégrée à un inventaire détaillé conforme aux exigences de l'article 770 du CGI. Cette exigence formelle incomberait au déposant (héritier ou notaire rédacteur mentionné en contexte inter-rôles)."
+    },
+    {
+      "entry_id": "55bf67616ea1",
+      "statute_chunk_id": "cgi-774bis",
+      "statute_excerpt": "Ne sont pas déductibles de l'actif successoral les dettes de restitution exigibles qui portent sur une somme d'argent dont le défunt s'était réservé l'usufruit.",
+      "obligation_summary": "La dette de restitution née de l'extinction du quasi-usufruit du défunt doit être traitée dans la déclaration de succession selon son origine juridique (réservé par le défunt ou usufruit légal 757/1094-1).",
+      "actor_role": "defunt_quasi_usufruitier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_reponse_x_x-f001"
+      ],
+      "rationale": "Le seul fait disponible est le décès de Monsieur Camille MARTIN le 9 janvier 2026, qualifié de quasi-usufruitier en dernier survivant. Les éléments manquent pour déterminer l'origine du quasi-usufruit — réservé par le défunt lors d'une donation antérieure (impliquant la non-déductibilité) ou usufruit du conjoint survivant relevant des articles 757 ou 1094-1 (maintenant la déductibilité) — ni pour apprécier le traitement fiscal effectivement appliqué à la dette de restitution due aux héritiers devenus pleins propriétaires. Cette obligation intéresse le rôle croisé d'héritier plein propriétaire, qui devra le cas échéant s'acquitter des droits de mutation par décès sur la valeur non déductible."
+    },
+    {
+      "entry_id": "c88d93d24a1a",
+      "statute_chunk_id": "cc-617",
+      "statute_excerpt": "L'usufruit s'éteint : Par la mort de l'usufruitier",
+      "obligation_summary": "Le quasi-usufruit s'éteint de plein droit par la mort du quasi-usufruitier, entraînant la consolidation en pleine propriété au profit du nu-propriétaire et l'exigibilité de la dette de restitution.",
+      "actor_role": "defunt_quasi_usufruitier",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_reponse_x_x-f001"
+      ],
+      "rationale": "L'attestation dévolutive du 3 février 2026 constate le décès du quasi-usufruitier le 9 janvier 2026. Il ne s'agit pas d'une obligation au sens strict mais d'un effet légal automatique déclenché par le décès, qui produit ses conséquences : extinction du quasi-usufruit, consolidation au profit du nu-propriétaire devenu plein propriétaire (rôle croisé), et naissance de la créance de restitution."
+    },
+    {
+      "entry_id": "f71d29c53d7d",
+      "statute_chunk_id": "cc-933",
+      "statute_excerpt": "Si le donataire est majeur, l'acceptation doit être faite par lui ou, en son nom, par la personne fondée de sa procuration, portant pouvoir d'accepter la donation faite",
+      "obligation_summary": "Le donataire majeur doit accepter la donation, soit personnellement, soit par l'intermédiaire d'un mandataire muni d'une procuration notariée.",
+      "actor_role": "donataires",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f004"
+      ],
+      "rationale": "Le fait établit que chaque donataire copartagé déclare formellement accepter le lot à lui échu, satisfaisant ainsi l'exigence d'acceptation de la libéralité. Le respect de la forme (personnellement ou par mandataire) dépend toutefois du rôle croisé du mandataire, dont l'intervention éventuelle n'est pas précisée par le seul fait fourni."
+    },
+    {
+      "entry_id": "feae0b22a4e5",
+      "statute_chunk_id": "cc-938",
+      "statute_excerpt": "La donation dûment acceptée sera parfaite par le seul consentement des parties ; et la propriété des objets donnés sera transférée au donataire, sans qu'il soit besoin d'autre tradition.",
+      "obligation_summary": "Le donataire doit consentir à la donation pour la rendre parfaite et opérer le transfert de propriété.",
+      "actor_role": "donataires",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f004"
+      ],
+      "rationale": "La déclaration d'acceptation du lot par chaque donataire copartagé exprime le consentement requis pour parfaire la donation. Les 'abandonnements et dessaisissements' consentis en faveur des autres donataires confirment l'accord réciproque nécessaire à la formation du partage anticipé."
+    },
+    {
+      "entry_id": "fe3269dbd43e",
+      "statute_chunk_id": "cc-1075-4",
+      "statute_excerpt": "Les dispositions de l'article 828, sont applicables aux soultes mises à la charge des donataires, nonobstant toute convention contraire.",
+      "obligation_summary": "Les donataires débiteurs de soultes sont tenus de s'acquitter de celles-ci selon les modalités de l'article 828.",
+      "actor_role": "donataires",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f004"
+      ],
+      "rationale": "Le fait mentionne des abandonnements et dessaisissements réciproques mais ne précise pas si des soultes ont été mises à la charge de certains donataires. Le caractère 'incomplet' du dossier source empêche de vérifier l'existence et l'exécution éventuelle de telles soultes."
+    },
+    {
+      "entry_id": "b0ea9d2263d2",
+      "statute_chunk_id": "cc-1078-1",
+      "statute_excerpt": "Le lot de certains gratifiés pourra être formé, en totalité ou en partie, des donations, soit rapportables, soit faites hors part, déjà reçues par eux du disposant",
+      "obligation_summary": "Les donataires acceptant l'incorporation de donations antérieures à leur lot sont tenus par la date d'évaluation du partage anticipé.",
+      "actor_role": "donataires",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f004"
+      ],
+      "rationale": "Le fait ne renseigne pas sur l'existence de donations antérieures incorporées aux lots attribués aux donataires. En l'absence d'indications sur des libéralités antérieures rapportées ou incorporées, cette obligation ne peut être évaluée sur la base des faits disponibles."
+    },
+    {
+      "entry_id": "feb69854098c",
+      "statute_chunk_id": "cc-1075",
+      "statute_excerpt": "Toute personne peut faire, entre ses héritiers présomptifs, la distribution et le partage de ses biens et de ses droits. Cet acte peut se faire sous forme de donation-partage",
+      "obligation_summary": "Les donateurs qui procèdent à une donation-partage doivent la réaliser au profit de leurs héritiers présomptifs et respecter les formalités, conditions et règles des donations entre vifs.",
+      "actor_role": "donateurs",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f003"
+      ],
+      "rationale": "Le fait cite verbatim l'acte par lequel les donateurs ont fait donation 'à titre de partage anticipé, conformément aux dispositions des articles 1075 et suivants du Code Civil'. L'expression 'par ces présentes' confirme une formalisation écrite, et le contexte inter-rôles atteste de la présence d'un notaire instrumentaire, satisfaisant les exigences de forme applicables aux donations entre vifs."
+    },
+    {
+      "entry_id": "41edf329db57",
+      "statute_chunk_id": "cc-894",
+      "statute_excerpt": "La donation entre vifs est un acte par lequel le donateur se dépouille actuellement et irrévocablement de la chose donnée en faveur du donataire qui l'accepte.",
+      "obligation_summary": "Les donateurs doivent se dépouiller actuellement et irrévocablement des biens donnés au profit des donataires acceptants.",
+      "actor_role": "donateurs",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f003"
+      ],
+      "rationale": "Le fait établit que les donateurs ont 'fait donation entre vifs', qualification qui suppose en principe un dépouillement actuel et irrévocable. Toutefois, l'extrait ne précise ni les biens transférés, ni les modalités concrètes du dessaisissement, ni l'acceptation formelle par les donataires, éléments nécessaires pour vérifier le respect effectif de cette exigence."
+    },
+    {
+      "entry_id": "a7ee65e7c1d6",
+      "statute_chunk_id": "cc-902",
+      "statute_excerpt": "Toutes personnes peuvent disposer et recevoir soit par donation entre vifs, soit par testament, excepté celles que la loi en déclare incapables.",
+      "obligation_summary": "Les donateurs doivent disposer de la capacité juridique requise pour consentir la donation entre vifs.",
+      "actor_role": "donateurs",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f003"
+      ],
+      "rationale": "Le fait unique fourni ne comporte aucune information sur l'identité, l'âge, l'état mental ou toute autre circonstance permettant d'évaluer la capacité juridique des donateurs au jour de l'acte. La question de la capacité ne peut être tranchée sur la base des éléments produits."
+    },
+    {
+      "entry_id": "b411d0a9d77f",
+      "statute_chunk_id": "cc-815-4",
+      "statute_excerpt": "Si l'un des indivisaires se trouve hors d'état de manifester sa volonté, un autre peut se faire habiliter par justice à le représenter, [...] les conditions et l'étendue de cette représentation étant fixées par le juge.",
+      "obligation_summary": "La personne habilitée par justice doit agir dans les limites et selon les conditions de représentation fixées par le juge dans l'ordonnance d'habilitation.",
+      "actor_role": "habilite_familial",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_declaration_x_mme_nomne_martin_ref-f004"
+      ],
+      "rationale": "Le seul fait disponible confirme la désignation de [nom]-Luc et Gérard MARTIN comme personnes habilitées par ordonnance. Toutefois, aucun fait ne renseigne sur les actes précis accomplis par ces personnes habilitées, ni sur les limites et l'étendue fixées par le juge dans l'ordonnance. Il est donc impossible d'apprécier si l'obligation d'agir dans le cadre de l'habilitation a été respectée ou méconnue."
+    },
+    {
+      "entry_id": "a24edf0e7626",
+      "statute_chunk_id": "cc-771",
+      "statute_excerpt": "L'héritier ne peut être contraint à opter avant l'expiration d'un délai de quatre mois à compter de l'ouverture de la succession.",
+      "obligation_summary": "L'héritier doit à terme exercer son option successorale (accepter purement, à concurrence de l'actif net, ou renoncer), sans pouvoir y être contraint pendant les quatre premiers mois.",
+      "actor_role": "heritier",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f002",
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f003"
+      ],
+      "rationale": "L'héritier exerce activement son droit d'être informée avant d'opter, en sollicitant les éléments successoraux et en demandant confirmation qu'aucun acte engageant son option n'a été établi. Cette démarche est conforme au cadre protecteur de l'article 771 qui laisse à l'héritier le temps nécessaire pour se prononcer entre les articles 787 et suivants."
+    },
+    {
+      "entry_id": "8c8404059daf",
+      "statute_chunk_id": "cc-786",
+      "statute_excerpt": "L'héritier acceptant purement et simplement ne peut plus renoncer à la succession ni l'accepter à concurrence de l'actif net.",
+      "obligation_summary": "L'héritier qui a accepté purement et simplement est engagé de manière irrévocable et ne peut plus opter autrement.",
+      "actor_role": "heritier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f002",
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f003"
+      ],
+      "rationale": "L'héritier demande expressément confirmation qu'aucun acte engageant son option n'a été établi et sollicite les informations nécessaires avant de choisir entre acceptation pure et acceptation à concurrence de l'actif net. Aucune acceptation pure et simple n'ayant été formalisée à la lecture des faits, l'obligation d'irrévocabilité n'est pas encore déclenchée."
+    },
+    {
+      "entry_id": "f21edde9b1c9",
+      "statute_chunk_id": "cc-800",
+      "statute_excerpt": "L'héritier est chargé d'administrer les biens qu'il recueille dans la succession. Il tient le compte de son administration, des créances qu'il paye et des actes qui engagent les biens recueillis",
+      "obligation_summary": "L'héritier ayant accepté à concurrence de l'actif net doit administrer les biens successoraux, tenir un compte de son administration et le présenter aux créanciers qui en font la demande.",
+      "actor_role": "heritier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f002"
+      ],
+      "rationale": "L'héritier n'a pas encore opté pour l'acceptation à concurrence de l'actif net, se trouvant en phase d'information préalable au titre des articles 787 et suivants. Les obligations d'administration et de reddition de compte ne sont donc pas encore activées à défaut d'option formalisée."
+    },
+    {
+      "entry_id": "bb63c8fcc26a",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est tenu des dettes et charges de la succession, personnellement pour sa part successorale et hypothécairement pour le tout.",
+      "actor_role": "heritier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f002"
+      ],
+      "rationale": "L'héritier n'a pas encore exercé son option et demande explicitement les éléments successoraux avant de choisir son mode d'acceptation. L'étendue de sa responsabilité aux dettes dépendant du type d'acceptation retenue, la mise en œuvre de cette obligation ne peut être appréciée en l'état."
+    },
+    {
+      "entry_id": "ea085e7f9023",
+      "statute_chunk_id": "cc-843",
+      "statute_excerpt": "Tout héritier, même ayant accepté à concurrence de l'actif, venant à une succession, doit rapporter à ses cohéritiers tout ce qu'il a reçu du défunt, par donations entre vifs",
+      "obligation_summary": "Tout héritier doit rapporter à ses cohéritiers ce qu'il a reçu du défunt par donations, sauf donation expresse hors part successorale.",
+      "actor_role": "heritier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_response_a_camille_28th_premiere_mention_de_l_acte_1999-f004"
+      ],
+      "rationale": "Les faits font état d'observations générales sur le règlement des successions et mentionnent un acte de 1999 sans précision quant à son objet. Aucune donation reçue par l'héritier ni phase de partage engagée ne peut être identifiée dans les faits fournis, empêchant l'évaluation de l'obligation de rapport."
+    },
+    {
+      "entry_id": "a3b1f912ab4e",
+      "statute_chunk_id": "cc-793",
+      "statute_excerpt": "Dans le délai prévu à l'article 792, l'héritier peut déclarer qu'il conserve en nature un ou plusieurs biens de la succession. En ce cas, il doit la valeur du bien fixée dans l'inventaire.",
+      "obligation_summary": "En cas d'acceptation à concurrence de l'actif net, si l'héritier conserve un bien en nature, il doit sa valeur d'inventaire ; s'il le vend, il doit le prix d'aliénation.",
+      "actor_role": "heritier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_nom_luc_accord_de_baisse_de_prix-f002",
+        "camille_martin_s_04_precontentieux_ref_nicole_tentative_de_diffusion_post_revocation_de_mandat_de_vente-f001"
+      ],
+      "rationale": "Bien que les faits mentionnent des discussions sur la baisse de prix d'un bien successoral et la révocation d'un mandat de vente, l'héritier n'a pas encore opté pour l'acceptation à concurrence de l'actif net qui conditionne l'application de cet article. Les obligations attachées à la conservation en nature ou à la vente ne sont pas encore activées."
+    },
+    {
+      "entry_id": "cadc20e0494a",
+      "statute_chunk_id": "cc-800",
+      "statute_excerpt": "L'héritier est chargé d'administrer les biens qu'il recueille dans la succession. Il tient le compte de son administration, des créances qu'il paye.",
+      "obligation_summary": "L'héritier doit administrer les biens successoraux et tenir le compte des opérations, des créances payées et des actes affectant la valeur des biens recueillis.",
+      "actor_role": "heritier_ayant_droit",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_chaine_de_communication_avec_ca_du_centre-f004"
+      ],
+      "rationale": "La demande de détail du virement et des pièces justificatives adressée à l'établissement bancaire s'inscrit dans une démarche compatible avec l'obligation d'administration et de reddition des comptes successoraux. Toutefois, ce seul fait ne permet pas d'apprécier si l'héritier tient effectivement un compte complet de son administration, ni le régime d'acceptation retenu."
+    },
+    {
+      "entry_id": "5514418a4a90",
+      "statute_chunk_id": "cc-724",
+      "statute_excerpt": "Les héritiers désignés par la loi sont saisis de plein droit des biens, droits et actions du défunt.",
+      "obligation_summary": "L'héritier saisi de plein droit exerce les actions du défunt, ce qui inclut la faculté de requérir des tiers, notamment bancaires, la communication d'informations sur les opérations affectant la succession.",
+      "actor_role": "heritier_ayant_droit",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_chaine_de_communication_avec_ca_du_centre-f004"
+      ],
+      "rationale": "En sollicitant auprès de l'établissement bancaire les justificatifs de l'opération de déblocage du 11 mai 2026, l'héritier exerce concrètement les droits et actions transmis par saisine. Cette démarche relève de l'exercice normal de la qualité d'ayant droit, en interaction avec l'obligation corrélative de l'établissement bancaire de communiquer les informations relatives à la succession."
+    },
+    {
+      "entry_id": "91958c993ea7",
+      "statute_chunk_id": "cc-800",
+      "statute_excerpt": "L'héritier est chargé d'administrer les biens qu'il recueille dans la succession. Il tient le compte de son administration, des créances qu'il paye et des actes qui engagent les biens recueillis",
+      "obligation_summary": "L'héritier acceptant à concurrence de l'actif net doit administrer les biens de la succession, tenir le compte de son administration et des créances qu'il paye",
+      "actor_role": "heritier_beneficiaire",
+      "status": "ambiguous",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_camille_accord_x_x-f003",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_tentative_de_cloture_des_successions-f007"
+      ],
+      "rationale": "L'héritier a posé un acte d'administration en autorisant le remboursement de 116,05€ à la banque de la défunte (f003), ce qui est cohérent avec l'obligation. Toutefois, il déclare en mai 2026 ne pas avoir encore exercé l'option successorale dans l'une comme dans l'autre des deux successions (f007), ce qui crée une ambiguïté sur l'applicabilité pleine de cette obligation qui suppose une acceptation formelle à concurrence de l'actif net."
+    },
+    {
+      "entry_id": "1fe637255eb7",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est tenu au paiement des dettes et charges de la succession, personnellement pour sa part successorale",
+      "actor_role": "heritier_beneficiaire",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_camille_accord_x_x-f003"
+      ],
+      "rationale": "L'autorisation expresse donnée au notaire de rembourser la somme de 116,05€ auprès de la banque de la défunte constitue une prise en charge concrète d'une dette de la succession, conforme à l'obligation de contribution aux dettes. Aucun refus explicite n'est établi concernant les autres charges évoquées, notamment les avances immobilières mentionnées par le cohéritier (f005)."
+    },
+    {
+      "entry_id": "06e5860322ca",
+      "statute_chunk_id": "cc-815-14",
+      "statute_excerpt": "L'indivisaire qui entend céder, à titre onéreux, à une personne étrangère à l'indivision, tout ou partie de ses droits dans les biens indivis (...) est tenu de notifier par acte extrajudiciaire aux autres indivisaires",
+      "obligation_summary": "L'indivisaire qui envisage de céder ses droits indivis à un tiers étranger à l'indivision doit notifier par acte extrajudiciaire aux autres indivisaires le prix et les conditions de la cession projetée.",
+      "actor_role": "heritier_indivisaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_fiche_x-f004",
+        "camille_martin_s_03_correspondance_courante_ref_nom_luc_relance_mandat_de_vente-f003"
+      ],
+      "rationale": "Les faits attestent la qualité d'indivisaire de Mme Camille MARTIN pour 1/3 et mentionnent l'existence d'un mandat de vente encouragé par le notaire, mais ne précisent ni le destinataire de la cession envisagée (tiers étranger ou coindivisaire), ni l'existence d'une notification préalable. Les éléments disponibles ne permettent donc pas d'évaluer le respect de l'obligation de notification prévue à l'article 815-14."
+    },
+    {
+      "entry_id": "35315231a856",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est personnellement tenu du passif successoral à concurrence de sa part successorale, et hypothécairement pour le tout.",
+      "actor_role": "heritier_indivisaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_fiche_x-f004"
+      ],
+      "rationale": "Mme Camille MARTIN a déclaré sa quote-part de 1/3 auprès du gestionnaire SCPI, ce qui identifie sa contribution proportionnelle au passif. Toutefois, aucun fait ne renseigne sur l'existence, le montant ou le règlement effectif de dettes successorales, ce qui empêche d'évaluer la mise en œuvre concrète de cette obligation."
+    },
+    {
+      "entry_id": "0b8181955102",
+      "statute_chunk_id": "cgi-770",
+      "statute_excerpt": "Les dettes dont la déduction est demandée sont détaillées, article par article, dans un inventaire certifié par le déposant et annexé à la déclaration de la succession",
+      "obligation_summary": "Les héritiers doivent détailler article par article, dans un inventaire certifié annexé à la déclaration de succession, les dettes dont ils demandent la déduction.",
+      "actor_role": "heritier_indivisaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_fiche_x-f002"
+      ],
+      "rationale": "Les faits se limitent à la déclaration d'identité et de quote-part auprès du gestionnaire SCPI, sans révéler le contenu de la déclaration de succession fiscale ni l'existence d'un inventaire de dettes annexé. Le respect de l'obligation de détail article par article ne peut être apprécié en l'état."
+    },
+    {
+      "entry_id": "f753ea996aa0",
+      "statute_chunk_id": "cc-730-1",
+      "statute_excerpt": "L'acte de notoriété doit viser l'acte de décès de la personne dont la succession est ouverte [...] Il contient l'affirmation, signée du ou des ayants droit auteurs de la demande, qu'ils ont vocation [...] à recueillir tout ou partie de la succession",
+      "obligation_summary": "Les ayants droit doivent affirmer et signer leur vocation successorale dans l'acte de notoriété, en visant l'acte de décès et les pièces relatives à d'éventuelles libéralités.",
+      "actor_role": "heritier_legal",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f003",
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f005",
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f004"
+      ],
+      "rationale": "Les requérants ont bien attesté et certifié la dévolution successorale ainsi que l'absence d'autres ayants droit à leur connaissance (f003), ce qui constitue l'affirmation exigée par l'article. L'acte de notoriété vise l'acte de décès dressé le 12 janvier 2026 sur la déclaration du fils du défunt (f005), et le mandat donné au notaire pour interroger FICOVIE (f004) contribue à identifier les libéralités à cause de mort pouvant affecter la dévolution."
+    },
+    {
+      "entry_id": "9984fb37ceb4",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout ; sauf leur recours [...] contre leurs cohéritiers [...] ou contre les légataires universels",
+      "obligation_summary": "Les héritiers doivent s'acquitter des dettes et charges de la succession, personnellement pour leur part et hypothécairement pour le tout.",
+      "actor_role": "heritier_legal",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f003"
+      ],
+      "rationale": "Les faits fournis ne mentionnent ni l'existence de dettes ou charges successorales, ni les modalités de leur règlement par les héritiers. Aucun élément ne permet d'évaluer le respect de cette obligation à ce stade de la procédure successorale."
+    },
+    {
+      "entry_id": "6c12bfd94353",
+      "statute_chunk_id": "cc-843",
+      "statute_excerpt": "Tout héritier, même ayant accepté à concurrence de l'actif, venant à une succession, doit rapporter à ses cohéritiers tout ce qu'il a reçu du défunt, par donations entre vifs, directement ou indirectement",
+      "obligation_summary": "L'héritier doit rapporter à ses cohéritiers les libéralités reçues du défunt sauf dispense expresse.",
+      "actor_role": "heritier_legal",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f004"
+      ],
+      "rationale": "Les faits n'indiquent aucune libéralité reçue par les héritiers du défunt qui devrait faire l'objet d'un rapport. Le mandat donné au notaire pour interroger FICOVIE (f004) suggère une recherche en cours des libéralités éventuelles, mais aucun résultat n'est encore mentionné."
+    },
+    {
+      "entry_id": "2713a4d9fc76",
+      "statute_chunk_id": "cc-785",
+      "statute_excerpt": "L'héritier universel ou à titre universel qui accepte purement et simplement la succession répond indéfiniment des dettes et charges qui en dépendent.",
+      "obligation_summary": "L'héritier qui accepte purement et simplement doit répondre indéfiniment des dettes et charges de la succession.",
+      "actor_role": "heritier_legal",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f003"
+      ],
+      "rationale": "Les faits fournis, limités à l'acte de notoriété, ne précisent pas le choix d'option successorale exercé par les héritiers (acceptation pure et simple, à concurrence de l'actif net, ou renonciation). Aucune évaluation du respect de cette obligation ne peut être conduite en l'état."
+    },
+    {
+      "entry_id": "b5c0d6f7398e",
+      "statute_chunk_id": "cc-768",
+      "statute_excerpt": "L'héritier peut accepter la succession purement et simplement ou y renoncer. Il peut également accepter la succession à concurrence de l'actif net... Est nulle l'option conditionnelle ou à terme.",
+      "obligation_summary": "L'héritier qui exerce son option successorale ne peut le faire de manière conditionnelle ou à terme, et doit choisir entre acceptation pure et simple, renonciation ou acceptation à concurrence de l'actif net.",
+      "actor_role": "heritier_nu_proprietaire",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_pdf_attache_au_refus_de_cloture-f005",
+        "camille_martin_s_04_precontentieux_ref_camille_reponse_a_sophie_dubois_0609-f002"
+      ],
+      "rationale": "Camille déclare expressément n'avoir exercé aucune option successorale ni signé aucun acte d'acceptation et sursoit à toute décision. En s'abstenant de tout acte d'option, elle ne contrevient pas à l'interdiction de l'option conditionnelle ou à terme et demeure dans le cadre du délai légal d'option ouvert à l'héritier."
+    },
+    {
+      "entry_id": "97e4821df137",
+      "statute_chunk_id": "cc-792",
+      "statute_excerpt": "Les créanciers de la succession déclarent leurs créances en notifiant leur titre au domicile élu de la succession... Faute de déclaration dans un délai de quinze mois... les créances non assorties de sûretés sont éteintes.",
+      "obligation_summary": "Le créancier de la succession doit déclarer sa créance en notifiant son titre au domicile élu, sous peine d'extinction à l'expiration d'un délai de quinze mois à compter de la publicité prévue à l'article 788.",
+      "actor_role": "heritier_nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_elodie_lucas_refus_d_entretien_telephonique-f004",
+        "camille_martin_s_04_precontentieux_ref_camille_demande_d_attestation_factuelle_a_x_reorientation_des_fonds-f007",
+        "camille_martin_s_04_precontentieux_ref_camille_a_x_demande_d_information-f001"
+      ],
+      "rationale": "Camille fait valoir sa qualité de nue-propriétaire de parts SCPI et sollicite des informations sur le sort des fonds objet de la convention du 8 mars 2024, ce qui suggère une créance de restitution potentielle contre le quasi-usufruitier ou la succession. En interaction avec le rôle du quasi-usufruitier, les faits ne permettent toutefois pas d'établir qu'une acceptation à concurrence de l'actif net ait été prononcée déclenchant le délai de quinze mois, ni qu'une déclaration formelle par notification ait été effectuée."
+    },
+    {
+      "entry_id": "2616a86c4bc2",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout ; sauf leur recours soit contre leurs cohéritiers, soit contre les légataires universels.",
+      "obligation_summary": "L'héritier est tenu des dettes et charges de la succession, personnellement pour sa part successorale et hypothécairement pour le tout.",
+      "actor_role": "heritier_nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_pdf_attache_au_refus_de_cloture-f005"
+      ],
+      "rationale": "L'obligation de contribution aux dettes successorales suppose l'acceptation préalable de la succession, qui détermine l'étendue de la responsabilité de l'héritier. Camille n'ayant pas encore exercé d'option successorale, cette obligation n'est pas déclenchée à son égard à ce stade, et son étendue future dépendra du choix qu'elle opérera dans le délai légal."
+    },
+    {
+      "entry_id": "c404cb9d22f6",
+      "statute_chunk_id": "cc-786",
+      "statute_excerpt": "L'héritier acceptant purement et simplement ne peut plus renoncer à la succession ni l'accepter à concurrence de l'actif net.",
+      "obligation_summary": "L'héritier qui a accepté purement et simplement ne peut plus revenir sur son option ni opter pour l'acceptation à concurrence de l'actif net.",
+      "actor_role": "heritier_nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_pdf_attache_au_refus_de_cloture-f005"
+      ],
+      "rationale": "Cette obligation d'irrévocabilité suppose une acceptation pure et simple préalable, expresse ou tacite. Camille déclarant formellement n'avoir signé aucun acte d'acceptation, la question de la révocabilité de son option ne se pose pas encore et son option demeure ouverte."
+    },
+    {
+      "entry_id": "911c6ddb4422",
+      "statute_chunk_id": "cc-768",
+      "statute_excerpt": "L'héritier peut accepter la succession purement et simplement ou y renoncer. Il peut également accepter la succession à concurrence de l'actif net lorsqu'il a une vocation universelle ou à titre universel.",
+      "obligation_summary": "L'héritier doit exercer son option successorale (acceptation pure et simple, acceptation à concurrence de l'actif net ou renonciation).",
+      "actor_role": "heritier_par_representation",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f002"
+      ],
+      "rationale": "Élodie envisage explicitement l'acceptation à concurrence de l'actif net (articles 787 et suivants) et interroge le notaire à ce sujet, sans avoir encore formalisé son choix. Elle se trouve dans la phase de réflexion préalable à l'option, ce qui ne permet pas d'évaluer si la décision définitive interviendra dans les formes et délais requis."
+    },
+    {
+      "entry_id": "93898b83d251",
+      "statute_chunk_id": "cc-800",
+      "statute_excerpt": "L'héritier est chargé d'administrer les biens qu'il recueille dans la succession. Il tient le compte de son administration, des créances qu'il paye et des actes qui engagent les biens recueillis.",
+      "obligation_summary": "L'héritier acceptant à concurrence de l'actif net doit administrer les biens successoraux avec diligence, tenir un compte et pouvoir révéler la consistance des biens.",
+      "actor_role": "heritier_par_representation",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f004",
+        "camille_martin_s_04_precontentieux_ref_elodie_entre_en_x_avec_ca_du_centre-f003"
+      ],
+      "rationale": "L'obligation d'administration prévue à cc-800 suppose une acceptation à concurrence de l'actif net effective, non encore formellement exercée par Élodie. Ses demandes de l'état du compte spécial, de la situation des parts SCPI NOTAPIERRE et des relevés bancaires démontrent toutefois une diligence préparatoire compatible avec les futures obligations d'administration, dont la mise en œuvre dépendra de la réponse des rôles croisés (notaire et banque)."
+    },
+    {
+      "entry_id": "f930daae91c4",
+      "statute_chunk_id": "cc-843",
+      "statute_excerpt": "Tout héritier, même ayant accepté à concurrence de l'actif, venant à une succession, doit rapporter à ses cohéritiers tout ce qu'il a reçu du défunt, par donations entre vifs, directement ou indirectement.",
+      "obligation_summary": "L'héritier doit rapporter à ses cohéritiers les libéralités qu'il a reçues du défunt.",
+      "actor_role": "heritier_par_representation",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f003"
+      ],
+      "rationale": "Aucun fait ne démontre que Élodie ait personnellement reçu du défunt une libéralité rapportable. Sa demande relative à la créance de restitution issue de la convention de quasi-usufruit du 8 mars 2024 concerne un droit dont les petits-enfants (dont elle-même) sont bénéficiaires, et non une obligation de rapport à sa charge."
+    },
+    {
+      "entry_id": "f5660c25bade",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout.",
+      "obligation_summary": "L'héritier est tenu des dettes et charges de la succession à proportion de sa part successorale.",
+      "actor_role": "heritier_par_representation",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f002"
+      ],
+      "rationale": "L'étendue de cette obligation dépend directement de l'option successorale exercée par l'héritier. Élodie envisageant l'acceptation à concurrence de l'actif net, sa responsabilité serait limitée à l'actif recueilli, mais ce choix n'est pas encore formalisé, ce qui ne permet pas d'évaluer le respect de l'obligation."
+    },
+    {
+      "entry_id": "67a312228021",
+      "statute_chunk_id": "cc-786",
+      "statute_excerpt": "L'héritier acceptant purement et simplement ne peut plus renoncer à la succession ni l'accepter à concurrence de l'actif net.",
+      "obligation_summary": "L'héritier n'ayant pas encore accepté purement et simplement conserve la faculté d'opter pour l'acceptation à concurrence de l'actif net ou la renonciation.",
+      "actor_role": "heritier_par_representation",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f001",
+        "camille_martin_s_04_precontentieux_ref_elodie_revocation_de_la_procuration-f002"
+      ],
+      "rationale": "Élodie n'a pas accepté purement et simplement la succession et conserve la faculté d'opter pour l'acceptation à concurrence de l'actif net qu'elle envisage explicitement. La révocation de la procuration donnée au notaire afin de signer personnellement les actes est cohérente avec le souhait de maîtriser le choix successoral. L'évaluation dépend toutefois de l'absence d'un acte antérieur d'acceptation tacite qui aurait pu être posé par le mandataire, laquelle n'est pas documentée."
+    },
+    {
+      "entry_id": "859b12800ae2",
+      "statute_chunk_id": "cc-768",
+      "statute_excerpt": "L'héritier peut accepter la succession purement et simplement ou y renoncer. Il peut également accepter la succession à concurrence de l'actif net (...) Est nulle l'option conditionnelle ou à terme.",
+      "obligation_summary": "L'héritier doit exercer son option successorale de manière ferme, sans condition ni terme.",
+      "actor_role": "heritier_petit_fils_representant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_lucas_revocation_de_la_procuration-f003",
+        "camille_martin_s_04_precontentieux_ref_lucas_revocation_de_la_procuration-f004"
+      ],
+      "rationale": "Les faits montrent que l'héritier sursoit à sa décision d'option en attendant la communication de documents relatifs à la succession, ce qui constitue un exercice de son droit à l'information préalable, distinct d'une option conditionnelle prohibée. Aucune option n'ayant été formellement exercée à ce stade, il n'est pas possible de conclure au respect ou au manquement à l'obligation de non-conditionnalité."
+    },
+    {
+      "entry_id": "2523eadff001",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est tenu au paiement des dettes et charges de la succession à hauteur de sa part successorale.",
+      "actor_role": "heritier_petit_fils_representant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_lucas_revocation_de_la_procuration-f003"
+      ],
+      "rationale": "Les faits fournis ne comportent aucun élément sur l'existence de dettes successorales exigibles ni sur d'éventuels paiements effectués ou refusés. L'héritier demande précisément à connaître le passif avant de se prononcer, ce qui traduit une prudence face à cette obligation potentielle, mais aucune conclusion sur le respect ou le manquement n'est possible."
+    },
+    {
+      "entry_id": "3c565e759139",
+      "statute_chunk_id": "cc-843",
+      "statute_excerpt": "Tout héritier, même ayant accepté à concurrence de l'actif, venant à une succession, doit rapporter à ses cohéritiers tout ce qu'il a reçu du défunt, par donations entre vifs",
+      "obligation_summary": "L'héritier doit rapporter à ses cohéritiers les libéralités reçues du défunt, directement ou indirectement.",
+      "actor_role": "heritier_petit_fils_representant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_lucas_revocation_de_la_procuration-f003"
+      ],
+      "rationale": "Les faits ne mentionnent aucune libéralité que l'héritier par représentation aurait reçue du défunt, ni de la part du représenté. La demande de restitution de fonds au titre d'une convention de mars 2024 n'est pas assimilable à une libéralité soumise à rapport. Il n'est donc pas possible d'évaluer le respect ou le manquement à l'obligation de rapport."
+    },
+    {
+      "entry_id": "7ed66babab51",
+      "statute_chunk_id": "cc-754",
+      "statute_excerpt": "Les enfants du renonçant conçus avant l'ouverture de la succession dont le renonçant a été exclu rapportent à la succession de ce dernier les biens dont ils ont hérité en son lieu et place",
+      "obligation_summary": "L'héritier venant par représentation d'un renonçant doit rapporter à la succession de ce dernier les biens hérités en ses lieu et place, en cas de concours avec d'autres enfants.",
+      "actor_role": "heritier_petit_fils_representant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_lucas_revocation_de_la_procuration-f003"
+      ],
+      "rationale": "Les faits fournis n'indiquent pas si l'héritier vient par représentation d'un prédécédé ou d'un renonçant, ni s'il existe des cohéritiers conçus après l'ouverture de la succession. Les conditions d'application de cette obligation de rapport spécifique ne peuvent être vérifiées à partir des éléments disponibles."
+    },
+    {
+      "entry_id": "f8c9d50d0cbb",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est tenu personnellement des dettes et charges de la succession à hauteur de sa part successorale.",
+      "actor_role": "heritier_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_reponse_x_x-f002"
+      ],
+      "rationale": "Le seul fait disponible se limite à une demande d'information adressée à la société de gestion SCPI concernant des parts détenues en nue-propriété, sans référence à des dettes ou charges successorales, ni à leur acquittement. Les éléments ne permettent pas d'apprécier le respect de cette obligation."
+    },
+    {
+      "entry_id": "7ea5e4c6607b",
+      "statute_chunk_id": "cc-724",
+      "statute_excerpt": "Les héritiers désignés par la loi sont saisis de plein droit des biens, droits et actions du défunt.",
+      "obligation_summary": "L'héritier légal est saisi de plein droit des biens, droits et actions du défunt et peut les exercer.",
+      "actor_role": "heritier_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_reponse_x_x-f002"
+      ],
+      "rationale": "L'acteur adresse une demande d'information à la société de gestion SCPI en se qualifiant de nue-propriétaire, ce qui témoigne d'une démarche relative aux droits successoraux. En raison du contexte inter-rôles (décès du quasi-usufruitier), la saisine devrait avoir consolidé la pleine propriété, mais les faits ne permettent pas d'évaluer si les droits sont exercés conformément à ce nouveau statut."
+    },
+    {
+      "entry_id": "00057f50990f",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "L'héritier est tenu du paiement des dettes et charges de la succession à hauteur de sa part successorale.",
+      "actor_role": "heritier_successeur",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_autorisation_de_deblocage-f002",
+        "camille_martin_s_01_creance_x_autorisation_de_deblocage-f003"
+      ],
+      "rationale": "Les faits montrent que l'héritier ordonne la vente des 377 titres SCPI EDISSIMO et demande le versement des fonds entre les mains du notaire, ce qui est cohérent avec la mobilisation de liquidités pour l'administration de la succession. Toutefois, les faits fournis ne permettent pas d'établir l'existence de dettes successorales ni de vérifier leur acquittement effectif."
+    },
+    {
+      "entry_id": "2b7952d843a9",
+      "statute_chunk_id": "cc-724",
+      "statute_excerpt": "Les héritiers désignés par la loi sont saisis de plein droit des biens, droits et actions du défunt.",
+      "obligation_summary": "L'héritier légal exerce de plein droit la saisine sur les biens, droits et actions du défunt.",
+      "actor_role": "heritier_successeur",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_x_autorisation_de_deblocage-f001",
+        "camille_martin_s_01_creance_x_autorisation_de_deblocage-f002"
+      ],
+      "rationale": "Suite au décès constaté le 9 janvier 2026, l'héritier exerce sa saisine en donnant instruction à AMUNDI IMMOBILIER de vendre les titres ayant appartenu en pleine propriété au défunt. Cet acte d'administration relève de la prérogative de saisine transmise de plein droit."
+    },
+    {
+      "entry_id": "82d5c8a28189",
+      "statute_chunk_id": "cc-873",
+      "statute_excerpt": "Les héritiers sont tenus des dettes et charges de la succession, personnellement pour leur part successorale, et hypothécairement pour le tout",
+      "obligation_summary": "Les héritiers doivent supporter les dettes et charges de la succession selon leur part successorale.",
+      "actor_role": "heritier_succession",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f002",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f003",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f004"
+      ],
+      "rationale": "Les trois cohéritiers ont exprimé le 12 février 2026 leur accord pour le paiement de la facture AMUNDI IMMOBILIER, ce qui démontre qu'ils assument l'obligation de règlement des dettes successorales. Cette démarche a été coordonnée avec le notaire_Sarah GARNIER (rôle croisé) sollicitant leur approbation."
+    },
+    {
+      "entry_id": "15512ca550fb",
+      "statute_chunk_id": "cc-796",
+      "statute_excerpt": "L'héritier règle le passif de la succession. Il paye les créanciers inscrits selon le rang de la sûreté assortissant leur créance.",
+      "obligation_summary": "L'héritier doit régler le passif de la succession et payer les créanciers.",
+      "actor_role": "heritier_succession",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f002",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f003",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f004"
+      ],
+      "rationale": "Les héritiers ont explicitement autorisé le paiement de la facture d'AMUNDI IMMOBILIER, participant ainsi au règlement du passif successoral. Leur accord unanime constitue l'acte d'autorisation nécessaire pour permettre le désintéressement du créancier."
+    },
+    {
+      "entry_id": "45deb9e5061b",
+      "statute_chunk_id": "cc-870",
+      "statute_excerpt": "Les cohéritiers contribuent entre eux au paiement des dettes et charges de la succession, chacun dans la proportion de ce qu'il y prend.",
+      "obligation_summary": "Les cohéritiers doivent contribuer proportionnellement au paiement des dettes et charges de la succession.",
+      "actor_role": "heritier_succession",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f002",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f003",
+        "camille_martin_s_03_correspondance_courante_ref_heritiers_approbation_facture_x-f004"
+      ],
+      "rationale": "Les trois cohéritiers ont donné individuellement leur accord pour le paiement de la facture AMUNDI le même jour, manifestant une contribution collective et coordonnée au règlement des charges successorales. Cette unanimité satisfait au principe de contribution partagée entre cohéritiers."
+    },
+    {
+      "entry_id": "bde488fe84ec",
+      "statute_chunk_id": "cc-800",
+      "statute_excerpt": "L'héritier est chargé d'administrer les biens qu'il recueille dans la succession. Il tient le compte de son administration, des créances qu'il paye et des actes qui engagent les biens recueillis",
+      "obligation_summary": "L'héritier acceptant à concurrence de l'actif net doit administrer les biens et tenir compte de ses actes de gestion.",
+      "actor_role": "heritier_succession",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_confirmation_de_reorientation_silence_sur_attestation_factuelle-f003"
+      ],
+      "rationale": "Les faits ne précisent pas le régime d'acceptation choisi par les héritiers (pure et simple ou à concurrence de l'actif net), ni si un compte d'administration est tenu. Le fait de fournir des justificatifs au gestionnaire (rôle croisé gestionnaire_succession_amundi) relève de la gestion mais ne permet pas d'apprécier le respect global de l'obligation."
+    },
+    {
+      "entry_id": "34d845d58582",
+      "statute_chunk_id": "cc-793",
+      "statute_excerpt": "Dans le délai prévu à l'article 792, l'héritier peut déclarer qu'il conserve en nature un ou plusieurs biens de la succession. […] Il peut vendre les biens qu'il n'entend pas conserver.",
+      "obligation_summary": "L'héritier peut conserver ou vendre les biens de la succession selon son choix, dans les formes requises.",
+      "actor_role": "heritier_succession",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_x_confirmation_de_reorientation_silence_sur_attestation_factuelle-f003"
+      ],
+      "rationale": "Le fait mentionne les conditions requises par AMUNDI pour un mandat de cession de parts (nombre, signature, RIB), mais ne permet pas de savoir si l'héritier a effectivement exercé son option de vente ou de conservation. Le régime d'acceptation applicable n'est par ailleurs pas établi par les faits fournis."
+    },
+    {
+      "entry_id": "f8d944a20b73",
+      "statute_chunk_id": "cc-813",
+      "statute_excerpt": "Les héritiers peuvent, d'un commun accord, confier l'administration de la succession à l'un d'eux ou à un tiers. Le mandat est régi par les articles 1984 à 2010.",
+      "obligation_summary": "Un mandat conventionnel d'administration de la succession doit être donné d'un commun accord par l'ensemble des héritiers.",
+      "actor_role": "mandant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02b_comptes_et_actifs_procuration-f002"
+      ],
+      "rationale": "Le mandant désigne Élodie MARTIN comme mandataire spécial dans un dossier référencé en matière successorale, mais les faits fournis ne permettent ni de qualifier juridiquement cette procuration (mandat conventionnel d'administration successorale au sens de l'article 813, simple procuration bancaire, ou autre), ni d'établir si l'accord commun de l'ensemble des cohéritiers a été recueilli. La présence dans le contexte inter-rôles d'un juge des contentieux et d'une personne habilitée suggère par ailleurs un cadre spécifique de protection qui ne peut être apprécié sans éléments complémentaires."
+    },
+    {
+      "entry_id": "3171cd22e623",
+      "statute_chunk_id": "cc-812",
+      "statute_excerpt": "Le mandataire ne peut être le notaire chargé du règlement de la succession.",
+      "obligation_summary": "Le mandataire désigné ne peut être le notaire chargé du règlement de la succession (si le mandat s'inscrit dans le cadre du mandat à effet posthume).",
+      "actor_role": "mandant",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02b_comptes_et_actifs_procuration-f002",
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_mandat_exclusif_de_vente_avec_faculte_de_delegation-f001"
+      ],
+      "rationale": "La mandataire spéciale désignée est Élodie MARTIN, personne physique non identifiée comme notaire, ce qui n'entre pas en conflit avec cette prohibition. Le mandat exclusif de vente confié à Sophie DUBOIS vise un objet distinct (vente immobilière) et non l'administration successorale au sens de l'article 812 ; les faits ne permettent pas d'établir si cette même personne est également chargée du règlement de la succession, ni si le mandat en cause est un mandat à effet posthume."
+    },
+    {
+      "entry_id": "1a9d0125cda7",
+      "statute_chunk_id": "cc-933",
+      "statute_excerpt": "Si le donataire est majeur, l'acceptation doit être faite par lui ou, en son nom, par la personne fondée de sa procuration, portant pouvoir d'accepter la donation faite... Cette procuration devra être passée devant notaires",
+      "obligation_summary": "Le mandataire représentant un donataire majeur à l'acceptation d'une donation doit être titulaire d'une procuration authentique (notariée) portant pouvoir d'accepter, dont une expédition doit être annexée à la minute de la donation.",
+      "actor_role": "mandataire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f005"
+      ],
+      "rationale": "Le fait établit uniquement que Hélène FAURE, clerc de notaire, représente les donataires non-présents à l'acte, sans préciser si elle disposait d'une procuration notariée conforme à l'article 933, ni si les expéditions ont été annexées à la minute. Le document étant qualifié d'incomplet, on ne peut vérifier la conformité de la représentation. Cette obligation interagit avec celle du notaire_redacteur, tenu d'annexer les procurations à la minute pour assurer la validité de l'acte."
+    },
+    {
+      "entry_id": "1dee37a3b2d4",
+      "statute_chunk_id": "cc-730-1",
+      "statute_excerpt": "L'acte de notoriété doit viser l'acte de décès de la personne dont la succession est ouverte et faire mention des pièces justificatives qui ont pu être produites",
+      "obligation_summary": "Le notaire qui dresse l'acte de notoriété doit y intégrer les mentions obligatoires : visa de l'acte de décès, référence aux pièces justificatives et affirmation signée des ayants droit.",
+      "actor_role": "notaire_instrumentaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_pdf_attache_au_refus_de_cloture-f002"
+      ],
+      "rationale": "Les faits attestent uniquement que l'Étude a reçu (dressé) l'acte de notoriété le 27 janvier 2026, sans en préciser le contenu. Il est donc impossible, à partir des éléments fournis, de vérifier le respect des mentions obligatoires (visa de l'acte de décès, pièces justificatives, affirmation signée des ayants droit)."
+    },
+    {
+      "entry_id": "1dee37a3b2d4",
+      "statute_chunk_id": "cc-730-1",
+      "statute_excerpt": "Il est fait mention de l'existence de l'acte de notoriété en marge de l'acte de décès.",
+      "obligation_summary": "Une mention de l'existence de l'acte de notoriété doit être portée en marge de l'acte de décès du défunt.",
+      "actor_role": "notaire_instrumentaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_pdf_attache_au_refus_de_cloture-f002"
+      ],
+      "rationale": "L'acte de notoriété a été reçu par l'Étude le 27 janvier 2026, mais aucun fait ne permet de confirmer ou d'infirmer que la mention marginale a été portée sur l'acte de décès du défunt. L'évaluation exigerait la production de l'acte d'état civil actualisé."
+    },
+    {
+      "entry_id": "24ba832dd51b",
+      "statute_chunk_id": "cc-789",
+      "statute_excerpt": "L'inventaire est établi par un commissaire-priseur judiciaire, un huissier ou un notaire, selon les lois et règlements applicables à ces professions.",
+      "obligation_summary": "En cas d'acceptation à concurrence de l'actif net, le notaire qui établit l'inventaire doit produire une estimation article par article de l'actif et du passif.",
+      "actor_role": "notaire_instrumentaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_reponse_a_sophie_dubois_0609-f006"
+      ],
+      "rationale": "Les faits ne précisent pas si la succession a été acceptée à concurrence de l'actif net ni si un inventaire a été dressé par l'Étude. La demande de justifications documentaires attendue pour le 25 juin 2026 pourrait porter sur cette pièce, mais rien ne permet de trancher sur son existence ou sa conformité."
+    },
+    {
+      "entry_id": "38977b6b63b1",
+      "statute_chunk_id": "cc-812",
+      "statute_excerpt": "Toute personne peut donner à une ou plusieurs autres personnes... mandat d'administrer ou de gérer... tout ou partie de sa succession pour le compte et dans l'intérêt d'un ou de plusieurs héritiers... Le mandataire ne peut être le notaire chargé du règlement de la succession.",
+      "obligation_summary": "Dans le cadre d'un mandat à effet posthume, le mandataire ne peut être le notaire chargé du règlement de la succession (interdiction de cumul).",
+      "actor_role": "notaire_mandataire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_mandat_exclusif_de_vente_avec_faculte_de_delegation-f002"
+      ],
+      "rationale": "L'article 812 C. civ. régit spécifiquement le mandat à effet posthume consenti par le défunt de son vivant, tandis que le document analysé est un mandat exclusif de vente accepté par Sophie DUBOIS, vraisemblablement consenti par un héritier (cf. contexte inter-rôles indiquant que le mandant est également héritier). L'article semble ainsi inapplicable à un simple mandat de vente entre héritier et notaire, et les faits fournis ne permettent pas de qualifier autrement l'acte ni d'identifier le notaire liquidateur de la succession Camille MARTIN."
+    },
+    {
+      "entry_id": "0d98be65c685",
+      "statute_chunk_id": "ord45-2590-6-2",
+      "statute_excerpt": "La responsabilité civile professionnelle des notaires est garantie par un contrat d'assurance souscrit par le Conseil supérieur du notariat.",
+      "obligation_summary": "Le notaire doit être couvert par une assurance de responsabilité civile professionnelle souscrite par le CSN pour l'exercice de ses fonctions.",
+      "actor_role": "notaire_mandataire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_mandat_exclusif_de_vente_avec_faculte_de_delegation-f002"
+      ],
+      "rationale": "Cette garantie collective est en principe systématique pour tout notaire en exercice, mais les faits fournis se limitent à l'acceptation du mandat et à la faculté de délégation, sans permettre de vérifier expressément l'affiliation de Sophie DUBOIS à la couverture collective du Conseil supérieur du notariat au moment de l'acceptation du mandat."
+    },
+    {
+      "entry_id": "0b79f26075f8",
+      "statute_chunk_id": "ord45-2590-1",
+      "statute_excerpt": "Les notaires sont les officiers publics, établis pour recevoir tous les actes et contrats auxquels les parties doivent ou veulent faire donner le caractère d'authenticité",
+      "obligation_summary": "Recevoir en la forme authentique les actes et contrats que les parties souhaitent revêtir de l'authenticité.",
+      "actor_role": "notaire_redacteur",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f001",
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f001",
+        "camille_martin_s_02_successions_02a_actes_de_x_attestation_devolutive_acte_n_ref_ref-f004",
+        "camille_martin_s_02_successions_02a_actes_de_x_declaration_x_mme_nomne_martin_ref-f005"
+      ],
+      "rationale": "Sophie DUBOIS a reçu plusieurs actes authentiques dans le cadre du dossier (convention de quasi-usufruit du 8 mars 2024, acte de notoriété du 5 août 2025 pour Mme BLANC, acte de notoriété du 27 janvier 2026 pour M. Henri MARTIN). La fonction constitutive de la profession notariale, à savoir la réception d'actes authentiques, est matériellement remplie."
+    },
+    {
+      "entry_id": "0b79f26075f8",
+      "statute_chunk_id": "ord45-2590-1",
+      "statute_excerpt": "pour en assurer la date, en conserver le dépôt",
+      "obligation_summary": "Assurer la date certaine des actes et en conserver le dépôt à l'office.",
+      "actor_role": "notaire_redacteur",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f001",
+        "camille_martin_s_02_successions_02a_actes_de_x_acte_de_notoriete_henri_martin_aae_annexes-f001",
+        "camille_martin_s_02_successions_02a_actes_de_x_attestation_devolutive_acte_n_ref_ref-f007"
+      ],
+      "rationale": "Chaque acte reçu par Sophie DUBOIS porte une date précise et vérifiable (8 mars 2024, 5 août 2025, 27 janvier 2026). Aucun fait ne suggère un défaut de conservation des minutes à l'étude Alain LEROY-Sophie DUBOIS à Beaumont."
+    },
+    {
+      "entry_id": "0b79f26075f8",
+      "statute_chunk_id": "ord45-2590-1",
+      "statute_excerpt": "en délivrer des grosses et expéditions",
+      "obligation_summary": "Délivrer les grosses et expéditions des actes reçus aux personnes qui y ont intérêt.",
+      "actor_role": "notaire_redacteur",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02a_actes_de_x_attestation_devolutive_acte_n_ref_ref-f008",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_response_a_camille_28th_premiere_mention_de_l_acte_1999-f002",
+        "camille_martin_s_04_precontentieux_ref_camille_a_x_demande_d_information-f004"
+      ],
+      "rationale": "L'attestation dévolutive a été délivrée le 3 février 2026 (« EN FOI DE QUOI, j'ai délivré la présente attestation »), et une copie de l'acte de donation-partage de 1999 a été transmise à la demande d'une héritière. L'obligation de délivrance d'expéditions est ainsi remplie sur les points documentés."
+    },
+    {
+      "entry_id": "c85b404f00fc",
+      "statute_chunk_id": "cc-812",
+      "statute_excerpt": "Le mandataire ne peut être le notaire chargé du règlement de la succession.",
+      "obligation_summary": "Le notaire chargé du règlement de la succession ne peut être désigné mandataire à effet posthume.",
+      "actor_role": "notaire_redacteur",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02c_immobilier_villeneuve_donation_partage_1999_incomplet_ref-f002",
+        "camille_martin_s_03_correspondance_courante_ref_etude_procuration-f001"
+      ],
+      "rationale": "Les faits font état de procurations reçues par le notaire (procuration de Nicole GIRARD en 1999, procurations sollicitées en janvier 2026) mais ne caractérisent pas un mandat à effet posthume au sens de l'article 812. La compatibilité des missions de Sophie DUBOIS avec cette prohibition ne peut être appréciée en l'état des pièces fournies."
+    },
+    {
+      "entry_id": "92bdfe2425e0",
+      "statute_chunk_id": "d73-609-22",
+      "statute_excerpt": "Le stagiaire participe à l'activité du maître de stage sous la direction et la responsabilité de celui-ci, sans pouvoir se substituer à lui pour les actes de sa profession",
+      "obligation_summary": "Le notaire Sarah GARNIER doit agir sous la direction et la responsabilité de son maître de stage, sans se substituer à lui pour les actes de la profession.",
+      "actor_role": "notaire_stagiaire",
+      "status": "ambiguous",
+      "evidence_fact_ids": [
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f005",
+        "camille_martin_s_04_precontentieux_ref_camille_refus_de_signature_de_la_procuration-f006",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_tentative_de_cloture_des_successions-f002",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_tentative_de_cloture_des_successions-f003",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_tentative_de_cloture_des_successions-f008",
+        "camille_martin_s_03_correspondance_courante_ref_sophie_dubois_procuration_modification_de_mandataire_de_nom_luc_a_sophie_dubois_soeur-f002",
+        "camille_martin_s_04_precontentieux_ref_sophie_dubois_demande_d_entretien_telephonique-f003"
+      ],
+      "rationale": "Certains faits laissent penser que Madame GARNIER, notaire Sarah GARNIER, émet directement aux héritiers des conclusions juridiques substantielles (constat de l'absence d'obligation de déclaration de succession, annonce de la clôture des deux dossiers successoraux, qualification des 377 parts SCPI EDISSIMO comme hors succession), qui s'apparentent à des actes de conseil juridique typiquement réservés au notaire. Toutefois, d'autres communications font explicitement référence à Sophie DUBOIS (fixation des rendez-vous de signature et proposition de visioconférence 'avec Sophie DUBOIS'), ce qui atteste d'un exercice sous supervision. En l'absence d'élément indiquant si ces conclusions étaient personnelles à la Sarah GARNIER ou relayées au nom du maître de stage (notaire_associe), l'évaluation demeure ambiguë. Cette obligation croise celle du rôle notaire_associe, qui doit exercer la direction effective sur la Sarah GARNIER."
+    },
+    {
+      "entry_id": "cc2ecfab477d",
+      "statute_chunk_id": "cc-609",
+      "statute_excerpt": "Le propriétaire est obligé de les payer, et l'usufruitier doit lui tenir compte des intérêts ; Si elles sont avancées par l'usufruitier, il a la répétition du capital à la fin de l'usufruit.",
+      "obligation_summary": "Le nu-propriétaire est tenu de payer les charges imposées sur la propriété pendant la durée du (quasi-)usufruit, l'usufruitier lui devant les intérêts.",
+      "actor_role": "nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f006"
+      ],
+      "rationale": "Le seul fait disponible établit la constitution du quasi-usufruit du 8 mars 2024, mais ne renseigne ni sur l'existence de charges grevant les avoirs concernés ni sur leur prise en charge. L'évaluation du respect de cette obligation n'est pas possible en l'état."
+    },
+    {
+      "entry_id": "db03f209b59f",
+      "statute_chunk_id": "cc-612",
+      "statute_excerpt": "L'usufruitier, ou universel, ou à titre universel, doit contribuer avec le propriétaire au paiement des dettes ainsi qu'il suit : On estime la valeur du fonds sujet à usufruit ; on fixe ensuite la contribution aux dettes",
+      "obligation_summary": "Le nu-propriétaire doit contribuer, selon le mécanisme légal, au paiement des dettes grevant le fonds soumis à usufruit.",
+      "actor_role": "nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f006"
+      ],
+      "rationale": "Aucun fait ne mentionne de dettes attachées aux avoirs soumis au quasi-usufruit ni de contribution du nu-propriétaire à leur règlement. Le seul constat de constitution du quasi-usufruit ne permet pas de vérifier le respect de cette obligation contributive."
+    },
+    {
+      "entry_id": "1e907203e25c",
+      "statute_chunk_id": "cc-605",
+      "statute_excerpt": "L'usufruitier n'est tenu qu'aux réparations d'entretien. Les grosses réparations demeurent à la charge du propriétaire, à moins qu'elles n'aient été occasionnées par le défaut de réparations d'entretien",
+      "obligation_summary": "Le nu-propriétaire supporte la charge des grosses réparations sur les biens grevés d'usufruit.",
+      "actor_role": "nu_proprietaire",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f006"
+      ],
+      "rationale": "Les avoirs soumis au quasi-usufruit paraissent être des choses consomptibles (avoirs financiers) auxquelles la notion de grosses réparations ne s'applique pas directement. Par ailleurs, aucun fait ne fait état de réparations quelconques, rendant l'évaluation impossible."
+    },
+    {
+      "entry_id": "66b80daf8dc9",
+      "statute_chunk_id": "cc-815-4",
+      "statute_excerpt": "Si l'un des indivisaires se trouve hors d'état de manifester sa volonté, un autre peut se faire habiliter par justice à le représenter, d'une manière générale ou pour certains actes particuliers, les conditions et l'étendue de cette représentation étant fixées par le juge.",
+      "obligation_summary": "La personne habilitée par justice doit exercer sa représentation dans les strictes conditions et l'étendue fixées par le juge dans l'ordonnance.",
+      "actor_role": "personne_habitee",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_02_successions_02b_comptes_et_actifs_procuration-f004"
+      ],
+      "rationale": "Le fait fourni établit uniquement la désignation de MM. Bernard MARTIN et Gérard MARTIN comme personnes habilitées par ordonnance à représenter Henri MARTIN. Aucun élément factuel ne renseigne sur la nature des actes accomplis ni sur leur conformité à l'étendue de la représentation fixée par le juge, empêchant toute évaluation du respect de cette obligation."
+    },
+    {
+      "entry_id": "74dd741f3340",
+      "statute_chunk_id": "cc-587",
+      "statute_excerpt": "l'usufruitier a le droit de s'en servir, mais à la charge de rendre, à la fin de l'usufruit, soit des choses de même quantité et qualité soit leur valeur estimée à la date de la restitution.",
+      "obligation_summary": "Le quasi-usufruitier (et, à son décès, sa succession) doit restituer, à la fin de l'usufruit, une somme de même quantité et qualité ou sa valeur estimée à la date de la restitution.",
+      "actor_role": "quasi_usufruitier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_00_note_de_presentation-f002",
+        "camille_martin_s_04_precontentieux_ref_camille_a_x_demande_d_information-f002"
+      ],
+      "rationale": "Le décès de Henri MARTIN le 9 janvier 2026 a éteint l'usufruit et rendu la créance de restitution exigible envers sa succession. Les faits ne permettent pas d'établir si la restitution a effectivement été assurée : la demande d'information adressée par la nu-propriétaire à UNOFI en mai 2026 traduit une démarche exploratoire mais ne prouve ni un refus, ni une exécution, ni une insuffisance d'actif."
+    },
+    {
+      "entry_id": "f2309bbe12d0",
+      "statute_chunk_id": "cc-617",
+      "statute_excerpt": "L'usufruit s'éteint : Par la mort de l'usufruitier ; Par l'expiration du temps pour lequel il a été accordé ; Par la consolidation ou la réunion sur la même tête, des deux qualités d'usufruitier et de propriétaire",
+      "obligation_summary": "L'usufruit prend fin notamment par la mort de l'usufruitier, ce qui déclenche les effets attachés à son extinction (dont la restitution en matière de quasi-usufruit).",
+      "actor_role": "quasi_usufruitier",
+      "status": "met",
+      "evidence_fact_ids": [
+        "camille_martin_s_00_note_de_presentation-f002",
+        "camille_martin_s_04_precontentieux_ref_camille_a_x_demande_d_information-f002"
+      ],
+      "rationale": "Le décès du quasi-usufruitier le 9 janvier 2026, attesté par la note de présentation et l'acte de notoriété de Sophie DUBOIS du 3 février 2026, correspond au cas d'extinction prévu par l'article 617. Cet événement n'est pas un manquement mais le fait générateur de l'obligation de restitution qui incombe désormais à la succession."
+    },
+    {
+      "entry_id": "04ec08d56867",
+      "statute_chunk_id": "cc-618",
+      "statute_excerpt": "L'usufruit peut aussi cesser par l'abus que l'usufruitier fait de sa jouissance, soit en commettant des dégradations sur le fonds, soit en le laissant dépérir faute d'entretien.",
+      "obligation_summary": "Le quasi-usufruitier doit exercer sa jouissance sans abus, ce qui inclut, dans le contexte contractuel, le maintien des sommes conformément aux stipulations de la convention.",
+      "actor_role": "quasi_usufruitier",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f007",
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f002"
+      ],
+      "rationale": "La convention imposait au quasi-usufruitier de maintenir les sommes sur un compte spécial, obligation qui participe de l'exercice non-abusif de son droit. Les faits ne permettent toutefois pas d'établir si cette obligation de conservation a été respectée pendant la période d'habilitation familiale, ni si des dégradations patrimoniales ont été commises."
+    },
+    {
+      "entry_id": "24943460fa85",
+      "statute_chunk_id": "cc-815-4",
+      "statute_excerpt": "Si l'un des indivisaires se trouve hors d'état de manifester sa volonté, un autre peut se faire habiliter par justice à le représenter [...] les conditions et l'étendue de cette représentation étant fixées par le juge.",
+      "obligation_summary": "Le représentant doit agir dans les limites des pouvoirs et conditions fixés par l'habilitation qui lui a été délivrée.",
+      "actor_role": "representant_legal",
+      "status": "insufficient_evidence",
+      "evidence_fact_ids": [
+        "camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref-f004"
+      ],
+      "rationale": "Le fait établit qu'Gérard MARTIN représente Henri MARTIN et Jeanne MARTIN à l'acte, mais les termes de l'habilitation familiale, son étendue et la conformité de l'acte de quasi-usufruit à ces pouvoirs ne sont pas documentés dans les faits fournis. Il est donc impossible de vérifier si l'acte signé entre dans le périmètre de l'habilitation. Cette évaluation touche aussi le rôle croisé de quasi_usufruitier, puisque Gérard MARTIN engage juridiquement les représentés."
+    }
+  ],
+  "unresolved_ambiguities": 22
+}
