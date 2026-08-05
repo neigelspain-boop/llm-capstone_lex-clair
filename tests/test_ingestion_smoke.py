@@ -805,6 +805,31 @@ def test_chroma_scope_filter_prevents_candidate_starvation() -> None:
     assert r._chroma_scope_filter("blended") is None
 
 
+def test_chroma_filter_for_case_statute_allows_statute_plus_one_case() -> None:
+    """The dossier-first scope must be enforced server-side, not post-hoc.
+
+    Filtering after the fact would let another case's chunks consume the k*3
+    budget and then be trimmed away, starving the pool — the ADR #63 failure
+    in a new costume. The clause is an allowlist for the same reason: a case
+    the row table does not know is excluded rather than admitted.
+    """
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": "cc-587", "source": "cc_usufruit", "texte": "a"},
+        {"chunk_id": "dossier-vitrine-d1-c001", "source": "dossier-vitrine", "texte": "b"},
+        {"chunk_id": "dossier-private-d1-c001", "source": "dossier-private", "texte": "c"},
+    ]).set_index("chunk_id", drop=False)
+    r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
+
+    where = r._chroma_scope_filter("case+statute:vitrine")
+    allowed = where["source"]["$in"]
+
+    assert "cc_usufruit" in allowed
+    assert "dossier-vitrine" in allowed
+    assert "dossier-private" not in allowed, "another client's case reached the scope"
+
+
 def test_chroma_scope_filter_excludes_sources_the_row_table_does_not_know() -> None:
     """An unrecognised `source` must be excluded from every narrow scope,
     not admitted into the default one (ADR #63).

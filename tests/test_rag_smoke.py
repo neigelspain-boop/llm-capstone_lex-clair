@@ -115,7 +115,10 @@ def test_router_gap_analysis_with_case_id(monkeypatch) -> None:
     decision = router.route_query("le notaire a-t-il manque a son obligation ?", "private")
 
     assert decision.intent == "gap_analysis"
-    assert decision.source_scope == "blended"
+    # Was "blended" until ADR #66. "blended" is not a filter at all — it
+    # reaches every case in the index, so a gap-analysis question about one
+    # client could retrieve another's chunks.
+    assert decision.source_scope == "case+statute:private"
 
 
 def test_router_gap_analysis_without_case_id_downgrades(monkeypatch) -> None:
@@ -1434,3 +1437,118 @@ def test_template_is_chosen_from_the_chunks_not_the_caller() -> None:
 
     assert prompt._is_dossier(_dossier_chunk())
     assert not prompt._is_dossier(_statute_chunk())
+
+
+# ========== dossier-first routing (ADR #66) ==========
+
+
+@pytest.mark.parametrize("intent", ["statute_lookup", "case_factual", "gap_analysis", "other"])
+def test_router_never_drops_the_active_dossier(monkeypatch, intent: str) -> None:
+    """With a dossier open, no intent may resolve to bare "statute".
+
+    This is the defect that motivated ADR #66: a user looking at a dossier
+    asked whether one was attached, the classifier called it "other", scope
+    resolved to "statute", and the answer came back as generic Code civil
+    prose. The dossier is the unit of work — the router decides emphasis,
+    never whether the dossier is visible.
+    """
+    from rag import router
+
+    monkeypatch.setattr(
+        router, "get_openrouter_client",
+        lambda: _mock_openrouter_client(_classifier_json(intent)),
+    )
+
+    decision = router.route_query("une question", "vitrine")
+
+    assert decision.source_scope != "statute", f"{intent} dropped the dossier"
+    assert decision.source_scope != "blended", f"{intent} used the unfiltered scope"
+    assert "vitrine" in decision.source_scope
+
+
+def test_router_failure_keeps_the_active_dossier_in_scope(monkeypatch) -> None:
+    """A router outage must not look like an empty dossier.
+
+    The old fallback returned bare "statute", so an OpenRouter blip silently
+    reproduced the exact bug ADR #66 fixes.
+    """
+    from rag import router
+
+    def _boom():
+        raise RuntimeError("router unavailable")
+
+    monkeypatch.setattr(router, "get_openrouter_client", _boom)
+
+    decision = router.route_query("une question", "vitrine")
+    assert decision.source_scope == "case+statute:vitrine"
+    assert decision.confidence == "low"
+
+    # With no dossier open the original safe default is still right.
+    assert router.route_query("une question", None).source_scope == "statute"
+
+
+# ========== case+statute scope isolation (ADR #66) ==========
+
+
+def test_case_statute_predicate_admits_statute_and_exactly_one_case() -> None:
+    """The scope must carry the law plus one dossier — and no other dossier.
+
+    Chunk-id level, so it holds for the BM25 arm too, which has no
+    server-side filter to fall back on.
+    """
+    from ingestion.load import _scope_predicate
+
+    keep = _scope_predicate("case+statute:vitrine")
+
+    assert keep("cc-587")                               # statute
+    assert keep("dossier-vitrine-doc-c001")             # the active case
+    assert not keep("dossier-private-doc-c001")         # another client
+    assert not keep("dossier-vitrine2-doc-c001")        # prefix-similar case
+
+
+def test_case_statute_scope_rejects_an_empty_case_id() -> None:
+    from ingestion.load import _scope_predicate
+
+    with pytest.raises(ValueError, match="case id must not be empty"):
+        _scope_predicate("case+statute:")
+
+
+# ========== active-dossier identity in the prompt (ADR #66) ==========
+
+
+def test_prompt_names_the_active_dossier() -> None:
+    """The model must be told the case documents ARE the open dossier.
+
+    Retrieval was already returning the right chunks, but the prompt never
+    said whose they were: asked "vois-tu un dossier attaché à cette
+    conversation ?" over five pieces of that very dossier, the model replied
+    that it could see none — reading the question as being about an upload
+    feature rather than the case it was holding.
+    """
+    from rag import prompt
+
+    p = prompt.build("vois-tu un dossier ?", [_dossier_chunk(), _statute_chunk()])
+
+    assert "DOSSIER ACTIF" in p
+    assert "vitrine" in p
+
+
+def test_statute_only_prompt_has_no_dossier_header() -> None:
+    """A pure statute question must not be told a dossier is open — there
+    isn't one in its context, and saying so would invite invention."""
+    from rag import prompt
+
+    p = prompt.build("qu'est-ce que le quasi-usufruit ?", [_statute_chunk()])
+
+    assert "DOSSIER ACTIF" not in p
+
+
+def test_prompt_names_no_case_when_chunks_disagree() -> None:
+    """Naming one case while showing another's pieces is worse than naming
+    none, so a mixed set drops the header rather than guessing."""
+    from rag import prompt
+
+    other = {**_dossier_chunk(), "chunk_id": "dossier-autrecas-doc-c001"}
+    p = prompt.build("quel litige ?", [_dossier_chunk(), other])
+
+    assert "DOSSIER ACTIF" not in p

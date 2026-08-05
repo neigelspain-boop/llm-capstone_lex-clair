@@ -117,15 +117,34 @@ def route_query(query: str, active_case_id: str | None = None) -> RouteDecision:
     """Classify query intent and return source_scope for retrieval.
 
     Deterministic scope mapping from (intent, active_case_id):
+
+    With an active case (ADR #66) — the dossier is never out of scope, so no
+    intent may resolve to bare "statute". The router decides emphasis, not
+    whether the dossier is visible:
+      - statute_lookup  -> "case+statute:{case_id}"
+      - case_factual    -> "case:{case_id}"   (pure fact lookup, no statute)
+      - gap_analysis    -> "case+statute:{case_id}"
+      - other           -> "case+statute:{case_id}"
+
+    Without an active case — unchanged from ADR #42:
       - statute_lookup            -> "statute"
-      - case_factual + case_id    -> "case:{case_id}"
       - case_factual, no case_id  -> downgrade to "statute", confidence="low"
-      - gap_analysis + case_id    -> "blended"
       - gap_analysis, no case_id  -> downgrade to "statute", confidence="low"
       - other                     -> "statute" (safest fallback)
 
+    Two behaviours changed here. `statute_lookup` and `other` used to resolve
+    to "statute" even with a case selected, so a general legal question — or
+    anything the classifier found ambiguous, which includes "is a dossier
+    attached?" — answered from the statute corpus while the user was looking
+    at a dossier. And `gap_analysis` used to resolve to "blended", which is
+    not a filter at all: it reaches every case in the index, including other
+    clients'. "case+statute:{id}" fixes both, and is the reason that scope
+    exists.
+
     Never raises: any call or parse failure logs a warning and returns a
-    safe default (intent="other", source_scope="statute", confidence="low").
+    safe default (intent="other", confidence="low") — scoped to the active
+    case when there is one, so a router outage degrades to the right corpus
+    rather than silently dropping the dossier.
     """
     try:
         client = get_openrouter_client()
@@ -144,9 +163,15 @@ def route_query(query: str, active_case_id: str | None = None) -> RouteDecision:
         parsed = _parse_router_response(response.choices[0].message.content or "")
     except Exception as e:
         log.warning("router: call/parse failed (%s); falling back to safe default", e)
+        # "Safe" now means the active case stays in scope. Falling back to
+        # bare "statute" would make a router outage look like a dossier with
+        # nothing in it — the failure mode this ADR #66 mapping exists to
+        # remove. With no active case the old fallback is still correct.
         return RouteDecision(
             intent="other",
-            source_scope="statute",
+            source_scope=(
+                f"case+statute:{active_case_id}" if active_case_id else "statute"
+            ),
             confidence="low",
             rationale=f"router failure: {e}",
         )
@@ -156,7 +181,7 @@ def route_query(query: str, active_case_id: str | None = None) -> RouteDecision:
     rationale = parsed["rationale"]
 
     if intent == "statute_lookup":
-        source_scope = "statute"
+        source_scope = f"case+statute:{active_case_id}" if active_case_id else "statute"
     elif intent == "case_factual":
         if active_case_id:
             source_scope = f"case:{active_case_id}"
@@ -165,12 +190,12 @@ def route_query(query: str, active_case_id: str | None = None) -> RouteDecision:
             rationale = f"case_factual sans dossier actif — repli statute. {rationale}"
     elif intent == "gap_analysis":
         if active_case_id:
-            source_scope = "blended"
+            source_scope = f"case+statute:{active_case_id}"
         else:
             source_scope, confidence = "statute", "low"
             rationale = f"gap_analysis sans dossier actif — repli statute. {rationale}"
     else:  # "other"
-        source_scope = "statute"
+        source_scope = f"case+statute:{active_case_id}" if active_case_id else "statute"
 
     return RouteDecision(
         intent=intent, source_scope=source_scope, confidence=confidence, rationale=rationale,

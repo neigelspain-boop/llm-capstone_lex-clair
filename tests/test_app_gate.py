@@ -58,7 +58,52 @@ def test_unlocked_session_sees_every_case() -> None:
 def test_unknown_cases_are_protected_by_default() -> None:
     """A new case directory must be protected without anyone remembering to
     add it to a denylist — only the explicit PUBLIC_CASE_IDS allowlist opens
-    a case up."""
+    a case up.
+
+    ADR #66 added vitrine to the allowlist. That is a statement of fact — it
+    is anonymised and committed (ADR #65) — and deliberately does NOT relax
+    the rule this test guards: an unnamed case is still closed.
+    """
     assert _filter_accessible(["brand_new_client"], unlocked=False) == []
     assert not _case_is_public("brand_new_client")
-    assert PUBLIC_CASE_IDS == {"demo"}
+    assert PUBLIC_CASE_IDS == {"demo", "vitrine"}
+
+
+# ========== session-owned cases (ADR #66) ==========
+
+def test_session_owned_case_is_reachable_by_its_creator() -> None:
+    """A dossier created through the app must be usable immediately.
+
+    Its creator has no passphrase — on a fresh checkout none is even
+    configured — so without this the new-dossier flow would build a case the
+    user could never open.
+    """
+    assert _resolve_active_case_id("mine", unlocked=False, owned={"mine"}) == "mine"
+    assert _filter_accessible(["mine", "private"], unlocked=False, owned={"mine"}) == ["mine"]
+
+
+def test_session_owned_case_is_not_reachable_by_another_session() -> None:
+    """Ownership is per-session state and never persisted, so a second
+    visitor sees the same case as protected."""
+    assert _resolve_active_case_id("mine", unlocked=False, owned=set()) is None
+    assert _filter_accessible(["mine"], unlocked=False, owned=set()) == []
+
+
+def test_ownership_cannot_launder_the_protected_case() -> None:
+    """Ownership grants access to what this session created, not to anything
+    it names — `private` is protected regardless of what the set claims."""
+    assert _filter_accessible(["private"], unlocked=False, owned={"mine"}) == []
+
+
+# ========== case id validation for the new-dossier flow (ADR #66) ==========
+
+def test_case_id_slug_rejects_traversal_and_bad_shapes() -> None:
+    """case_id becomes a directory name AND the `dossier-<id>-` chunk-id
+    prefix, so anything outside the slug set either escapes data/dossier/ or
+    corrupts scope parsing."""
+    from app.streamlit_app import _valid_case_id
+
+    for good in ("vitrine", "dupont_2026", "a1", "cas-01"):
+        assert _valid_case_id(good), good
+    for bad in ("../etc/passwd", "Dupont", "a", "has space", "", "x" * 70, "-lead", "/abs"):
+        assert not _valid_case_id(bad), bad

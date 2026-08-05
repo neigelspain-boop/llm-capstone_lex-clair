@@ -61,7 +61,7 @@ DOSSIER_ANSWER_TEMPLATE = """
 Tu es un assistant juridique qui aide des non-juristes à comprendre LEUR PROPRE
 dossier de succession. On te donne des pièces de ce dossier (courriers, actes,
 conventions, factures) et une question portant sur les faits de l'affaire.
-
+{case_line}
 QUESTION:
 {query}
 
@@ -95,7 +95,7 @@ BLENDED_ANSWER_TEMPLATE = """
 Tu es un assistant juridique qui aide des non-juristes à comprendre leur dossier
 de succession. On te donne À LA FOIS des articles de loi et des pièces du
 dossier de l'utilisateur.
-
+{case_line}
 QUESTION:
 {query}
 
@@ -144,9 +144,38 @@ Page: {page}
 # chunk_id prefix written by ingestion.dossier.index for every case document.
 DOSSIER_CHUNK_PREFIX = "dossier-"
 
+# Names the open dossier for the model (ADR #66). Without it the model knows
+# it has case documents but not that they ARE the user's open case file, and
+# answers meta-questions about the session wrongly: asked "vois-tu un dossier
+# attaché à cette conversation ?" over five chunks from that very dossier, it
+# replied that it could see none — reading the question as being about an
+# upload feature rather than about the case it was already holding.
+CASE_LINE_TEMPLATE = """
+DOSSIER ACTIF: « {case_id} ». Ce dossier EST rattaché à cette conversation et
+les pièces ci-dessous en proviennent. Si l'utilisateur demande si un dossier
+est joint, ouvert ou disponible, la réponse est OUI — c'est celui-ci, et tu
+dois le décrire. C'est le sujet par défaut de toutes ses questions.
+"""
+
 
 def _is_dossier(chunk: dict) -> bool:
     return str(chunk.get("chunk_id", "")).startswith(DOSSIER_CHUNK_PREFIX)
+
+
+def _case_id_of(chunks: list[dict]) -> str | None:
+    """The case id shared by the dossier chunks, or None.
+
+    Read from the chunk ids rather than taken from the caller for the same
+    reason `build` picks its template that way: retrieval decides what the
+    model is actually looking at. Returns None when the chunks disagree —
+    naming one case while showing another's pieces would be worse than
+    naming none.
+    """
+    ids = {
+        str(c["chunk_id"]).removeprefix(DOSSIER_CHUNK_PREFIX).split("-", 1)[0]
+        for c in chunks if _is_dossier(c)
+    }
+    return ids.pop() if len(ids) == 1 else None
 
 
 def _page_of(chunk: dict) -> str:
@@ -179,13 +208,13 @@ def build(query: str, chunks: list[dict]) -> str:
     ]
     context = "\n\n".join(entries)
 
-    if has_dossier and has_statute:
-        template = BLENDED_ANSWER_TEMPLATE
-    elif has_dossier:
-        template = DOSSIER_ANSWER_TEMPLATE
-    else:
-        template = ANSWER_TEMPLATE
-    return template.format(query=query, context=context)
+    if not has_dossier:
+        return ANSWER_TEMPLATE.format(query=query, context=context)
+
+    template = BLENDED_ANSWER_TEMPLATE if has_statute else DOSSIER_ANSWER_TEMPLATE
+    case_id = _case_id_of(chunks)
+    case_line = CASE_LINE_TEMPLATE.format(case_id=case_id) if case_id else ""
+    return template.format(query=query, context=context, case_line=case_line)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,11 @@ from __future__ import annotations
 
 import hmac
 import json
+import logging
 import os
+import re
+import threading
+import time
 import traceback
 import uuid
 from datetime import datetime, timezone
@@ -37,6 +41,8 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from monitoring import db
+
+log = logging.getLogger(__name__)
 
 
 # ========== labels (EN/FR chrome) ==========
@@ -98,14 +104,35 @@ LABELS = {
         "dossier_unlocked": "Accès dossier déverrouillé.",
         "dossier_lock": "🔒 Verrouiller",
         "dossier_not_configured": (
-            "_Aucune phrase secrète configurée — accès dossier verrouillé. "
-            "Voir `.streamlit/secrets.toml.example`._"
+            "_Aucune phrase secrète configurée — les dossiers protégés restent "
+            "verrouillés. Voir `.streamlit/secrets.toml.example`._"
         ),
         "dossier_active": "Dossier actif",
         "dossier_statute_only": (
             "_Réponses fondées sur la loi uniquement. Sélectionnez un "
             "dossier pour interroger vos documents._"
         ),
+        "dossier_none_available": (
+            "Aucun dossier exploitable. Construisez le dossier de "
+            "démonstration `vitrine` :"
+        ),
+        "dossier_new": "➕ Nouveau dossier",
+        "dossier_new_name": "Nom du dossier",
+        "dossier_new_invalid": (
+            "Nom invalide — lettres minuscules, chiffres, tiret et underscore "
+            "uniquement."
+        ),
+        "dossier_new_exists": "Ce dossier existe déjà.",
+        "dossier_new_files": "Documents PDF",
+        "dossier_new_create": "Créer et analyser",
+        "dossier_new_cost": (
+            "⚠️ L'extraction utilise Opus 4.7 (vision) et est facturée. "
+            "Estimation pour {n} document(s) : ~{cost}. Durée : plusieurs "
+            "minutes."
+        ),
+        "dossier_new_running": "Analyse de « {case} » en cours — étape : {step}",
+        "dossier_new_done": "Dossier « {case} » prêt : {facts} faits extraits.",
+        "dossier_new_failed": "Échec de l'analyse de « {case} » : {error}",
         "route": "Périmètre de recherche",
     },
     "en": {
@@ -167,7 +194,7 @@ LABELS = {
         "dossier_unlocked": "Dossier access unlocked.",
         "dossier_lock": "🔒 Lock",
         "dossier_not_configured": (
-            "_No passphrase configured — dossier access locked. "
+            "_No passphrase configured — protected dossiers stay locked. "
             "See `.streamlit/secrets.toml.example`._"
         ),
         "dossier_active": "Active dossier",
@@ -175,6 +202,24 @@ LABELS = {
             "_Answers grounded in statute only. Select a dossier to query "
             "your own documents._"
         ),
+        "dossier_none_available": (
+            "No usable dossier. Build the `vitrine` demo case:"
+        ),
+        "dossier_new": "➕ New dossier",
+        "dossier_new_name": "Dossier name",
+        "dossier_new_invalid": (
+            "Invalid name — lowercase letters, digits, hyphen and underscore only."
+        ),
+        "dossier_new_exists": "That dossier already exists.",
+        "dossier_new_files": "PDF documents",
+        "dossier_new_create": "Create and analyse",
+        "dossier_new_cost": (
+            "⚠️ Extraction uses Opus 4.7 (vision) and is billed. Estimate for "
+            "{n} document(s): ~{cost}. Takes several minutes."
+        ),
+        "dossier_new_running": "Analysing “{case}” — stage: {step}",
+        "dossier_new_done": "Dossier “{case}” ready: {facts} facts extracted.",
+        "dossier_new_failed": "Analysis of “{case}” failed: {error}",
         "route": "Retrieval scope",
     },
 }
@@ -265,10 +310,23 @@ MATRIX_CACHE_TTL_SECONDS = 300
 # Cases anyone may reach without the passphrase. Everything else under
 # data/dossier/ is protected — the demo fixture stays open so a deployed
 # Space remains usable for peer review.
-PUBLIC_CASE_IDS = {"demo"}
+#
+# vitrine joins it under ADR #66. That is not a relaxation: vitrine is the
+# anonymised case derived from private and committed to the repository
+# (ADR #65), so it is already public by construction and gating it only made
+# the one case with real content unreachable. Everything NOT named here is
+# still protected by default — see _filter_accessible.
+PUBLIC_CASE_IDS = {"demo", "vitrine"}
 
 PASSPHRASE_SECRET_KEY = "dossier_passphrase"
+
+# Retained for the "nothing selectable" path and its tests. It is no longer
+# offered in the chat selector: a dossier is the unit of work, so browsing
+# with none active is not a state the app should make easy to reach (ADR #66).
 NO_CASE_LABEL = "Aucun"
+
+# Opened on load when it is accessible and non-empty.
+DEFAULT_CASE_ID = "vitrine"
 
 
 # ========== feedback wrapper (delegates to monitoring.db) ==========
@@ -407,20 +465,29 @@ def _case_is_public(case_id: str) -> bool:
     return case_id in PUBLIC_CASE_IDS
 
 
-def _filter_accessible(case_ids: list[str], unlocked: bool) -> list[str]:
+def _filter_accessible(
+    case_ids: list[str], unlocked: bool, owned: set[str] | None = None
+) -> list[str]:
     """Enforcement point 1 of 2, as a pure function.
 
     Applied to the compliance panel's case list so a locked session cannot
     read data/dossier/<protected>/ at all — the panel reads private facts and
     matrices directly, so gating only the chat would leave the larger surface
     open.
+
+    `owned` is the set of cases this session created (ADR #66). They stay
+    protected from everyone else — the allowlist is per-session state, never
+    persisted — but their creator is not locked out of their own upload.
     """
     if unlocked:
         return case_ids
-    return [c for c in case_ids if _case_is_public(c)]
+    owned = owned or set()
+    return [c for c in case_ids if _case_is_public(c) or c in owned]
 
 
-def _resolve_active_case_id(case_id: str | None, unlocked: bool) -> str | None:
+def _resolve_active_case_id(
+    case_id: str | None, unlocked: bool, owned: set[str] | None = None
+) -> str | None:
     """Enforcement point 2 of 2, as a pure function.
 
     Returns None whenever the session is locked or the selection is absent,
@@ -435,64 +502,213 @@ def _resolve_active_case_id(case_id: str | None, unlocked: bool) -> str | None:
     """
     if not case_id or case_id == NO_CASE_LABEL:
         return None
-    if not unlocked and not _case_is_public(case_id):
+    if not unlocked and not _case_is_public(case_id) and case_id not in (owned or set()):
         return None
     return case_id
 
 
+def _owned_case_ids() -> set[str]:
+    """Cases created by this session (ADR #66). Session state only — never
+    persisted, so a restart or another visitor does not inherit access."""
+    return set(st.session_state.get("owned_case_ids", ()))
+
+
 def _accessible_cases(case_ids: list[str]) -> list[str]:
     """Session-reading wrapper over _filter_accessible."""
-    return _filter_accessible(case_ids, _dossier_unlocked())
+    return _filter_accessible(case_ids, _dossier_unlocked(), _owned_case_ids())
 
 
 def _active_case_id() -> str | None:
     """Session-reading wrapper over _resolve_active_case_id."""
     return _resolve_active_case_id(
-        st.session_state.get("active_case_id"), _dossier_unlocked()
+        st.session_state.get("active_case_id"), _dossier_unlocked(), _owned_case_ids()
     )
 
 
 def _render_dossier_gate(labels: dict) -> None:
-    """Sidebar passphrase control + active-case selector."""
+    """Sidebar active-case selector, new-dossier flow, and passphrase control.
+
+    Order matters (ADR #66): the dossier selector comes first because the
+    dossier is the unit of work. The passphrase moved into a collapsed
+    expander — it exists to reach *protected* cases, which is the exception,
+    and leading with a lock on a fresh checkout read as "the app is closed".
+    """
     st.markdown("### " + labels["dossier_heading"])
 
-    configured = _configured_passphrase()
-    if configured is None:
-        st.caption(labels["dossier_not_configured"])
-    elif _dossier_unlocked():
-        st.success(labels["dossier_unlocked"], icon="🔓")
-        if st.button(labels["dossier_lock"], key="dossier_lock", width="stretch"):
-            st.session_state.dossier_unlocked = False
-            st.session_state.active_case_id = NO_CASE_LABEL
-            st.rerun()
+    # A dossier is the unit of work, so the selector offers only real cases —
+    # no "Aucun". Statute-only is still reachable, but by having no usable
+    # case rather than by choosing to ignore the one you opened.
+    options = _selectable_cases()
+    if not options:
+        # Fail loudly. Silently falling back to statute-only is exactly the
+        # behaviour that made a selected dossier look empty.
+        st.warning(labels["dossier_none_available"], icon="⚠️")
+        st.code("uv run python -m ingestion.dossier.build --case-id vitrine "
+                "--source-case-id private --step anonymize", language="bash")
+        st.session_state.active_case_id = NO_CASE_LABEL
     else:
-        entered = st.text_input(
-            labels["dossier_passphrase"],
-            type="password",
-            key="dossier_passphrase_input",
-        )
-        if entered:
-            # compare_digest: constant-time, avoids leaking the prefix length
-            # through timing on repeated attempts.
-            if hmac.compare_digest(entered, configured):
-                st.session_state.dossier_unlocked = True
-                st.rerun()
-            else:
-                st.error(labels["dossier_wrong"])
+        current = st.session_state.get("active_case_id")
+        if current not in options:
+            current = _default_case_id(options)
+            st.session_state.active_case_id = current
 
-    cases = _accessible_cases(_list_all_cases())
-    options = [NO_CASE_LABEL, *cases]
-    current = st.session_state.get("active_case_id", NO_CASE_LABEL)
-    if current not in options:
-        current = NO_CASE_LABEL
-    choice = st.selectbox(
-        labels["dossier_active"],
-        options,
-        index=options.index(current),
-        key="active_case_id",
-    )
-    if choice == NO_CASE_LABEL:
-        st.caption(labels["dossier_statute_only"])
+        st.selectbox(
+            labels["dossier_active"],
+            options,
+            index=options.index(current),
+            key="active_case_id",
+        )
+
+    _render_new_dossier(labels)
+
+    with st.expander(labels["dossier_heading"], expanded=False):
+        configured = _configured_passphrase()
+        if configured is None:
+            st.caption(labels["dossier_not_configured"])
+        elif _dossier_unlocked():
+            st.success(labels["dossier_unlocked"], icon="🔓")
+            if st.button(labels["dossier_lock"], key="dossier_lock", width="stretch"):
+                st.session_state.dossier_unlocked = False
+                # Drop the selection too: re-locking must revoke a protected
+                # case already chosen, and the selector will re-resolve to a
+                # public default on the next run.
+                st.session_state.active_case_id = None
+                st.rerun()
+        else:
+            entered = st.text_input(
+                labels["dossier_passphrase"],
+                type="password",
+                key="dossier_passphrase_input",
+            )
+            if entered:
+                # compare_digest: constant-time, avoids leaking the prefix
+                # length through timing on repeated attempts.
+                if hmac.compare_digest(entered, configured):
+                    st.session_state.dossier_unlocked = True
+                    st.rerun()
+                else:
+                    st.error(labels["dossier_wrong"])
+
+
+# ========== new dossier: create + ingest (ADR #66) ==========
+
+# Slug rules match the case_id used as a directory name and as the
+# `dossier-<case_id>-` chunk-id prefix, so anything outside this set would
+# either escape the dossier directory or corrupt scope parsing.
+_CASE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
+
+# Rough per-document extraction estimate (Opus 4.7 vision). Deliberately an
+# over-estimate: the number exists to make the user pause, and quoting low
+# would defeat that.
+_EXTRACT_COST_PER_DOC_USD = 0.12
+
+
+def _valid_case_id(name: str) -> bool:
+    """Whether `name` is safe as a directory name and chunk-id prefix."""
+    return bool(_CASE_ID_RE.match(name))
+
+
+def _run_dossier_build(case_id: str, raw_dir: Path, job: dict) -> None:
+    """Worker body: run the ingestion pipeline, recording progress on `job`.
+
+    Runs on a plain thread rather than inline. Extraction is a paid Opus 4.7
+    vision call per document and takes minutes; Streamlit reruns the script on
+    every widget interaction, so an inline call would either block the UI or
+    be torn down and restarted mid-flight.
+
+    Mutates `job` in place — it is the same dict held in session state, which
+    is how a rerun re-attaches to a build already running.
+    """
+    from ingestion.dossier import build
+
+    try:
+        for step in ("extract", "gate", "facts", "index"):
+            job["step"] = step
+            build.run_pipeline(case_id, raw_dir=raw_dir, step=step)
+        job["summary"] = {"facts": _count_facts(case_id)}
+    except Exception as e:  # noqa: BLE001 — surfaced in the UI, not swallowed
+        job["error"] = str(e)
+        log.exception("dossier build failed for case_id=%s", case_id)
+    finally:
+        job["done"] = True
+
+
+def _count_facts(case_id: str) -> int:
+    """Number of extracted facts, for the completion message."""
+    path = DOSSIER_DIR / case_id / "facts.jsonl"
+    try:
+        return sum(1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip())
+    except OSError:
+        return 0
+
+
+def _render_new_dossier(labels: dict) -> None:
+    """Sidebar: name a new case, upload PDFs, run the pipeline in a thread."""
+    job = st.session_state.get("dossier_job")
+
+    # An in-flight build owns this panel — no second build may start.
+    if job and not job["done"]:
+        st.info(labels["dossier_new_running"].format(case=job["case_id"], step=job["step"]))
+        # Cheap poll: the worker mutates `job`, so a rerun re-reads it.
+        time.sleep(2)
+        st.rerun()
+
+    if job and job["done"]:
+        if job["error"]:
+            st.error(labels["dossier_new_failed"].format(case=job["case_id"], error=job["error"]))
+        else:
+            st.success(labels["dossier_new_done"].format(
+                case=job["case_id"], facts=(job["summary"] or {}).get("facts", 0),
+            ))
+            # The case list is cached; a new case would otherwise stay
+            # invisible for the cache TTL.
+            _list_all_cases.clear()
+            _cases_with_matrix.clear()
+            st.session_state.owned_case_ids = _owned_case_ids() | {job["case_id"]}
+            st.session_state.active_case_id = job["case_id"]
+        if st.button("OK", key="dossier_job_ack", width="stretch"):
+            st.session_state.dossier_job = None
+            st.rerun()
+        return
+
+    with st.expander(labels["dossier_new"], expanded=False):
+        name = st.text_input(labels["dossier_new_name"], key="new_case_name").strip().lower()
+        uploads = st.file_uploader(
+            labels["dossier_new_files"], type=["pdf"], accept_multiple_files=True,
+            key="new_case_files",
+        )
+
+        if not (name and uploads):
+            return
+        if not _valid_case_id(name):
+            st.error(labels["dossier_new_invalid"])
+            return
+        if (DOSSIER_DIR / name).exists():
+            st.error(labels["dossier_new_exists"])
+            return
+
+        # Cost is stated before the button, never after: no paid job may start
+        # from a page load, only from a click that follows the warning.
+        st.warning(labels["dossier_new_cost"].format(
+            n=len(uploads), cost=f"${len(uploads) * _EXTRACT_COST_PER_DOC_USD:.2f}",
+        ))
+        if not st.button(labels["dossier_new_create"], type="primary", width="stretch"):
+            return
+
+        raw_dir = DOSSIER_DIR / name / "raw"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+        for upload in uploads:
+            (raw_dir / upload.name).write_bytes(upload.getbuffer())
+
+        new_job = {
+            "case_id": name, "step": "extract", "done": False,
+            "error": None, "summary": None,
+        }
+        st.session_state.dossier_job = new_job
+        threading.Thread(
+            target=_run_dossier_build, args=(name, raw_dir, new_job), daemon=True,
+        ).start()
+        st.rerun()
 
 
 # ========== compliance panel: data access ==========
@@ -521,6 +737,40 @@ def _list_all_cases() -> list[str]:
     if not DOSSIER_DIR.exists():
         return []
     return sorted(p.parent.name for p in DOSSIER_DIR.glob("*/facts.jsonl"))
+
+
+def _case_has_facts(case_id: str) -> bool:
+    """Whether a case has any extracted facts.
+
+    data/dossier/demo/ is a committed smoke fixture whose facts.jsonl,
+    actor_roles.jsonl and role_ambiguities.jsonl are all zero bytes. Offering
+    it in the chat selector is offering an option that cannot answer anything,
+    which is worse than not offering it (ADR #66). Cheap stat, not a parse.
+    """
+    path = DOSSIER_DIR / case_id / "facts.jsonl"
+    try:
+        return path.stat().st_size > 0
+    except OSError:
+        return False
+
+
+def _selectable_cases() -> list[str]:
+    """Cases this session may open in the chat: accessible AND non-empty.
+
+    Session-owned cases (created via the new-dossier flow this run) count as
+    accessible without the passphrase — their creator should not be locked out
+    of their own upload — while remaining protected from any other session.
+    That rule lives in _filter_accessible, not here.
+    """
+    return [c for c in _accessible_cases(_list_all_cases()) if _case_has_facts(c)]
+
+
+def _default_case_id(options: list[str]) -> str | None:
+    """Which case to open on first load: vitrine when available, else the
+    first selectable one, else None (the blocking-notice path)."""
+    if not options:
+        return None
+    return DEFAULT_CASE_ID if DEFAULT_CASE_ID in options else options[0]
 
 
 @st.cache_data(ttl=MATRIX_CACHE_TTL_SECONDS)
@@ -848,8 +1098,15 @@ def _init_session_state() -> None:
     answer_model: str — ANSWER_MODELS catalog key (ADR #46)
     dossier_unlocked: bool — passphrase accepted this session (ADR #58).
         Default False; both enforcement points deny while it is False.
-    active_case_id: str — selected case, or NO_CASE_LABEL. Never read
-        directly for authorisation; go through _active_case_id().
+    active_case_id: str — selected case. Never read directly for
+        authorisation; go through _active_case_id(). Starts as None and is
+        resolved by _render_dossier_gate to the first selectable case,
+        preferring DEFAULT_CASE_ID (ADR #66).
+    owned_case_ids: set[str] — cases created by this session, accessible to
+        it without the passphrase and to nobody else. Never persisted.
+    dossier_job: dict | None — in-flight new-dossier build (ADR #66):
+        {case_id, thread, step, done, error, summary}. Survives reruns so a
+        page interaction re-attaches instead of launching a second build.
     compare_model: str — selected compliance model id (ADR #57)
     compare_result_cache: dict — analysis results keyed by
         (case_id, role_id, mode, model_id), mode in {'single', 'compare'}.
@@ -872,7 +1129,11 @@ def _init_session_state() -> None:
     st.session_state.setdefault("compare_model", DEFAULT_COMPLIANCE_MODEL)
     st.session_state.setdefault("compare_result_cache", {})
     st.session_state.setdefault("dossier_unlocked", False)
-    st.session_state.setdefault("active_case_id", NO_CASE_LABEL)
+    # Left unset on purpose: _render_dossier_gate resolves the opening case
+    # from what is actually selectable (ADR #66), which it cannot know here.
+    st.session_state.setdefault("active_case_id", None)
+    st.session_state.setdefault("owned_case_ids", set())
+    st.session_state.setdefault("dossier_job", None)
 
 
 # ========== env validation (startup fail-loud) ==========

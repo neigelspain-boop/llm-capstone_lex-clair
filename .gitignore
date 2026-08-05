@@ -24,11 +24,15 @@ eval_run.pid
 eval_resume.log
 
 # v2 dossier work
-# Rule: private case fully ignored; demo and vitrine cases fully committed.
-# vitrine is the anonymised public demo derived from private (ADR #59, #62)
-# and is the case the README's walkthrough commands use; it stayed untracked
-# until ADR #65, so every one of those commands failed on a fresh clone.
-data/dossier/private/
+# Rule: EVERY case is ignored except the two public fixtures, which are
+# whitelisted by name. Inverted from naming `private/` explicitly (ADR #66):
+# that form left any other case directory tracked, so a dossier created from
+# the app — real client PDFs — was one `git add -A` from publication. Ignoring
+# by default means a new case is safe without anyone remembering to add it.
+#
+# demo is the smoke fixture; vitrine is the anonymised public case derived
+# from private (ADR #59, #62, #65) and the one the README's commands use.
+data/dossier/*
 !data/dossier/demo/
 !data/dossier/demo/**
 !data/dossier/vitrine/

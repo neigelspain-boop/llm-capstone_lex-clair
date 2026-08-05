@@ -88,12 +88,33 @@ def _read_dossier_chunks(statute_columns: list[str], dossier_dir: Path) -> list[
 
 # ========== source_scope filtering (ADR #41) ==========
 
+CASE_SCOPE_PREFIX = "case:"
+CASE_STATUTE_SCOPE_PREFIX = "case+statute:"
+
+
+def _scope_case_id(source_scope: str, prefix: str) -> str:
+    """The case id inside a case-scoped source_scope, validated non-empty."""
+    case_id = source_scope.removeprefix(prefix)
+    if not case_id:
+        raise ValueError(
+            f"invalid source_scope: {source_scope!r} — case id must not be empty"
+        )
+    return case_id
+
+
 def _scope_predicate(source_scope: str):
     """Return a chunk_id -> bool predicate for the given source_scope.
 
     Raises ValueError for anything other than "statute", "dossier",
-    "blended", or "case:<id>". Called first thing in search() so bad
-    input fails before any embedding/query work.
+    "blended", "case:<id>", or "case+statute:<id>". Called first thing in
+    search() so bad input fails before any embedding/query work.
+
+    "case+statute:<id>" is the dossier-first scope (ADR #66): the statute
+    corpus plus exactly one case, and no other case. It exists because the
+    two obvious spellings are both wrong for an app whose unit of work is a
+    dossier — "case:<id>" alone drops the law the dossier has to be
+    interpreted against, and "blended" is not a filter at all, so it reaches
+    every other client's chunks.
     """
     if source_scope == "statute":
         return lambda cid: not cid.startswith("dossier-")
@@ -101,17 +122,15 @@ def _scope_predicate(source_scope: str):
         return lambda cid: cid.startswith("dossier-")
     if source_scope == "blended":
         return lambda cid: True
-    if source_scope.startswith("case:"):
-        case_id = source_scope.removeprefix("case:")
-        if not case_id:
-            raise ValueError(
-                f"invalid source_scope: {source_scope!r} — case id must not be empty"
-            )
-        prefix = f"dossier-{case_id}-"
+    if source_scope.startswith(CASE_STATUTE_SCOPE_PREFIX):
+        prefix = f"dossier-{_scope_case_id(source_scope, CASE_STATUTE_SCOPE_PREFIX)}-"
+        return lambda cid: cid.startswith(prefix) or not cid.startswith("dossier-")
+    if source_scope.startswith(CASE_SCOPE_PREFIX):
+        prefix = f"dossier-{_scope_case_id(source_scope, CASE_SCOPE_PREFIX)}-"
         return lambda cid: cid.startswith(prefix)
     raise ValueError(
         f"invalid source_scope: {source_scope!r} — must be 'statute', 'dossier', "
-        f"'blended', or 'case:<id>'"
+        f"'blended', 'case:<id>', or 'case+statute:<id>'"
     )
 
 
@@ -184,8 +203,14 @@ class HybridRetriever:
         if source_scope == "dossier":
             dossier_sources = self._dossier_sources()
             return {"source": {"$in": dossier_sources}} if dossier_sources else None
-        if source_scope.startswith("case:"):
-            return {"source": f"dossier-{source_scope.removeprefix('case:')}"}
+        if source_scope.startswith(CASE_STATUTE_SCOPE_PREFIX):
+            case_id = _scope_case_id(source_scope, CASE_STATUTE_SCOPE_PREFIX)
+            # Statute + this one case, as one allowlist. Every other case is
+            # excluded server-side rather than trimmed from the fused pool
+            # afterwards, so a narrow scope cannot starve (ADR #63, #66).
+            return {"source": {"$in": [*self._statute_sources(), f"dossier-{case_id}"]}}
+        if source_scope.startswith(CASE_SCOPE_PREFIX):
+            return {"source": f"dossier-{_scope_case_id(source_scope, CASE_SCOPE_PREFIX)}"}
         return None
 
     def search(

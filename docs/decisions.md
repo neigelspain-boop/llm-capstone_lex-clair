@@ -3355,3 +3355,144 @@ requires; aggregate rows cannot answer the question.
 Related: ADR #20 (superseded), ADR #21 (the reranker whose existence makes
 pool coverage the right objective), ADR #58 and #63 (scope filtering, active
 during measurement), ADR #10 (`load_index` contract, unchanged).
+
+---
+
+## ADR #66 — Dossier-first: a case is always active, and always in scope
+
+**Date:** 2026-08-05 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+The app was built as a statute Q&A tool with dossiers bolted on. The product
+is the other way round: a dossier is the thing under investigation and the law
+is what it gets interpreted against. Opening the app with `vitrine` selected
+and asking *"vois-tu un dossier attaché à cette conversation ?"* returned
+generic Code civil prose about `art. 812` and `art. 730-1`.
+
+Four independent mechanisms produced that, three of them defects.
+
+1. **The one usable case was unreachable.** `PUBLIC_CASE_IDS = {"demo"}`, and
+   `_configured_passphrase()` returns `None` on a checkout with no
+   `secrets.toml` — the normal state — which means permanently locked. So the
+   only selectable case was `demo`, whose `facts.jsonl`, `actor_roles.jsonl`
+   and `role_ambiguities.jsonl` are all **zero bytes**. `vitrine` (823 chunks,
+   235 facts, 77 compliance entries) could not be opened at all.
+2. **"Aucun" was the default and a legal choice**, and `_resolve_active_case_id`
+   maps it to `None`, which by ADR #42's design forces `statute`.
+3. **The router discarded the dossier even with one open.** `statute_lookup`
+   and `other` both mapped to bare `"statute"` without consulting
+   `active_case_id`. The failing question classified as `other`.
+4. **The prompt never said whose documents these were.** Even once retrieval
+   was fixed and four of five citations came from the dossier, the model
+   answered that it saw no dossier — reading the question as being about an
+   upload feature rather than the case file in its own context.
+
+Two hazards surfaced while tracing it, both latent and both made acute by the
+change:
+
+- **`gap_analysis + case_id → "blended"`, and `blended` is not a filter.** It
+  resolves to `where=None` and `lambda cid: True` — every case in the index,
+  including `private`. It was masked only because reaching `gap_analysis`
+  required an active case and the only reachable case was `demo`. Making
+  `vitrine` public and default removes the mask.
+- **A new case directory was not gitignored.** `.gitignore` named
+  `data/dossier/private/` explicitly, so `data/dossier/<anything-else>/` was
+  tracked. Shipping in-app dossier creation on top of that would put a user's
+  real client PDFs one `git add -A` from publication.
+
+### Decision
+
+**A new scope, `case+statute:<id>` — statute plus exactly one case.** Both
+obvious spellings are wrong for a dossier-first app: `case:<id>` alone drops
+the law the dossier must be read against, and `blended` reaches every other
+client. Implemented in both `_scope_predicate` (chunk-id level, so the BM25
+arm is covered — it has no server-side filter) and `_chroma_scope_filter`,
+where it is a positive allowlist `{"$in": [*statute_sources, "dossier-<id>"]}`
+consistent with ADR #63.
+
+**The router decides emphasis, never visibility.** With an active case no
+intent may resolve to bare `statute` or to `blended`: `statute_lookup`,
+`gap_analysis` and `other` all map to `case+statute:{id}`; `case_factual`
+keeps `case:{id}`, a pure fact lookup that wants no statute. Without an active
+case every ADR #42 mapping is unchanged. The failure fallback also carries the
+case now — returning bare `statute` on an OpenRouter blip would silently
+reproduce the exact bug this ADR removes.
+
+**`vitrine` joins `PUBLIC_CASE_IDS`.** A statement of fact, not a relaxation:
+it is anonymised and committed (ADR #65). The fail-closed rule is untouched —
+an unnamed case is still protected, and `test_unknown_cases_are_protected_by_default`
+still asserts it.
+
+**The selector offers only real cases.** No "Aucun"; `_case_has_facts` drops
+zero-byte fixtures so `demo` stops being an option that can answer nothing;
+`vitrine` opens by default. With nothing selectable the app says so and prints
+the build command rather than falling back to statute-only — the silent
+fallback *is* the bug.
+
+**The prompt names the open case.** `CASE_LINE_TEMPLATE` states which dossier
+is attached and that questions about it should be answered from it. The case
+id is read from the chunk ids rather than passed by the caller, for the same
+reason `build` picks its template that way (ADR #62): retrieval decides what
+the model is actually looking at. Mixed cases drop the header — naming one
+case while showing another's pieces is worse than naming none.
+
+**New dossiers can be created in-app**, running
+`ingestion.dossier.build.run_pipeline` on a worker thread with the job record
+in session state so a rerun re-attaches instead of launching a second build.
+Cost is stated before the button, never after: no paid Opus vision job starts
+from a page load. `case_id` is slug-validated — it becomes both a directory
+name and the `dossier-<id>-` chunk-id prefix, so anything else either escapes
+`data/dossier/` or corrupts scope parsing.
+
+**Session ownership.** A case created in-app is protected by default, so its
+creator — who has no passphrase — would otherwise be locked out of their own
+upload. `owned_case_ids` is session state, never persisted: the creator can
+use it now, another visitor cannot, and a restart does not inherit access.
+
+**`.gitignore` inverted** to ignore `data/dossier/*` and whitelist the two
+public fixtures by name, so every future case is ignored without anyone
+remembering.
+
+### Consequences
+
+- The original question now answers correctly: *"Oui, il y a un dossier joint
+  à cette conversation, il concerne la succession de Jeanne MARTIN et de Henri
+  MARTIN…"*, naming parties and dates, at scope `case+statute:vitrine`.
+- `gap_analysis` can no longer reach another client's chunks. Verified against
+  the live index: `case+statute:vitrine` returns only `dossier-vitrine`
+  sources, `case+statute:private` only `dossier-private`.
+- 247 tests pass. Router coverage is parametrised across all four intents so a
+  future intent cannot quietly reintroduce a statute-only path.
+- **`blended` is now unreachable from the router but still implemented**, and
+  `rag/compliance.py` and the eval harness still pass explicit scopes. It
+  remains a foot-gun for any future caller that reaches for it by name.
+- The passphrase moved into a collapsed expander. Leading with a lock on a
+  fresh checkout read as "the app is closed", which is what sent the whole
+  dossier surface out of reach.
+- **The threaded build is the weakest part.** Streamlit has no first-class
+  background-job model; the worker mutates a dict in session state and the UI
+  polls it every 2s. It does not survive a browser refresh, there is no
+  cancel, and two browser tabs are two sessions with two independent job
+  records. Acceptable for a local single-operator tool, not for a shared
+  deployment.
+- Cost estimation for a new dossier is a flat per-document figure, deliberately
+  over-stated. It does not read page counts, so a 200-page scan and a 1-page
+  letter quote the same.
+
+### Alternatives considered
+
+- **Keep `blended` and rely on the passphrase** to keep `private` out of reach.
+  Rejected: it makes a privacy property depend on a UI state rather than on the
+  retrieval filter, and ADR #58 already learned that lesson.
+- **Dossier-only answers (drop statute).** The most literal reading of "from
+  that file precisely", and rejected: the app's value is connecting the case to
+  the Code civil, and it would have to stop citing articles.
+- **Mark protected cases with a marker file instead of an allowlist.** Cleaner
+  for user-created cases, but inverts ADR #58's fail-closed default — a case
+  would be open unless someone remembered to protect it.
+
+Related: ADR #58 (the gate this reshapes, whose fail-closed default it keeps),
+ADR #42 (router mapping rewritten), ADR #41 and #63 (scope allowlists this
+follows), ADR #62 (prompt-per-context, extended with case identity),
+ADR #65 (`vitrine` public by construction).
