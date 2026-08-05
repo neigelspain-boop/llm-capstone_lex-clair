@@ -3010,3 +3010,229 @@ ADR #41 (source-scope filtering, tightened here from post-hoc to server-side),
 ADR #42 (the router downgrade — correct, and now both reachable and visible),
 ADR #55 (`persons.jsonl`, still outside retrieval), ADR #57 (the compliance
 panel this gate must also cover).
+
+---
+
+## ADR #63 — Fail-closed source scoping and Chroma/row-table reconciliation
+
+**Date:** 2026-08-05 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+`test_rag_flow_end_to_end` was failing on `assert chunks_retrieved == 20`,
+returning 16 or 17 depending on the run. The nondeterminism was the useful
+clue: the count varied with the LLM-rewritten query, so the shortfall was
+being produced during retrieval rather than by a fixed off-by-one.
+
+The index was desynced. Chroma held **2469 vectors against a 1646-row table** —
+824 orphans, all `source="dossier-vitrine"`, left over from an anonymisation
+run whose output directory no longer existed. `ingestion/dossier/index.py`
+purges stale vectors by the `dossier-{case_id}-` prefix it is currently
+writing (ADR #38), which is correct for re-running a case and structurally
+blind to a case that has been renamed or deleted: nothing knows the old prefix
+to purge it.
+
+Orphans alone would have been harmless. What made them damaging is that
+ADR #58's server-side scope filter expressed `"statute"` as a **denylist**,
+`{"source": {"$nin": dossier_sources}}`, with `dossier_sources` derived from
+the row table. An orphan is by definition absent from the row table, so it was
+absent from the denylist, so the filter **admitted it** — into `"statute"`,
+the default scope. The orphans then consumed slots in the `k*3` dense budget,
+and `_scope_predicate` cut them from the fused pool afterwards. Net effect:
+every statute query silently delivered fewer candidates than requested to the
+cross-encoder, which is the recall ceiling for every answer the system gives.
+
+On `"blended"` and `"dossier"` the predicate *kept* the orphans instead, and
+hydration's `self.chunks.loc[cid]` raised `KeyError` — a hard crash on the
+dossier retrieval path that ADR #58 had just shipped. Reproduced directly.
+
+The comment in `search()` claiming Chroma filtering "fixes the dense half
+exactly" was therefore true only while the two derived lists agreed. It
+described the happy path as an invariant.
+
+### Decision
+
+**Every scope is a positive allowlist.** `_statute_sources()` is added as the
+counterpart to `_dossier_sources()`, and `"statute"` becomes
+`{"source": {"$in": statute_sources}}`. A `source` value the row table has
+never heard of is now retrieved by *nobody* instead of by the default scope.
+This inverts the failure direction: the old design's unknown-source case
+failed open into the one scope that must stay clean, which is also the privacy
+property ADR #41 exists to guarantee — an undeclared dossier source reaching
+`"statute"` is exactly the leak, independent of the starvation bug. `case:<id>`
+for an unindexed case now matches nothing rather than everything, for the same
+reason. An empty allowlist falls through to `None` rather than sending an
+empty `$in`, which some backends read as match-all.
+
+**Hydration drops orphans instead of raising.** Candidates absent from the row
+table are removed *before* the top-k cut — after it they would silently
+shorten the result list, which is the failure this ADR exists to remove. One
+WARNING names the reconcile command. A desynced index is an operator problem;
+it must not be a user-visible crash.
+
+**`reconcile_chroma()` in `ingestion/index.py`**, exposed as
+`python -m ingestion.index --reconcile [--apply]`. It diffs persisted vector
+ids against the row table, reports orphans grouped by `source` and row-table
+chunks with no vector, and deletes only with `--apply`. Chroma is real state,
+so the default is a dry run — the same posture as `rag.compliance --dry-run`.
+`load_index()` stays strictly read-only and only logs a count mismatch:
+reconciling at load time would delete real state as a side effect of opening
+the app.
+
+### Consequences
+
+- `test_rag_flow_end_to_end` passes, and passes repeatedly — verified across
+  three consecutive runs at `chunks_retrieved == 20`. Suite: 218 passed,
+  4 skipped (Postgres only).
+- `"blended"` and `"dossier"` scopes return results instead of raising.
+- The 824 orphans turned out to be **recoverable, not garbage**: regenerating
+  the `vitrine` case produced 824 chunks with identical ids, so reconcile went
+  from 824 orphans to zero without deleting a single embedding. Chroma and the
+  row table now agree exactly at 2470/2470. Determinism of the anonymisation
+  pipeline (ADR #59, #62) is what made that true.
+- The demo fixture's single chunk was unvectorised and is now embedded, so
+  `case:demo` is reachable by dense retrieval for the first time.
+- Two tests that asserted the denylist were rewritten rather than deleted. The
+  "inert on a statute-only corpus" guarantee is deliberately given up: sending
+  no `where` clause is what let stray vectors reach the default scope, so the
+  allowlist is now sent unconditionally.
+- Scope filtering costs one extra row-table scan per search to build the
+  allowlist. Negligible at this corpus size, but it is O(rows) per query and
+  would want caching on a corpus orders of magnitude larger.
+- **This class of bug had no alarm**, which is ADR #58 follow-up (d) coming
+  due. The reconcile CLI is a manual check, not a monitor; nothing yet fails
+  loudly when the corpus drifts.
+
+### Alternatives considered
+
+- **Purge by "any `dossier-` prefix not in the known case list" at index
+  time.** Rejected: it makes indexing one case responsible for the global
+  state of every other, and still silently deletes on a typo'd `--case-id`.
+- **Reconcile automatically inside `load_index()`.** Rejected: destructive by
+  default, at the least expected moment, violating the project's rule against
+  unconfirmed destructive state changes.
+- **Keep the denylist and simply purge more aggressively.** Rejected: it
+  leaves the fail-open direction intact, so the next desync — from any cause —
+  reopens the same leak into the default scope.
+
+Related: ADR #38 (prefix-scoped Chroma purge, whose blind spot this covers),
+ADR #41 (source-scope filtering, whose privacy guarantee this makes
+structural), ADR #58 (server-side scope filtering, tightened here from
+denylist to allowlist; its follow-up (d) restated as still open),
+ADR #59 and #62 (deterministic anonymisation, which made the orphans
+recoverable).
+
+---
+
+## ADR #65 — Financial identifiers in the anonymiser, and vitrine as a tracked case
+
+**Date:** 2026-08-05 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+Two problems that turned out to be the same problem.
+
+**The public demo case was not in the repository.** README documents `vitrine`
+in six places, including two walkthrough commands a reviewer is invited to
+copy-paste, and `git ls-files | grep vitrine` returned nothing. The directory
+did not exist on disk either. What existed was 824 `dossier-vitrine` vectors
+in a local Chroma whose source directory had been deleted — the orphans
+ADR #63 diagnoses. The case had been generated once, indexed, and then lost,
+and `.gitignore` whitelisted only `demo/`, so nothing ever tracked it. The
+committed `demo/` fixture is not a substitute: its `facts.jsonl`,
+`actor_roles.jsonl` and `role_ambiguities.jsonl` are zero bytes, so every
+compliance command against it produces nothing.
+
+**`verify_anonymization` reported `leaks=0` on output that still carried
+identifiers.** Regenerating `vitrine` passed the gate; an independent sweep of
+the result found 23 distinct account-like numbers passing through
+**byte-identical** from `private/`. The gate was not malfunctioning — its leak
+check is `persons.jsonl` names, the extra-identifier table, and
+`_PII_PATTERNS`, and a bank account number appears in none of the three. Its
+own docstring says the residual-proper-noun list "CANNOT prove the absence of
+an identifier that was never in persons.jsonl". That caveat was load-bearing
+and had not been acted on.
+
+Four concrete gaps, found by testing the patterns against the strings that
+actually survived rather than by reading them:
+
+1. `[SIREN]` matched via a **lookahead** — `\d{3} \d{3} \d{3}(?=\s*(?:RCS|SIREN))`
+   — so it only fired on `315 429 837 RCS`. French company footers write
+   `RCS Beaumont 315 429 837`, marker first. The rule never matched real text.
+2. Bank account, contract and policy references carry **no marker at all**
+   (`254 440 017`, `019 349 002`) and matched nothing.
+3. AMF approval numbers (`n° GP 07000033`) escaped the generic reference rule,
+   whose `[A-Z]?\d` allows at most one letter before the first digit.
+4. Phone matching was **format-anchored** on a leading `0`/`+33` that OCR of a
+   scanned letterhead routinely loses. `Tél. 40 54 44 44` and
+   `Tel ; 514 813 9053` both survived, both labelled as telephones in the text.
+
+### Decision
+
+**Close the gaps in `_PII_PATTERNS`, which the redactor and the verifier
+share.** `_apply_structured_pii` and `verify_anonymization` iterate the same
+list, so one edit tightens redaction and detection together — the property
+that made this fixable at all, and worth preserving.
+
+- SIREN/RCS/SIRET with the marker **before** the number.
+- Bare 9-digit triplets, for references carrying no marker.
+- Regulator approval numbers with a **enumerated** prefix (`GP`, `GC`) rather
+  than `[A-Z]{2,3}`, which would also swallow ordinary citations.
+- Phone numbers anchored on their **label** rather than their format: when a
+  document says a number is a telephone, that is better evidence than its
+  shape, and OCR damages shape but not the label beside it.
+
+**Over-redaction is explicitly not the safe default.** The compliance
+reasoning is built on amounts and article numbers, so a rule that ate
+`123 456 789 €` or `article 587` would silently degrade every downstream
+answer instead of failing loudly. The 9-digit rule therefore excludes anything
+reading as currency, and the tests assert non-redaction of amounts and
+citations as strictly as they assert redaction of identifiers.
+
+**Track `vitrine`.** `.gitignore` whitelists it beside `demo/`. Regeneration
+is deterministic from the pinned `_anonymization_map.json`, so ids reproduce
+exactly — which is why ADR #63's 824 orphans turned out to be recoverable
+rather than garbage.
+
+### Consequences
+
+- The gate now **fails** the vitrine build on the stale artifacts, and passes
+  at `leaks=0` over 61 files once re-indexed. That failure is the feature: the
+  tightened patterns detect what the previous run shipped.
+- Independent sweep of the committed case finds no 9-digit triplets, no
+  GP/RCS/SIREN forms, no labelled phones, no emails, no IBANs, and no
+  source-case surname. The one `mena` substring hit is inside *ramenant*,
+  which is exactly why the verifier anchors on word boundaries.
+- Residual proper nouns are `FISCALE`, `ADMINISTRATION`, `EDEX` — French
+  administrative vocabulary and a fragment of CEDEX. Reviewed, not
+  identifiers.
+- `uv run python -m rag.compliance --case-id vitrine --dry-run` now runs for a
+  reviewer: 46 roles, ~$21.96 estimated. It failed on a fresh clone before.
+- Chunk count moved 824 → 823: redaction merged a chunk boundary. Chroma and
+  the row table agree at 2469/2469.
+- **A clean gate still is not proof.** The verifier detects what its patterns
+  and tables describe; this ADR widened both, and the next unmodelled
+  identifier class will pass just as quietly. Publishing a new case still
+  warrants an independent sweep, and the residual-proper-noun list remains a
+  review aid rather than evidence.
+- 232 tests pass. 11 new cases pin both directions — identifiers redacted,
+  amounts and citations preserved.
+
+### Alternatives considered
+
+- **Commit vitrine as-is**, treating contract numbers as non-identifying once
+  the institution and account holder are anonymised. Rejected: they are
+  correlatable against records held by third parties, and the cost of closing
+  the gap was one afternoon against an irreversible publication.
+- **Keep vitrine local.** Rejected: it leaves the README's six references
+  broken for exactly the audience the case exists to serve.
+- **An LLM residual sweep over the output.** Already available via `use_llm`
+  and deliberately left off (see `build.py`): it is generative, it rewrites
+  markdown in ways that cannot be replayed over a fact's `verbatim_quote`, and
+  it previously reconstructed an email the structured layer had redacted.
+  Deterministic patterns keep markdown, facts and chunks in agreement.
+
+Related: ADR #59 and #62 (the anonymisation pipeline and its pinned persona
+roster, whose determinism this relies on), ADR #63 (the orphan vectors that
+were this missing case), ADR #58 (`PUBLIC_CASE_IDS` — `vitrine` is derived
+from a protected case and its committed form is the reviewable artifact).
