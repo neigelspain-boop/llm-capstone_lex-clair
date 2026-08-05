@@ -138,6 +138,20 @@ class HybridRetriever:
             return []
         return sorted(set(self.chunks.loc[dossier_ids, "source"].astype(str)))
 
+    def _statute_sources(self) -> list[str]:
+        """The `source` metadata values belonging to statute chunks, derived
+        from the row table — the positive counterpart of _dossier_sources().
+
+        Exists so the "statute" scope can be expressed as an allowlist rather
+        than a denylist. See _chroma_scope_filter for why that distinction is
+        load-bearing (ADR #63)."""
+        statute_ids = [
+            cid for cid in self.chunks.index if not str(cid).startswith("dossier-")
+        ]
+        if not statute_ids:
+            return []
+        return sorted(set(self.chunks.loc[statute_ids, "source"].astype(str)))
+
     def _chroma_scope_filter(self, source_scope: str) -> dict | None:
         """Translate source_scope into a Chroma `where` clause, or None for
         no server-side filter.
@@ -147,17 +161,29 @@ class HybridRetriever:
         documents that already match the scope, so a narrow scope can never
         starve (ADR #58, tightening ADR #41).
 
-        Returns None when there is nothing to exclude — an all-statute
-        corpus, or "blended" — so a corpus with no dossier indexed behaves
-        exactly as it did before.
+        Every scope is expressed as a positive allowlist so an unrecognised
+        `source` is excluded rather than admitted (ADR #63). "statute" used
+        to be the denylist {"$nin": dossier_sources}, which fails open twice
+        over: both lists are derived from the row table, so a vector whose
+        case has been removed or renamed is absent from dossier_sources, and
+        the denylist therefore *admits* it. Those orphans then displace real
+        statute hits inside the k*3 budget before the chunk_id predicate cuts
+        them, silently starving the reranker's candidate pool — and a dossier
+        source the row table has never heard of is exactly the one that must
+        not leak into the default scope.
+
+        Returns None only for "blended", which is unfiltered by definition.
         """
-        dossier_sources = self._dossier_sources()
-        if source_scope == "blended" or not dossier_sources:
+        if source_scope == "blended":
             return None
         if source_scope == "statute":
-            return {"source": {"$nin": dossier_sources}}
+            statute_sources = self._statute_sources()
+            # An empty allowlist would match everything on some backends;
+            # fall through to the chunk_id predicate instead of guessing.
+            return {"source": {"$in": statute_sources}} if statute_sources else None
         if source_scope == "dossier":
-            return {"source": {"$in": dossier_sources}}
+            dossier_sources = self._dossier_sources()
+            return {"source": {"$in": dossier_sources}} if dossier_sources else None
         if source_scope.startswith("case:"):
             return {"source": f"dossier-{source_scope.removeprefix('case:')}"}
         return None
@@ -234,6 +260,21 @@ class HybridRetriever:
         # rather than being cut down further after truncation (ADR #41).
         scores = {cid: s for cid, s in scores.items() if predicate(cid)}
 
+        # Orphan guard (ADR #63): a chunk_id can be present in Chroma but
+        # absent from the row table when a case's CSV is removed or renamed
+        # without its vectors being purged. Hydrating one raises KeyError and
+        # takes down the whole query, so drop them before the top-k cut —
+        # dropping after it would silently shorten the result list instead.
+        orphans = [cid for cid in scores if cid not in self.chunks.index]
+        if orphans:
+            log.warning(
+                "search: dropping %d candidate(s) present in Chroma but absent from the "
+                "row table (e.g. %s) — the index is out of sync; run "
+                "`python -m ingestion.index --reconcile` to inspect",
+                len(orphans), orphans[0],
+            )
+            scores = {cid: s for cid, s in scores.items() if cid not in orphans}
+
         top_ids = sorted(scores, key=scores.get, reverse=True)[:k]
 
         # hydrate results from the indexed chunk table
@@ -305,6 +346,17 @@ def load_index(
             f"Chroma collection {collection_name!r} not found in {chroma_dir}. Run `uv run python -m ingestion.index` to rebuild it."
         ) from e
     log.info("opened Chroma collection %r with %d chunks", collection_name, collection.count())
+
+    # Detect-only desync check (ADR #63). load_index stays read-only: a
+    # mutating reconcile at load time would delete real state as a side
+    # effect of opening the app. Reporting is enough — search() drops
+    # orphans defensively, and `--reconcile --apply` is the deliberate fix.
+    if collection.count() != len(chunks):
+        log.warning(
+            "load_index: Chroma holds %d vectors but the row table has %d chunks — "
+            "the index is out of sync; run `python -m ingestion.index --reconcile`",
+            collection.count(), len(chunks),
+        )
 
     # load the embed model with matching runtime flags
     embed_model = BGEM3FlagModel(

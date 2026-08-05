@@ -795,9 +795,9 @@ def test_chroma_scope_filter_prevents_candidate_starvation() -> None:
     r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
 
     assert r._dossier_sources() == ["dossier-acme", "dossier-private"]
-    assert r._chroma_scope_filter("statute") == {
-        "source": {"$nin": ["dossier-acme", "dossier-private"]}
-    }
+    assert r._statute_sources() == ["cc_usufruit"]
+    # Allowlist, not denylist (ADR #63) — see the fail-closed test below.
+    assert r._chroma_scope_filter("statute") == {"source": {"$in": ["cc_usufruit"]}}
     assert r._chroma_scope_filter("dossier") == {
         "source": {"$in": ["dossier-acme", "dossier-private"]}
     }
@@ -805,9 +805,115 @@ def test_chroma_scope_filter_prevents_candidate_starvation() -> None:
     assert r._chroma_scope_filter("blended") is None
 
 
-def test_chroma_scope_filter_is_inert_on_a_statute_only_corpus() -> None:
-    """A corpus with no dossier indexed must behave exactly as it did before
-    ADR #58 — no `where` clause sent to Chroma at all."""
+def test_chroma_scope_filter_excludes_sources_the_row_table_does_not_know() -> None:
+    """An unrecognised `source` must be excluded from every narrow scope,
+    not admitted into the default one (ADR #63).
+
+    The denylist this replaces derived BOTH lists from the row table, so a
+    vector whose case had been removed or renamed was absent from
+    dossier_sources and the {"$nin": dossier_sources} clause therefore let it
+    through — into source_scope="statute", the default. That is how 824
+    orphaned `dossier-vitrine` vectors ended up displacing real statute hits
+    inside the k*3 budget and starving the reranker's candidate pool.
+
+    An allowlist inverts the failure: a source nobody declared is a source
+    nobody retrieves.
+    """
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": "cc-587", "source": "cc_usufruit", "texte": "a"},
+        {"chunk_id": "dossier-private-d1-c001", "source": "dossier-private", "texte": "b"},
+    ]).set_index("chunk_id", drop=False)
+    r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
+
+    # "dossier-ghost" is indexed in Chroma but absent from the row table.
+    statute_where = r._chroma_scope_filter("statute")
+    assert "dossier-ghost" not in statute_where["source"]["$in"]
+    assert statute_where["source"]["$in"] == ["cc_usufruit"]
+
+    dossier_where = r._chroma_scope_filter("dossier")
+    assert "dossier-ghost" not in dossier_where["source"]["$in"]
+
+    # A case that was never indexed must match nothing, not everything.
+    assert r._chroma_scope_filter("case:ghost") == {"source": "dossier-ghost"}
+
+
+def test_search_drops_orphan_candidates_instead_of_raising() -> None:
+    """A chunk_id in Chroma but not in the row table must not crash a query.
+
+    Hydration does `self.chunks.loc[cid]`, so an orphan raised KeyError and
+    took down the whole request — reproducibly on source_scope="blended",
+    which by design sends no server-side filter. Orphans are dropped before
+    the top-k cut so a full k is still returned when candidates exist.
+    """
+    import numpy as np
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": f"cc-{i}", "source": "cc_usufruit", "texte": "a", "num": str(i),
+         "titre": "t", "section_path": "s", "source_label": "Code civil", "url": "u"}
+        for i in range(3)
+    ]).set_index("chunk_id", drop=False)
+
+    class _Model:
+        def encode(self, *a, **k):
+            return {"dense_vecs": [np.zeros(4)]}
+
+    class _Vectors:
+        # Two real ids sandwiching an orphan, as a desynced collection returns.
+        def query(self, **kwargs):
+            return {"ids": [["cc-0", "dossier-ghost-d1-c001", "cc-1", "cc-2"]]}
+
+    r = HybridRetriever(
+        bm25=None, vectors=_Vectors(), embed_model=_Model(), chunks=chunks,
+    )
+
+    hits = r.search("q", k=3, mode="vector", source_scope="blended")
+    assert [h["chunk_id"] for h in hits] == ["cc-0", "cc-1", "cc-2"]
+
+
+def test_reconcile_chroma_reports_and_deletes_orphans_only_when_applied() -> None:
+    """reconcile must be a dry run by default — Chroma is real state."""
+    from ingestion.index import reconcile_chroma
+
+    class _Collection:
+        def __init__(self):
+            self.deleted: list[str] = []
+
+        def get(self, include=None):
+            return {
+                "ids": ["cc-0", "dossier-ghost-c001"],
+                "metadatas": [{"source": "cc_usufruit"}, {"source": "dossier-ghost"}],
+            }
+
+        def delete(self, ids):
+            self.deleted.extend(ids)
+
+    row_ids = {"cc-0", "cc-unvectorised"}
+
+    dry = _Collection()
+    result = reconcile_chroma(row_ids, dry, apply=False)
+    assert result["orphans"] == 1
+    assert result["orphans_by_source"] == {"dossier-ghost": 1}
+    assert result["unvectorised"] == 1
+    assert result["deleted"] == 0
+    assert dry.deleted == [], "dry run must not delete"
+
+    live = _Collection()
+    applied = reconcile_chroma(row_ids, live, apply=True)
+    assert applied["deleted"] == 1
+    assert live.deleted == ["dossier-ghost-c001"]
+
+
+def test_chroma_scope_filter_on_a_statute_only_corpus() -> None:
+    """With no dossier indexed, statute scope still sends its allowlist.
+
+    Before ADR #63 this asserted that no `where` clause was sent at all. That
+    compatibility guarantee is exactly what let stray dossier vectors reach
+    the default scope, so the contract is now the allowlist — inert in
+    effect on a clean corpus, protective on a desynced one.
+    """
     from ingestion.load import HybridRetriever
 
     chunks = pd.DataFrame([
@@ -816,5 +922,8 @@ def test_chroma_scope_filter_is_inert_on_a_statute_only_corpus() -> None:
     r = HybridRetriever(bm25=None, vectors=None, embed_model=None, chunks=chunks)
 
     assert r._dossier_sources() == []
-    for scope in ("statute", "dossier", "case:private", "blended"):
-        assert r._chroma_scope_filter(scope) is None
+    assert r._chroma_scope_filter("statute") == {"source": {"$in": ["cc_usufruit"]}}
+    # No dossier sources to allow: fall through to the chunk_id predicate
+    # rather than send an empty $in, which some backends read as match-all.
+    assert r._chroma_scope_filter("dossier") is None
+    assert r._chroma_scope_filter("blended") is None

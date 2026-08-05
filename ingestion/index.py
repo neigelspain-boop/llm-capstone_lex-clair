@@ -169,6 +169,101 @@ def build_all(
     return bm25, collection
 
 
+# ========== Chroma/row-table reconciliation (ADR #63) ==========
+
+def reconcile_chroma(
+    chunk_ids: set[str],
+    collection: chromadb.api.models.Collection.Collection,
+    apply: bool = False,
+) -> dict:
+    """Diff the persisted Chroma collection against the row table.
+
+    Two failure modes, only one of them fixable here:
+
+    - ORPHANS — vectors whose chunk_id is absent from the row table. Left
+      behind whenever a case's CSV is removed or its case_id renamed, because
+      ingestion.dossier.index only purges the `dossier-{case_id}-` prefix it
+      is currently writing (ADR #38) and cannot know about a prefix that no
+      longer exists. These are deletable, and this is what `apply=True` does.
+    - UNVECTORISED — row-table chunks with no vector. Reported only: fixing
+      them means re-embedding, which is build_chroma's job, not a diff's.
+
+    Chroma is real state, so deletion is opt-in: the default is a dry run
+    that reports and changes nothing (same idiom as rag.compliance's
+    --dry-run). Returns the counts either way.
+    """
+    persisted = collection.get(include=["metadatas"])
+    persisted_ids = persisted["ids"]
+    metadatas = persisted["metadatas"] or [{} for _ in persisted_ids]
+
+    orphans = [cid for cid in persisted_ids if cid not in chunk_ids]
+    unvectorised = sorted(chunk_ids.difference(persisted_ids))
+
+    by_source: dict[str, int] = {}
+    orphan_set = set(orphans)
+    for cid, meta in zip(persisted_ids, metadatas):
+        if cid in orphan_set:
+            source = str((meta or {}).get("source", "<no source metadata>"))
+            by_source[source] = by_source.get(source, 0) + 1
+
+    log.info(
+        "reconcile: %d vectors in Chroma, %d chunks in row table",
+        len(persisted_ids), len(chunk_ids),
+    )
+    if orphans:
+        log.warning("reconcile: %d orphan vector(s) with no row-table entry:", len(orphans))
+        for source, count in sorted(by_source.items(), key=lambda kv: -kv[1]):
+            log.warning("  source=%-24s %d vector(s)", source, count)
+    if unvectorised:
+        log.warning(
+            "reconcile: %d row-table chunk(s) with no vector (e.g. %s) — dense retrieval "
+            "cannot reach them; rebuild the index to embed them",
+            len(unvectorised), unvectorised[0],
+        )
+    if not orphans and not unvectorised:
+        log.info("reconcile: Chroma and the row table agree; nothing to do")
+
+    deleted = 0
+    if orphans and apply:
+        collection.delete(ids=orphans)
+        deleted = len(orphans)
+        log.info("reconcile: deleted %d orphan vector(s)", deleted)
+    elif orphans:
+        log.info("reconcile: dry run — re-run with --apply to delete these %d vector(s)", len(orphans))
+
+    return {
+        "persisted": len(persisted_ids),
+        "row_table": len(chunk_ids),
+        "orphans": len(orphans),
+        "orphans_by_source": by_source,
+        "unvectorised": len(unvectorised),
+        "deleted": deleted,
+    }
+
+
+def _reconcile_cli(apply: bool) -> dict:
+    """Assemble the merged row table and reconcile the persisted collection.
+
+    Imports ingestion.load lazily: load.py imports build_bm25/infer_device
+    from this module, so a module-level import here would be circular. The
+    row table must come from load_index's merge (statute CSV + every per-case
+    dossier CSV, ADR #58) — reconciling against the statute CSV alone would
+    condemn every legitimate dossier vector as an orphan.
+    """
+    from ingestion.load import DOSSIER_DIR, _read_dossier_chunks
+
+    statute_chunks = pd.read_csv(CHUNKS_CSV, keep_default_na=False)
+    frames = [statute_chunks, *_read_dossier_chunks(
+        list(statute_chunks.columns), DOSSIER_DIR
+    )]
+    chunks = pd.concat(frames, ignore_index=True) if len(frames) > 1 else statute_chunks
+    chunk_ids = set(chunks["chunk_id"].astype(str))
+
+    client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+    collection = client.get_collection(name=COLLECTION)
+    return reconcile_chroma(chunk_ids, collection, apply=apply)
+
+
 def main() -> None:
     """Command-line entrypoint for BM25 + Chroma index building."""
     parser = argparse.ArgumentParser(description="Build BM25 + Chroma from chunks CSV.")
@@ -179,7 +274,24 @@ def main() -> None:
         default=None,
         help="embedding device; inferred from torch.cuda.is_available() if omitted",
     )
+    parser.add_argument(
+        "--reconcile",
+        action="store_true",
+        help="diff Chroma against the row table instead of building; reports only",
+    )
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="with --reconcile, delete orphan vectors (destructive; default is a dry run)",
+    )
     args = parser.parse_args()
+
+    if args.apply and not args.reconcile:
+        parser.error("--apply is only meaningful with --reconcile")
+    if args.reconcile:
+        _reconcile_cli(apply=args.apply)
+        return
+
     build_all(src=args.src, device=args.device)
 
 
