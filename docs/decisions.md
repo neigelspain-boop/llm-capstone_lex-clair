@@ -3236,3 +3236,122 @@ Related: ADR #59 and #62 (the anonymisation pipeline and its pinned persona
 roster, whose determinism this relies on), ADR #63 (the orphan vectors that
 were this missing case), ADR #58 (`PUBLIC_CASE_IDS` — `vitrine` is derived
 from a protected case and its committed form is the reviewable artifact).
+
+---
+
+## ADR #64 — Retrieval re-measured at the pipeline's own shape; weighted hybrid replaces vector-only
+
+**Date:** 2026-08-05 · **Branch:** v2-persons · **Status:** Accepted
+**Supersedes:** ADR #20 (vector-only retrieval mode)
+
+### Context
+
+ADR #20 locked `rag/retrieve.py` to `mode="vector"` on this table
+(`data/retrieval_eval_results.csv`, k=10, raw retriever, n=1484):
+
+| config | hit@10 | mrr@10 |
+|---|---|---|
+| bm25_only | 0.4164 | 0.2343 |
+| vector_only | **0.7695** | **0.5547** |
+| hybrid | 0.7224 | 0.4153 |
+| hybrid_tuned | 0.7385 | 0.4531 |
+
+Its own module docstring flagged a retest "once Day 7 monitoring collects real
+query logs". That retest never happened, and in the meantime the corpus gained
+a whole second half (dossier chunks merged at load time, ADR #58).
+
+Two things about that measurement do not match the system it governs.
+
+**It measured a stage the pipeline does not use.** `rag/flow.py` retrieves
+`RETRIEVE_K=20` and passes all 20 to a BGE cross-encoder that keeps
+`RERANK_K=5` — and `rag/rerank.py` explicitly discards rrf ordering before
+scoring anything ("Original ordering (rrf_score) is discarded"). So the
+retriever's ordering below k is close to irrelevant; what it owes the pipeline
+is that the gold chunk be *present in the top-20 pool*. mrr@10 measures
+precisely the property the reranker exists to overwrite. Hybrid retrieval
+characteristically trades ordering for coverage — a bad trade under mrr@10,
+a good one under "get it into the pool" — so the published comparison was
+structurally biased against it.
+
+**The fusion it tested was unweighted.** `load.py` summed `1/(RRF_K + rank)`
+from both arms at equal weight. BM25 is far the weaker arm on this corpus, so
+a garbage BM25 rank-0 hit scores 1/60 = .0167 and outranks a *correct* dense
+rank-5 hit at 1/65 = .0154. That alone explains hybrid (0.7224) < vector
+(0.7695): the fusion was letting the weak arm override the strong one. ADR #20
+rejected hybrid on evidence that was real — for that fusion.
+
+Ground truth is single-gold (one article per question), so recall@k and hit@k
+are the same quantity. The gap was never a missing metric, only the wrong k
+and a missing reranker.
+
+### Decision
+
+**`eval/pipeline_eval.py`** measures at the pipeline's shape: retrieve k=20,
+rerank to 5, report hit/mrr at both stages, with `weights` swept over the RRF
+arms. It sits beside `retrieval_eval.py` rather than replacing it — the
+original harness stays as the provenance of ADR #20's numbers.
+
+**`HybridRetriever.search()` gains `weights: tuple[float, float] = (1.0, 1.0)`**
+scaling each arm's RRF contribution. The default is exactly the old behaviour,
+so every pre-existing measurement remains comparable.
+
+**`rag/retrieve.py` moves to `mode="hybrid", weights=(0.3, 1.0)`.** Full ground
+truth, n=1584:
+
+| config | hit@20 | mrr@20 | hit@5 (reranked) | mrr@5 (reranked) |
+|---|---|---|---|---|
+| vector_only | 0.8333 | **0.5546** | 0.7475 | 0.6186 |
+| hybrid (1.0, 1.0) | 0.7833* | 0.3983* | 0.6800* | 0.5834* |
+| **hybrid (0.3, 1.0)** | **0.8491** | 0.4850 | **0.7595** | **0.6263** |
+
+*n=300 sweep.
+
+Note hybrid **loses mrr@20 badly while winning hit@20** — the coverage-for-
+ordering trade, visible only because this harness measures the stage that
+consumes it. The reranker then repairs the ordering, and the end-to-end
+numbers invert.
+
+**The decision rests on a paired test, not the aggregate gap.** A 1.2-point
+difference is not self-evidently real. McNemar's exact test on the same 1584
+queries:
+
+- pool (hit@20): hybrid wins 43, loses 18, 61 discordant → **p = 0.0019**
+- reranked (hit@5): hybrid wins 33, loses 14, 47 discordant → **p = 0.0079**
+
+Significant at both stages. `--per-query-out` writes the per-query ranks this
+requires; aggregate rows cannot answer the question.
+
+### Consequences
+
+- Every answer now draws on a candidate pool containing the gold chunk ~1.6pp
+  more often, and cites the right article ~1.2pp more often end to end.
+- **The effect is modest.** Significant is not the same as large: 33 queries in
+  1584 changed from miss to hit after reranking. This is a correctness fix to
+  a decision procedure, not a step change in answer quality.
+- BM25 stops being dead weight. It was rebuilt from `chunks.csv` on every boot
+  and then never consulted, since `mode="vector"` ignored it entirely.
+- Latency rises by one in-memory BM25 query per search — negligible against the
+  cross-encoder pass that dominates.
+- `retrieval_eval.py`'s boost tuner still optimises hit_rate at k=10, so
+  `hybrid_tuned`'s boosts were fitted against the superseded objective. The
+  `DEFAULT_BM25_BOOST` remains uniform and untuned at the new one.
+- The weight was chosen from a coarse sweep (1.0, 0.5, 0.3, 0.2); 0.5 and 0.3
+  tied on hit@20 at n=300. It is a plateau, not a tuned optimum, and no
+  interaction with `SCOPED_BM25_FETCH`'s asymmetric over-fetch was explored.
+
+### Confounders, stated
+
+- **Ground truth is synthetic** — gpt-4o-mini paraphrases of each article's own
+  text. Paraphrase queries structurally favour dense retrieval, so this
+  measurement most likely *under*-credits BM25's exact-match strength on
+  article numbers ("article 587", "L. 132-1"), which real users type and these
+  queries barely exercise. The boost tuner independently learned `num: 1.516`
+  was its most valuable field — a signal the corpus rewards lexical matching
+  that the eval set does not test. Direction of bias is against the change
+  adopted here, which strengthens rather than weakens the conclusion.
+- Measured under `source_scope="statute"` only. The dossier half of the corpus
+  is unmeasured, and a real-query evaluation set remains unbuilt.
+
+Related: ADR #20 (superseded), ADR #21 (the reranker whose existence makes
+pool coverage the right objective), ADR #58 and #63 (scope filtering, active
+during measurement), ADR #10 (`load_index` contract, unchanged).

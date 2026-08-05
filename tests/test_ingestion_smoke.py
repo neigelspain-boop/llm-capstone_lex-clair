@@ -873,6 +873,53 @@ def test_search_drops_orphan_candidates_instead_of_raising() -> None:
     assert [h["chunk_id"] for h in hits] == ["cc-0", "cc-1", "cc-2"]
 
 
+def test_rrf_weights_default_to_uniform_and_damp_the_weaker_arm() -> None:
+    """weights scales each arm's RRF contribution; (1.0, 1.0) is a no-op.
+
+    The default must reproduce pre-ADR-#64 fusion exactly, or every published
+    measurement in data/retrieval_eval_results.csv becomes uncomparable.
+
+    The damping case encodes the defect ADR #64 diagnoses: under uniform RRF a
+    BM25 rank-0 hit scores 1/60 and outranks a *correct* dense rank-5 hit at
+    1/65, even though BM25 is far the weaker arm on this corpus. Weighting the
+    lexical arm down lets the dense arm's answer win.
+    """
+    import numpy as np
+    from ingestion.load import HybridRetriever
+
+    chunks = pd.DataFrame([
+        {"chunk_id": f"cc-{i}", "source": "cc_usufruit", "texte": "a", "num": str(i),
+         "titre": "t", "section_path": "s", "source_label": "Code civil", "url": "u"}
+        for i in range(7)
+    ]).set_index("chunk_id", drop=False)
+
+    class _Model:
+        def encode(self, *a, **k):
+            return {"dense_vecs": [np.zeros(4)]}
+
+    class _Bm25:
+        # Ranks a wrong chunk first.
+        def search(self, **kwargs):
+            return [{"chunk_id": "cc-6"}]
+
+    class _Vectors:
+        # Ranks the correct chunk 6th.
+        def query(self, **kwargs):
+            return {"ids": [[f"cc-{i}" for i in range(6)]]}
+
+    r = HybridRetriever(
+        bm25=_Bm25(), vectors=_Vectors(), embed_model=_Model(), chunks=chunks,
+    )
+
+    uniform = r.search("q", k=1, mode="hybrid", source_scope="blended")
+    assert uniform[0]["chunk_id"] == "cc-6", "uniform RRF: BM25's rank-0 should win"
+
+    damped = r.search(
+        "q", k=1, mode="hybrid", source_scope="blended", weights=(0.3, 1.0),
+    )
+    assert damped[0]["chunk_id"] == "cc-0", "damped BM25 must not override dense"
+
+
 def test_reconcile_chroma_reports_and_deletes_orphans_only_when_applied() -> None:
     """reconcile must be a dry run by default — Chroma is real state."""
     from ingestion.index import reconcile_chroma

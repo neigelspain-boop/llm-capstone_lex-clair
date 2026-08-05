@@ -1,0 +1,3 @@
+config,mode,w_bm25,w_dense,hit_at_20,mrr_at_20,n_queries,hit_at_5_reranked,mrr_at_5_reranked
+vector_only,vector,1.0,1.0,0.8333,0.5546,1584,0.7475,0.6186
+hybrid_03_1,hybrid,0.3,1.0,0.8491,0.485,1584,0.7595,0.6263

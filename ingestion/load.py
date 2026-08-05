@@ -195,13 +195,24 @@ class HybridRetriever:
         boost_dict: dict[str, float] | None = None,
         mode: str = "hybrid",
         source_scope: str = "statute",
+        weights: tuple[float, float] = (1.0, 1.0),
     ) -> list[dict]:
         """Return top-k chunks fused from BM25 and dense retrieval.
 
         source_scope (ADR #41, default "statute") filters the fused
         candidate set before the top-k cut: "statute" (default),
         "dossier", "case:<id>", or "blended" (no filter).
+
+        weights (bm25_weight, dense_weight) scales each arm's RRF
+        contribution. The default (1.0, 1.0) is textbook uniform RRF and
+        reproduces every pre-ADR-#64 measurement exactly. Uniform weighting
+        is not neutral when the arms differ in quality: BM25 scores hit@10
+        0.4164 against dense's 0.7695 on this corpus, yet a BM25 rank-0 hit
+        contributes 1/60 = .0167 and outranks a *correct* dense rank-5 hit
+        at 1/65 = .0154. Damping the weaker arm lets it break ties and
+        confirm agreement without overriding the stronger one.
         """
+        w_bm25, w_dense = weights
         predicate = _scope_predicate(source_scope)
 
         if mode not in ("bm25", "vector", "hybrid"):
@@ -251,9 +262,9 @@ class HybridRetriever:
         scores: dict[str, float] = {}
         for rank, hit in enumerate(bm25_hits):
             cid = hit["chunk_id"]
-            scores[cid] = scores.get(cid, 0.0) + 1.0 / (RRF_K + rank)
+            scores[cid] = scores.get(cid, 0.0) + w_bm25 / (RRF_K + rank)
         for rank, cid in enumerate(vec_ids):
-            scores[cid] = scores.get(cid, 0.0) + 1.0 / (RRF_K + rank)
+            scores[cid] = scores.get(cid, 0.0) + w_dense / (RRF_K + rank)
 
         # source_scope filter: applied to the fused candidate pool, before
         # the top-k cut, so a narrow scope draws from the full k*3 over-fetch
