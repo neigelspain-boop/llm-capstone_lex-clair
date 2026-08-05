@@ -217,8 +217,50 @@ _PII_PATTERNS: list[tuple[re.Pattern, str]] = [
     (re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"), "[email]"),
     (re.compile(r"\b[A-Z]{2}\d{2}(?:[ ]?[A-Z0-9]{4}){2,7}\b"), "[IBAN]"),
     (re.compile(r"\b(?:\+33|0)\s?[1-9](?:[\s.-]?\d{2}){4}\b"), "[telephone]"),
+    # Label-anchored phone numbers. The rule above is format-anchored and so
+    # requires the leading 0 / +33 that OCR of a scanned letterhead routinely
+    # loses or mangles — "Tél. 40 54 44 44" and "Tel ; 514 813 9053" both
+    # survived it. When a document says a number is a telephone, that is
+    # better evidence than its shape, so trust the label and redact whatever
+    # digit run follows it.
+    (
+        re.compile(
+            r"\b(?:t[ée]l(?:[ée]phone)?|mobile|portable|fax|gsm)\b\s*[.:;]?\s*"
+            r"\+?\d[\d .\-]{6,}\d",
+            re.IGNORECASE,
+        ),
+        "Tél. [telephone]",
+    ),
     (re.compile(r"\b\d{3}[ ]?\d{3}[ ]?\d{3}[ ]?\d{5}\b"), "[SIRET]"),
     (re.compile(r"\b\d{3}[ ]?\d{3}[ ]?\d{3}\b(?=\s*(?:RCS|SIREN))"), "[SIREN]"),
+    # Same 9-digit shape with the marker BEFORE it — "RCS Beaumont 315 429 837",
+    # which is the ordering French company footers actually use. The lookahead
+    # rule above only fires on "315 429 837 RCS" and so never matched these.
+    (
+        re.compile(
+            r"\b(?:RCS|RCS\s+[A-ZÀ-Ý][\w'\-]+|SIREN|SIRET)\s+\d{3}[ ]?\d{3}[ ]?\d{3}\b"
+        ),
+        "[SIREN]",
+    ),
+    # Bare 9-digit triplets: bank account, contract and policy references, which
+    # carry no marker at all and were passing through the anonymiser verbatim.
+    # A monetary amount has the same shape, so anything reading as currency is
+    # excluded — and \b already prevents biting a 9-digit window out of the
+    # longer SIRET/account runs handled above.
+    (
+        re.compile(r"\b\d{3}[ ]\d{3}[ ]\d{3}\b(?!\s*(?:€|EUR\b|euros?\b))"),
+        "[réf.]",
+    ),
+    # Regulator approval numbers — AMF "n° GP 07000033" / "GP 07 0000 33".
+    # The generic reference rule below expects at most one letter before the
+    # first digit ("[A-Z]?\d"), so a two-letter agrément prefix escaped it.
+    # The "n°" is optional but the prefix is enumerated rather than left as
+    # [A-Z]{2,3}: any two capitals followed by digits would also swallow
+    # ordinary citations ("ADR 63", "SCPI 07 …").
+    (
+        re.compile(r"\b(?:[Nn]°?\s?)?(?:GP|GC)\s?\d(?:[\d ]{3,}\d|\d{3,})\b"),
+        "[réf.]",
+    ),
     # Street line: number + type + name, up to a comma, a marker or end of
     # line. The tail stops at "[" because the patterns above have already
     # placed markers on this line — without it a 40-character tail slices

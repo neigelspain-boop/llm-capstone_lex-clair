@@ -747,3 +747,56 @@ def test_committed_vitrine_artifacts_contain_no_private_identifier() -> None:
         "private identifiers found in committed vitrine artifacts: "
         + "; ".join(f"{f}: {i}" for f, i in report.leaks[:10])
     )
+
+
+# --- structured-PII coverage for financial identifiers (ADR #65) -------------
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "RCS Beaumont 315 429 837, siège social",       # marker before the number
+        "compte n 254 440 017 ouvert en 2019",          # bare account reference
+        "référence 019 349 002 du contrat",             # bare contract reference
+        "agréée par l'AMF sous le n° GP 07000033",      # regulator approval, packed
+        "agréée sous le n° GP 07 0000 33 délivré",      # regulator approval, spaced
+        "Nicole GIRARD Design / Tel ; 514 813 9053",    # labelled phone, no leading 0
+        "Tél. 40 54 44 44",                             # labelled phone, OCR-truncated
+    ],
+)
+def test_financial_identifiers_are_redacted(text: str) -> None:
+    """Account, contract and registration numbers must not survive.
+
+    All five of these passed through the anonymiser byte-identical while
+    verify_anonymization still reported leaks=0, because its leak check is
+    persons.jsonl names + extra identifiers + these same regexes — none of
+    which covered a 9-digit reference carrying no marker, or a two-letter
+    agrément prefix. The redaction layer and the verifier share
+    _PII_PATTERNS, so closing the gap here closes it in both.
+    """
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    assert _apply_structured_pii(text) != text, f"identifier survived: {text!r}"
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "capital de 684 660 €",
+        "montant de 123 456 789 € versé",
+        "indemnité de 250 000 euros",
+        "article 587 du code civil",
+        "SCPI Notapierre détenue en usufruit",
+        "ADR 63 est accepté",
+    ],
+)
+def test_amounts_and_citations_are_not_mistaken_for_identifiers(text: str) -> None:
+    """A monetary amount shares the 9-digit triplet shape with a SIREN.
+
+    Over-redaction is not a safe default here: the compliance reasoning is
+    built on amounts and article numbers, so eating them would quietly
+    degrade every downstream answer rather than fail loudly.
+    """
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    assert _apply_structured_pii(text) == text, f"over-redacted: {text!r}"
