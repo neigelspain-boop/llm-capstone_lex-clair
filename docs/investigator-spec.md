@@ -419,11 +419,27 @@ The second is not a failure mode, it is a deliverable: a document-request list. 
 is also the anti-hallucination device, because it makes it structurally impossible
 for the engine to upgrade "we didn't look" into "it didn't happen".
 
-Coverage comes from `coverage.jsonl`, written by `ingestion/dossier/gate.py`.
+Coverage comes from `coverage.jsonl`, written by `ingestion/dossier/gate.py`,
+and it is **graded rather than binary**:
+
+| Scope | Status | Tier |
+|---|---|---|
+| every document verified | `gap` | T3 |
+| some verified, some unknown | `gap` | T4 |
+| none verified, or no coverage file | `unverifiable` | T5 |
+
+The middle row is load-bearing. On the real corpus 8 of 55 documents carry an
+unparsed gate verdict, so an all-or-nothing rule discarded 28 confirmed
+documents because of 3 unknown ones and collapsed *every* obligation to
+`unverifiable` — the engine could never assert a breach at all. A wholly
+unverified scope still says nothing; a mostly-verified one says something
+weaker, and the tier carries that instead of the status discarding it.
+
 **`vitrine` has no `coverage.jsonl`** (only `private` does, 93 rows), so
-`coverage_known=False` there and every gap degrades to `unverifiable`-grade
-confidence and caps at T5. That is correct and directly demonstrable, not a bug to
-work around.
+`coverage_known=False` there and every gap degrades to T5. The consequence is
+worth stating plainly: the anonymised case yields **no gap findings at all**,
+while the real case yields nine. Anonymisation drops the coverage file, and
+without it absence cannot be distinguished from a collection failure.
 
 ---
 

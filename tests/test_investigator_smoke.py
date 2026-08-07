@@ -288,10 +288,40 @@ def test_presence_on_a_defective_fact_collapses_to_t5():
 
 
 def test_a_gap_over_a_covered_scope_is_t3_and_never_better():
-    ev = Evaluation(obligation_id="o", status="gap", scope_covered=True)
+    ev = Evaluation(
+        obligation_id="o", status="gap", scope_covered=True, scope_doc_ids=("d",), scope_ok_docs=1
+    )
     tier, _ = schema.assign_tier(ev, GraphHealth(coverage_known=True), _obligation())
     assert tier == "T3"
     assert schema.TIER_ORDER[tier] > schema.TIER_ORDER["T2"]
+
+
+def test_a_gap_over_a_partly_verified_scope_is_t4_not_discarded():
+    """Coverage is graded, not binary.
+
+    On the real corpus 8 of 55 documents have an unparsed gate verdict.
+    Requiring every document in scope to be verified threw away 28 confirmed
+    ones because of 3 unknown ones, and every obligation collapsed to
+    `unverifiable` — the engine could never assert a breach at all.
+    """
+    partial = Evaluation(
+        obligation_id="o",
+        status="gap",
+        scope_covered=False,
+        scope_doc_ids=("a", "b", "c"),
+        scope_ok_docs=2,
+    )
+    tier, basis = schema.assign_tier(partial, GraphHealth(coverage_known=True), _obligation())
+    assert (tier, basis) == ("T4", "absence_perimetre_partiellement_couvert")
+
+    none_verified = Evaluation(
+        obligation_id="o",
+        status="gap",
+        scope_covered=False,
+        scope_doc_ids=("a", "b", "c"),
+        scope_ok_docs=0,
+    )
+    assert schema.assign_tier(none_verified, GraphHealth(coverage_known=True), _obligation())[0] == "T5"
 
 
 def test_an_uncovered_scope_can_never_beat_t5():

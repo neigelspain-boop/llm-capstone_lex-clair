@@ -493,9 +493,11 @@ because a model is down or wrong.
 
 - **`gap` is not `unverifiable`.** A gap says the obligation was not performed;
   `unverifiable` says the record needed to test it is not in the dossier. The
-  engine cannot silently upgrade "we didn't look" into "it didn't happen". The
-  public `vitrine` case has no `coverage.jsonl`, so every gap there caps at T5 —
-  and it says so rather than assuming the best case.
+  engine cannot silently upgrade "we didn't look" into "it didn't happen".
+  Coverage is graded: fully verified absence is T3, partially verified T4,
+  unverified stays `unverifiable` at T5. The public `vitrine` case has no
+  `coverage.jsonl` at all, so it yields **no gap findings** — real analysis runs
+  on the source case, and `vitrine` demonstrates the pipeline.
 - **Evidence of performance means conduct by the bearer.** Before that default
   existed, one well-worded sentence from an unrelated party reported a duty
   performed — a false `satisfied`, the one direction no later layer can repair.

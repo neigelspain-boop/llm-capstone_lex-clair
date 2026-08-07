@@ -3977,6 +3977,19 @@ confidently wrong output, and each is now a named rule with a regression test:
    records why. `window.trigger_select` (`earliest`/`latest`) makes the choice
    explicit where it *can* be made.
 
+4. **Coverage is graded, not binary.** Requiring every document in an
+   obligation's scope to be gate-verified discarded 28 confirmed documents
+   because 3 were unknown, and collapsed every obligation on the real case to
+   `unverifiable`. A fully verified absence is T3, a partially verified one
+   T4, an unverified one stays `unverifiable` at T5. This is what lets the real
+   case produce nine `gap` findings where the previous rule produced none.
+
+A consequence worth recording: the anonymised `vitrine` case yields **no gap
+findings**, because `anonymize.py` does not carry `coverage.jsonl` into the
+derived case and absence without a coverage denominator caps at T5. Real
+analysis therefore runs on the source case; `vitrine` demonstrates the
+pipeline and carries the committable artifacts.
+
 The third correction also demonstrated resolve-on-fix on real data: the false
 `critical` finding flipped to `resolved` and the accurate one opened, with no
 manual edit and no loss of history.

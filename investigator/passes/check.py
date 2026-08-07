@@ -190,7 +190,7 @@ def _find_trigger(
 
 def _scope(
     obligation: Obligation, graph: CaseGraph, trigger_fact_id: str | None = None
-) -> tuple[tuple[str, ...], bool]:
+) -> tuple[tuple[str, ...], int]:
     """Documents where the required event would appear, and whether they're covered.
 
     With explicit `doc_id_patterns`, the author has said where to look. Without
@@ -205,6 +205,14 @@ def _scope(
     all-documents scope is never fully covered and *every* obligation degrades
     to `unverifiable`. Narrowing to where the bearer appears keeps the coverage
     question answerable without ever asserting coverage the gate did not give.
+
+    Returns `(docs, verified_count)`. Coverage is **graded, not binary**: on the
+    real corpus 8 of 55 documents have an unparsed gate verdict, and requiring
+    every document in scope to be verified threw away 28 confirmed documents
+    because of 3 unknown ones — every obligation collapsed to `unverifiable`
+    and no breach could ever be asserted. A wholly unverified scope still says
+    nothing; a mostly-verified one says something weaker, and the tier carries
+    that rather than the status discarding it.
 
     An empty scope stays uncovered by definition: nothing here could have shown
     compliance either way.
@@ -224,10 +232,9 @@ def _scope(
             relevant.add(graph.facts[trigger_fact_id].source_doc_id)
         docs = tuple(sorted(relevant))
     if not docs or not graph.coverage_known:
-        return docs, False
+        return docs, 0
     required = obligation.evidence_scope.require_gate_status
-    covered = all(graph.coverage.get(d) == required for d in docs)
-    return docs, covered
+    return docs, sum(1 for d in docs if graph.coverage.get(d) == required)
 
 
 def _rank_candidates(
@@ -268,7 +275,8 @@ def evaluate(
     triggered, trigger_fact_id, trigger_date, trigger_ambiguous = _find_trigger(
         obligation, graph
     )
-    scope_docs, scope_covered = _scope(obligation, graph, trigger_fact_id)
+    scope_docs, scope_ok = _scope(obligation, graph, trigger_fact_id)
+    scope_covered = bool(scope_docs) and scope_ok == len(scope_docs)
 
     if not triggered:
         return Evaluation(
@@ -276,6 +284,7 @@ def evaluate(
             status="not_triggered",
             scope_doc_ids=scope_docs,
             scope_covered=scope_covered,
+            scope_ok_docs=scope_ok,
             foreach_key=foreach_key,
             foreach_role=foreach_role,
         )
@@ -333,7 +342,9 @@ def evaluate(
                     status = "window_breach"
                     breach_days = (min(dates) - due).days
     else:
-        status = "gap" if scope_covered else "unverifiable"
+        # Any verified document in scope is enough to say the record was
+        # searched. None at all means it was not — that stays `unverifiable`.
+        status = "gap" if scope_ok else "unverifiable"
 
     return Evaluation(
         obligation_id=obligation.obligation_id,
@@ -344,6 +355,7 @@ def evaluate(
         candidate_fact_ids=_rank_candidates(obligation, graph, trigger_date, bound),
         scope_doc_ids=scope_docs,
         scope_covered=scope_covered,
+        scope_ok_docs=scope_ok,
         trigger_fact_id=trigger_fact_id,
         trigger_ambiguous=trigger_ambiguous,
         window_breach_days=breach_days,
@@ -395,7 +407,7 @@ def _evidence(ev: Evaluation, graph: CaseGraph) -> str:
     bits = [
         f"statut={ev.status}",
         f"faits_retenus={len(ev.matched_fact_ids)}",
-        f"périmètre={len(ev.scope_doc_ids)} document(s), couvert={ev.scope_covered}",
+        f"périmètre={ev.scope_ok_docs}/{len(ev.scope_doc_ids)} document(s) vérifié(s)",
     ]
     if ev.trigger_fact_id:
         bits.append(f"déclencheur={ev.trigger_fact_id} ({graph.facts[ev.trigger_fact_id].date})")

@@ -304,7 +304,10 @@ class Evaluation:
     # layer touches no other module.
     candidate_fact_ids: tuple[str, ...] = ()
     scope_doc_ids: tuple[str, ...] = ()
+    # Fully verified scope. `scope_ok_docs` carries the graded form: a
+    # partially verified scope still supports a finding, one tier weaker.
     scope_covered: bool = False
+    scope_ok_docs: int = 0
     trigger_fact_id: str | None = None
     # True when the corpus disagrees about when the triggering event
     # happened. No deadline may be computed from an ambiguous trigger.
@@ -368,10 +371,16 @@ def assign_tier(
     elif ev.status in ABSENCE_STATUSES:
         if set(ev.candidate_fact_ids) & health.defective_fact_ids:
             tier, basis = "T5", "absence_defaut_integrite"
-        elif ev.scope_covered and health.coverage_known:
-            tier, basis = "T3", "absence_perimetre_couvert"
-        else:
+        elif not health.coverage_known:
             tier, basis = "T5", "absence_perimetre_non_couvert"
+        elif ev.scope_covered:
+            tier, basis = "T3", "absence_perimetre_couvert"
+        elif not ev.scope_ok_docs:
+            tier, basis = "T5", "absence_perimetre_non_couvert"
+        else:
+            # Some of the scope was verified and some was not. The finding
+            # stands, one tier weaker than a fully verified absence.
+            tier, basis = "T4", "absence_perimetre_partiellement_couvert"
         cap = obligation.absence_tier_cap
     else:
         raise ValueError(f"{ev.obligation_id}: status {ev.status!r} produces no finding")
