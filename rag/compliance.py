@@ -9,36 +9,27 @@ obligations (source_scope="statute", ADR #41), and asks an LLM to judge
 whether each identifiable obligation was met, breached, is ambiguous, or
 lacks sufficient evidence.
 
-This is the one deliverable in the pipeline that justifies Opus-class
-reasoning cost — every other LLM call in lex-clair uses a cheaper model
-(Haiku for routing, Gemini Flash Lite for fact extraction, etc.). One call
-per (actor_role, facts cluster) using anthropic/claude-opus-4.7 with
-reasoning.effort="max" (confirmed live on OpenRouter 2026-07-28 — "max" is a
-distinct reasoning-effort level, not a model suffix; the model slug itself
-uses a dot, not a hyphen). The OpenAI SDK's typed chat.completions.create()
-doesn't accept a bare `reasoning` kwarg, so it's passed via `extra_body`
-(the SDK's standard mechanism for provider-specific fields) — OpenRouter
-still receives "reasoning": {"effort": "max"} at the top level of the
-request body.
+One LLM call per (actor_role, facts cluster), using COMPLIANCE_MODEL_ID at
+reasoning effort "max" — the one deliverable that justifies Opus-class cost.
+Why this model and this effort level, and the OpenRouter transport details
+that constrain how it is passed: ADR #43, plus CLAUDE.md's "OpenRouter SDK
+transport patterns".
 
 Output is fully regenerated (no merge) on every run and persisted to
-data/dossier/<case_id>/compliance_matrix.json. Deterministic entry_id
-(SHA1 of statute_chunk_id + actor_role, truncated to 12 chars) keeps repeat
-runs from creating duplicate rows if a future version adds merge logic.
+data/dossier/<case_id>/compliance_matrix.json. entry_id is deterministic
+(SHA1 of statute_chunk_id + actor_role, truncated to 12), so repeat runs
+cannot produce duplicate rows.
 
-CLI: python -m rag.compliance --case-id <id> [--limit N] [--dry-run]
+Three entry points:
+  generate_compliance_matrix(case_id)      every role in the case (ADR #43)
+  compare_compliance_for_role(...)         one role, two models in parallel,
+                                           divergence tagged (ADR #56)
+  run_compliance_for_role(...)             one role, one model, cached per
+                                           model; backs the Streamlit panel
+                                           (ADR #57)
 
-compare_compliance_for_role (ADR #56, D7) is a second, opt-in entry point:
-for one role at a time, it runs the same prompt against two frontier
-reasoning models (Opus 4.7 max + Kimi K3 max) in parallel and has Haiku 4.5
-tag agreement/divergence per obligation — CLI:
-python -m rag.compliance --case-id <id> --role-id <role> --compare [--dry-run]
-
-run_compliance_for_role (ADR #57, D8) is the cheap single-model sibling of
-that comparative entry point: identical inputs and prompt, one model of the
-caller's choosing, cached per model. It backs the Streamlit panel's model
-toggle, where only the selected model may fire — CLI:
-python -m rag.compliance --case-id <id> --role-id <role> [--model-id <slug>] [--dry-run]
+CLI: python -m rag.compliance --case-id <id> [--role-id <role>]
+     [--compare | --model-id <slug>] [--limit N] [--dry-run]
 """
 from __future__ import annotations
 
@@ -595,27 +586,25 @@ def _call_compliance_llm(
     dry_run: bool = False,
     compliance_model_id: str = COMPLIANCE_MODEL_ID,
 ) -> tuple[list[dict], dict]:
-    """Call a compliance-reasoning model (reasoning.effort="max") for one
-    role cluster. Defaults to Opus 4.7 (COMPLIANCE_MODEL_ID);
-    compliance_model_id lets compare_compliance_for_role (ADR #56, D7) run
-    the identical prompt against a second model (Kimi K3) for comparison —
-    generate_compliance_matrix never passes this, so its behavior is
-    unchanged.
+    """Call a compliance-reasoning model at reasoning effort "max" for one
+    role cluster.
 
-    Returns (parsed_entries, usage) where usage is
-    {"prompt_tokens", "completion_tokens", "cost_usd", "estimated",
-    "cache_hit", "cache_key"}. If `cache` is given and the cluster
-    fingerprint (ADR #53, _compliance_cache_key) is already present, the
-    cached entries are returned at zero cost with cache_hit=True — checked
-    before both the dry-run estimate and the real call, so a cached rerun's
-    dry-run report is also accurate. compare_compliance_for_role always
-    passes cache=None: the shared cache key has no model dimension, so
-    reusing it across two different models on the same role/facts would
-    collide and silently return one model's cached entries for the other.
-    Otherwise, in --dry-run mode, no API call is made: tokens are estimated
-    via a char/4 heuristic and cost from clients.MODEL_RATES_USD_PER_M keyed
-    on compliance_model_id (ADR #68), with estimated=True. An unlisted model
-    raises KeyError rather than reporting a silent $0.
+    Returns (parsed_entries, usage), usage being {"prompt_tokens",
+    "completion_tokens", "cost_usd", "estimated", "cache_hit", "cache_key"}.
+
+    Resolution order:
+      1. `cache` hit on the cluster fingerprint (_compliance_cache_key) —
+         returns cached entries at zero cost, cache_hit=True. Checked before
+         both the dry-run estimate and the real call, so a cached rerun's
+         dry-run report is accurate too.
+      2. dry_run — no API call; tokens via a char/4 heuristic, cost from
+         clients.MODEL_RATES_USD_PER_M (ADR #68). An unlisted model raises
+         KeyError rather than reporting a silent $0.
+      3. the real call.
+
+    Callers running more than one model over the same role MUST pass
+    cache=None: the shared cache key has no model dimension and would return
+    one model's entries for another (ADR #56).
     Otherwise, cost comes from OpenRouter's exact per-call usage.cost when
     present, falling back to the same catalog estimate if it isn't.
     "cache_key" is returned uncached (None on a cache hit) so the caller can
@@ -1329,35 +1318,29 @@ def run_compliance_for_role(
     compliance_model_id: str = COMPLIANCE_MODEL_ID,
     dry_run: bool = False,
 ) -> dict:
-    """Run ONE compliance-reasoning model over one role cluster (ADR #57, D8).
+    """Run ONE compliance-reasoning model over one role cluster.
 
-    The cheap sibling of compare_compliance_for_role: identical inputs
-    (_prepare_role_inputs) and identical prompt, but a single call to the
-    caller's chosen model instead of a parallel Opus + Kimi fan-out plus a
-    Haiku divergence pass. Roughly a third the cost, and the model actually
-    consulted is the one the UI names — which is what makes a user-facing
-    model toggle honest.
+    Same inputs (_prepare_role_inputs) and same prompt as
+    compare_compliance_for_role, with a single call to the caller's chosen
+    model instead of the two-model fan-out. See ADR #57 for why the single-
+    model path exists.
 
-    Output written atomically to
+    Writes atomically to
     data/dossier/<case_id>/compliance_single_<role_id>_<model_slug>.json.
-    The model slug is in the FILENAME and the model id is in the
-    inputs_hash (_single_inputs_hash), so Opus and Kimi results for the same
-    role coexist on disk and toggling between them is a cache miss, never a
-    stale hit. A rerun is a cache hit (zero LLM calls) whenever inputs_hash
-    matches.
+    The model slug is in the filename and the model id is inside
+    inputs_hash, so results for different models coexist and switching model
+    is always a cache miss, never a stale hit. A rerun with a matching
+    inputs_hash is a cache hit and makes zero LLM calls.
 
-    Deliberately passes cache=None to _call_compliance_llm, for the same
-    reason compare_compliance_for_role does (ADR #56): the shared
+    MUST pass cache=None to _call_compliance_llm: the shared
     compliance_cache.jsonl fingerprints on (role_id, fact_ids, prompt) with
-    no model dimension, so reusing it here would let a Kimi run silently
-    return generate_compliance_matrix's cached Opus entries for the
-    identical role/facts/prompt — the exact failure this function's
-    per-model cache exists to prevent.
+    no model dimension, so reusing it here would return one model's cached
+    entries for another (ADR #56, #57).
 
-    Returns a dict deliberately parallel to compare_compliance_for_role's,
-    minus the two-model and divergence keys:
-    {"case_id", "role_id", "role_label", "generated_at", "inputs_hash",
-     "model": {"model_id", "entries", "usage"}, "cache_hit"}.
+    Returns {"case_id", "role_id", "role_label", "generated_at",
+    "inputs_hash", "model": {"model_id", "entries", "usage"}, "cache_hit"} —
+    parallel to compare_compliance_for_role's shape minus its two-model and
+    divergence keys.
 
     Raises ValueError if role_id has no facts in this case.
     """

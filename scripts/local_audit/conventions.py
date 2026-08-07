@@ -159,6 +159,48 @@ def check_section_dividers() -> list[dict]:
     return findings
 
 
+# ========== docstring presence ==========
+
+
+def check_public_docstrings() -> list[dict]:
+    """CLAUDE.md's "spec first" convention, as amended by ADR #69.
+
+    ADR #69 moves design *rationale* out of docstrings and into ADRs, leaving
+    the contract behind. This check is its counterweight: it flags any public
+    (non-underscore) top-level function or class in a plane that has no
+    docstring at all, so trimming rationale cannot quietly become deleting
+    the contract too.
+
+    Private helpers are exempt — the convention has never demanded a
+    docstring on every `_`-prefixed function, and requiring one would produce
+    noise rather than a signal.
+    """
+    findings = []
+    for py_file in _collect_py_files(list(config.PLANE_DIRS.values())):
+        try:
+            tree = ast.parse(py_file.read_text(encoding="utf-8", errors="replace"))
+        except SyntaxError:
+            continue
+        rel = str(py_file.relative_to(config.PROJECT_ROOT))
+
+        for node in tree.body:
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                continue
+            if node.name.startswith("_"):
+                continue
+            if ast.get_docstring(node):
+                continue
+            findings.append(_finding(
+                "convention", rel, node.lineno,
+                f"Public `{node.name}` has no docstring.",
+                "ADR #69 moves rationale to ADRs but keeps the contract "
+                "(arguments, returns, invariants, failure modes) in the "
+                "docstring. An empty one is not the intended end state.",
+                severity="medium", confidence="high",
+            ))
+    return findings
+
+
 # ========== ADR numbering ==========
 
 
@@ -198,5 +240,6 @@ def check_all() -> list[dict]:
     findings += check_cross_plane_imports()
     findings += check_csv_na_handling()
     findings += check_section_dividers()
+    findings += check_public_docstrings()
     findings += check_adr_numbering()
     return findings

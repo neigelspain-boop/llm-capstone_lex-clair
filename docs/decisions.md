@@ -3678,3 +3678,90 @@ the one the model missed.
 
 The generalisable rule, now in `concepts.py`: **before sending a clause to
 the model, check that the span actually contains what decides it.**
+
+---
+
+## ADR #69 — Docstrings carry the contract; ADRs carry the rationale
+
+**Date:** 2026-08-07 · **Branch:** v2-persons · **Status:** Accepted
+
+**Amends:** CLAUDE.md's "Spec first, code second" convention. Does not repeal it.
+
+### Context
+
+Measured across the nine largest source files (7,469 lines), **only ~47% is
+executable logic**. 18.4% is docstrings — 1,375 lines. `rag/compliance.py`
+alone carries 337. The `# ==========` dividers the convention also mandates
+total 99 lines repo-wide, a rounding error. The spec-first docstring
+convention is what makes this codebase long, not the dividers and not the
+tests.
+
+That convention is worth keeping. What has drifted is *what goes in a
+docstring*. Two examples, both real:
+
+- `rag/compliance.py`'s module docstring spends nine lines explaining that
+  `reasoning.effort="max"` was confirmed live on OpenRouter on a particular
+  date, that "max" is a distinct effort level rather than a model suffix,
+  that the slug uses a dot not a hyphen, and that the OpenAI SDK needs
+  `extra_body`. Every one of those is a *decision with a date and a reason* —
+  the definition of an ADR entry. Three of them are already in CLAUDE.md's
+  "OpenRouter SDK transport patterns" section.
+- `run_compliance_for_role`'s 32-line docstring restates ADR #57's Context
+  section. `_call_compliance_llm`'s 31-line docstring restates ADR #53 and
+  #56.
+
+The cost is not just length. Rationale in a docstring has no supersession
+mechanism. When ADR #49 uncapped `max_tokens`, the ADR recorded it; the
+docstrings that explained the old cap did not all get updated, and CLAUDE.md
+went on forbidding the fix for months. Prose that explains *why* needs a
+dated, supersedable home. A docstring is not one.
+
+### Decision
+
+A docstring states the **contract**. Its ADR states the **rationale**.
+
+**Contract — stays in the docstring.** What the function does, arguments,
+return shape, raised exceptions, failure modes and what the caller must do
+about them, invariants, side effects, and any caller obligation that is not
+visible from the signature ("callers must not cache a None result").
+
+**Rationale — moves to the ADR.** Why this design over the alternative, what
+was measured, what was tried and rejected, dated vendor findings, cost
+archaeology, and history of superseded approaches. The docstring keeps a
+one-line pointer: `See ADR #N.`
+
+**The test.** *Would this sentence change if we changed our minds, without
+the function's behaviour changing?* If yes, it is rationale.
+
+Two carve-outs where rationale stays inline:
+
+1. **Non-obvious correctness.** If the next reader would "simplify" the code
+   and break it, the warning stays. `strip_json_fences` documents that the
+   surrounding failure policies deliberately differ (ADR #67) because that is
+   exactly what someone would try to unify.
+2. **Load-bearing invisible detail.** Where the data itself is the reason —
+   the U+00A0 in the whitespace-drift test.
+
+### Consequences
+
+- Roughly 600 lines of prose move from source to `docs/decisions.md`. Net
+  repository size barely changes; the point is that rationale lands somewhere
+  dated and supersedable.
+- The slimming pass's docstring-mass check (>22% of a file, >80 lines) is the
+  measurement. It is `info` severity: a flag for review, never an instruction
+  to delete documentation.
+- A guard against the obvious failure mode: `conventions.py` now flags any
+  public function with **no** docstring, so "split the contract out" cannot
+  quietly become "delete the docstring".
+- **Blocked for two files.** `ingestion/dossier/personas.py` (44% docstring)
+  and `anonymize.py` carry the anonymisation subsystem's rationale, and ADRs
+  #59–#62 were never written — the work shipped under numbers that have no
+  entries. Their rationale has nowhere to move to. Writing those ADRs is a
+  prerequisite, and is deliberately not bundled here.
+
+### Rejected
+
+- **Cutting docstrings to one-liners.** Recovers more lines and destroys the
+  convention a reviewer may be grading. The contract is the valuable half.
+- **Leaving it alone.** Defensible, but concedes the largest single line item
+  and keeps rationale in the one place that cannot record supersession.
