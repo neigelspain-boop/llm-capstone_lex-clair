@@ -27,7 +27,7 @@ from typing import Literal
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import get_openrouter_client, strip_json_fences
 
 load_dotenv()
 
@@ -84,12 +84,8 @@ def _parse_router_response(raw: str) -> dict:
     then json.loads, then validates shape. Raises ValueError on any parse
     or shape failure; the caller catches it and returns a safe default.
     """
-    text = (raw or "").strip()
+    text = strip_json_fences(raw)
 
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
 
     try:
         data = json.loads(text)

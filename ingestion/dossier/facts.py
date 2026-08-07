@@ -42,7 +42,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
-from ingestion.clients import get_anthropic_client
+from ingestion.clients import get_anthropic_client, strip_json_fences
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -214,12 +214,8 @@ def _parse_llm_json(raw: str, doc_id: str) -> dict | None:
     naming doc_id on any failure — callers treat that as "no facts/roles/
     ambiguities extracted from this document".
     """
-    text = (raw or "").strip()
+    text = strip_json_fences(raw)
 
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
 
     try:
         obj, _ = json.JSONDecoder().raw_decode(text)

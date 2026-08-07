@@ -48,7 +48,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from ingestion.clients import get_anthropic_client
+from ingestion.clients import get_anthropic_client, strip_json_fences
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -127,13 +127,9 @@ def _parse_verifier_response(raw: str) -> dict:
     Raises ValueError on any parse or shape failure — caller records
     status="parse_failed" and logs the raw response.
     """
-    text = (raw or "").strip()
+    text = strip_json_fences(raw)
 
     # strip ```json ... ``` fences if the model ignores the "JSON only" instruction
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
 
     try:
         data = json.loads(text)

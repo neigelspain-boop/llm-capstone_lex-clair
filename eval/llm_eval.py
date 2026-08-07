@@ -42,7 +42,7 @@ from dotenv import load_dotenv
 from tqdm.auto import tqdm
 
 # ========== project imports ==========
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import get_openrouter_client, strip_json_fences
 from rag import flow
 
 # ========== paths + constants ==========
@@ -128,13 +128,9 @@ def _parse_judge_response(raw: str) -> dict:
     Raises ValueError on any parse or validation failure. Caller records
     the failure as verdict="UNKNOWN" and increments the failure counter.
     """
-    text = (raw or "").strip()
+    text = strip_json_fences(raw)
 
     # strip ```json ... ``` fences if present
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
 
     try:
         data = json.loads(text)

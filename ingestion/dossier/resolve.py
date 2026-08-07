@@ -43,7 +43,7 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import get_openrouter_client, parse_json_list
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -184,32 +184,10 @@ def _write_role_cache_atomic(cache_path: Path, source_hash: str, persons: list[d
 def _parse_persons_json(raw: str, role_id: str) -> list[dict] | None:
     """Parse the resolver's raw response into a list of person dicts.
 
-    Strips ```json fences and uses json.JSONDecoder().raw_decode() so
-    trailing prose commentary doesn't break the parse (mirrors mentions.py's
-    _parse_mentions_json / facts.py's _parse_llm_json). Returns None and
-    logs a warning naming role_id on any failure — callers must NOT cache a
-    None result, only a real (possibly empty) list.
+    Returns None and logs a warning naming role_id on any failure — callers
+    must NOT cache a None result, only a real (possibly empty) list.
     """
-    text = (raw or "").strip()
-
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
-
-    try:
-        obj, _ = json.JSONDecoder().raw_decode(text)
-    except json.JSONDecodeError as e:
-        log.warning(
-            "resolve: JSON parse failed for role_id=%s: %s\nraw response: %s", role_id, e, raw
-        )
-        return None
-
-    if not isinstance(obj, list):
-        log.warning("resolve: top-level JSON is not an array for role_id=%s", role_id)
-        return None
-
-    return obj
+    return parse_json_list(raw, "resolve", f"role_id={role_id}", log)
 
 
 # ========== fact grouping by role ==========

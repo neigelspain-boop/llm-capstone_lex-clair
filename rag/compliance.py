@@ -55,7 +55,7 @@ from typing import Literal, NamedTuple
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ValidationError
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import get_openrouter_client, strip_json_fences
 from ingestion.dossier.facts import ActorRole, DOSSIER_DIR, Fact, RoleAmbiguity
 from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT, DIVERGENCE_ANALYSIS_SYSTEM_PROMPT
 from rag.retrieve import retrieve
@@ -540,12 +540,8 @@ def _parse_compliance_response(raw: str, role_id: str) -> list[dict]:
     the cut. Returns [] and logs a warning only if recovery also yields
     nothing, or the top-level type is wrong.
     """
-    text = (raw or "").strip()
+    text = strip_json_fences(raw)
 
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
 
     try:
         obj, _ = json.JSONDecoder().raw_decode(text)
@@ -1060,11 +1056,7 @@ def _parse_divergence_response(raw: str, role_id: str) -> dict:
     raising — on any parse failure or unexpected top-level type, since a
     divergence-analysis miss shouldn't take down the whole compare call.
     """
-    text = (raw or "").strip()
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
+    text = strip_json_fences(raw)
 
     try:
         obj, _ = json.JSONDecoder().raw_decode(text)

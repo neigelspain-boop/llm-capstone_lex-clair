@@ -144,48 +144,52 @@ REGISTRY: tuple[Concept, ...] = (
     Concept(
         id="llm_json_fence_strip",
         title="strip markdown code fences off an LLM JSON response",
-        canonical="",
-        canonical_state="to_create",
+        canonical="ingestion/clients.py::strip_json_fences",
+        canonical_state="exists",
         detector="stmt_window",
-        seed_site="ingestion/dossier/facts.py::_parse_llm_json",
+        seed_site="ingestion/clients.py::strip_json_fences",
         seed_marker='text.startswith("```")',
         window_k=2,
         severity="medium",
-        adr="candidate #67",
+        adr="#67",
         rule=(
             "The fence-stripping logic is called from a single shared helper, "
             "not re-implemented at the call site.",
         ),
         note=(
-            "Eight sites carry the identical four lines. Only the strip itself "
-            "is common: the decoder (json.loads vs raw_decode) and the failure "
+            "RESOLVED (ADR #67). Eight sites carried the identical four lines; "
+            "they now call clients.strip_json_fences. Only the strip was ever "
+            "common — the decoder (json.loads vs raw_decode) and the failure "
             "policy (raise / return None / return []) differ by caller "
-            "contract and must NOT be unified — gate.py raises so its caller "
-            "can record status='parse_failed', compliance.py returns [] after "
-            "_recover_partial_entries salvage. Extract the pure string->string "
-            "part only."
+            "contract and were deliberately left alone: gate.py raises so its "
+            "caller can record status='parse_failed', compliance.py returns [] "
+            "after _recover_partial_entries salvage. A helper flagged to "
+            "select between those would have been worse than the duplication. "
+            "Still seeded on the window so re-inlining anywhere re-triggers it."
         ),
     ),
 
     Concept(
         id="llm_json_parse_full",
         title="parse an LLM JSON response: fence strip, raw_decode, warn-and-None",
-        canonical="ingestion/dossier/facts.py::_parse_llm_json",
+        canonical="ingestion/clients.py::parse_json_list",
         canonical_state="exists",
         detector="function_clone",
-        seed_site="ingestion/dossier/facts.py::_parse_llm_json",
+        seed_site="ingestion/clients.py::parse_json_list",
         severity="high",
-        adr="candidate #67",
+        adr="#67",
         rule=(
             "There is one implementation of the fence-strip + raw_decode + "
             "warn-and-return-None sequence, parameterised by the expected "
             "top-level container type.",
         ),
         note=(
-            "mentions.py and resolve.py are byte-identical to facts.py after "
-            "renaming, and both docstrings admit the mirroring. All three "
-            "share the same failure contract, so unlike the fence-strip "
-            "concept these can be collapsed whole."
+            "RESOLVED (ADR #67). mentions.py and resolve.py were byte-identical "
+            "to facts.py after renaming, and both docstrings admitted the "
+            "mirroring. Unlike the fence-strip concept all three shared one "
+            "failure contract (warn, return None, never cache None), so they "
+            "collapsed whole onto clients.parse_json_list. facts.py keeps its "
+            "own because it expects a dict, not a list."
         ),
     ),
 

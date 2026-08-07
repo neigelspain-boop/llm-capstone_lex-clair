@@ -3496,3 +3496,92 @@ Related: ADR #58 (the gate this reshapes, whose fail-closed default it keeps),
 ADR #42 (router mapping rewritten), ADR #41 and #63 (scope allowlists this
 follows), ADR #62 (prompt-per-context, extended with case identity),
 ADR #65 (`vitrine` public by construction).
+
+---
+
+## ADR #67 — One shared JSON-fence helper; the failure policies stay apart
+
+**Date:** 2026-08-07 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+The slimming pass (`scripts/local_audit/passes/slimming.py`) found the same
+four lines at eight call sites spanning three planes:
+
+```python
+if text.startswith("```"):
+    text = text.strip("`").strip()
+    if text.lower().startswith("json"):
+        text = text[4:].strip()
+```
+
+`ingestion/dossier/facts.py`, `mentions.py`, `resolve.py`, `gate.py`,
+`rag/router.py`, `rag/compliance.py` (twice) and `eval/llm_eval.py`. Three of
+the enclosing functions — `_parse_llm_json`, `_parse_mentions_json`,
+`_parse_persons_json` — were byte-identical after renaming, and two of their
+docstrings said so outright ("mirrors facts.py's `_parse_llm_json`").
+
+The obvious move is one `parse_llm_json(raw, expect=..., on_fail=...)` helper
+covering all eight. That would have been a mistake, and naming why is the
+point of this ADR: **the sites do not share a failure contract.**
+
+- `gate.py::_parse_verifier_response` raises `ValueError`; its caller records
+  `status="parse_failed"` on the coverage row.
+- `facts.py::_parse_llm_json` returns `None`, meaning "no facts extracted
+  from this document" — the document is skipped, not failed.
+- `compliance.py::_parse_compliance_response` returns `[]` *after*
+  `_recover_partial_entries` salvages what it can from a truncated response,
+  which exists because of the ADR #49 truncation history.
+
+Those three behaviours are load-bearing and no test covers swapping them. A
+helper with a flag whose only job is to pick between them would turn every
+call site into a configuration puzzle and grow a fourth flag at the next
+divergence.
+
+### Decision
+
+Split the extraction by whether the behaviour is genuinely shared.
+
+1. **`ingestion.clients.strip_json_fences(raw) -> str`** — the pure
+   string-to-string part, and nothing else. Never raises, never logs, never
+   decodes. All eight sites call it. Each caller keeps its own decoder and
+   its own failure policy, unchanged.
+2. **`ingestion.clients.parse_json_list(raw, context, source, log)`** — the
+   whole fence-strip + `raw_decode` + warn-and-return-`None` sequence, for
+   the three sites that *did* share one contract. `mentions.py` and
+   `resolve.py` become one-line delegators. `facts.py` keeps its own because
+   it expects a dict, not a list.
+
+**Home.** `ingestion/clients.py`, not a new shared module. The call sites span
+Planes Ib, II and III, so any shared helper is a cross-plane import, and
+CLAUDE.md permits exactly one such module —
+`conventions.check_cross_plane_imports` already names `ingestion.clients` as
+the sanctioned shared-infra exception. A new top-level package would be a
+fifth plane and would break "plane membership equals tree position". The
+module's docstring and title now say "client factory and response plumbing"
+rather than just credentials, since that is what it now holds.
+
+### Consequences
+
+- One definition of what a fenced response looks like. A model that starts
+  emitting a different fence dialect is one fix, not eight.
+- ~60 lines removed; the three-way parser duplication is gone entirely.
+- The failure-policy divergence is now *documented as intentional* in
+  `strip_json_fences`'s docstring, where the next person to try unifying it
+  will read it, rather than being rediscovered as an inconsistency.
+- The cross-plane import count in the `convention` pass goes up by four.
+  That is the correct trade and the reason this ADR exists: those imports are
+  legitimate and the checker flags them at low confidence by design.
+- The two concepts in `scripts/local_audit/concepts.py` stay in the registry,
+  reseeded on the new canonical implementations, so re-inlining the block
+  anywhere re-triggers them.
+
+### Rejected
+
+- **`parse_llm_json(raw, expect, on_fail, log_key)` for all eight.** See
+  Context. Recorded here as the stop condition it exercised: *if an extracted
+  helper needs a parameter whose only job is to select between two call
+  sites' behaviours, stop and leave them apart.*
+- **A new `ingestion/llm_json.py`.** Cleaner by concept, but it is a second
+  cross-plane-reachable module where the architecture allows one, and the
+  helper is four lines.

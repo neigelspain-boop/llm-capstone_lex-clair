@@ -24,7 +24,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import get_openrouter_client, parse_json_list
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -127,32 +127,10 @@ def _write_cache_atomic(cache_path: Path, source_hash: str, mentions: list[dict]
 def _parse_mentions_json(raw: str, doc_id: str) -> list[dict] | None:
     """Parse the extractor's raw response into a list of mention dicts.
 
-    Strips ```json fences and uses json.JSONDecoder().raw_decode() so
-    trailing prose commentary doesn't break the parse (mirrors facts.py's
-    _parse_llm_json). Returns None and logs a warning naming doc_id on any
-    failure — callers must NOT cache a None result, only a real (possibly
-    empty) list.
+    Returns None and logs a warning naming doc_id on any failure — callers
+    must NOT cache a None result, only a real (possibly empty) list.
     """
-    text = (raw or "").strip()
-
-    if text.startswith("```"):
-        text = text.strip("`").strip()
-        if text.lower().startswith("json"):
-            text = text[4:].strip()
-
-    try:
-        obj, _ = json.JSONDecoder().raw_decode(text)
-    except json.JSONDecodeError as e:
-        log.warning(
-            "mentions: JSON parse failed for doc_id=%s: %s\nraw response: %s", doc_id, e, raw
-        )
-        return None
-
-    if not isinstance(obj, list):
-        log.warning("mentions: top-level JSON is not an array for doc_id=%s", doc_id)
-        return None
-
-    return obj
+    return parse_json_list(raw, "mentions", f"doc_id={doc_id}", log)
 
 
 # ========== per-doc LLM call ==========
