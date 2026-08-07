@@ -5,15 +5,17 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 ## Current state
 
 - **Attempt 1 baseline shipped on `main`** (tag `attempt-1-baseline`). Day 7 complete: Postgres persistence + 6-panel Grafana dashboard. 23 tests passing. 17 rubric points locked. Do not modify `main` — it's the fallback submission.
-- **Active work on `v2-persons`**: dual-corpus (statute + user dossier) adversarial gap-analysis pivot, now dossier-first (ADR #66). Days A-D shipped, plus the person pipeline and the anonymisation subsystem. 251 tests collected. See `docs/decisions.md` for ADRs #38-#66.
+- **Active work on `v2-persons`**: dual-corpus (statute + user dossier) adversarial gap-analysis pivot, now dossier-first (ADR #66). Days A-D shipped, plus the person pipeline and the anonymisation subsystem. 251 tests collected. See `docs/decisions.md` for ADRs #38-#70.
+- **In flight — Plane V investigator** (ADR #70, spec in `docs/investigator-spec.md`). Phase 1 to 11 Aug: all five passes ship, **none calls an LLM** — a full cycle is deterministic and costs $0.00. Phase 2, 12-14 Aug: local qwen3 adjudication layers, each additive over a pass that already works. Working checklist at `investigator/PLAN.md` (temporary; deleted when Phase 2 lands).
 
-## Four-plane architecture — plane membership equals tree position
+## Five-plane architecture — plane membership equals tree position
 
 - **Plane I — Statute ingestion** (offline): `ingestion/`, `data/chunks.csv`. Legal statute corpus via PISTE API (Légifrance). 792 chunks across 9 sources.
 - **Plane Ib — Dossier ingestion** (offline): `ingestion/dossier/`, `data/dossier/`. PDF → verbatim extraction (Opus 4.7 vision) → Haiku 4.5 faithfulness gate → facts + actor_roles + role_ambiguities JSONL → distill → mentions → resolve. Per-case chunks CSV; dossier chunks are merged into the corpus **at load time** (ADR #58) — `append_to_statute_chunks_csv` was retired and no longer exists. Also holds the anonymisation subsystem: `anonymize.py` (three-layer PII redaction + verification gate) and `personas.py` (pinned court-style persona roster), which produce the committed public `vitrine` case.
 - **Plane II — RAG flow** (online): `rag/`. `flow.run(query, source_scope=None, active_case_id=None, answer_model="gpt-4o-mini")` for Q&A. `rag.compliance.generate_compliance_matrix(case_id)` for compliance-matrix mode.
 - **Plane III — Measurement**: `eval/`. Retrieval eval, LLM-as-judge harness with 3 provider-diverse judges (GPT-4o-mini + Haiku 4.5 + Mistral Small — all via OpenRouter as of D0).
 - **Plane IV — UI/Operations**: `app/`, `monitoring/`. Streamlit UI (multi-conversation + language toggle + answer-model toggle), Postgres persistence, Grafana dashboards.
+- **Plane V — Investigation** (offline, long-running): `investigator/`, `data/dossier/{case_id}/investigation/`. Obligation-catalog-driven gap analysis over Plane Ib artifacts. Where Plane II answers a query, Plane V *generates* the questions — comparing what should be in the documents (per statute, contract, deontology) against what is, with **absence** as the primary signal. Five passes hard-wired by name: `graph → search → check → contradict → attack`. Report-only: writes nothing outside the case dir except through the single gate in `schema.externalisable_findings()`. ADR #70.
 
 **Any file that doesn't fit cleanly into one plane is a smell.** Cross-plane imports only through defined contracts. `load_index()` is the single Plane I → Plane II interface. Do not add hidden cross-plane paths.
 
@@ -97,7 +99,8 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 
 ## Key docs
 
-- `docs/decisions.md` — ADRs #1-#66. Read before any architectural change. **Known bookkeeping gaps**: #47, #50, #51, #59, #60, #61, #62 have no entry. #59-#62 are the load-bearing ones — the anonymisation subsystem shipped under them and later ADRs cite them as if they exist. #65 is also filed out of order, before #64.
+- `docs/decisions.md` — ADRs #1-#70. Read before any architectural change. **Known bookkeeping gaps**: #47, #50, #51, #59, #60, #61, #62 have no entry. #59-#62 are the load-bearing ones — the anonymisation subsystem shipped under them and later ADRs cite them as if they exist. #65 is also filed out of order, before #64.
+- `docs/investigator-spec.md` — Plane V contracts: obligation catalog schema, the five pass contracts, finding/tier schema, the externalisation gate, resumability invariants. Rationale is ADR #70 (per ADR #69: spec carries the contract, ADR carries the why).
 - `docs/lex-clair-system-map.html` — rendered architecture map.
 - `README.md` — project entry point for reviewers.
 - `scripts/local_audit/README.md` — local-only, report-only code-audit harness driven by a local Ollama model. Findings in `audit/DIGEST.md` (gitignored, regenerated per run).
