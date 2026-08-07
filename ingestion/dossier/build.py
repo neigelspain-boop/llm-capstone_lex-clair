@@ -34,6 +34,7 @@ import logging
 import time
 from pathlib import Path
 
+from ingestion import build as statute_build
 from ingestion.dossier import anonymize, extract, gate, facts, index
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
@@ -45,19 +46,10 @@ STAGES_REQUIRING_RAW_DIR = {"extract", "all"}
 
 # ========== stage runner ==========
 
-def _run_stage(name: str, func, *args, **kwargs):
-    """Run one pipeline stage with elapsed-time logging."""
-    log.info("=" * 70)
-    log.info("STAGE START · %s", name)
-    log.info("=" * 70)
-    t0 = time.time()
-    try:
-        result = func(*args, **kwargs)
-    except Exception:
-        log.error("STAGE FAILED · %s (after %.1fs)", name, time.time() - t0)
-        raise
-    log.info("STAGE DONE · %s (%.1fs)", name, time.time() - t0)
-    return result
+# Shared with Plane I's statute pipeline — this file previously carried a
+# byte-identical copy, docstring included. Both are `ingestion.*`, so the
+# import is within one plane namespace, not a cross-plane path.
+_run_stage = statute_build._run_stage
 
 
 # ========== pipeline orchestration ==========

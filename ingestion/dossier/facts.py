@@ -360,72 +360,70 @@ def extract_facts_and_roles(
 
 # ========== idempotent persistence ==========
 
-def _write_facts_jsonl(case_id: str, docs_processed: set[str], new_facts: list[Fact]) -> Path:
-    path = DOSSIER_DIR / case_id / "facts.jsonl"
+def _write_case_jsonl(case_id: str, docs_processed: set[str], new_items: list,
+                      filename: str, model, doc_field: str, sort_key) -> Path:
+    """Rewrite one per-case JSONL artifact, replacing only reprocessed docs.
+
+    Args:
+        case_id: case directory under DOSSIER_DIR.
+        docs_processed: source_doc_ids whose existing rows are superseded.
+        new_items: pydantic instances to write for those docs.
+        filename: artifact name within the case directory.
+        model: pydantic class used to parse existing rows.
+        doc_field: attribute naming an item's source document.
+        sort_key: total ordering applied before writing, so the file is
+            byte-stable across runs and the matrix stays idempotent.
+
+    Returns the path written.
+    """
+    path = DOSSIER_DIR / case_id / filename
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    kept: list[Fact] = []
+    kept = []
     if path.exists():
         for line in path.read_text(encoding="utf-8").splitlines():
             if not line.strip():
                 continue
-            fact = Fact.model_validate_json(line)
-            if fact.source_doc_id not in docs_processed:
-                kept.append(fact)
+            item = model.model_validate_json(line)
+            if getattr(item, doc_field) not in docs_processed:
+                kept.append(item)
 
-    combined = kept + new_facts
-    combined.sort(key=lambda f: (f.source_doc_id, f.fact_id))
+    combined = sorted(kept + new_items, key=sort_key)
 
     with path.open("w", encoding="utf-8") as f:
-        for fact in combined:
-            f.write(fact.model_dump_json() + "\n")
+        for item in combined:
+            f.write(item.model_dump_json() + "\n")
     return path
+
+
+# The three artifacts differ only in these four values. Note actor_roles
+# keys its doc on first_seen_doc_id rather than source_doc_id, and sorts on
+# a single field where the other two sort on a tuple — which is why the
+# structural clone detector matches only two of the three.
+_CASE_ARTIFACTS = {
+    "facts": ("facts.jsonl", Fact, "source_doc_id",
+              lambda f: (f.source_doc_id, f.fact_id)),
+    "actor_roles": ("actor_roles.jsonl", ActorRole, "first_seen_doc_id",
+                    lambda r: r.role_id),
+    "role_ambiguities": ("role_ambiguities.jsonl", RoleAmbiguity, "source_doc_id",
+                         lambda a: (a.source_doc_id, a.ambiguity_id)),
+}
+
+
+def _write_facts_jsonl(case_id: str, docs_processed: set[str], new_facts: list[Fact]) -> Path:
+    return _write_case_jsonl(case_id, docs_processed, new_facts, *_CASE_ARTIFACTS["facts"])
 
 
 def _write_actor_roles_jsonl(case_id: str, docs_processed: set[str], new_roles: list[ActorRole]) -> Path:
-    path = DOSSIER_DIR / case_id / "actor_roles.jsonl"
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    kept: list[ActorRole] = []
-    if path.exists():
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
-                continue
-            role = ActorRole.model_validate_json(line)
-            if role.first_seen_doc_id not in docs_processed:
-                kept.append(role)
-
-    combined = kept + new_roles
-    combined.sort(key=lambda r: r.role_id)
-
-    with path.open("w", encoding="utf-8") as f:
-        for role in combined:
-            f.write(role.model_dump_json() + "\n")
-    return path
+    return _write_case_jsonl(case_id, docs_processed, new_roles, *_CASE_ARTIFACTS["actor_roles"])
 
 
 def _write_role_ambiguities_jsonl(
     case_id: str, docs_processed: set[str], new_ambiguities: list[RoleAmbiguity]
 ) -> Path:
-    path = DOSSIER_DIR / case_id / "role_ambiguities.jsonl"
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    kept: list[RoleAmbiguity] = []
-    if path.exists():
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
-                continue
-            ambiguity = RoleAmbiguity.model_validate_json(line)
-            if ambiguity.source_doc_id not in docs_processed:
-                kept.append(ambiguity)
-
-    combined = kept + new_ambiguities
-    combined.sort(key=lambda a: (a.source_doc_id, a.ambiguity_id))
-
-    with path.open("w", encoding="utf-8") as f:
-        for ambiguity in combined:
-            f.write(ambiguity.model_dump_json() + "\n")
-    return path
+    return _write_case_jsonl(
+        case_id, docs_processed, new_ambiguities, *_CASE_ARTIFACTS["role_ambiguities"]
+    )
 
 
 # ========== case aggregation ==========

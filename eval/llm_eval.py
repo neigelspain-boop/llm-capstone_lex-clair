@@ -33,6 +33,7 @@ import argparse
 import json
 import sys
 from datetime import datetime, timezone
+from functools import partial
 from pathlib import Path
 
 # ========== third-party imports ==========
@@ -153,60 +154,40 @@ def _parse_judge_response(raw: str) -> dict:
 # Each returns (verdict_dict, token_stats). Raises on API/parse failure --
 # caller catches and records "UNKNOWN" per silent-fallback contract.
 
-def judge_gpt(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with GPT-4o-mini via OpenRouter (ADR #40)."""
-    client = get_openrouter_client()
-    prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
-    r = client.chat.completions.create(
-        model=JUDGE_MODELS["gpt"],
-        messages=[{"role": "user", "content": prompt}],
-    )
-    token_stats = _extract_usage(r)
-    verdict = _parse_judge_response(r.choices[0].message.content)
-    return verdict, token_stats
+def judge(judge_name: str, question: str, answer: str) -> tuple[dict, dict]:
+    """Score one answer with the named judge.
 
+    Args:
+        judge_name: key into JUDGE_MODELS ("gpt", "claude", "mistral").
+        question: the evaluated question.
+        answer: the answer to score.
 
-def judge_claude(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with Claude Haiku 4.5 via OpenRouter (ADR #40)."""
-    client = get_openrouter_client()
-    prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
-    r = client.chat.completions.create(
-        model=JUDGE_MODELS["claude"],
-        messages=[{"role": "user", "content": prompt}],
-    )
-    token_stats = _extract_usage(r)
-    verdict = _parse_judge_response(r.choices[0].message.content)
-    return verdict, token_stats
+    Returns (verdict_dict, token_stats). Raises on API or parse failure —
+    the caller catches and records "UNKNOWN", per the silent-fallback
+    contract above.
 
-
-def judge_mistral(question: str, answer: str) -> tuple[dict, dict]:
-    """Score with Mistral Small via OpenRouter (ADR #40).
-
-    Highest JSON-drift risk of the three -- dry-run validates this before
-    the full 200-sample commitment.
+    Mistral carries the highest JSON-drift risk of the three; --dry-run
+    validates it before the full 200-sample commitment.
     """
     client = get_openrouter_client()
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=question, answer=answer)
     r = client.chat.completions.create(
-        model=JUDGE_MODELS["mistral"],
+        model=JUDGE_MODELS[judge_name],
         messages=[{"role": "user", "content": prompt}],
     )
-    token_stats = _extract_usage(r)
-    verdict = _parse_judge_response(r.choices[0].message.content)
-    return verdict, token_stats
+    return _parse_judge_response(r.choices[0].message.content), _extract_usage(r)
 
 
-JUDGES = {
-    "gpt":     judge_gpt,
-    "claude":  judge_claude,
-    "mistral": judge_mistral,
-}
+# The three provider-diverse judges previously had a function each, identical
+# but for the JUDGE_MODELS lookup. The table was already the dispatch surface,
+# so the functions were pure duplication.
+JUDGES = {name: partial(judge, name) for name in JUDGE_MODELS}
 
 
 # ========== cost helper ==========
 
 def _compute_judge_cost(judge_name: str, token_stats: dict) -> float:
-    """USD cost for one judge call. Mirrors flow.py:_compute_cost pattern."""
+    """USD cost for one judge call, from COST_PER_MTOKEN's per-million rates."""
     model = JUDGE_MODELS[judge_name]
     inp_rate, out_rate = COST_PER_MTOKEN[model]
     return (

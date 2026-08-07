@@ -316,35 +316,40 @@ REGISTRY: tuple[Concept, ...] = (
     Concept(
         id="dossier_write_jsonl",
         title="write a deduped, sorted JSONL artifact for one dossier case",
-        canonical="ingestion/dossier/facts.py::_write_facts_jsonl",
+        canonical="ingestion/dossier/facts.py::_write_case_jsonl",
         canonical_state="exists",
         detector="function_clone",
-        seed_site="ingestion/dossier/facts.py::_write_facts_jsonl",
+        seed_site="ingestion/dossier/facts.py::_write_case_jsonl",
         severity="medium",
         rule=(),
         note=(
-            "Three near-identical writers differing only in filename, model "
-            "class, dedup field and sort key. _write_actor_roles_jsonl is "
-            "expected NOT to match at the exact-fingerprint tier (it sorts on "
-            "a tuple, the others on a single key) — that near-miss is correct "
-            "behaviour, not a detector bug, and it still belongs in the same "
-            "table-driven collapse."
+            "RESOLVED. Three near-identical writers differing only in "
+            "filename, model class, dedup field and sort key, now one "
+            "table-driven _write_case_jsonl with three thin delegators. Worth "
+            "recording that the detector matched only two of the three: "
+            "_write_actor_roles_jsonl sorts on a single key where the others "
+            "sort on a tuple, and keys its document on first_seen_doc_id "
+            "rather than source_doc_id. That near-miss was correct — exact "
+            "fingerprints are exact — and reading the cluster rather than "
+            "trusting its size is what found the third member."
         ),
     ),
 
     Concept(
         id="eval_judge_fn",
         title="dispatch one eval judge call for a named model",
-        canonical="eval/llm_eval.py::judge_gpt",
+        canonical="eval/llm_eval.py::judge",
         canonical_state="exists",
         detector="function_clone",
-        seed_site="eval/llm_eval.py::judge_gpt",
+        seed_site="eval/llm_eval.py::judge",
         severity="medium",
         rule=(),
-        note="Three functions identical modulo JUDGE_MODELS[key]. The JUDGES "
-             "name->function table already exists in the same file, so the "
-             "table is not the missing piece — the three functions are the "
-             "redundancy.",
+        note="RESOLVED. judge_gpt/judge_claude/judge_mistral were identical "
+             "modulo JUDGE_MODELS[key]; the JUDGES name->function table was "
+             "already the dispatch surface, so the three functions were pure "
+             "duplication. Collapsed to one `judge(name, ...)` with JUDGES "
+             "built by functools.partial. The concept stays seeded on the "
+             "survivor so a fourth provider-specific judge would re-trigger it.",
     ),
 
     Concept(
