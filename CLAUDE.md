@@ -5,28 +5,30 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 ## Current state
 
 - **Attempt 1 baseline shipped on `main`** (tag `attempt-1-baseline`). Day 7 complete: Postgres persistence + 6-panel Grafana dashboard. 23 tests passing. 17 rubric points locked. Do not modify `main` — it's the fallback submission.
-- **Active work on `v2-agentic`**: dual-corpus (statute + user dossier) adversarial gap-analysis pivot. Days A, B, C shipped. 94 tests passing. See `docs/decisions.md` for ADRs #38-#46 and `docs/response_doctrine.md` (v1 doctrine, superseded — v2 invalidates §6.3-6.5 corpus-only assumptions and §6.4 single-model constraint).
+- **Active work on `v2-persons`**: dual-corpus (statute + user dossier) adversarial gap-analysis pivot, now dossier-first (ADR #66). Days A-D shipped, plus the person pipeline and the anonymisation subsystem. 251 tests collected. See `docs/decisions.md` for ADRs #38-#66.
 
 ## Four-plane architecture — plane membership equals tree position
 
 - **Plane I — Statute ingestion** (offline): `ingestion/`, `data/chunks.csv`. Legal statute corpus via PISTE API (Légifrance). 792 chunks across 9 sources.
-- **Plane Ib — Dossier ingestion** (offline): `ingestion/dossier/`, `data/dossier/`. PDF → verbatim extraction (Opus 4.7 vision) → Haiku 4.5 faithfulness gate → facts + actor_roles + role_ambiguities JSONL. Per-case audit CSV + shared corpus sync via `append_to_statute_chunks_csv` (ADR #39).
+- **Plane Ib — Dossier ingestion** (offline): `ingestion/dossier/`, `data/dossier/`. PDF → verbatim extraction (Opus 4.7 vision) → Haiku 4.5 faithfulness gate → facts + actor_roles + role_ambiguities JSONL → distill → mentions → resolve. Per-case chunks CSV; dossier chunks are merged into the corpus **at load time** (ADR #58) — `append_to_statute_chunks_csv` was retired and no longer exists. Also holds the anonymisation subsystem: `anonymize.py` (three-layer PII redaction + verification gate) and `personas.py` (pinned court-style persona roster), which produce the committed public `vitrine` case.
 - **Plane II — RAG flow** (online): `rag/`. `flow.run(query, source_scope=None, active_case_id=None, answer_model="gpt-4o-mini")` for Q&A. `rag.compliance.generate_compliance_matrix(case_id)` for compliance-matrix mode.
 - **Plane III — Measurement**: `eval/`. Retrieval eval, LLM-as-judge harness with 3 provider-diverse judges (GPT-4o-mini + Haiku 4.5 + Mistral Small — all via OpenRouter as of D0).
 - **Plane IV — UI/Operations**: `app/`, `monitoring/`. Streamlit UI (multi-conversation + language toggle + answer-model toggle), Postgres persistence, Grafana dashboards.
 
 **Any file that doesn't fit cleanly into one plane is a smell.** Cross-plane imports only through defined contracts. `load_index()` is the single Plane I → Plane II interface. Do not add hidden cross-plane paths.
 
-## Person pipeline + distillation — Plane Ib, partially shipped
+## Person pipeline + distillation — Plane Ib, shipped with one gap
 
-- Plane Ib's person-index pipeline was planned as three stages: **mentions** (extract person mentions per fact) → **resolve** (cluster mentions into canonical entities, case-local and global) → **distill** (ceremony-stripped substance summary per fact). Only **distill** has shipped (`ingestion/dossier/distill.py`, ADR #52). Mentions and resolve do not exist anywhere in this repo — no `mentions.py`/`resolve.py` on any branch — and remain open per ADR #50 (D1) and ADR #51 (D4).
-- `Fact.distilled_context: str | None` is populated by `distill.py`; `verbatim_quote` is never mutated. The anticipated `Fact.mentioned_person_ids` field (mentions-stage output) does **not** exist yet — `rag/compliance.py` reads it defensively via `getattr(f, "mentioned_person_ids", None) or []`, so the person-context plumbing (ADR #53) is real code exercised as a no-op, not dead code behind a flag.
-- Model choices: shipped stages use Haiku 4.5 (distill, temperature 0.0) and Opus 4.7 max (compliance reasoning over `distilled_context` + `verbatim_quote`, ADR #53). Planned (unbuilt) stages: Gemini flash-lite for mentions (high-volume, low-reasoning extraction), Haiku 4.5 for resolve (clustering/dedup judgment).
-- See ADR #50-#53 in `docs/decisions.md` for the full history of what's built vs. open.
+- All three stages exist and are committed: **distill** (`distill.py`, ADR #52) writes a ceremony-stripped substance summary per fact; **mentions** (`mentions.py`, ADR #54) extracts person mentions per document to `_mentions/<doc_id>.json`; **resolve** (`resolve.py`, ADR #55) clusters into canonical entities and writes `persons.jsonl`. ADR #55 supersedes #54's assumption that resolve would consume `_mentions/*.json` — it reads `distilled_context` per role instead.
+- ADR #50 and #51 were **reserved but never written**. D1's scope was absorbed into D2 (ADR #54); D4 (global cross-case entity store) is still deferred.
+- **The one real gap**: `Fact.mentioned_person_ids` still does not exist on the `Fact` model (`ingestion/dossier/facts.py`). `rag/compliance.py` reads it defensively via `getattr(f, "mentioned_person_ids", None) or []`, so `_persons_context_for_role` filters on a field that is always absent and `ComplianceEntry.persons_named` is `[]` on every entry — even though `persons.jsonl` is now fully populated. Neither `mentions.py` nor `resolve.py` writes back onto facts. Backfilling that field is the open follow-up (`docs/decisions.md`, ADR #53 follow-up (d)).
+- Model choices: distill and mentions both use Haiku 4.5 (temperature 0.0); resolve uses Haiku 4.5 for clustering; compliance reasoning uses Opus 4.7 max over `distilled_context` + `verbatim_quote` (ADR #53). No Gemini model is used anywhere.
+- See ADR #52-#55 in `docs/decisions.md` for the full history.
 
 ## Retrieval — source-scoped hybrid + router
 
-- `HybridRetriever.search(query, source_scope="statute")` — RRF fusion of BM25 + BGE-M3 vector search, then BGE-reranker cross-encoder rescoring. `source_scope` values: `"statute"` (default), `"dossier"`, `"case:{id}"`, `"blended"`. Enforced at the Chroma filter level, not post-hoc. ADR #41 (B1). Default `"statute"` matches v1 behavior and closes the ADR #39 privacy blocker.
+- `HybridRetriever.search(query, source_scope="statute")` — **weighted** RRF fusion of BM25 + BGE-M3 vector search (`DEFAULT_BM25_BOOST`), then BGE-reranker cross-encoder rescoring. ADR #64 supersedes ADR #20: the pipeline ran `mode="vector"` for most of its life, and uniform RRF let the weak BM25 arm override the strong vector arm, so the weighting is load-bearing, not cosmetic.
+- `source_scope` values: `"statute"`, `"dossier"`, `"case:{id}"`, `"case+statute:{id}"` (the gap-analysis default since ADR #66), `"blended"`. Enforced at the Chroma filter level, not post-hoc, and **fail-closed as an allowlist** since ADR #63 — a denylist left 824 orphan vectors reachable.
 - `rag/retrieve.retrieve()` threads `source_scope` through to the underlying retriever.
 - `rag/flow.run()` calls `rag.router.route_query()` when `source_scope=None` (default). Router uses Haiku 4.5 via OpenRouter to classify intent → scope. Route decision surfaced in return dict as `route_decision: RouteDecision`. ADR #42 (B2).
 
@@ -35,9 +37,9 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 - `rag/compliance.py::generate_compliance_matrix(case_id)` produces `data/dossier/{case_id}/compliance_matrix.json` — per-role obligation assessment against retrieved statute articles.
 - Facts grouped by exact `actor_role` string; each cluster gets one LLM call to Opus 4.7 max via OpenRouter. ADR #43 (B3).
 - **Cross-role context block** (ADR #44, C1): when facts across roles share a source document, the user message gains a "Contexte inter-rôles" section listing other roles and their labels. System prompt updated to weigh cross-role obligation interactions. No schema change, no re-extraction — pure prompt enrichment. Deterministic (sorted output), preserves matrix idempotency.
-- Compliance matrix output is gitignored for private cases (`data/dossier/private/`). Demo fixture (`data/dossier/demo/`) is committed for reproducibility.
-- **Known truncation risk** (candidate ADR #47, Attempt 2): `max_tokens=4096` is shared between reasoning tokens and output JSON on Opus 4.7 max. Fact-heavy roles (10+ facts, prompt_tokens >5000) risk `finish_reason=length` with `raw_chars=0`. Loud warning logs fire; parser has bracket-tracking incremental recovery. Observed loss rate on private case Day C run: ~52% of calls truncated. Fix path: raise budget to 8192 or split fact-heavy clusters. Do not tune inside Attempt 1 — cost curves shift.
-- **Verify-conclude + person integration** (ADR #53, D6): the prompt requires reasoning from `distilled_context` but verifying against `verbatim_quote` before finalizing `breached`/`met`, downgrading to `insufficient_evidence` on any mismatch. A "Personnes impliquées" section and `ComplianceEntry.persons_named` are wired but inert — `persons_named` is `[]` on every entry until the D1-D4 person pipeline ships (see Person pipeline + distillation, above). Cluster-level results are cached at `data/dossier/{case_id}/compliance_cache.jsonl`; `--dry-run` reports per-cluster token/cost estimates and raises if the total exceeds `DRY_RUN_COST_ALERT_USD` ($25).
+- Every case directory is gitignored by default; only `demo/` and `vitrine/` are whitelisted by name (ADR #66). `vitrine` is the anonymised public case the README's commands use; `demo` is the smoke fixture and its JSONL files are intentionally empty.
+- **Truncation — fixed, not open.** ADR #49 uncapped `MAX_OUTPUT_TOKENS` on the compliance call. The old `max_tokens=4096` was shared between reasoning and output on Opus 4.7 max, so fact-heavy `notaire_*` clusters hit `finish_reason=length` (~52% loss on the Day C private run) and ADR #48 added a per-case `compliance_run.log` to make that silence visible. Candidate ADR #47 was never written — #49 superseded it. The bracket-tracking incremental recovery in the parser remains as a second line of defence.
+- **Verify-conclude + person integration** (ADR #53, D6): the prompt requires reasoning from `distilled_context` but verifying against `verbatim_quote` before finalizing `breached`/`met`, downgrading to `insufficient_evidence` on any mismatch. A "Personnes impliquées" section and `ComplianceEntry.persons_named` are wired but still inert — not because the person pipeline is unshipped (it is), but because `Fact.mentioned_person_ids` was never added (see Person pipeline + distillation, above). Cluster-level results are cached at `data/dossier/{case_id}/compliance_cache.jsonl`; `--dry-run` reports per-cluster token/cost estimates and raises if the total exceeds `DRY_RUN_COST_ALERT_USD` ($25).
 
 ## Multi-model answer generation — runtime catalog (ADR #45, C2)
 
@@ -71,7 +73,7 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 
 ## Locked technical stack
 
-- Python 3.12, `uv` for package management, pytest for testing
+- Python >=3.11 (`pyproject.toml`), `uv` for package management, pytest for testing
 - Streamlit (UI), ChromaDB (vector), BM25 + vector hybrid retrieval with RRF, BGE-reranker via `sentence-transformers.CrossEncoder`
 - Postgres 16 (persistence), Grafana 11 (dashboards), docker-compose for services
 - Environment: Ubuntu, conventional commit messages
@@ -84,21 +86,21 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 - **`keep_default_na=False` on every `pd.read_csv`** call that reads lex-clair-produced CSVs. Pandas NaN trap is documented project-wide convention.
 - **Kill switches even when dormant**: `monitoring/db.py` uses module-level `_DB_HEALTHY` global as a one-way kill switch (ADR #34).
 - **Small commits, conventional messages**: `git diff --cached --stat` before every commit; split unrelated changes into separate commits.
-- **Privacy grep before every commit**: `git diff --cached --name-only | grep -E "private"` must print nothing before pushing. Private case data lives locally in `data/dossier/private/` (gitignored). After push, `git ls-tree -r origin/v2-agentic --name-only | grep -c "dossier/private"` must return 0.
-- **Never rebase or force-push shared branches**. `main` and `v2-agentic` are both shared with `origin`.
+- **Privacy grep before every commit**: every case directory under `data/dossier/` is gitignored by default and only `demo/`/`vitrine/` are whitelisted (ADR #66), so the check is that no unexpected case appears: `git diff --cached --name-only | grep "data/dossier/" | grep -vE "data/dossier/(demo|vitrine)/"` must print nothing. After push, verify the same against `origin/v2-persons`.
+- **Never rebase or force-push shared branches**. `main` and `v2-persons` are both shared with `origin`.
 
 ## Testing
 
-- Fast suite: `uv run pytest tests/ -v` (runs in <5s, must be green before any commit). 94 tests passing as of Day C close.
+- Fast suite: `uv run pytest tests/ -v` (must be green before any commit). 251 tests collected, 6 marked `slow`. There is no `conftest.py` yet — fixtures are file-local.
 - Slow suite: `uv run pytest tests/ -m slow -v` (integration tests, run before session close)
 - New tests go in `tests/test_*.py` matching existing conventions in `tests/test_ingestion_smoke.py`.
 
 ## Key docs
 
-- `docs/decisions.md` — ADRs #1-#46 as of Day C close. Read before any architectural change.
-- `docs/response_doctrine.md` — v1 response doctrine. §6.3-6.5 corpus-only assumptions and §6.4 single-model constraint superseded by Day C ADRs.
+- `docs/decisions.md` — ADRs #1-#66. Read before any architectural change. **Known bookkeeping gaps**: #47, #50, #51, #59, #60, #61, #62 have no entry. #59-#62 are the load-bearing ones — the anonymisation subsystem shipped under them and later ADRs cite them as if they exist. #65 is also filed out of order, before #64.
+- `docs/lex-clair-system-map.html` — rendered architecture map.
 - `README.md` — project entry point for reviewers.
-- `docs/plan_day_a.md`, `docs/plan_day_b.md`, `docs/plan_day_c.md` — per-day execution plans (kept for provenance).
+- `scripts/local_audit/README.md` — local-only, report-only code-audit harness driven by a local Ollama model. Findings in `audit/DIGEST.md` (gitignored, regenerated per run).
 
 ## Communication style Claude Code should use
 
@@ -110,10 +112,9 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 
 ## What NOT to do
 
-- Do not modify files on `main`. All work goes to `v2-agentic`.
-- Do not add cross-plane imports outside the `load_index()` contract.
-- Do not touch `docs/response_doctrine.md` — supersession happens via a new ADR + a v2 doctrine file, not in-place edits.
-- Do not commit files under `data/raw/`, `data/chroma/`, `data/conversations/`, `data/dossier/private/`, or `data/feedback.csv` — all gitignored.
+- Do not modify files on `main`. All work goes to `v2-persons`.
+- Do not add cross-plane imports outside the `load_index()` contract. `ingestion/clients.py` is the one sanctioned shared-infra exception.
+- Do not commit files under `data/raw/`, `data/chroma/`, `data/conversations/`, or `data/feedback.csv`, or any case directory under `data/dossier/` other than `demo/` and `vitrine/` — all gitignored.
 - Do not run destructive DB commands without explicit confirmation. Postgres data is real state.
-- Do not index dossier chunks into the shared corpus without source-scope filtering active (ADR #39 privacy blocker).
-- Do not tune `compliance.py` `max_tokens` inside Attempt 1 window — deferred to Attempt 2 (candidate ADR #47).
+- Do not weaken the source-scope allowlist in `ingestion/load.py` — it is fail-closed by design (ADR #63) and is what keeps dossier chunks out of statute-scoped answers.
+- Do not re-cap `compliance.py` `max_tokens`. ADR #49 uncapped it deliberately; reasoning and output share the budget on Opus 4.7 max.

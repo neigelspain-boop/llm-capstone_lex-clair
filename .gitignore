@@ -22,6 +22,10 @@ data/feedback.csv
 eval_run.log
 eval_run.pid
 eval_resume.log
+# Root-level audit harness log. The `audit/` rule below is a directory and does
+# NOT cover this file — it sits at the repo root and carries local Ollama
+# output, so without this line it is one `git add -A` from publication.
+audit_run.log
 
 # v2 dossier work
 # Rule: EVERY case is ignored except the two public fixtures, which are
