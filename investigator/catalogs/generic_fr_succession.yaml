@@ -1,0 +1,502 @@
+# Generic French succession / quasi-usufruit obligation catalog.
+#
+# COMMITTED and person-free. No party name, address, amount, or identifier may
+# appear in this file — it is shared by every case, so a leak here leaks into
+# all of them. A test asserts it against the vitrine roster.
+#
+# Every `kind: statute` excerpt below was read out of data/chunks.csv and
+# verified verbatim; the `search` pass re-checks all of them on every cycle.
+# An article outside the 792-chunk corpus may only be anchored with a LEGIARTI
+# identifier confirmed against Légifrance — never a guessed one. See
+# catalogs/README.md.
+#
+# Contract clauses live in per-case overlays, not here: they cannot be
+# citation-verified without a case.
+
+catalog_id: generic_fr_succession
+catalog_version: v1
+jurisdiction: FR
+person_free: true
+
+obligations:
+
+  # ========== quasi-usufruit ==========
+
+  - obligation_id: qu-restitution-fin-usufruit
+    rule_version: v1
+    title_fr: "Restitution en fin de quasi-usufruit"
+    severity: critical
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 587"
+      chunk_id: cc-587
+      legiarti_id: LEGIARTI000006429324
+      excerpt_fr: |
+        à la charge de rendre, à la fin de l'usufruit, soit des choses de même quantité et qualité soit leur valeur estimée à la date de la restitution
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier, notaire_redacteur]
+      bearer_note_fr: >
+        Le quasi-usufruitier, puis sa succession, est débiteur de la restitution ;
+        le notaire rédacteur répond de l'efficacité de l'acte qui l'organise.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["extinction", "décès", "deces", "fin de l'usufruit"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+      deadline_days: null
+      deadline_note_fr: "Exigible à l'extinction, sauf délai conventionnel plus long."
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr:
+            - "restitution"
+            - "restituer"
+            - "créance de restitution"
+            - "remise des fonds"
+            - "attribution des parts"
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      la restitution due à l'extinction du quasi-usufruit.
+    confounders_seed:
+      - "La restitution a pu être opérée par acte séparé non versé au dossier."
+      - "Un délai conventionnel non encore échu peut suspendre l'exigibilité sans emporter manquement."
+
+  - obligation_id: qu-caution-ou-dispense-expresse
+    rule_version: v1
+    title_fr: "Caution de l'usufruitier, ou dispense expresse dans l'acte constitutif"
+    severity: high
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 601"
+      chunk_id: cc-601
+      legiarti_id: LEGIARTI000029336835
+      excerpt_fr: |
+        Il donne caution de jouir raisonnablement, s'il n'en est dispensé par l'acte constitutif de l'usufruit
+    bearer:
+      actor_roles: [quasi_usufruitier, notaire_redacteur, notaire_instrumentaire]
+      bearer_note_fr: >
+        La dispense n'est opposable que si elle figure à l'acte constitutif ; à
+        défaut de caution comme de dispense, la garantie du nu-propriétaire est
+        absente.
+    expected_evidence:
+      any_of:
+        - kind: fact_match
+          any_terms_fr: ["caution", "cautionnement", "garantie personnelle"]
+          min_count: 1
+        - kind: fact_match
+          any_terms_fr: ["dispense de caution", "dispensé de fournir caution", "sans caution"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      la fourniture d'une caution ni une dispense expresse à l'acte constitutif.
+    confounders_seed:
+      - "La dispense peut figurer à l'acte constitutif sans avoir été reprise dans les faits extraits."
+      - "Une dispense de caution est licite : son existence n'est pas en soi un manquement, seule son absence de trace l'est."
+
+  - obligation_id: qu-emploi-des-sommes-a-defaut-de-caution
+    rule_version: v1
+    title_fr: "Placement des sommes comprises dans l'usufruit à défaut de caution"
+    severity: high
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 602"
+      chunk_id: cc-602
+      legiarti_id: LEGIARTI000006429469
+      excerpt_fr: |
+        Les sommes comprises dans l'usufruit sont placées
+    bearer:
+      actor_roles: [quasi_usufruitier, notaire_redacteur, etablissement_bancaire]
+      bearer_note_fr: >
+        Le droit d'emploi de l'article 602 est la contrepartie de la caution :
+        écarté par une dispense, il laisse le nu-propriétaire chirographaire.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr:
+            - "placement"
+            - "emploi des fonds"
+            - "remploi"
+            - "compte dédié"
+            - "compte-titres"
+            - "séquestre"
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      le placement ou le remploi des sommes soumises à l'usufruit.
+    confounders_seed:
+      - "Une dispense de caution régulière écarte le droit d'emploi : l'absence de placement peut être licite."
+      - "Le placement a pu être opéré par l'établissement teneur de compte sans acte notarié distinct."
+
+  # ========== succession et indivision ==========
+
+  - obligation_id: succ-deblocage-dans-la-proportion-de-l-acte
+    rule_version: v1
+    title_fr: "Libération de fonds successoraux dans la seule proportion indiquée à l'acte de notoriété"
+    severity: critical
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 730-4 ; art. 815-3 in fine"
+      chunk_id: cc-730-4
+      legiarti_id: LEGIARTI000006430899
+      excerpt_fr: |
+        Les héritiers désignés dans l'acte de notoriété ou leur mandataire commun sont réputés, à l'égard des tiers détenteurs de biens de la succession, avoir la libre disposition de ces biens et, s'il s'agit de fonds, la libre disposition de ceux-ci dans la proportion indiquée à l'acte.
+    also_anchored:
+      - chunk_id: cc-815-3
+        note_fr: >
+          Le consentement de tous les indivisaires est requis pour tout acte ne
+          ressortissant pas à l'exploitation normale des biens indivis.
+    bearer:
+      actor_roles: [etablissement_bancaire, gestionnaire_scpi, societe_de_gestion_scpi, notaire_redacteur]
+      bearer_note_fr: >
+        Le tiers détenteur n'est déchargé que dans la proportion indiquée à
+        l'acte ; au-delà, il opère hors du champ du texte.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["déblocage", "deblocage", "virement", "libération des fonds", "versement", "règlement"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+      deadline_days: null
+      deadline_note_fr: "Contrôle de licéité au moment de l'opération, non d'un délai."
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr:
+            - "acte de notoriété"
+            - "proportion"
+            - "quote-part"
+            - "accord de tous"
+            - "unanimité"
+            - "mandataire commun"
+          before_or_at_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : une libération de fonds successoraux
+      est attestée sans qu'aucun fait n'établisse la proportion opposable ni l'accord
+      de l'ensemble des ayants droit qui l'autorise.
+    confounders_seed:
+      - "L'article 730-4 protège le tiers détenteur qui se fie à l'acte de notoriété : la faute peut incomber au rédacteur de l'acte, non au détenteur."
+      - "L'opération peut ressortir à l'exploitation normale au sens de l'article 815-3, hors exigence d'unanimité."
+      - "L'accord des ayants droit a pu être recueilli hors du dossier."
+
+  - obligation_id: indiv-etendue-des-droits-etablie
+    rule_version: v1
+    title_fr: "Étendue des droits de chaque indivisaire établie par acte de notoriété ou intitulé d'inventaire"
+    severity: high
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 815-11 al. 2"
+      chunk_id: cc-815-11
+      legiarti_id: LEGIARTI000039367245
+      excerpt_fr: |
+        l'étendue des droits de chacun dans l'indivision résulte de l'acte de notoriété ou de l'intitulé d'inventaire établi par le notaire
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, notaire_associe]
+      bearer_note_fr: "L'établissement de l'acte incombe au notaire chargé de la succession."
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["acte de notoriété", "intitulé d'inventaire", "attestation dévolutive"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      l'établissement de l'acte fixant l'étendue des droits de chaque indivisaire.
+    confounders_seed:
+      - "L'acte peut exister sans avoir été communiqué aux nus-propriétaires, ce qui déplace le manquement vers l'information plutôt que vers l'établissement."
+
+  - obligation_id: indiv-prelevement-creancier-avant-partage
+    rule_version: v1
+    title_fr: "Paiement des créanciers de l'indivision par prélèvement avant le partage"
+    severity: critical
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 815-17 al. 1"
+      chunk_id: cc-815-17
+      legiarti_id: LEGIARTI000006432501
+      excerpt_fr: |
+        seront payés par prélèvement sur l'actif avant le partage
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, heritier_indivisaire]
+      bearer_note_fr: >
+        Le créancier dont la créance est antérieure à l'indivision prime la
+        dévolution : le partage ne peut lui être opposé.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["partage", "répartition", "dévolution", "devolution", "attribution des lots"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["prélèvement", "prelevement", "paiement du créancier", "apurement du passif", "règlement de la créance"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : un partage ou une dévolution est
+      attesté sans qu'aucun fait n'établisse le prélèvement préalable dû aux créanciers
+      de l'indivision.
+    confounders_seed:
+      - "Le prélèvement peut avoir été réservé dans un projet de partage non versé au dossier."
+      - "La qualification de créancier de l'indivision peut être contestée, ce qui déplacerait le débat sans le trancher."
+
+  # ========== fiscalité successorale ==========
+
+  - obligation_id: fisc-passif-dettes-justifiees
+    rule_version: v1
+    title_fr: "Inscription au passif successoral des dettes à la charge du défunt dûment justifiées"
+    severity: critical
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code général des impôts, art. 768"
+      chunk_id: cgi-768
+      legiarti_id: LEGIARTI000006305392
+      excerpt_fr: |
+        les dettes à la charge du défunt sont déduites lorsque leur existence au jour de l'ouverture de la succession est dûment justifiée
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, administration_fiscale]
+      bearer_note_fr: >
+        La créance de restitution née à l'extinction du quasi-usufruit est une
+        dette du défunt : son omission au passif fausse la liquidation.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["déclaration de succession", "declaration de succession", "liquidation", "droits de mutation"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["passif", "dette du défunt", "créance de restitution", "déduction", "inscription au passif"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : une opération de liquidation est
+      attestée sans qu'aucun fait n'établisse l'inscription au passif de la dette
+      dont le défunt était tenu.
+    confounders_seed:
+      - "La déclaration peut avoir été déposée sans que son contenu figure au dossier."
+      - "Une dispense de déclaration régulièrement applicable rendrait l'inscription sans objet."
+
+  # ========== responsabilité civile ==========
+
+  - obligation_id: resp-reparation-du-dommage-cause
+    rule_version: v1
+    title_fr: "Réparation du dommage causé par sa faute"
+    severity: high
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code civil, art. 1240"
+      chunk_id: cc-1240
+      legiarti_id: LEGIARTI000032041571
+      excerpt_fr: |
+        Tout fait quelconque de l'homme, qui cause à autrui un dommage, oblige celui par la faute duquel il est arrivé à le réparer.
+    also_anchored:
+      - chunk_id: cc-1241
+        note_fr: "La négligence et l'imprudence engagent au même titre que le fait positif."
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, notaire_associe, notaire_stagiaire]
+      bearer_note_fr: "Faute simple suffisante ; la responsabilité notariale n'est pas subsidiaire."
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["manquement", "défaut d'exécution", "defaut d'execution", "préjudice", "prejudice", "réclamation"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["réparation", "indemnisation", "régularisation", "regularisation", "rectification"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : un manquement est attesté sans
+      qu'aucun fait n'établisse une régularisation ou une réparation subséquente.
+    confounders_seed:
+      - "Le lien de causalité entre le manquement et le préjudice reste à établir et peut être discuté."
+      - "Une régularisation peut être en cours sans trace écrite à la date de l'extraction."
+
+  # ========== assurance de responsabilité ==========
+
+  - obligation_id: assur-reclamation-prealable-a-la-garantie
+    rule_version: v1
+    title_fr: "Réclamation préalable du tiers lésé conditionnant la garantie"
+    severity: medium
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code des assurances, art. L. 124-1"
+      chunk_id: ca-l124-1
+      legiarti_id: LEGIARTI000006792604
+      excerpt_fr: |
+        l'assureur n'est tenu que si, à la suite du fait dommageable prévu au contrat, une réclamation amiable ou judiciaire est faite à l'assuré par le tiers lésé
+    bearer:
+      actor_roles: [heritier_nu_proprietaire, heritier_indivisaire]
+      bearer_note_fr: >
+        Condition de mise en jeu de la garantie, non un manquement : son absence
+        signale une démarche à accomplir plutôt qu'une faute d'un tiers.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["manquement", "préjudice", "prejudice", "responsabilité", "responsabilite"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["réclamation", "reclamation", "mise en demeure", "mise en cause", "assignation"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      la réclamation adressée à l'assuré qui conditionne la garantie.
+    confounders_seed:
+      - "Une réclamation a pu être formée verbalement ou par un canal non archivé."
+      - "La condition pèse sur le tiers lésé : son inaccomplissement n'est pas un manquement du professionnel."
+
+  - obligation_id: assur-action-directe-du-tiers-lese
+    rule_version: v1
+    title_fr: "Action directe du tiers lésé contre l'assureur de responsabilité"
+    severity: medium
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Code des assurances, art. L. 124-3"
+      chunk_id: ca-l124-3
+      legiarti_id: LEGIARTI000017735449
+      excerpt_fr: |
+        Le tiers lésé dispose d'un droit d'action directe à l'encontre de l'assureur garantissant la responsabilité civile de la personne responsable.
+    bearer:
+      actor_roles: [heritier_nu_proprietaire, heritier_indivisaire]
+      bearer_note_fr: >
+        Voie ouverte au nu-propriétaire lésé, indépendante de toute action
+        contre le responsable lui-même.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["assureur", "responsabilité civile professionnelle", "garantie"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["action directe", "saisine de l'assureur", "déclaration de sinistre"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : la voie de l'action directe contre
+      l'assureur n'est attestée par aucun fait du dossier.
+    confounders_seed:
+      - "La voie est une faculté, non une obligation : son non-exercice n'est pas un manquement."
+
+  # ========== statut du notariat ==========
+
+  - obligation_id: not-conservation-du-depot-et-delivrance
+    rule_version: v1
+    title_fr: "Conservation du dépôt des actes et délivrance des expéditions"
+    severity: high
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Ordonnance n° 45-2590 du 2 novembre 1945, art. 1er"
+      chunk_id: ord45-2590-1
+      legiarti_id: LEGIARTI000006915175
+      excerpt_fr: |
+        pour en assurer la date, en conserver le dépôt, en délivrer des grosses et expéditions
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, notaire_associe]
+      bearer_note_fr: >
+        La conservation et la délivrance sont des attributions statutaires de
+        l'officier public, non des services discrétionnaires.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["demande de copie", "demande d'expédition", "communication de pièces", "production de pièces", "sommation"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+      deadline_days: 30
+      deadline_note_fr: "Délai raisonnable retenu par défaut ; à ajuster par catalogue de cas."
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["expédition", "copie authentique", "délivrance", "transmission des pièces", "remise de copie"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : une demande de pièces est attestée
+      sans qu'aucun fait n'établisse la délivrance correspondante.
+    confounders_seed:
+      - "Les pièces ont pu être délivrées par un canal non archivé au dossier."
+      - "Une demande imprécise peut n'avoir pas fait courir l'obligation de délivrance."
+
+  - obligation_id: not-garantie-rcp-mobilisable
+    rule_version: v1
+    title_fr: "Garantie de la responsabilité civile professionnelle par le contrat souscrit par le CSN"
+    severity: medium
+    externalisable: true
+    source:
+      kind: statute
+      ref: "Ordonnance n° 45-2590 du 2 novembre 1945, art. 6-2"
+      chunk_id: ord45-2590-6-2
+      legiarti_id: LEGIARTI000023777969
+      excerpt_fr: |
+        La responsabilité civile professionnelle des notaires est garantie par un contrat d'assurance souscrit par le Conseil supérieur du notariat.
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_associe, notaire_instrumentaire]
+      bearer_note_fr: >
+        La garantie existe de droit : sa mobilisation ne dépend pas du bon
+        vouloir de l'étude mise en cause.
+    window:
+      from_event:
+        kind: fact_match
+        any_terms_fr: ["mise en cause", "réclamation", "reclamation", "manquement"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["assureur", "responsabilité civile professionnelle", "déclaration de sinistre", "garantie"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : une mise en cause est attestée sans
+      qu'aucun fait n'établisse la mobilisation de la garantie de responsabilité
+      civile professionnelle.
+    confounders_seed:
+      - "La déclaration à l'assureur relève de l'assuré et peut n'avoir laissé aucune trace au dossier des tiers."

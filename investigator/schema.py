@@ -72,7 +72,14 @@ class FactMatch(BaseModel):
     """
 
     kind: Literal["fact_match"] = "fact_match"
+    # Empty means "the obligation's bearer roles" for an evidence leaf, and
+    # "any role" for a trigger leaf. Evidence of *performance* is conduct by
+    # the party who owes it; a trigger is an event that may be caused by
+    # anyone. Set `any_actor` to widen an evidence leaf deliberately — leaving
+    # it implicit is how an obligation silently reports satisfied because some
+    # unrelated party's document happened to use the right word.
     actor_roles: list[str] = Field(default_factory=list)
+    any_actor: bool = False
     any_terms_fr: list[str] = Field(default_factory=list)
     match_fields: list[str] = Field(default_factory=lambda: list(DEFAULT_MATCH_FIELDS))
     after_trigger: bool = False
@@ -220,6 +227,15 @@ class Obligation(BaseModel):
                     f"{self.obligation_id}: claim_template_fr references a foreach "
                     "placeholder but no foreach is declared"
                 )
+        elif not {"foreach_role", "foreach_key"} <= placeholders:
+            # Without both, every instance renders the same claim, hence the
+            # same finding id, and the per-instance evaluations silently
+            # collapse into one — the exact failure `foreach` exists to avoid.
+            raise ValueError(
+                f"{self.obligation_id}: a foreach obligation's claim_template_fr must "
+                "interpolate both {foreach_role} and {foreach_key}, or its instances "
+                "collapse to a single finding"
+            )
         if any(
             leaf.after_trigger or leaf.before_or_at_trigger
             for leaf in self.expected_evidence.leaves()

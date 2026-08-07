@@ -620,6 +620,362 @@ def test_case_paths_reject_traversal():
             config.CasePaths.for_case(bad)
 
 
+def _synthetic_graph(facts_spec, *, coverage=None, ambiguous=(), statute=None):
+    """Build a CaseGraph by hand. `facts_spec` is (fact_id, role, date, text)."""
+    from ingestion.dossier.facts import Fact
+
+    facts, folded, by_role = {}, {}, {}
+    for fid, role, when, text in facts_spec:
+        facts[fid] = Fact(
+            fact_id=fid,
+            date=when,
+            actor_role=role,
+            action=text,
+            target=None,
+            verbatim_quote=text,
+            source_doc_id=fid.split("-f")[0],
+        )
+        folded[fid] = {
+            "action": lexicon.fold(text),
+            "target": "",
+            "verbatim_quote": lexicon.fold(text),
+            "distilled_context": "",
+        }
+        by_role.setdefault(role, []).append(fid)
+    docs = {f.source_doc_id for f in facts.values()}
+    return graph.CaseGraph(
+        case_id="synthetic",
+        facts=facts,
+        roles={},
+        ambiguities=(),
+        persons={},
+        person_facts={},
+        fact_persons={},
+        persons_by_role={},
+        facts_by_role={r: tuple(sorted(v)) for r, v in by_role.items()},
+        folded=folded,
+        coverage=coverage if coverage is not None else {},
+        coverage_known=coverage is not None,
+        doc_ids=frozenset(docs),
+        doc_text_folded={},
+        statute=statute or {},
+        case_chunks={},
+        ambiguous_fact_ids=frozenset(ambiguous),
+    )
+
+
+# ========== group 4: predicate semantics ==========
+
+
+def test_an_untriggered_obligation_produces_no_finding():
+    from investigator.passes import check
+
+    ob = _obligation(
+        window={
+            "from_event": {"kind": "fact_match", "any_terms_fr": ["décès"]},
+        }
+    )
+    g = _synthetic_graph([("d-f001", "notaire_redacteur", "2026-01-01", "rédige un acte")])
+    assert check.evaluate(ob, g).status == "not_triggered"
+
+
+def test_evidence_defaults_to_the_bearer_so_a_stranger_cannot_satisfy_it():
+    """The false-`satisfied` direction, which no later adjudication can repair.
+
+    A leaf naming no role means "the party who owes the obligation", not
+    "anyone" — otherwise one well-worded sentence from an unrelated third party
+    reports the duty performed.
+    """
+    from investigator.passes import check
+
+    ob = _obligation(
+        evidence_scope={"doc_id_patterns": ["*"]},
+        expected_evidence={"all_of": [{"kind": "fact_match", "any_terms_fr": ["extrait"]}]},
+    )
+    stranger = _synthetic_graph(
+        [("d-f001", "fournisseur_energie", "2026-01-01", "transmet un extrait")],
+        coverage={"d": "ok"},
+    )
+    assert check.evaluate(ob, stranger).status == "gap"
+
+    bearer = _synthetic_graph(
+        [("d-f001", "notaire_redacteur", "2026-01-01", "transmet un extrait")],
+        coverage={"d": "ok"},
+    )
+    assert check.evaluate(ob, bearer).status == "satisfied"
+
+
+def test_any_actor_widens_a_leaf_back_to_the_whole_graph():
+    from investigator.passes import check
+
+    ob = _obligation(
+        evidence_scope={"doc_id_patterns": ["*"]},
+        expected_evidence={
+            "all_of": [{"kind": "fact_match", "any_actor": True, "any_terms_fr": ["extrait"]}]
+        },
+    )
+    g = _synthetic_graph(
+        [("d-f001", "fournisseur_energie", "2026-01-01", "transmet un extrait")],
+        coverage={"d": "ok"},
+    )
+    assert check.evaluate(ob, g).status == "satisfied"
+
+
+def test_a_gap_needs_a_covered_scope_or_it_is_only_unverifiable():
+    """The distinction the whole design rests on."""
+    from investigator.passes import check
+
+    ob = _obligation(evidence_scope={"doc_id_patterns": ["*"]})
+    covered = _synthetic_graph(
+        [("d-f001", "notaire_redacteur", "2026-01-01", "rédige")], coverage={"d": "ok"}
+    )
+    unknown = _synthetic_graph([("d-f001", "notaire_redacteur", "2026-01-01", "rédige")])
+    failed = _synthetic_graph(
+        [("d-f001", "notaire_redacteur", "2026-01-01", "rédige")],
+        coverage={"d": "parse_failed"},
+    )
+    assert check.evaluate(ob, covered).status == "gap"
+    assert check.evaluate(ob, unknown).status == "unverifiable"
+    assert check.evaluate(ob, failed).status == "unverifiable"
+
+
+def test_a_deadline_breach_needs_both_dates_known():
+    """Undated facts must never manufacture a breach."""
+    from investigator.passes import check
+
+    ob = _obligation(
+        evidence_scope={"doc_id_patterns": ["*"]},
+        window={
+            "from_event": {"kind": "fact_match", "any_actor": True, "any_terms_fr": ["décès"]},
+            "deadline_days": 30,
+        },
+        expected_evidence={
+            "all_of": [{"kind": "fact_match", "any_terms_fr": ["extrait"], "after_trigger": True}]
+        },
+    )
+    late = _synthetic_graph(
+        [
+            ("d-f001", "defunt", "2026-01-01", "constate le décès"),
+            ("d-f002", "notaire_redacteur", "2026-06-01", "transmet un extrait"),
+        ],
+        coverage={"d": "ok"},
+    )
+    undated = _synthetic_graph(
+        [
+            ("d-f001", "defunt", "2026-01-01", "constate le décès"),
+            ("d-f002", "notaire_redacteur", None, "transmet un extrait"),
+        ],
+        coverage={"d": "ok"},
+    )
+    assert check.evaluate(ob, late).status == "window_breach"
+    assert check.evaluate(ob, undated).status == "satisfied"
+
+
+def test_scope_falls_back_to_where_the_bearer_appears():
+    """Not "every document": 8 of 55 real documents have an unparsed gate verdict,
+    so an all-documents scope would make every obligation unverifiable."""
+    from investigator.passes import check
+
+    ob = _obligation()
+    g = _synthetic_graph(
+        [
+            ("mine-f001", "notaire_redacteur", "2026-01-01", "rédige"),
+            ("theirs-f001", "fournisseur_energie", "2026-01-01", "facture"),
+        ],
+        coverage={"mine": "ok", "theirs": "parse_failed"},
+    )
+    ev = check.evaluate(ob, g)
+    assert ev.scope_doc_ids == ("mine",)
+    assert ev.scope_covered is True
+
+
+def test_foreach_instances_get_distinct_subjects_and_claims():
+    from investigator.passes import check
+
+    ob = _obligation(
+        foreach={"kind": "role_instances", "actor_roles": ["gestionnaire_scpi"], "key": "person_id"},
+        claim_template_fr="Obligation {obligation_id} : détenteur {foreach_role}/{foreach_key}.",
+    )
+    g = _synthetic_graph([("d-f001", "notaire_redacteur", "2026-01-01", "rédige")])
+    g = graph.CaseGraph(
+        **{**g.__dict__, "persons_by_role": {"gestionnaire_scpi": ("p-a", "p-b")}}
+    )
+    pairs = check.instances(ob, g)
+    assert pairs == [("gestionnaire_scpi", "p-a"), ("gestionnaire_scpi", "p-b")]
+    claims = {
+        check._claim(ob, check.evaluate(ob, g, foreach_key=k, foreach_role=r))
+        for r, k in pairs
+    }
+    assert len(claims) == 2
+
+
+# ========== group 3b: search catches a wrong citation ==========
+
+
+def _search_ctx(obligations, case_graph):
+    from investigator.budget import Budget
+    from investigator.catalog import Catalog
+    from investigator.passes import extract
+
+    cat = Catalog(
+        obligations={o.obligation_id: o for o in obligations},
+        origin={o.obligation_id: "test.yaml" for o in obligations},
+        files=(),
+    )
+    return schema.RunContext(
+        case_id="synthetic",
+        paths=config.CasePaths.for_case("vitrine"),
+        graph=case_graph,
+        catalog=cat,
+        budget=Budget(),
+        health=extract.graph_health(case_graph),
+    )
+
+
+def test_search_catches_the_real_historical_citation_error(vitrine_graph):
+    """The `art. 730-4 al. 2` error, caught with zero network calls.
+
+    An earlier draft of this catalog anchored a unanimity obligation to
+    "art. 730-4 al. 2". The article has one alinéa and it *enables* release in
+    the proportion stated in the acte de notoriété. This is the pass earning
+    its slot on a real input rather than a synthetic one.
+    """
+    from investigator.passes import search
+
+    wrong = _obligation(
+        source={
+            "kind": "statute",
+            "ref": "Code civil, art. 730-4 al. 2",
+            "chunk_id": "cc-730-4",
+            "excerpt_fr": "en cas de pluralité d'ayants droit, l'encaissement individuel "
+            "des fonds réclamera un accord unanime",
+        }
+    )
+    result = search.run(_search_ctx([wrong], vitrine_graph))
+    kinds = {f["claim"] for f in result.findings}
+    assert any("n'apparaît pas dans le texte" in k for k in kinds), kinds
+
+
+def test_search_accepts_a_citation_that_is_actually_verbatim(vitrine_graph):
+    from investigator.passes import search
+
+    right = _obligation(
+        source={
+            "kind": "statute",
+            "ref": "Code civil, art. 730-4",
+            "chunk_id": "cc-730-4",
+            "legiarti_id": "LEGIARTI000006430899",
+            "excerpt_fr": "la libre disposition de ceux-ci dans la proportion indiquée à l'acte",
+        }
+    )
+    assert search.run(_search_ctx([right], vitrine_graph)).findings == []
+
+
+def test_search_reports_an_anchor_outside_the_local_corpus(vitrine_graph):
+    """`cc-1204`, `cc-1344` and `cc-494-12` are genuinely outside the 792-chunk
+    corpus. Unverifiable-here is not the same as wrong, and must not be
+    reported as if it were."""
+    from investigator.passes import search
+
+    ob = _obligation(
+        source={
+            "kind": "statute",
+            "ref": "Code civil, art. 1204",
+            "legiarti_id": "LEGIARTI000000000000",
+            "excerpt_fr": "On peut se porter fort pour un tiers.",
+        }
+    )
+    findings = search.run(_search_ctx([ob], vitrine_graph)).findings
+    assert len(findings) == 1
+    assert "ne peut être vérifiée hors ligne" in findings[0]["claim"]
+
+
+def test_search_reports_a_chunk_id_absent_from_the_corpus(vitrine_graph):
+    from investigator.passes import search
+
+    ob = _obligation(
+        source={
+            "kind": "statute",
+            "ref": "Code civil, art. 9999",
+            "chunk_id": "cc-9999",
+            "excerpt_fr": "Texte inexistant.",
+        }
+    )
+    findings = search.run(_search_ctx([ob], vitrine_graph)).findings
+    assert "absent du corpus" in findings[0]["claim"]
+
+
+def test_the_shipped_catalog_citations_all_verify(vitrine_graph):
+    """Guards the committed catalog itself. A wrong citation cannot land."""
+    if not config.GENERIC_CATALOG.exists():
+        pytest.skip("generic catalog not authored yet")
+    from investigator.passes import search
+
+    obligations = catalog.load_file(config.GENERIC_CATALOG).obligations
+    findings = search.run(_search_ctx(obligations, vitrine_graph)).findings
+    assert findings == [], [f["claim"] for f in findings]
+
+
+# ========== group 1: pass identity ==========
+
+
+@pytest.mark.parametrize("module_name", ["extract", "check", "search"])
+def test_every_finding_carries_its_own_pass_name(module_name, vitrine_graph):
+    """A mismatch between the emitted pass and the reconciled name would
+    silently resolve everything that pass ever produced."""
+    import importlib
+
+    module = importlib.import_module(f"investigator.passes.{module_name}")
+    obligations = (
+        catalog.load_file(config.GENERIC_CATALOG).obligations
+        if config.GENERIC_CATALOG.exists()
+        else [_obligation()]
+    )
+    result = module.run(_search_ctx(obligations, vitrine_graph))
+    assert {f["pass"] for f in result.findings} <= {module.PASS_NAME}
+
+
+@pytest.mark.parametrize("module_name", ["extract", "check", "search"])
+def test_finding_ids_are_stable_and_unique_across_runs(module_name, vitrine_graph):
+    import importlib
+
+    module = importlib.import_module(f"investigator.passes.{module_name}")
+    obligations = (
+        catalog.load_file(config.GENERIC_CATALOG).obligations
+        if config.GENERIC_CATALOG.exists()
+        else [_obligation()]
+    )
+    ctx = _search_ctx(obligations, vitrine_graph)
+    first = [store.make_id(f["pass"], f["subject"], f["claim"]) for f in module.run(ctx).findings]
+    second = [store.make_id(f["pass"], f["subject"], f["claim"]) for f in module.run(ctx).findings]
+    assert first == second
+    assert len(first) == len(set(first))
+
+
+def test_claims_carry_no_volatile_numbers(vitrine_graph):
+    """Counts, dates and amounts belong in `evidence`, which is rewritten every
+    run; a claim carrying one re-mints its finding id on every cycle."""
+    import importlib
+
+    obligations = (
+        catalog.load_file(config.GENERIC_CATALOG).obligations
+        if config.GENERIC_CATALOG.exists()
+        else [_obligation()]
+    )
+    ctx = _search_ctx(obligations, vitrine_graph)
+    # Volatile markers that must only ever appear in `evidence`. A claim
+    # carrying one changes whenever the case does, so the finding it names can
+    # never be tracked, resolved, or attacked across cycles.
+    forbidden = ("faits_retenus", "périmètre=", "statut=", "candidats=", "déclencheur=", "retard=")
+    for module_name in ("extract", "check", "search"):
+        module = importlib.import_module(f"investigator.passes.{module_name}")
+        for f in module.run(ctx).findings:
+            assert not any(marker in f["claim"] for marker in forbidden), f["claim"]
+            # Whatever numbers survive must come from the citation, never from
+            # the case: identical claims must render identically on any dossier.
+            assert f["claim"] == f["claim"].format(), f["claim"]
+
+
 def test_investigation_state_stays_inside_the_case_directory():
     """Nothing Plane V writes may land outside the case dir.
 
