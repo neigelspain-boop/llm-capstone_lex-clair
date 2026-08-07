@@ -25,7 +25,7 @@ WATCH_STATE = AUDIT_DIR / ".watch_state.json"
 # Directories walked for .py file collection. Deliberately does NOT include
 # scripts/local_audit itself (self-referential noise) or notebooks/data/docs
 # (not source code the passes reason about).
-SCAN_DIRS = ["ingestion", "rag", "eval", "app", "monitoring", "tests", "scripts"]
+SCAN_DIRS = ["ingestion", "rag", "eval", "app", "monitoring", "investigator", "tests", "scripts"]
 
 PY_SKIP_DIRS = {
     "__pycache__", ".pytest_cache", ".git", ".venv", "node_modules",
@@ -42,11 +42,20 @@ PLANE_DIRS = {
     "eval": "eval",
     "app": "app",
     "monitoring": "monitoring",
+    "investigator": "investigator",
 }
 # Only these planes may import ingestion.* directly, and only through the
 # load_index() contract (CLAUDE.md: "load_index() is the single Plane I ->
 # Plane II interface. Do not add hidden cross-plane paths.").
-CROSS_PLANE_ALLOWED_IMPORTERS = {"rag", "eval", "app", "monitoring"}
+#
+# investigator (Plane V, ADR #70) reads Plane Ib artifacts through
+# ingestion.dossier.facts' models and prices calls through ingestion.clients.
+# Neither goes through load_index(), so both surface here as findings — that is
+# the check working as its docstring describes ("surfaces candidates for
+# review, it doesn't assert a verdict"), and ADR #70 records them as reviewed.
+# CROSS_PLANE_ALLOWED_SYMBOLS is deliberately NOT widened to silence them:
+# that would weaken the check for every plane in order to legitimise one.
+CROSS_PLANE_ALLOWED_IMPORTERS = {"rag", "eval", "app", "monitoring", "investigator"}
 CROSS_PLANE_ALLOWED_SYMBOLS = {"load_index"}
 
 # ========== local LLM (Ollama) ==========

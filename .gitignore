@@ -41,6 +41,12 @@ data/dossier/*
 !data/dossier/demo/**
 !data/dossier/vitrine/
 !data/dossier/vitrine/**
+# Plane V state (ADR #70). Findings and the digest are reviewable artifacts and
+# stay tracked for the two public cases; the verification cache is a binary
+# that churns on every run, so it is re-ignored after the whitelist above.
+data/dossier/*/investigation/cache.sqlite3
+data/dossier/*/investigation/*.tmp
+data/dossier/*/investigation/.watch_state.json
 
 # Backups
 *.bak
