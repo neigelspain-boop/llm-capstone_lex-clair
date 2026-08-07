@@ -459,26 +459,21 @@ def _prepare_target(base: Path, text: str) -> None:
     (extracted / "doc.md").write_text(text, encoding="utf-8")
 
 
-def test_gate_raises_on_a_surviving_person_name(dossier) -> None:
-    _prepare_target(dossier, "## Page 1\n\nMaître VOLTAIRE a reçu l'acte.")
-    with pytest.raises(RuntimeError, match="anonymisation gate FAILED"):
-        anonymize.verify_anonymization("vitrine", source_case_id="src")
+@pytest.mark.parametrize("leaked_text", [
+    pytest.param("Maître VOLTAIRE a reçu l'acte.", id="a_surviving_person_name"),
+    pytest.param("Contact : a.b@etude.fr", id="a_surviving_email"),
+    pytest.param("Étude sise 12 rue des Lilas.", id="a_surviving_address"),
+    pytest.param("le notaire voltaïre a signé", id="accented_and_lowercased_variants"),
+])
+def test_gate_raises_on_leaked_identifiers(dossier, leaked_text) -> None:
+    """Each leak class the gate must catch, one named case per class.
 
-
-def test_gate_raises_on_a_surviving_email(dossier) -> None:
-    _prepare_target(dossier, "## Page 1\n\nContact : a.b@etude.fr")
-    with pytest.raises(RuntimeError, match="anonymisation gate FAILED"):
-        anonymize.verify_anonymization("vitrine", source_case_id="src")
-
-
-def test_gate_raises_on_a_surviving_address(dossier) -> None:
-    _prepare_target(dossier, "## Page 1\n\nÉtude sise 12 rue des Lilas.")
-    with pytest.raises(RuntimeError, match="anonymisation gate FAILED"):
-        anonymize.verify_anonymization("vitrine", source_case_id="src")
-
-
-def test_gate_catches_accented_and_lowercased_variants(dossier) -> None:
-    _prepare_target(dossier, "## Page 1\n\nle notaire voltaïre a signé")
+    The gate is the last thing standing between a real client dossier and a
+    public commit, so every class it is supposed to catch stays individually
+    named — a merged failure would say "a leak got through" without saying
+    which kind.
+    """
+    _prepare_target(dossier, f"## Page 1\n\n{leaked_text}")
     with pytest.raises(RuntimeError, match="anonymisation gate FAILED"):
         anonymize.verify_anonymization("vitrine", source_case_id="src")
 

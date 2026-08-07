@@ -62,92 +62,48 @@ def _mock_generate(prompt: str, model_key: str | None = None) -> tuple[str, dict
 
 # ========== router unit tests ==========
 
-def test_router_statute_lookup(monkeypatch) -> None:
+@pytest.mark.parametrize("intent,case_id,expected_scope,downgraded", [
+    pytest.param("statute_lookup", None, "statute", False,
+                 id="statute_lookup"),
+    pytest.param("case_factual", "private", "case:private", False,
+                 id="case_factual_with_case_id"),
+    pytest.param("case_factual", None, "statute", True,
+                 id="case_factual_without_case_id_downgrades"),
+    # gap_analysis + case_id was "blended" until ADR #66. "blended" is not a
+    # filter at all — it reaches every case in the index, so a gap-analysis
+    # question about one client could retrieve another's chunks.
+    pytest.param("gap_analysis", "private", "case+statute:private", False,
+                 id="gap_analysis_with_case_id"),
+    pytest.param("gap_analysis", None, "statute", True,
+                 id="gap_analysis_without_case_id_downgrades"),
+    pytest.param("other", None, "statute", False,
+                 id="other_defaults_statute"),
+])
+def test_router_maps_intent_and_case_to_scope(
+    monkeypatch, intent, case_id, expected_scope, downgraded
+) -> None:
+    """The routing table of ADR #42 as amended by ADR #66.
+
+    One case per row, each keeping its own test id, so a failure still names
+    exactly which routing rule broke.
+    """
     from rag import router
 
     monkeypatch.setattr(
         router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("statute_lookup")),
+        lambda: _mock_openrouter_client(_classifier_json(intent)),
     )
 
-    decision = router.route_query("qu'est-ce que le quasi-usufruit ?", None)
+    decision = router.route_query("question de test", case_id)
 
-    assert decision.intent == "statute_lookup"
-    assert decision.source_scope == "statute"
-
-
-def test_router_case_factual_with_case_id(monkeypatch) -> None:
-    from rag import router
-
-    monkeypatch.setattr(
-        router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("case_factual")),
-    )
-
-    decision = router.route_query("quand le notaire a-t-il envoye la mise en demeure ?", "private")
-
-    assert decision.intent == "case_factual"
-    assert decision.source_scope == "case:private"
-
-
-def test_router_case_factual_without_case_id_downgrades(monkeypatch) -> None:
-    from rag import router
-
-    monkeypatch.setattr(
-        router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("case_factual")),
-    )
-
-    decision = router.route_query("quand le notaire a-t-il envoye la mise en demeure ?", None)
-
-    assert decision.source_scope == "statute"
-    assert decision.confidence == "low"
-    assert "case_factual" in decision.rationale or "dossier actif" in decision.rationale
-
-
-def test_router_gap_analysis_with_case_id(monkeypatch) -> None:
-    from rag import router
-
-    monkeypatch.setattr(
-        router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("gap_analysis")),
-    )
-
-    decision = router.route_query("le notaire a-t-il manque a son obligation ?", "private")
-
-    assert decision.intent == "gap_analysis"
-    # Was "blended" until ADR #66. "blended" is not a filter at all — it
-    # reaches every case in the index, so a gap-analysis question about one
-    # client could retrieve another's chunks.
-    assert decision.source_scope == "case+statute:private"
-
-
-def test_router_gap_analysis_without_case_id_downgrades(monkeypatch) -> None:
-    from rag import router
-
-    monkeypatch.setattr(
-        router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("gap_analysis")),
-    )
-
-    decision = router.route_query("le notaire a-t-il manque a son obligation ?", None)
-
-    assert decision.source_scope == "statute"
-    assert decision.confidence == "low"
-
-
-def test_router_other_defaults_statute(monkeypatch) -> None:
-    from rag import router
-
-    monkeypatch.setattr(
-        router, "get_openrouter_client",
-        lambda: _mock_openrouter_client(_classifier_json("other")),
-    )
-
-    decision = router.route_query("bonjour, comment ca va ?", None)
-
-    assert decision.intent == "other"
-    assert decision.source_scope == "statute"
+    assert decision.intent == intent
+    assert decision.source_scope == expected_scope
+    if downgraded:
+        # A downgrade must be visible to the caller, not silent: low
+        # confidence plus a rationale naming the intent and the missing case.
+        assert decision.confidence == "low"
+        assert intent in decision.rationale
+        assert "dossier actif" in decision.rationale
 
 
 def test_router_parse_failure_returns_safe_default(monkeypatch, caplog) -> None:
@@ -283,7 +239,18 @@ def test_generate_default_model_uses_gpt4o_mini(monkeypatch) -> None:
     assert "extra_body" not in call_kwargs
 
 
-def test_generate_opus_uses_reasoning_effort(monkeypatch) -> None:
+@pytest.mark.parametrize("model_key,expected_model_id", [
+    pytest.param("opus-4.7", "anthropic/claude-opus-4.7", id="opus"),
+    pytest.param("kimi-k3", "moonshotai/kimi-k3", id="kimi"),
+])
+def test_generate_deep_think_models_use_reasoning_effort(
+    monkeypatch, model_key, expected_model_id
+) -> None:
+    """Reasoning effort rides in extra_body, never as a top-level kwarg.
+
+    The OpenAI SDK rejects `reasoning=` outright, so a regression here is a
+    hard failure at call time rather than a silently non-reasoning answer.
+    """
     from rag import generate
 
     client = _mock_openrouter_client("answer text")
@@ -292,26 +259,10 @@ def test_generate_opus_uses_reasoning_effort(monkeypatch) -> None:
     )
     monkeypatch.setattr(generate, "get_openrouter_client", lambda: client)
 
-    generate.generate("prompt", model_key="opus-4.7")
+    generate.generate("prompt", model_key=model_key)
 
     call_kwargs = client.chat.completions.create.call_args.kwargs
-    assert call_kwargs["model"] == "anthropic/claude-opus-4.7"
-    assert call_kwargs["extra_body"] == {"reasoning": {"effort": "max"}}
-
-
-def test_generate_kimi_uses_reasoning_effort(monkeypatch) -> None:
-    from rag import generate
-
-    client = _mock_openrouter_client("answer text")
-    client.chat.completions.create.return_value.usage = MagicMock(
-        prompt_tokens=100, completion_tokens=50,
-    )
-    monkeypatch.setattr(generate, "get_openrouter_client", lambda: client)
-
-    generate.generate("prompt", model_key="kimi-k3")
-
-    call_kwargs = client.chat.completions.create.call_args.kwargs
-    assert call_kwargs["model"] == "moonshotai/kimi-k3"
+    assert call_kwargs["model"] == expected_model_id
     assert call_kwargs["extra_body"] == {"reasoning": {"effort": "max"}}
 
 

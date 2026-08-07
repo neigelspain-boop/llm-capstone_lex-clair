@@ -126,6 +126,29 @@ ACCEPTED_CLONES: dict[str, str] = {
     "ingestion/dossier/index.py::_split_page_text":
         "Dossier chunking is a different algorithm from ingestion/chunk.py's "
         "statute chunker by design (ADR #39); shape overlap is coincidental.",
+
+    # --- test clones deliberately left un-parametrized ---
+    # A merged test is only a win when the merged failure still says which
+    # case broke. These three pairs fail that test for concrete reasons.
+    "tests/test_persons_smoke.py::test_extract_fact_neighborhood_matches_across_nbsp_whitespace_drift":
+        "The drift under test is an invisible U+00A0 in the source string. "
+        "Moving it into a parametrize table risks an editor or a copy "
+        "normalising it back to a space, which would leave the test passing "
+        "while testing nothing. The character IS the fixture.",
+    "tests/test_persons_smoke.py::test_extract_fact_neighborhood_matches_across_newline_count_drift":
+        "Pairs with the NBSP drift test above; kept alongside it.",
+    "tests/test_rag_smoke.py::test_build_user_message_omits_cross_role_when_empty":
+        "Same shape as the persons-block test but a different contract — the "
+        "cross-role block (ADR #44) and the persons block (ADR #53) are "
+        "independent, and a merged failure would not say which section leaked.",
+    "tests/test_rag_smoke.py::test_compliance_user_message_omits_persons_when_empty":
+        "Pairs with the cross-role omission test above.",
+    "tests/test_rag_smoke.py::test_compare_compliance_does_not_pollute_shared_compliance_cache":
+        "Cache isolation for compare_compliance_for_role (ADR #56) and for "
+        "run_compliance_for_role (ADR #57) are separate guarantees with "
+        "separate cache keys; merging them would hide which one regressed.",
+    "tests/test_rag_smoke.py::test_run_compliance_for_role_does_not_pollute_shared_compliance_cache":
+        "Pairs with the compare_compliance cache-isolation test above.",
 }
 
 

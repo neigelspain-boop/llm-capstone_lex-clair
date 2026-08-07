@@ -182,23 +182,36 @@ def test_articles_csv_row_count_in_expected_range(articles: pd.DataFrame) -> Non
     assert 700 <= len(articles) <= 900, f"unexpected corpus size: {len(articles)}"
 
 
-def test_articles_chunk_id_unique(articles: pd.DataFrame) -> None:
-    """Duplicate chunk_ids break BM25 fit and Chroma add. Namespacing bug guard."""
-    dupes = articles["chunk_id"].duplicated().sum()
-    assert dupes == 0, f"{dupes} duplicate chunk_ids in articles.csv"
+@pytest.fixture(scope="module")
+def corpus_csv(request, articles, chunks):
+    """Either statute CSV, by name — for invariants that hold of both."""
+    return {"articles": articles, "chunks": chunks}[request.param]
 
 
-def test_articles_texte_non_null(articles: pd.DataFrame) -> None:
-    """Empty texte means nothing to embed. Parse.py should have dropped these."""
-    nulls = articles["texte"].isnull().sum()
-    assert nulls == 0, f"{nulls} null texte values in articles.csv"
+@pytest.mark.parametrize("corpus_csv", ["articles", "chunks"], indirect=True)
+def test_corpus_chunk_id_unique(corpus_csv: pd.DataFrame) -> None:
+    """Duplicate chunk_ids break BM25 fit and collide in Chroma's primary key."""
+    dupes = corpus_csv["chunk_id"].duplicated().sum()
+    assert dupes == 0, f"{dupes} duplicate chunk_ids"
 
 
-def test_articles_all_critical_present(articles: pd.DataFrame) -> None:
-    """Every case-critical article must be indexed. Wrong LEGISCTA guard."""
-    present = set(articles["chunk_id"])
+@pytest.mark.parametrize("corpus_csv", ["articles", "chunks"], indirect=True)
+def test_corpus_texte_non_null(corpus_csv: pd.DataFrame) -> None:
+    """Empty texte means nothing to embed.
+
+    On articles.csv this guards parse.py dropping empties; on chunks.csv it
+    guards the NaN round-trip that keep_default_na=False exists to prevent.
+    """
+    nulls = corpus_csv["texte"].isnull().sum()
+    assert nulls == 0, f"{nulls} null texte values"
+
+
+@pytest.mark.parametrize("corpus_csv", ["articles", "chunks"], indirect=True)
+def test_corpus_all_critical_present(corpus_csv: pd.DataFrame) -> None:
+    """Case-critical articles must be indexed and survive the chunking transform."""
+    present = set(corpus_csv["chunk_id"])
     missing = [cid for cid in CRITICAL_ARTICLES if cid not in present]
-    assert not missing, f"critical articles missing from articles.csv: {missing}"
+    assert not missing, f"critical articles missing: {missing}"
 
 
 def test_articles_only_vigueur(articles: pd.DataFrame) -> None:
@@ -221,25 +234,6 @@ def test_chunks_csv_matches_articles_row_count(
     assert len(statute_chunks) == len(articles), (
         f"row-count drift: articles={len(articles)}, chunks={len(statute_chunks)}"
     )
-
-
-def test_chunks_chunk_id_unique(chunks: pd.DataFrame) -> None:
-    """Duplicate chunk_ids in chunks.csv would collide in the Chroma primary key."""
-    dupes = chunks["chunk_id"].duplicated().sum()
-    assert dupes == 0, f"{dupes} duplicate chunk_ids in chunks.csv"
-
-
-def test_chunks_texte_non_null(chunks: pd.DataFrame) -> None:
-    """Guards against the NaN round-trip bug (keep_default_na=False regression)."""
-    nulls = chunks["texte"].isnull().sum()
-    assert nulls == 0, f"{nulls} null texte values in chunks.csv"
-
-
-def test_chunks_all_critical_present(chunks: pd.DataFrame) -> None:
-    """Critical articles must survive the chunking transform."""
-    present = set(chunks["chunk_id"])
-    missing = [cid for cid in CRITICAL_ARTICLES if cid not in present]
-    assert not missing, f"critical articles missing from chunks.csv: {missing}"
 
 
 def test_chunks_required_columns_present(chunks: pd.DataFrame) -> None:

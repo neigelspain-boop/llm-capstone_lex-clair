@@ -475,12 +475,21 @@ def test_build_gate_cli_registers_step(monkeypatch, capsys) -> None:
     )
 
 
-def test_build_extract_requires_raw_dir(monkeypatch, capsys) -> None:
-    """--step extract without --raw-dir exits cleanly via argparse.error, not a downstream crash."""
+@pytest.mark.parametrize("step", [
+    pytest.param("extract", id="extract"),
+    pytest.param("all", id="all"),
+])
+def test_build_steps_reading_raw_files_require_raw_dir(monkeypatch, capsys, step) -> None:
+    """Every STAGES_REQUIRING_RAW_DIR step exits via argparse.error.
+
+    argparse cannot express "required unless --step is X" declaratively, so
+    build.py enforces it after parsing. The failure must stay a clean exit
+    naming the missing flag, not a downstream crash on a missing directory.
+    """
     from ingestion.dossier import build
 
     monkeypatch.setattr(
-        "sys.argv", ["build.py", "--case-id", "demo", "--step", "extract"]
+        "sys.argv", ["build.py", "--case-id", "demo", "--step", step]
     )
 
     with pytest.raises(SystemExit):
@@ -488,23 +497,7 @@ def test_build_extract_requires_raw_dir(monkeypatch, capsys) -> None:
 
     err = capsys.readouterr().err
     assert "raw-dir" in err
-    assert "extract" in err
-
-
-def test_build_all_requires_raw_dir(monkeypatch, capsys) -> None:
-    """--step all without --raw-dir exits cleanly via argparse.error, not a downstream crash."""
-    from ingestion.dossier import build
-
-    monkeypatch.setattr(
-        "sys.argv", ["build.py", "--case-id", "demo", "--step", "all"]
-    )
-
-    with pytest.raises(SystemExit):
-        build.main()
-
-    err = capsys.readouterr().err
-    assert "raw-dir" in err
-    assert "all" in err
+    assert step in err
 
 
 # ========== deliverable 4: facts.extract_facts_and_roles + extract_case_facts ==========
