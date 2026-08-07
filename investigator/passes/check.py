@@ -31,7 +31,9 @@ import logging
 from datetime import date, timedelta
 from fnmatch import fnmatch
 
-from investigator import config, store
+from dataclasses import replace
+
+from investigator import cache, config, ollama, store
 from investigator.graph import MATCH_FIELDS, CaseGraph
 from investigator.lexicon import contains_term
 from investigator.schema import (
@@ -422,16 +424,92 @@ def _evidence(ev: Evaluation, graph: CaseGraph) -> str:
     return " · ".join(bits)
 
 
+# ========== the rescue tier (Phase 2, local model) ==========
+
+RESCUE_SYSTEM_PROMPT = """Tu es un vérificateur juridique. On te donne UNE clause \
+d'obligation et UNE citation extraite d'un dossier.
+
+Question unique : cette citation atteste-t-elle l'exécution de cette obligation précise ?
+
+Règles :
+- Réponds uniquement sur ce que la citation dit explicitement.
+- Une mention de l'obligation, une promesse, ou une demande ne sont PAS une exécution.
+- Dans le doute, réponds false.
+
+Réponds en JSON strict : {"atteste": true|false, "motif": "<une phrase>"}"""
+
+
+def _rescue_gap(
+    ctx: RunContext, obligation: Obligation, ev: Evaluation
+) -> tuple[Evaluation, dict | None]:
+    """Ask the local model whether any candidate fact actually attests the duty.
+
+    A false negative — the obligation was performed, but phrased outside the
+    catalog's term list — is the failure a deterministic predicate cannot avoid.
+    This is the repair, and it is deliberately one-directional: **a rescue can
+    only turn `gap` into `satisfied`, never the reverse**. The model is never
+    able to manufacture a breach, only to withdraw one the terms invented.
+
+    Each call sees one clause and one quote. It never sees the obligation set,
+    the corpus, or the other candidates — `scripts/local_audit/passes/slimming.py`
+    documents whole-unit judgment failing 3/3 on both model sizes, and the fix
+    there was the same: shrink the unit until the question is answerable.
+    """
+    clause = obligation.source.excerpt_fr.strip()[: config.MAX_CLAUSE_CHARS]
+    prompt_version = config.PROMPT_VERSIONS["check_rescue"]
+
+    for fact_id in ev.candidate_fact_ids:
+        fact = ctx.graph.facts.get(fact_id)
+        if fact is None:
+            continue
+        quote = fact.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
+        subject = f"{obligation.obligation_id}@{obligation.rule_version}|{ctx.case_id}|{fact_id}"
+        content_hash = cache.content_hash_for_text(f"{quote}||{clause}")
+
+        cached = cache.get(ctx.paths, PASS_NAME, prompt_version, subject, content_hash)
+        if cached is None:
+            if not ctx.budget.take_local():
+                return ev, None  # budget exhausted; caller marks the pass partial
+            verdict, meta = ollama.call_self_consistency(
+                RESCUE_SYSTEM_PROMPT,
+                f"Clause d'obligation :\n« {clause} »\n\nCitation du dossier :\n« {quote} »",
+                verdict_key="atteste",
+                model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_RESCUE),
+            )
+            if verdict is None:
+                # No verdict is not a negative verdict, and is never cached.
+                continue
+            cached = dict(verdict)
+            cached["_self_consistency"] = meta
+            cache.set(ctx.paths, PASS_NAME, prompt_version, subject, content_hash, cached)
+
+        if cached.get("atteste") is True:
+            rescued = replace(
+                ev,
+                status="satisfied",
+                matched_fact_ids=(fact_id,),
+                matched_doc_ids=(fact.source_doc_id,),
+                matched_docs_all_gate_ok=ctx.graph.gate_ok(fact.source_doc_id),
+            )
+            return rescued, cached.get("_self_consistency")
+    return ev, None
+
+
 def run(ctx: RunContext) -> PassResult:
     """Evaluate every obligation, every instance.
 
-    Always `complete=True` in Phase 1: nothing here consumes budget, so the
-    sweep cannot be truncated. The Phase 2 rescue tier is what makes this
-    conditional, and it must set it — a budget cutoff that reconciled would
-    resolve real gaps.
+    Deterministic by default. With `--local-llm`, a `gap` whose obligation opts
+    into adjudication additionally gets the rescue pass above. `complete` goes
+    False if the call budget ran out mid-sweep — a cutoff that reconciled would
+    resolve real gaps and report the deletion as progress.
     """
     findings: list[dict] = []
     graph = ctx.graph
+    complete = True
+    adjudicating = ctx.local_model is not None and ollama.is_available()
+    if ctx.local_model is not None and not adjudicating:
+        log.warning("check: Ollama unreachable — deterministic verdicts only, pass marked partial")
+        complete = False
 
     for obligation in ctx.catalog.ordered():
         for role, person_id in instances(obligation, graph):
@@ -439,7 +517,14 @@ def run(ctx: RunContext) -> PassResult:
             if ev.status == "not_triggered":
                 continue
 
-            tier, basis = assign_tier(ev, ctx.health, obligation)
+            sc_meta = None
+            if adjudicating and ev.status == "gap" and obligation.adjudicate != "none":
+                before = ev.status
+                ev, sc_meta = _rescue_gap(ctx, obligation, ev)
+                if ev.status == before and ctx.budget.local_exhausted():
+                    complete = False
+
+            tier, basis = assign_tier(ev, ctx.health, obligation, sc_meta=sc_meta)
             subject = obligation.obligation_id
             if person_id is not None:
                 subject = f"{obligation.obligation_id}|{role}|{person_id}"
@@ -468,4 +553,4 @@ def run(ctx: RunContext) -> PassResult:
                 )
             )
 
-    return PassResult(findings=findings, complete=True)
+    return PassResult(findings=findings, complete=complete)

@@ -21,7 +21,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 
-from investigator import store
+from investigator import cache, config, ollama, store
 from investigator.schema import TIER_ORDER, PassResult, RunContext
 
 log = logging.getLogger(__name__)
@@ -48,6 +48,46 @@ def select_targets(store_: dict[str, dict], min_tier: str = MIN_TIER_TO_ATTACK) 
     return sorted(targets, key=lambda f: (TIER_ORDER[f["tier"]], f["id"]))
 
 
+GENERATE_SYSTEM_PROMPT = """Tu défends la partie mise en cause par le constat suivant. \
+Donne les explications alternatives les plus solides, chacune ancrée dans une pratique \
+documentée ou dans une absence documentée.
+
+Règles :
+- Pas de rhétorique, pas d'attaque de la partie adverse.
+- Chaque explication doit être vérifiable en principe.
+- Deux à quatre explications, une phrase chacune.
+
+Réponds en JSON strict : {"contre_arguments": ["...", "..."]}"""
+
+
+def _generate(ctx: RunContext, finding: dict) -> list[str]:
+    """Ask the local model for additional counter-narratives.
+
+    The authored seeds are the floor, not the ceiling: the catalog author knew
+    the clause, the model sees the finding as rendered. A `None` verdict simply
+    means the seeds stand alone.
+    """
+    subject = f"attack|{ctx.case_id}|{finding['id']}"
+    content_hash = cache.content_hash_for_text(finding["claim"] + "||" + finding.get("evidence", ""))
+    version = config.PROMPT_VERSIONS["attack"]
+
+    cached = cache.get(ctx.paths, PASS_NAME, version, subject, content_hash)
+    if cached is None:
+        if not ctx.budget.take_local():
+            return []
+        out = ollama.call_json(
+            GENERATE_SYSTEM_PROMPT,
+            f"Constat : {finding['claim']}\n\nÉléments : {finding.get('evidence', '')[:600]}",
+            model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT),
+            think=True,
+        )
+        if not isinstance(out, dict) or "contre_arguments" not in out:
+            return []
+        cached = out
+        cache.set(ctx.paths, PASS_NAME, version, subject, content_hash, cached)
+    return [str(x) for x in cached.get("contre_arguments", []) if str(x).strip()][:4]
+
+
 def run(ctx: RunContext) -> PassResult:
     """Seed confounders onto every attackable finding.
 
@@ -58,20 +98,26 @@ def run(ctx: RunContext) -> PassResult:
     targets = select_targets(current)
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     attached = 0
+    generating = ctx.local_model is not None and ollama.is_available()
 
     for finding in targets:
         obligation = ctx.catalog.get(finding.get("obligation_id") or "")
-        if obligation is None or not obligation.confounders_seed:
+        authored = list(obligation.confounders_seed) if obligation else []
+        generated = _generate(ctx, finding) if generating else []
+        if not authored and not generated:
             continue
         already = {c.get("text_fr") for c in finding.get("confounders", [])}
         seeds = [
             {
                 "text_fr": text,
-                "source": "catalog_seed",
+                "source": source,
                 "dispositive": False,
                 "added_at": now,
             }
-            for text in obligation.confounders_seed
+            for text, source in (
+                [(t, "catalog_seed") for t in authored]
+                + [(t, "modele_local") for t in generated]
+            )
             if text not in already
         ]
         if not seeds:

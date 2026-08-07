@@ -119,6 +119,40 @@ MAX_QUOTE_CHARS = 400
 MAX_CLAUSE_CHARS = 200
 
 
+# ========== local models (Ollama) ==========
+# Phase 2. Nothing here is touched unless a run passes --local-llm; the
+# deterministic verdict is computed first either way, and a model can only
+# adjust it in the directions each pass documents.
+
+OLLAMA_URL = "http://localhost:11434/api/chat"
+
+# Rescue is high-volume and narrow — one short quote against one short clause —
+# so it defaults to the 14B, which is fully GPU-resident on a 12 GB card.
+OLLAMA_MODEL_RESCUE = "qwen3:14b"
+
+# Genuine comparative judgment. qwen3:30b is Qwen's MoE variant: ~19 GB at Q4
+# does not fit a 12 GB card, but Ollama splits it (as many layers on GPU as
+# fit, the rest on CPU RAM) and MoE sparsity keeps the CPU-side cost per token
+# low. Slower per call than the all-GPU 14B path, spent only on the handful of
+# pairs and findings these passes actually judge.
+OLLAMA_MODEL_JUDGMENT = "qwen3:30b"
+
+OLLAMA_TIMEOUT = 600  # split inference on a 30B is minutes, not seconds
+OLLAMA_NUM_CTX = 32768
+# Thinking plus format="json" can burn the whole budget on a hidden trace
+# before emitting any JSON. Self-consistency compensates for what a
+# single-shot non-thinking answer gives up.
+OLLAMA_THINK = False
+# The 12 GB card is shared with this project's own BGE-M3 embedder and
+# reranker. A short keep_alive means the model unloads between bursts instead
+# of permanently occupying the card; it costs a reload on the next call.
+OLLAMA_KEEP_ALIVE = "2m"
+
+SELF_CONSISTENCY_RUNS = 3
+SELF_CONSISTENCY_TEMPERATURE = 0.4
+SELF_CONSISTENCY_AGREE_THRESHOLD = 2
+
+
 # ========== budget ==========
 
 # Local calls are free in USD but seconds each, so their cap is what makes a

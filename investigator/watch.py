@@ -26,7 +26,7 @@ import logging
 import time
 from pathlib import Path
 
-from investigator import config, orchestrator
+from investigator import config, ollama, orchestrator
 from investigator.cache import content_hash_for_file
 
 log = logging.getLogger(__name__)
@@ -67,7 +67,12 @@ def artifact_hashes(paths: config.CasePaths) -> dict[str, str]:
 # ========== the loop ==========
 
 
-def loop(case_id: str, dossier_dir: Path | None = None, once: bool = False) -> None:
+def loop(
+    case_id: str,
+    dossier_dir: Path | None = None,
+    once: bool = False,
+    local_model: str | None = None,
+) -> None:
     paths = config.CasePaths.for_case(case_id, dossier_dir=dossier_dir)
     state = _load_state(paths)
 
@@ -85,7 +90,9 @@ def loop(case_id: str, dossier_dir: Path | None = None, once: bool = False) -> N
                 else "balayage périodique"
             )
             log.info("watch: cycle (%s)", reason)
-            report = orchestrator.run_cycle(case_id, dossier_dir=dossier_dir)
+            report = orchestrator.run_cycle(
+                case_id, dossier_dir=dossier_dir, local_model=local_model
+            )
             print(report.summary())
             state = {
                 "case_id": case_id,
@@ -114,8 +121,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run Plane V continuously for one case.")
     parser.add_argument("--case-id", required=True)
     parser.add_argument("--once", action="store_true", help="run a single cycle and exit")
+    parser.add_argument("--local-llm", action="store_true", help="enable local adjudication")
+    parser.add_argument("--model", default=None, help="override the local model")
     args = parser.parse_args()
-    loop(args.case_id, once=args.once)
+    local_model = (args.model or ollama.AUTO) if (args.local_llm or args.model) else None
+    loop(args.case_id, once=args.once, local_model=local_model)
 
 
 if __name__ == "__main__":

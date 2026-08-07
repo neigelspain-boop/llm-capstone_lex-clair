@@ -29,7 +29,7 @@ from pathlib import Path
 
 from investigator import budget as budget_mod
 from investigator import catalog as catalog_mod
-from investigator import config, graph as graph_mod, render, store
+from investigator import config, graph as graph_mod, ollama, render, store
 from investigator.passes import attack, check, contradict, extract, search
 from investigator.schema import PassResult, RunContext
 
@@ -65,6 +65,7 @@ class CycleReport:
         return (
             f"investigator · case_id={self.case_id} obligations={self.obligations} "
             f"facts={self.facts} {passes} open={self.open_findings} "
+            f"local_calls={self.budget.get('local_used', 0)} "
             f"elapsed={self.elapsed_s:.1f}s cost=${self.budget.get('usd_spent_cycle', 0.0):.4f}"
         )
 
@@ -114,6 +115,7 @@ def run_cycle(
     dossier_dir: Path | None = None,
     budget: budget_mod.Budget | None = None,
     write_outbound: bool = False,
+    local_model: str | None = None,
 ) -> CycleReport:
     """Run every pass over one case and rewrite its digest."""
     started = time.time()
@@ -132,7 +134,10 @@ def run_cycle(
         budget=budget or budget_mod.Budget(),
         health=health,
         sha=_current_sha(),
+        local_model=local_model,
     )
+    if local_model:
+        log.info("orchestrator: local adjudication enabled (%s)", local_model)
 
     report = CycleReport(
         case_id=case_id, obligations=len(case_catalog), facts=len(case_graph.facts)
@@ -166,6 +171,28 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run one Plane V investigation cycle.")
     parser.add_argument("--case-id", required=True)
     parser.add_argument(
+        "--local-llm",
+        action="store_true",
+        help="enable the local-model adjudication tiers (Ollama on localhost). "
+        "Deterministic verdicts are computed first either way; a model can only "
+        "move each one in the single direction its pass documents.",
+    )
+    parser.add_argument(
+        "--model",
+        default=None,
+        help=f"override the local model for every tier, e.g. {config.OLLAMA_MODEL_JUDGMENT}. "
+        f"Default: {config.OLLAMA_MODEL_RESCUE} for the high-volume rescue tier, "
+        f"{config.OLLAMA_MODEL_JUDGMENT} for comparative judgment.",
+    )
+    parser.add_argument(
+        "--local-calls",
+        type=int,
+        default=config.LOCAL_CALLS_PER_CYCLE,
+        help="per-cycle cap on local model calls; the cap is what makes a cycle "
+        "terminate, and hitting it marks the pass partial rather than resolving "
+        "what it never reached.",
+    )
+    parser.add_argument(
         "--outbound",
         action="store_true",
         help="also write the gated outbound extract (refused for a case that is "
@@ -173,7 +200,22 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    report = run_cycle(args.case_id, write_outbound=args.outbound)
+    local_model = None
+    if args.local_llm or args.model:
+        local_model = args.model or ollama.AUTO
+        if not ollama.is_available():
+            parser.error(
+                "Ollama is not reachable at "
+                f"{config.OLLAMA_URL} — start it, or drop --local-llm to run "
+                "the deterministic tier only."
+            )
+
+    report = run_cycle(
+        args.case_id,
+        write_outbound=args.outbound,
+        budget=budget_mod.Budget(local_calls=args.local_calls),
+        local_model=local_model,
+    )
     print(report.summary())
     print(f"digest: {report.digest_path}")
 

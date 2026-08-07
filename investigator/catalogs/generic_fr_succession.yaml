@@ -60,7 +60,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la restitution due à l'extinction du quasi-usufruit.
@@ -96,7 +96,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la fourniture d'une caution ni une dispense expresse à l'acte constitutif.
@@ -134,7 +134,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       le placement ou le remploi des sommes soumises à l'usufruit.
@@ -187,7 +187,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une libération de fonds successoraux
       est attestée sans qu'aucun fait n'établisse la proportion opposable ni l'accord
@@ -219,7 +219,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'établissement de l'acte fixant l'étendue des droits de chaque indivisaire.
@@ -256,7 +256,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : un partage ou une dévolution est
       attesté sans qu'aucun fait n'établisse le prélèvement préalable dû aux créanciers
@@ -297,7 +297,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une opération de liquidation est
       attestée sans qu'aucun fait n'établisse l'inscription au passif de la dette
@@ -339,7 +339,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : un manquement est attesté sans
       qu'aucun fait n'établisse une régularisation ou une réparation subséquente.
@@ -379,7 +379,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la réclamation adressée à l'assuré qui conditionne la garantie.
@@ -417,7 +417,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : la voie de l'action directe contre
       l'assureur n'est attestée par aucun fait du dossier.
@@ -458,7 +458,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une demande de pièces est attestée
       sans qu'aucun fait n'établisse la délivrance correspondante.
@@ -496,7 +496,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une mise en cause est attestée sans
       qu'aucun fait n'établisse la mobilisation de la garantie de responsabilité

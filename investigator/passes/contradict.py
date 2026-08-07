@@ -27,7 +27,7 @@ import logging
 from dataclasses import dataclass
 from itertools import combinations
 
-from investigator import config, store
+from investigator import cache, config, ollama, store
 from investigator.graph import MATCH_FIELDS, CaseGraph
 from investigator.lexicon import action_polarity, parse_amounts_eur, parse_party_counts
 from investigator.schema import PassResult, RunContext
@@ -138,6 +138,55 @@ def candidate_pairs(graph: CaseGraph, max_pairs: int = config.CONTRADICT_MAX_PAI
 # ========== the pass ==========
 
 
+ADJUDICATE_SYSTEM_PROMPT = """Tu es un analyste juridique. On te donne DEUX citations \
+extraites d'un même dossier, et la raison pour laquelle elles ont été rapprochées.
+
+Question unique : ces deux affirmations peuvent-elles être vraies toutes les deux ?
+
+Règles :
+- Deux formulations différentes du même fait ne sont PAS incompatibles.
+- Deux montants, dates ou dénombrements différents pour le même objet le sont.
+- Dans le doute, réponds false.
+
+Réponds en JSON strict : {"incompatible": true|false, "motif": "<une phrase>"}"""
+
+
+def _adjudicate(ctx: RunContext, pair: "FactPair") -> tuple[dict | None, dict | None]:
+    """Ask the 30B whether one candidate pair is genuinely incompatible.
+
+    Genuine comparative judgment over two short quotes — the documented use for
+    the larger model. The pair list is produced deterministically and is
+    already stable, so the model only annotates; it never decides which pairs
+    exist, and a `None` verdict leaves the Layer-0 collision standing.
+    """
+    fa, fb = ctx.graph.facts[pair.fact_id_a], ctx.graph.facts[pair.fact_id_b]
+    qa = fa.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
+    qb = fb.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
+    subject = f"contradict|{ctx.case_id}|{pair.fact_id_a}|{pair.fact_id_b}"
+    content_hash = cache.content_hash_for_text(f"{qa}||{qb}")
+    version = config.PROMPT_VERSIONS["contradict"]
+
+    cached = cache.get(ctx.paths, PASS_NAME, version, subject, content_hash)
+    if cached is not None:
+        return cached, cached.get("_self_consistency")
+    if not ctx.budget.take_local():
+        return None, None
+    verdict, meta = ollama.call_self_consistency(
+        ADJUDICATE_SYSTEM_PROMPT,
+        f"Rapprochement : {BUCKET_LABELS[pair.bucket]} ({pair.bucket_key})\n\n"
+        f"Citation A :\n« {qa} »\n\nCitation B :\n« {qb} »",
+        verdict_key="incompatible",
+        think=True,
+        model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT),
+    )
+    if verdict is None:
+        return None, None
+    result = dict(verdict)
+    result["_self_consistency"] = meta
+    cache.set(ctx.paths, PASS_NAME, version, subject, content_hash, result)
+    return result, meta
+
+
 def run(ctx: RunContext) -> PassResult:
     """Report every candidate collision.
 
@@ -148,9 +197,23 @@ def run(ctx: RunContext) -> PassResult:
     all_pairs = candidate_pairs(graph, max_pairs=10**9)
     kept = all_pairs[: config.CONTRADICT_MAX_PAIRS]
 
+    adjudicating = ctx.local_model is not None and ollama.is_available()
     findings = []
     for pair in kept:
         fa, fb = graph.facts[pair.fact_id_a], graph.facts[pair.fact_id_b]
+
+        verdict = meta = None
+        if adjudicating:
+            verdict, meta = _adjudicate(ctx, pair)
+            if verdict is None and ctx.budget.local_exhausted():
+                all_pairs = all_pairs + [pair]  # force complete=False below
+
+        if verdict is not None and verdict.get("incompatible") is not True:
+            # Adjudicated as compatible: two ways of saying one thing. Drop it
+            # rather than leaving a collision the reader must re-dismiss.
+            continue
+
+        adjudicated = verdict is not None and verdict.get("incompatible") is True
         findings.append(
             store.finding(
                 PASS_NAME,
@@ -164,13 +227,19 @@ def run(ctx: RunContext) -> PassResult:
                     f"clé={pair.bucket_key} · "
                     f"{pair.fact_id_a} [{fa.actor_role} {fa.date}] « {fa.verbatim_quote[:110]} » ‖ "
                     f"{pair.fact_id_b} [{fb.actor_role} {fb.date}] « {fb.verbatim_quote[:110]} »"
+                    + (f" · motif={verdict.get('motif', '')[:120]}" if adjudicated else "")
                 ),
-                severity="low",
-                confidence="low",
+                severity="medium" if adjudicated else "low",
+                confidence="medium" if adjudicated else "low",
                 # Layer 0 alone cannot tell an incompatibility from a
-                # coincidence of vocabulary; the tier says so.
-                tier="T5",
-                tier_basis="collision_deterministe_non_adjugee",
+                # coincidence of vocabulary; the tier says so. An adjudicated
+                # pair rises to T4 — a model verdict with consensus, but with
+                # no deterministic corroboration behind it.
+                tier="T4" if adjudicated else "T5",
+                tier_basis=(
+                    "collision_adjugee_par_modele_local" if adjudicated
+                    else "collision_deterministe_non_adjugee"
+                ),
                 externalisable=False,
                 evidence_pointers={
                     "fact_ids": [pair.fact_id_a, pair.fact_id_b],

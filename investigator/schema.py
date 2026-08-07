@@ -326,6 +326,10 @@ class RunContext:
     budget: "Budget"
     health: GraphHealth
     sha: str | None = None
+    # None means "deterministic only" — the Phase 1 default. A model name here
+    # enables the adjudication tiers; each pass documents the single direction
+    # in which a model may move its own verdict.
+    local_model: str | None = None
 
 
 # ========== tier derivation ==========

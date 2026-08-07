@@ -50,7 +50,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la constitution du compte spécial destiné à recevoir les sommes et titres
@@ -82,7 +82,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       une notification de changement dans la désignation du compte.
@@ -120,7 +120,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'information périodique du nu-propriétaire sur les opérations réalisées sur
@@ -153,7 +153,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       les instructions qui devaient être données à l'établissement teneur du compte.
@@ -193,7 +193,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une cession de titres est attestée
       sans qu'aucun fait n'établisse le remploi intégral du prix.
@@ -234,7 +234,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'inscription de la créance de restitution au passif de la déclaration de
@@ -277,7 +277,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la remise de l'extrait de convention au détenteur d'actifs
@@ -327,7 +327,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T1
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       le prélèvement de la créance de restitution avant dévolution successorale.
@@ -366,7 +366,7 @@ obligations:
           min_count: 1
     absence_tier_cap: T3
     presence_tier_cap: T2
-    adjudicate: none
+    adjudicate: llm_local
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : la convention écarte toute sûreté
       sans qu'aucun fait du dossier n'atteste le conseil délivré sur la portée de

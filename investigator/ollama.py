@@ -1,0 +1,150 @@
+"""The only place Plane V talks to a local model.
+
+Forked from `scripts/local_audit/ollama_client.py` for the reason in ADR #70,
+with the request budget threaded through so a pass can report `complete=False`
+when it runs out rather than silently truncating.
+
+Two contracts callers must honour, both learned in the original harness:
+
+- **`None` means "no verdict", never "no".** A timeout, a transport error, or
+  unparseable output must never be read as a negative answer, and must never be
+  cached — the next cycle simply retries. Reading a failure as "no" is how a
+  transient blip becomes a permanent wrong finding.
+- **Nothing here decides anything on its own.** Every call answers one narrow
+  question about one short span. The model never sees the obligation set, never
+  sees the corpus, and never chooses which finding to emit; the deterministic
+  pass has already done that.
+
+There are no transport retries. Self-consistency exists for *precision*, not
+reliability: three samples at a low temperature, and a verdict only when they
+agree. Reliability comes from not caching failures.
+"""
+from __future__ import annotations
+
+import json
+import logging
+from collections import Counter
+
+import requests
+
+from investigator import config
+
+log = logging.getLogger(__name__)
+
+
+# ========== single call ==========
+
+
+def call_json(
+    system_prompt: str,
+    user_prompt: str,
+    temperature: float = 0.0,
+    think: bool | None = None,
+    model: str | None = None,
+    timeout: int | None = None,
+) -> dict | list | None:
+    """One structured call. Returns None on any failure — never raises."""
+    body = {
+        "model": model or config.OLLAMA_MODEL_RESCUE,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        "stream": False,
+        "format": "json",
+        "think": config.OLLAMA_THINK if think is None else think,
+        "keep_alive": config.OLLAMA_KEEP_ALIVE,
+        "options": {"temperature": temperature, "num_ctx": config.OLLAMA_NUM_CTX},
+    }
+    try:
+        response = requests.post(
+            config.OLLAMA_URL, json=body, timeout=timeout or config.OLLAMA_TIMEOUT
+        )
+        response.raise_for_status()
+        text = response.json()["message"]["content"]
+    except (requests.exceptions.RequestException, KeyError, ValueError) as exc:
+        log.warning("ollama: call failed (%s) — no verdict", exc)
+        return None
+
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.strip("`").strip()
+        if text.lower().startswith("json"):
+            text = text[4:].strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(text)
+            return obj
+        except json.JSONDecodeError:
+            log.warning("ollama: unparseable response — no verdict: %s", text[:200])
+            return None
+
+
+# ========== self-consistency ==========
+
+
+def call_self_consistency(
+    system_prompt: str,
+    user_prompt: str,
+    verdict_key: str,
+    n: int = config.SELF_CONSISTENCY_RUNS,
+    temperature: float = config.SELF_CONSISTENCY_TEMPERATURE,
+    agree_threshold: int = config.SELF_CONSISTENCY_AGREE_THRESHOLD,
+    think: bool | None = None,
+    model: str | None = None,
+) -> tuple[dict | None, dict]:
+    """Sample `n` times and return a verdict only if enough samples agree.
+
+    Returns `(verdict, meta)`. A `None` verdict means no consensus or no usable
+    response — the caller must treat it as "not adjudicated" and leave the
+    deterministic result standing.
+    """
+    results = []
+    for _ in range(n):
+        out = call_json(system_prompt, user_prompt, temperature, think, model)
+        if isinstance(out, dict) and verdict_key in out:
+            results.append(out)
+
+    if not results:
+        return None, {"runs": n, "agree": 0, "votes": {}}
+
+    votes = Counter(str(r[verdict_key]) for r in results)
+    top, count = votes.most_common(1)[0]
+    meta = {"runs": n, "agree": count, "votes": dict(votes), "model": model or config.OLLAMA_MODEL_RESCUE}
+    if count < agree_threshold:
+        return None, meta
+    return next(r for r in results if str(r[verdict_key]) == top), meta
+
+
+# ========== model selection ==========
+
+# Sentinel meaning "each pass picks its own default". `--local-llm` sets this,
+# so the volume tier stays on the GPU-resident 14B while comparative judgment
+# goes to the 30B; `--model X` overrides both.
+AUTO = "auto"
+
+
+def resolve_model(requested: str | None, default: str) -> str:
+    """The model a pass should actually call."""
+    if requested in (None, AUTO):
+        return default
+    return requested
+
+
+# ========== availability ==========
+
+
+def is_available(timeout: int = 5) -> bool:
+    """Whether Ollama is reachable at all.
+
+    Checked once before a pass spends its budget, so an unreachable daemon
+    produces one clear log line and `complete=False` rather than a slow parade
+    of identical timeouts.
+    """
+    try:
+        requests.get(config.OLLAMA_URL.replace("/api/chat", "/api/tags"), timeout=timeout)
+        return True
+    except requests.exceptions.RequestException:
+        return False
