@@ -25,7 +25,7 @@ import logging
 
 from dotenv import load_dotenv
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import estimate_cost_usd, get_openrouter_client
 
 
 load_dotenv()
@@ -35,27 +35,25 @@ log = logging.getLogger(__name__)
 
 # ========== answer model catalog (ADR #45) ==========
 
+# Per-model call configuration. Rates deliberately absent: they live in
+# ingestion.clients.MODEL_RATES_USD_PER_M keyed by model_id (ADR #68). This
+# catalog carried its own copy, which is how eval/ and ingestion/dossier/
+# ended up with two more.
 ANSWER_MODELS: dict[str, dict] = {
     "gpt-4o-mini": {
         "model_id": "openai/gpt-4o-mini",
-        "cost_input_per_m": 0.15,
-        "cost_output_per_m": 0.60,
         "reasoning_effort": None,
         "max_tokens": 500,
         "label_fr": "⚡ Rapide (GPT-4o-mini)",
     },
     "opus-4.7": {
         "model_id": "anthropic/claude-opus-4.7",
-        "cost_input_per_m": 15.0,
-        "cost_output_per_m": 75.0,
         "reasoning_effort": "max",
         "max_tokens": 4096,
         "label_fr": "🧠 Réflexion approfondie (Claude Opus 4.7)",
     },
     "kimi-k3": {
         "model_id": "moonshotai/kimi-k3",
-        "cost_input_per_m": 3.0,
-        "cost_output_per_m": 15.0,
         "reasoning_effort": "max",
         "max_tokens": 4096,
         "label_fr": "🔬 Réflexion approfondie (Kimi K3)",
@@ -96,9 +94,10 @@ def generate(prompt: str, model_key: str = DEFAULT_ANSWER_MODEL_KEY) -> tuple[st
     usage = {
         "prompt_tokens": response.usage.prompt_tokens,
         "completion_tokens": response.usage.completion_tokens,
-        "cost_usd": (
-            response.usage.prompt_tokens * cfg["cost_input_per_m"] / 1_000_000
-            + response.usage.completion_tokens * cfg["cost_output_per_m"] / 1_000_000
+        "cost_usd": estimate_cost_usd(
+            cfg["model_id"],
+            response.usage.prompt_tokens,
+            response.usage.completion_tokens,
         ),
         "model_id": cfg["model_id"],
         "model_key": model_key,

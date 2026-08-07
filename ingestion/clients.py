@@ -59,6 +59,80 @@ def get_anthropic_client():
     return get_openrouter_client()
 
 
+# ========== cost catalog (ADR #68) ==========
+
+# USD per MILLION tokens (input, output), keyed by OpenRouter model slug.
+# The single source of these numbers, which previously existed in three
+# incompatible representations across five files: per-million pairs
+# (eval/llm_eval.py COST_PER_MTOKEN), per-token pairs (_EST_*_USD_PER_TOKEN
+# in distill/mentions/resolve/compliance), and a catalog dict
+# (rag/generate.py ANSWER_MODELS). All three agreed on every shared model —
+# they encode CLAUDE.md's model palette — so unifying them changed no number.
+# Agreement was luck, not design: nothing kept them in step.
+#
+# Per-million, not per-token, because that is how every provider publishes
+# and how the palette table reads, so a rate can be checked against a
+# pricing page without arithmetic.
+MODEL_RATES_USD_PER_M: dict[str, tuple[float, float]] = {
+    "openai/gpt-4o-mini":           (0.15, 0.60),
+    "anthropic/claude-haiku-4.5":   (1.00, 5.00),
+    "anthropic/claude-opus-4.7":    (15.0, 75.0),
+    "moonshotai/kimi-k3":           (3.00, 15.0),
+    "mistralai/mistral-small-2603": (0.15, 0.60),
+}
+
+
+def estimate_cost_usd(model_id: str, prompt_tokens: int, completion_tokens: int) -> float:
+    """Estimated USD for a call, from MODEL_RATES_USD_PER_M.
+
+    Raises KeyError for an unlisted model. Deliberately not a silent 0.0:
+    ADR #45 records that flow.py::_compute_cost was deleted precisely
+    because it zeroed cost for every non-default model, and a dry-run
+    preview that under-reports is worse than one that fails.
+
+    Estimates only. Real calls should prefer the provider's own
+    `usage.cost` — see extract_usage.
+    """
+    rate_in, rate_out = MODEL_RATES_USD_PER_M[model_id]
+    return (prompt_tokens * rate_in + completion_tokens * rate_out) / 1_000_000
+
+
+def extract_usage(response, model_id: str | None = None) -> dict:
+    """Normalize a response's token usage, preferring the provider's cost.
+
+    Args:
+        response: an OpenAI-compatible response object, possibly lacking usage.
+        model_id: OpenRouter slug. When given and the provider reported no
+            cost, an estimate from MODEL_RATES_USD_PER_M fills in and
+            "estimated" is True.
+
+    Returns {prompt_tokens, completion_tokens, cost_usd, estimated}. cost_usd
+    is None only when the provider reported none and no model_id was passed.
+
+    Reads defensively: OpenRouter's OpenAI-compatible endpoint uses
+    prompt_tokens/completion_tokens, the Responses API uses
+    input_tokens/output_tokens, and a mocked client may carry neither.
+    """
+    usage = getattr(response, "usage", None)
+    prompt = (getattr(usage, "prompt_tokens", None)
+              or getattr(usage, "input_tokens", None) or 0)
+    completion = (getattr(usage, "completion_tokens", None)
+                  or getattr(usage, "output_tokens", None) or 0)
+    cost = getattr(usage, "cost", None) if usage is not None else None
+
+    estimated = False
+    if cost is None and model_id is not None:
+        cost = estimate_cost_usd(model_id, prompt, completion)
+        estimated = True
+
+    return {
+        "prompt_tokens": prompt,
+        "completion_tokens": completion,
+        "cost_usd": cost,
+        "estimated": estimated,
+    }
+
+
 # ========== response plumbing (ADR #67) ==========
 
 

@@ -134,6 +134,8 @@ SLIMMING_DOCSTRING_MIN_LINES = 80
 # zero calls, so this only bites on the first sweep after a rule change.
 SLIMMING_LLM_MAX_CALLS_PER_CYCLE = 24
 VULTURE_MIN_CONFIDENCE = 60
+# The one file allowed to define model price constants (ADR #68).
+RATE_CATALOG_FILE = "ingestion/clients.py"
 
 # ========== self-consistency ==========
 

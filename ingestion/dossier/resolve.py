@@ -43,7 +43,8 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ingestion.clients import get_openrouter_client, parse_json_list
+from ingestion.clients import (estimate_cost_usd, extract_usage,
+                              get_openrouter_client, parse_json_list)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -58,12 +59,6 @@ RESOLVE_MAX_OUTPUT_TOKENS = 2048
 RESOLVE_TEMPERATURE = 0.0
 RESOLVE_SCHEMA_VERSION = 1
 MAX_FACTS_PER_ROLE = 20  # caps prompt size; facts are date-sorted before truncation
-
-# Rough per-token USD rates for --dry-run token/cost estimates only, matching
-# the anthropic/claude-haiku-4.5 rate in the model palette (~1 / ~5 per M) —
-# same constants as distill.py and mentions.py.
-_EST_PROMPT_USD_PER_TOKEN = 1e-6
-_EST_COMPLETION_USD_PER_TOKEN = 5e-6
 
 _CONFIDENCE_RANK = {"low": 0, "medium": 1, "high": 2}
 
@@ -263,10 +258,7 @@ def _call_haiku_for_role(
     if dry_run:
         prompt_tokens = (len(SYSTEM_PROMPT) + len(user_message)) // 4
         completion_tokens = RESOLVE_MAX_OUTPUT_TOKENS // 4
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
+        cost = estimate_cost_usd(RESOLVE_MODEL, prompt_tokens, completion_tokens)
         return None, {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -286,21 +278,7 @@ def _call_haiku_for_role(
     )
     raw = (response.choices[0].message.content or "").strip()
 
-    usage = getattr(response, "usage", None)
-    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
-    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
-    cost = getattr(usage, "cost", None) if usage is not None else None
-    if cost is None:
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
-    usage_dict = {
-        "prompt_tokens": prompt_tokens,
-        "completion_tokens": completion_tokens,
-        "cost_usd": cost,
-        "estimated": False,
-    }
+    usage_dict = extract_usage(response, RESOLVE_MODEL)
 
     persons = _parse_persons_json(raw, role_id)
     return persons, usage_dict

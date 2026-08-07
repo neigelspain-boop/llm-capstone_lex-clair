@@ -55,7 +55,8 @@ from typing import Literal, NamedTuple
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ValidationError
 
-from ingestion.clients import get_openrouter_client, strip_json_fences
+from ingestion.clients import (estimate_cost_usd, extract_usage,
+                               get_openrouter_client, strip_json_fences)
 from ingestion.dossier.facts import ActorRole, DOSSIER_DIR, Fact, RoleAmbiguity
 from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT, DIVERGENCE_ANALYSIS_SYSTEM_PROMPT
 from rag.retrieve import retrieve
@@ -77,34 +78,15 @@ MAX_FACTS_PER_ROLE = 30  # see _cap_facts_chronologically
 COMPLIANCE_MODEL_ALTERNATIVES = ["anthropic/claude-opus-4.7", "moonshotai/kimi-k3"]
 DIVERGENCE_MODEL_ID = "anthropic/claude-haiku-4.5"
 
-# --dry-run cost rates per compliance_model_id, USD per token (in, out).
-# COMPLIANCE_MODEL_ID's entry mirrors _EST_*_USD_PER_TOKEN above; falls back
-# to that pair for any model not listed here.
-_COMPLIANCE_MODEL_DRY_RUN_RATES: dict[str, tuple[float, float]] = {
-    "anthropic/claude-opus-4.7": (15e-6, 75e-6),
-    "moonshotai/kimi-k3": (3e-6, 15e-6),
-}
-
-# --dry-run cost rates + completion-token estimate for the divergence call
-# (Haiku 4.5, CLAUDE.md model palette: ~$1/~$5 per M). Unlike
-# _DRY_RUN_EST_COMPLETION_TOKENS above, this isn't back-solved from a real
-# multi-cluster bill — divergence output is a handful of obligations plus a
-# short summary, bounded by RELEVANT_STATUTE_K, so a rough estimate suffices.
-_DIVERGENCE_EST_PROMPT_USD_PER_TOKEN = 1e-6
-_DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN = 5e-6
+# Completion-token estimate for the divergence call's --dry-run preview.
+# Unlike _DRY_RUN_EST_COMPLETION_TOKENS below this isn't back-solved from a
+# real multi-cluster bill — divergence output is a handful of obligations
+# plus a short summary, bounded by RELEVANT_STATUTE_K, so a rough estimate
+# suffices. Its USD rates come from clients.MODEL_RATES_USD_PER_M keyed on
+# DIVERGENCE_MODEL_ID (ADR #68); this file previously carried its own
+# per-token copy of the Haiku 4.5 palette rate.
 _DIVERGENCE_EST_COMPLETION_TOKENS = 800
 
-# Per-token USD rates for --dry-run cost estimates only, matching the
-# documented model palette rate for anthropic/claude-opus-4.7 in CLAUDE.md
-# ($15 / $75 per M in/out). Previously calibrated from a single tiny live
-# OpenRouter call (22 prompt / 333 completion tokens, $0.008435 total) that
-# landed at 1/3 this rate for unexplained reasons and was never re-checked
-# against a real multi-cluster bill — caught 2026-08-02 when this estimate
-# undershot the actual ADR #49 real-run cost (~$22 for 46 clusters) by
-# ~7x. Real (non-dry-run) calls use the exact `usage.cost` OpenRouter
-# returns instead; this constant only feeds the --dry-run preview.
-_EST_PROMPT_USD_PER_TOKEN = 15e-6
-_EST_COMPLETION_USD_PER_TOKEN = 75e-6
 # --dry-run only: no real max_tokens cap on the live call (ADR #49), so
 # there's no cap to reference for a completion-length estimate — reasoning-
 # effort="max" output is prompt-dependent and can run large. Back-solved
@@ -631,11 +613,11 @@ def _call_compliance_llm(
     reusing it across two different models on the same role/facts would
     collide and silently return one model's cached entries for the other.
     Otherwise, in --dry-run mode, no API call is made: tokens are estimated
-    via a char/4 heuristic and cost via the rate looked up for
-    compliance_model_id in _COMPLIANCE_MODEL_DRY_RUN_RATES (falling back to
-    _EST_*_USD_PER_TOKEN for an unlisted model), with estimated=True.
+    via a char/4 heuristic and cost from clients.MODEL_RATES_USD_PER_M keyed
+    on compliance_model_id (ADR #68), with estimated=True. An unlisted model
+    raises KeyError rather than reporting a silent $0.
     Otherwise, cost comes from OpenRouter's exact per-call usage.cost when
-    present, falling back to the same rate-lookup formula if it isn't.
+    present, falling back to the same catalog estimate if it isn't.
     "cache_key" is returned uncached (None on a cache hit) so the caller can
     persist a fresh entry without recomputing the fingerprint.
 
@@ -666,12 +648,9 @@ def _call_compliance_llm(
             }
 
     if dry_run:
-        prompt_rate, completion_rate = _COMPLIANCE_MODEL_DRY_RUN_RATES.get(
-            compliance_model_id, (_EST_PROMPT_USD_PER_TOKEN, _EST_COMPLETION_USD_PER_TOKEN)
-        )
         prompt_tokens = _estimate_tokens(COMPLIANCE_SYSTEM_PROMPT) + _estimate_tokens(user_message)
         completion_tokens = _DRY_RUN_EST_COMPLETION_TOKENS
-        cost = prompt_tokens * prompt_rate + completion_tokens * completion_rate
+        cost = estimate_cost_usd(compliance_model_id, prompt_tokens, completion_tokens)
         return [], {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -697,15 +676,10 @@ def _call_compliance_llm(
     finish_reason = getattr(response.choices[0], "finish_reason", None)
     entries = _parse_compliance_response(raw, role_id)
 
-    usage = getattr(response, "usage", None)
-    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
-    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
-    cost = getattr(usage, "cost", None) if usage is not None else None
-    if cost is None:
-        prompt_rate, completion_rate = _COMPLIANCE_MODEL_DRY_RUN_RATES.get(
-            compliance_model_id, (_EST_PROMPT_USD_PER_TOKEN, _EST_COMPLETION_USD_PER_TOKEN)
-        )
-        cost = prompt_tokens * prompt_rate + completion_tokens * completion_rate
+    call_usage = extract_usage(response, compliance_model_id)
+    prompt_tokens = call_usage["prompt_tokens"]
+    completion_tokens = call_usage["completion_tokens"]
+    cost = call_usage["cost_usd"]
 
     log.info(
         "compliance call · role_id=%s model_id=%s finish_reason=%s prompt_tokens=%d "
@@ -1143,10 +1117,7 @@ def _call_divergence_analysis(
     if dry_run:
         prompt_tokens = _estimate_tokens(DIVERGENCE_ANALYSIS_SYSTEM_PROMPT) + _estimate_tokens(user_message)
         completion_tokens = _DIVERGENCE_EST_COMPLETION_TOKENS
-        cost = (
-            prompt_tokens * _DIVERGENCE_EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN
-        )
+        cost = estimate_cost_usd(DIVERGENCE_MODEL_ID, prompt_tokens, completion_tokens)
         empty = {"shared_obligations": [], "divergent_obligations": [], "meta_summary": ""}
         return empty, {
             "prompt_tokens": prompt_tokens,
@@ -1167,15 +1138,10 @@ def _call_divergence_analysis(
     raw = response.choices[0].message.content or ""
     divergence = _parse_divergence_response(raw, role_id)
 
-    usage = getattr(response, "usage", None)
-    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
-    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
-    cost = getattr(usage, "cost", None) if usage is not None else None
-    if cost is None:
-        cost = (
-            prompt_tokens * _DIVERGENCE_EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _DIVERGENCE_EST_COMPLETION_USD_PER_TOKEN
-        )
+    call_usage = extract_usage(response, DIVERGENCE_MODEL_ID)
+    prompt_tokens = call_usage["prompt_tokens"]
+    completion_tokens = call_usage["completion_tokens"]
+    cost = call_usage["cost_usd"]
 
     log.info(
         "compliance compare: divergence call · role_id=%s prompt_tokens=%d completion_tokens=%d",

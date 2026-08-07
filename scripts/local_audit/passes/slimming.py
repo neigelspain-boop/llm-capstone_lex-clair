@@ -55,6 +55,11 @@ LAST_DIVERGENCE_COMPLETE = True
 
 _SCAN = list(config.PLANE_DIRS.values()) + ["tests"]
 
+# Names that denote a per-token or per-million model price. Deliberately
+# narrow: matching on "COST" alone would catch budget ceilings and kill
+# switches, which are policy, not prices.
+_RATE_NAME_RE = re.compile(r"USD_PER_TOKEN|PER_MTOKEN|USD_PER_M\b|_DRY_RUN_RATES")
+
 
 # ========== shared source index ==========
 
@@ -147,47 +152,46 @@ def _concept_findings(funcs, index) -> list[dict]:
 # ========== tier A: unregistered clone discovery ==========
 
 
-def _local_constant_findings(funcs, index) -> list[dict]:
-    """Concepts whose rule names a shared source that a member bypasses.
+def _stray_rate_constant_findings(files) -> list[dict]:
+    """Module-level per-token/per-million price constants outside the catalog.
 
-    Deterministic by design. The natural home for "does this span use a
-    module-local rate constant instead of the shared catalog" looks like an
-    LLM question and is not one: the span shows the identifier but never its
-    definition, so the model can only guess. An AST scan for the identifier
-    pattern decides it outright. See the calibration note on
-    llm_cost_from_usage in concepts.py.
+    Deterministic by design, and this is the check that replaced an LLM one.
+    Asked whether a span used a module-local rate, qwen3 quoted exactly the
+    right line and then judged it compliant 3/3 — correctly, because nothing
+    in a span reveals whether `_DIVERGENCE_EST_PROMPT_USD_PER_TOKEN` IS the
+    shared catalog. The deciding fact is where the name is *defined*, which
+    is a lookup, and static_tools.py's standing rule is that no LLM pass
+    re-derives what a deterministic tool answers.
+
+    Scoped to module-level assignments rather than to concept members: after
+    ADR #68 the cost sites all call the shared helper, so a span-scoped check
+    would have nothing left to look at, while the axiom it enforces — one
+    price table — still needs guarding against the next re-introduction.
     """
     out: list[dict] = []
-    for concept in concepts.REGISTRY:
-        if not concept.local_constant_pattern:
+    for path in files:
+        rel = str(path.relative_to(config.PROJECT_ROOT))
+        if rel == config.RATE_CATALOG_FILE:
+            continue  # the catalog itself
+        tree = si.parse_file(path)
+        if tree is None:
             continue
-        fp, err = concepts.resolve_fingerprint(concept, index, funcs)
-        if fp is None:
-            continue
-        pattern = re.compile(concept.local_constant_pattern)
-        by_key = {f"{f.file}::{f.qualname}": f for f in funcs}
-
-        for site in concepts.members(concept, fp, funcs):
-            if site.key in concepts.ACCEPTED_CLONES:
-                continue
-            func = by_key.get(site.key)
-            if func is None:
-                continue
-            names = {
-                n.id for stmt in func.body for n in ast.walk(stmt)
-                if isinstance(n, ast.Name) and site.span_start <= n.lineno <= site.span_end
-            }
-            hits = sorted(n for n in names if pattern.search(n))
-            if not hits:
-                continue
-            out.append(si.finding(
-                PASS_NAME, site.file, site.lineno,
-                f"`{site.qualname}` computes concept `{concept.id}` from "
-                f"module-local constants instead of a shared catalog.",
-                f"references {', '.join(hits)}. Rule: {concept.rule[-1]}",
-                severity=_severity_for(site.file, concept.severity),
-                confidence="high",
-            ))
+        for node in tree.body:
+            targets = (node.targets if isinstance(node, ast.Assign)
+                       else [node.target] if isinstance(node, ast.AnnAssign) else [])
+            for t in targets:
+                if not isinstance(t, ast.Name) or not _RATE_NAME_RE.search(t.id):
+                    continue
+                out.append(si.finding(
+                    PASS_NAME, rel, node.lineno,
+                    f"`{t.id}` is a module-local price constant outside the "
+                    f"shared rate catalog.",
+                    f"Model prices belong in {config.RATE_CATALOG_FILE}'s "
+                    f"MODEL_RATES_USD_PER_M (ADR #68), keyed by model slug. "
+                    f"Three copies of the same palette previously drifted apart "
+                    f"here.",
+                    severity=_severity_for(rel, "high"), confidence="high",
+                ))
     return out
 
 
@@ -601,7 +605,7 @@ def run(static_results: dict | None = None, dirs: list[str] | None = None) -> li
 
     out: list[dict] = []
     out += _concept_findings(funcs, index)
-    out += _local_constant_findings(funcs, index)
+    out += _stray_rate_constant_findings(files)
     out += _discovery_findings(funcs, index)
     out += _vulture_findings(static_results)
     out += _ruff_findings(static_results)

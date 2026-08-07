@@ -3585,3 +3585,96 @@ rather than just credentials, since that is what it now holds.
 - **A new `ingestion/llm_json.py`.** Cleaner by concept, but it is a second
   cross-plane-reachable module where the architecture allows one, and the
   helper is four lines.
+
+---
+
+## ADR #68 — One model-price catalog
+
+**Date:** 2026-08-07 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+Model prices existed in **three incompatible representations across five
+files**, all encoding the same table — CLAUDE.md's model palette:
+
+| Where | Form |
+|---|---|
+| `rag/generate.py::ANSWER_MODELS` | per-million, as two keys per catalog entry |
+| `eval/llm_eval.py::COST_PER_MTOKEN` | per-million, `{slug: (in, out)}` |
+| `eval/llm_eval.py` dry-run | **numeric literals inline**, duplicating the table 180 lines above them |
+| `ingestion/dossier/{distill,mentions,resolve}.py` | per-token, `_EST_*_USD_PER_TOKEN` module constants |
+| `rag/compliance.py` | per-token, twice: `_COMPLIANCE_MODEL_DRY_RUN_RATES` and `_DIVERGENCE_EST_*` |
+
+Alongside them, the same 8-line `getattr(response, "usage", ...)` block
+appeared verbatim in four files.
+
+Two things make this worth an ADR rather than a quiet refactor.
+
+**They all agreed, and that was luck.** Every shared model had the same rate
+in every representation, so unifying them changed no number. Nothing enforced
+that. `mentions.py` and `resolve.py` each carried a comment saying "same
+constants as distill.py" — a comment is not a mechanism, and comments of
+exactly that shape are what a reader trusts instead of checking.
+
+**The drift risk is asymmetric.** `compliance.py`'s constants carry a comment
+recording that they were once calibrated from a single tiny live call, landed
+at 1/3 the real rate, went unchecked, and undershot ADR #49's actual run by
+~7x. That correction was applied to one of the six copies.
+
+### Decision
+
+`ingestion.clients.MODEL_RATES_USD_PER_M` is the single price table, keyed by
+OpenRouter model slug, **per million tokens** — the unit providers publish
+and the palette table uses, so a rate can be checked against a pricing page
+without arithmetic.
+
+Two helpers beside it:
+
+- `estimate_cost_usd(model_id, prompt_tokens, completion_tokens)`. Raises
+  `KeyError` on an unlisted model rather than returning `0.0`. ADR #45 records
+  that `flow.py::_compute_cost` was deleted precisely because it silently
+  zeroed cost for every non-default model; a dry-run that under-reports is
+  worse than one that fails.
+- `extract_usage(response, model_id=None)`. Normalizes
+  `prompt_tokens`/`input_tokens` naming across SDK surfaces, prefers the
+  provider's own `usage.cost`, falls back to the catalog estimate, and flags
+  which happened via `estimated`.
+
+Home is `ingestion/clients.py` for the reason given in ADR #67: the call sites
+span Planes Ib, II and III, and this is the one shared-infra module the
+architecture sanctions.
+
+`ANSWER_MODELS` loses its two cost keys. It keeps what is genuinely per-model
+call configuration — `model_id`, `reasoning_effort`, `max_tokens`, `label_fr`.
+
+### Consequences
+
+- Six rate representations become one. Verified numerically equivalent at
+  every previously-used rate before committing.
+- The axiom is now *enforced*, not just documented: the slimming pass flags
+  any module-level constant matching `USD_PER_TOKEN` / `PER_MTOKEN` /
+  `_DRY_RUN_RATES` outside `ingestion/clients.py`. Re-introducing a local
+  price table is a finding, not a silent divergence.
+- `tests/test_rag_smoke.py`'s cost assertion reads the shared catalog rather
+  than `ANSWER_MODELS`, so it verifies the real source of truth.
+- Adding a model now means one catalog entry. Forgetting one is a loud
+  `KeyError` at the call site, not a `$0.00` line in a cost report.
+
+### Note on how this was found, and why the LLM did not find it
+
+This is `passes/duplication.py`'s motivating case, which it fails 3/3 on both
+qwen3:14b and qwen3:30b. The slimming pass's rewritten single-span prompt
+fixed the framing problem that caused that — the model stopped reasoning
+about the enclosing function and quoted exactly the right line,
+`prompt_tokens * _DIVERGENCE_EST_PROMPT_USD_PER_TOKEN` — and then judged it
+compliant, 3/3.
+
+It was right to, on the evidence it had. Nothing in a code span reveals
+whether that identifier *is* the shared catalog. The deciding fact is where
+the name is defined, which is a symbol lookup, and `static_tools.py`'s
+standing rule is that no LLM pass re-derives what a deterministic tool
+answers. The clause became an AST check and found all five sites, including
+the one the model missed.
+
+The generalisable rule, now in `concepts.py`: **before sending a clause to
+the model, check that the span actually contains what decides it.**

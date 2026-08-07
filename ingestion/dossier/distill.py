@@ -34,7 +34,7 @@ import os
 import re
 from pathlib import Path
 
-from ingestion.clients import get_openrouter_client
+from ingestion.clients import estimate_cost_usd, extract_usage, get_openrouter_client
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -49,11 +49,6 @@ DISTILL_MAX_OUTPUT_TOKENS = 500  # distilled_context is dense but short
 DISTILL_TEMPERATURE = 0.0  # determinism requirement
 CONTEXT_WINDOW_CHARS = 2000  # surrounding source text fed to Haiku per fact
 
-# Rough per-token USD rates for --dry-run token/cost estimates only, matching
-# the anthropic/claude-haiku-4.5 rate in the model palette (~1 / ~5 per M).
-# Real (non-dry-run) calls use the exact usage.cost OpenRouter returns.
-_EST_PROMPT_USD_PER_TOKEN = 1e-6
-_EST_COMPLETION_USD_PER_TOKEN = 5e-6
 _DRY_RUN_EST_COMPLETION_TOKENS = 150  # 2-5 dense sentences, well under the 500 cap
 
 SYSTEM_PROMPT = """\
@@ -208,10 +203,7 @@ def distill_fact(
     if dry_run:
         prompt_tokens = (len(SYSTEM_PROMPT) + len(user_message)) // 4
         completion_tokens = _DRY_RUN_EST_COMPLETION_TOKENS
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
+        cost = estimate_cost_usd(DISTILL_MODEL, prompt_tokens, completion_tokens)
         return "", {
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
@@ -232,23 +224,7 @@ def distill_fact(
     )
     distilled_context = (response.choices[0].message.content or "").strip()
 
-    usage = getattr(response, "usage", None)
-    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
-    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
-    cost = getattr(usage, "cost", None) if usage is not None else None
-    if cost is None:
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
-
-    return distilled_context, {
-        "prompt_tokens": prompt_tokens,
-        "completion_tokens": completion_tokens,
-        "cost_usd": cost,
-        "cache_hit": False,
-        "estimated": False,
-    }
+    return distilled_context, {**extract_usage(response, DISTILL_MODEL), "cache_hit": False}
 
 
 # ========== case-level orchestration ==========

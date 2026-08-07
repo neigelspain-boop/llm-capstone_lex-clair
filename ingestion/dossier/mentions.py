@@ -24,7 +24,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ingestion.clients import get_openrouter_client, parse_json_list
+from ingestion.clients import (estimate_cost_usd, extract_usage,
+                              get_openrouter_client, parse_json_list)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -38,12 +39,6 @@ _MENTIONS_MODEL = "anthropic/claude-haiku-4.5"
 _MENTIONS_MAX_OUTPUT_TOKENS = 4096
 _MENTIONS_TEMPERATURE = 0.0
 _MENTIONS_SCHEMA_VERSION = 1
-
-# Rough per-token USD rates for --dry-run token/cost estimates only, matching
-# the anthropic/claude-haiku-4.5 rate in the model palette (~1 / ~5 per M) —
-# same constants as distill.py.
-_EST_PROMPT_USD_PER_TOKEN = 1e-6
-_EST_COMPLETION_USD_PER_TOKEN = 5e-6
 
 SYSTEM_PROMPT = """\
 Tu es un extracteur d'entites nommees pour documents juridiques francais.
@@ -153,16 +148,7 @@ def _call_haiku_for_mentions(markdown: str, doc_id: str) -> tuple[list[dict] | N
     )
     raw = (response.choices[0].message.content or "").strip()
 
-    usage = getattr(response, "usage", None)
-    prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
-    completion_tokens = getattr(usage, "completion_tokens", 0) or 0
-    cost = getattr(usage, "cost", None) if usage is not None else None
-    if cost is None:
-        cost = (
-            prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-            + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-        )
-    usage_dict = {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, "cost_usd": cost}
+    usage_dict = extract_usage(response, _MENTIONS_MODEL)
 
     mentions = _parse_mentions_json(raw, doc_id)
     return mentions, usage_dict
@@ -218,10 +204,7 @@ def extract_mentions_for_case(case_id: str, *, force: bool = False, dry_run: boo
             markdown = md_path.read_text(encoding="utf-8")
             prompt_tokens = (len(SYSTEM_PROMPT) + len(markdown)) // 4
             completion_tokens = _MENTIONS_MAX_OUTPUT_TOKENS // 4  # rough upper-bound estimate
-            total_cost += (
-                prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-                + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-            )
+            total_cost += estimate_cost_usd(_MENTIONS_MODEL, prompt_tokens, completion_tokens)
             docs_processed += 1
     else:
         for md_path in md_paths:
@@ -280,10 +263,7 @@ def _cli() -> None:
                 markdown = md_path.read_text(encoding="utf-8")
                 prompt_tokens = (len(SYSTEM_PROMPT) + len(markdown)) // 4
                 completion_tokens = _MENTIONS_MAX_OUTPUT_TOKENS // 4
-                cost = (
-                    prompt_tokens * _EST_PROMPT_USD_PER_TOKEN
-                    + completion_tokens * _EST_COMPLETION_USD_PER_TOKEN
-                )
+                cost = estimate_cost_usd(_MENTIONS_MODEL, prompt_tokens, completion_tokens)
                 print(f"mentions dry-run · doc_id={args.doc_id} cost_est=${cost:.4f}")
             else:
                 result = extract_mentions_for_doc(args.case_id, args.doc_id, force=args.force)

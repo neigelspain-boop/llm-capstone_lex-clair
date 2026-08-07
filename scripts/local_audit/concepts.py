@@ -85,12 +85,6 @@ class Concept:
     # answers "not_applicable" and a real divergence goes unreported.
     span_extra_stmts: int = 0
     llm_divergence: bool = False
-    # Regex over identifier names appearing in a member's span. A match means
-    # the span reaches for a module-local constant where the concept requires
-    # a shared one. Deterministic on purpose — see the calibration note on
-    # llm_cost_from_usage for why this specific question must not go to the
-    # model.
-    local_constant_pattern: str = ""
     adr: str | None = None
     note: str = ""
     exempt: frozenset[str] = frozenset()
@@ -198,17 +192,13 @@ REGISTRY: tuple[Concept, ...] = (
     Concept(
         id="llm_cost_from_usage",
         title="derive prompt/completion tokens and a USD cost from a response's usage",
-        canonical="",
-        canonical_state="to_create",
-        detector="stmt_window",
-        seed_site="ingestion/dossier/distill.py::distill_fact",
-        seed_marker="completion_tokens = getattr",
-        window_k=4,
-        span_extra_stmts=1,
+        canonical="ingestion/clients.py::extract_usage",
+        canonical_state="exists",
+        detector="function_clone",
+        seed_site="ingestion/clients.py::extract_usage",
         severity="high",
-        adr="candidate #68",
+        adr="#68",
         llm_divergence=False,
-        local_constant_pattern=r"_EST_|USD_PER_TOKEN|_DRY_RUN_RATES",
         rule=(
             "Token counts are read from the response's usage object "
             "defensively, tolerating a missing usage attribute.",
@@ -224,6 +214,14 @@ REGISTRY: tuple[Concept, ...] = (
             "resolve), and a catalog dict (rag/generate.py ANSWER_MODELS). "
             "eval/llm_eval.py's dry-run additionally hardcodes rates that "
             "already exist in its own COST_PER_MTOKEN.\n\n"
+            "RESOLVED (ADR #68). One MODEL_RATES_USD_PER_M catalog in "
+            "clients.py, plus extract_usage/estimate_cost_usd. All three "
+            "representations agreed on every shared model — they encode "
+            "CLAUDE.md's palette — so unifying them changed no number; the "
+            "agreement was luck, since nothing kept them in step. The "
+            "'one price table' axiom is now enforced by the pass's stray "
+            "rate-constant check rather than by this concept, which after "
+            "the fix has only its canonical member left to match.\n\n"
             "CALIBRATION — the LLM tier was tried here and switched off. This "
             "is passes/duplication.py's motivating case, which it fails 3/3 on "
             "both qwen3:14b and qwen3:30b. The rewritten single-span, "

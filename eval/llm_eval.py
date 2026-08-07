@@ -42,7 +42,8 @@ from dotenv import load_dotenv
 from tqdm.auto import tqdm
 
 # ========== project imports ==========
-from ingestion.clients import get_openrouter_client, strip_json_fences
+from ingestion.clients import (estimate_cost_usd, extract_usage,
+                               get_openrouter_client, strip_json_fences)
 from rag import flow
 
 # ========== paths + constants ==========
@@ -65,15 +66,15 @@ JUDGE_MODELS = {
     "mistral": "mistralai/mistral-small-2603",
 }
 
-# USD per million tokens (input, output). Used for kill-switch aggregation.
-# Sources: OpenAI pricing page (gpt-4o-mini), OpenRouter Claude Haiku 4.5 and
-# Mistral Small 3.2 pages. Approximations acceptable -- kill switch is a
-# safety net, not accounting.
-COST_PER_MTOKEN = {
-    "openai/gpt-4o-mini":                        (0.15, 0.60),
-    "anthropic/claude-haiku-4.5":                (1.00, 5.00),
-    "mistralai/mistral-small-2603":  (0.15, 0.60),
-}
+# Rates now come from ingestion.clients.MODEL_RATES_USD_PER_M (ADR #68).
+# This module previously carried its own per-million table whose values
+# happened to match; nothing kept the two in step.
+
+# Per-judge-call token shape for the --dry-run estimate only. Rough by
+# design: the estimate is a headroom check before committing to a 200-sample
+# run, not accounting.
+_DRY_RUN_PROMPT_TOKENS = 500
+_DRY_RUN_COMPLETION_TOKENS = 100
 
 # ========== judge prompt template ==========
 # French, JSON contract explicit. Judges are told no markdown, no surrounding
@@ -94,29 +95,6 @@ Reponds en JSON strict, sans markdown, sans texte autour:
 VALID_VERDICTS = {"RELEVANT", "PARTLY_RELEVANT", "NON_RELEVANT"}
 
 # ========== usage + JSON parse helpers ==========
-
-def _extract_usage(response) -> dict:
-    """Normalize token usage across provider SDKs.
-
-    OpenAI Responses API uses input_tokens/output_tokens.
-    OpenAI Chat Completions (and OpenRouter's OpenAI-compatible endpoint)
-    use prompt_tokens/completion_tokens. Mistral matches classic.
-    """
-    usage = getattr(response, "usage", None)
-    if usage is None:
-        return {"prompt_tokens": 0, "completion_tokens": 0}
-    prompt = (
-        getattr(usage, "prompt_tokens", None)
-        or getattr(usage, "input_tokens", None)
-        or 0
-    )
-    completion = (
-        getattr(usage, "completion_tokens", None)
-        or getattr(usage, "output_tokens", None)
-        or 0
-    )
-    return {"prompt_tokens": int(prompt), "completion_tokens": int(completion)}
-
 
 def _parse_judge_response(raw: str) -> dict:
     """Parse a judge's raw text output into a validated verdict dict.
@@ -171,7 +149,8 @@ def judge(judge_name: str, question: str, answer: str) -> tuple[dict, dict]:
         model=JUDGE_MODELS[judge_name],
         messages=[{"role": "user", "content": prompt}],
     )
-    return _parse_judge_response(r.choices[0].message.content), _extract_usage(r)
+    return (_parse_judge_response(r.choices[0].message.content),
+            extract_usage(r, JUDGE_MODELS[judge_name]))
 
 
 # The three provider-diverse judges previously had a function each, identical
@@ -183,13 +162,22 @@ JUDGES = {name: partial(judge, name) for name in JUDGE_MODELS}
 # ========== cost helper ==========
 
 def _compute_judge_cost(judge_name: str, token_stats: dict) -> float:
-    """USD cost for one judge call, from COST_PER_MTOKEN's per-million rates."""
-    model = JUDGE_MODELS[judge_name]
-    inp_rate, out_rate = COST_PER_MTOKEN[model]
-    return (
-        token_stats.get("prompt_tokens", 0) * inp_rate
-        + token_stats.get("completion_tokens", 0) * out_rate
-    ) / 1_000_000
+    """USD for one judge call: the provider's own figure when it reported one.
+
+    extract_usage already prefers OpenRouter's exact usage.cost and falls
+    back to the shared catalog, so this only picks that result out. Kept as
+    a named function because run_eval's kill-switch aggregation reads better
+    for it, and the fallback keeps working if a caller hands over a usage
+    dict built without a model_id.
+    """
+    cost = token_stats.get("cost_usd")
+    if cost is not None:
+        return float(cost)
+    return estimate_cost_usd(
+        JUDGE_MODELS[judge_name],
+        token_stats.get("prompt_tokens", 0),
+        token_stats.get("completion_tokens", 0),
+    )
 
 
 # ========== resume-safe result loading ==========
@@ -244,19 +232,22 @@ def run_eval(n_samples: int, dry_run: bool = False) -> None:
 
     # ----- dry-run: cost estimate only, no API calls -----
     if dry_run:
-        # Numbers grounded in Day 4 measurements (answer gen ~$0.00047/query)
-        # and pricing table above. Round up 20% for headroom.
+        # Answer-gen figure is grounded in Day 4 measurements. Judge rates
+        # come from the shared catalog (ADR #68) — they were previously
+        # inlined here as numeric literals that duplicated this module's own
+        # rate table two screens above, the exact drift this batch removes.
         est_answer = 0.00047 * len(sample)
-        est_gpt = (500 * 0.15 + 100 * 0.60) / 1_000_000 * len(sample)     # rough per-call
-        est_claude = (500 * 1.00 + 100 * 5.00) / 1_000_000 * len(sample)
-        est_mistral = (500 * 0.15 + 100 * 0.60) / 1_000_000 * len(sample)
-        total = est_answer + est_gpt + est_claude + est_mistral
+        per_judge = {
+            name: estimate_cost_usd(model, _DRY_RUN_PROMPT_TOKENS,
+                                    _DRY_RUN_COMPLETION_TOKENS) * len(sample)
+            for name, model in JUDGE_MODELS.items()
+        }
+        total = est_answer + sum(per_judge.values())
         print(f"[llm_eval] DRY RUN estimate for {len(sample)} samples:")
         print(f"  answer generation (flow):     ~${est_answer:.4f}")
-        print(f"  judge gpt-4o-mini:            ~${est_gpt:.4f}")
-        print(f"  judge claude-haiku-4.5:       ~${est_claude:.4f}")
-        print(f"  judge mistral-small:          ~${est_mistral:.4f}")
-        print(f"  ----------------------------------------")
+        for name, model in JUDGE_MODELS.items():
+            print(f"  judge {model:<28} ~${per_judge[name]:.4f}")
+        print("  ----------------------------------------")
         print(f"  total:                        ~${total:.4f}")
         print(f"  kill switch:                  ${COST_KILL_TOTAL_USD:.2f}")
         return

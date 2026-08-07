@@ -24,6 +24,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from ingestion.clients import MODEL_RATES_USD_PER_M
 from ingestion.dossier.facts import ActorRole, Fact, RoleAmbiguity
 
 
@@ -328,9 +329,11 @@ def test_generate_cost_calculation_from_catalog(monkeypatch) -> None:
 
         _, usage = generate.generate("prompt", model_key=model_key)
 
+        # Rates live in the shared catalog, not in ANSWER_MODELS (ADR #68).
+        rate_in, rate_out = MODEL_RATES_USD_PER_M[cfg["model_id"]]
         expected_cost = (
-            prompt_tokens * cfg["cost_input_per_m"] / 1_000_000
-            + completion_tokens * cfg["cost_output_per_m"] / 1_000_000
+            prompt_tokens * rate_in / 1_000_000
+            + completion_tokens * rate_out / 1_000_000
         )
         assert usage["cost_usd"] == pytest.approx(expected_cost)
         assert usage["model_id"] == cfg["model_id"]
