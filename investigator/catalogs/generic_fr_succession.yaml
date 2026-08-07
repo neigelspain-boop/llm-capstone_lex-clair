@@ -44,6 +44,7 @@ obligations:
         kind: fact_match
         any_terms_fr: ["extinction", "décès", "deces", "fin de l'usufruit"]
         match_fields: [action, target, verbatim_quote, distilled_context]
+      trigger_select: latest
       deadline_days: null
       deadline_note_fr: "Exigible à l'extinction, sauf délai conventionnel plus long."
     expected_evidence:
@@ -247,6 +248,7 @@ obligations:
         kind: fact_match
         any_terms_fr: ["partage", "répartition", "dévolution", "devolution", "attribution des lots"]
         match_fields: [action, target, verbatim_quote, distilled_context]
+      trigger_select: latest
     expected_evidence:
       all_of:
         - kind: fact_match
@@ -287,6 +289,7 @@ obligations:
         kind: fact_match
         any_terms_fr: ["déclaration de succession", "declaration de succession", "liquidation", "droits de mutation"]
         match_fields: [action, target, verbatim_quote, distilled_context]
+      trigger_select: latest
     expected_evidence:
       all_of:
         - kind: fact_match

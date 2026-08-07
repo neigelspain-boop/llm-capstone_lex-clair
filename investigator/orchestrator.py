@@ -30,17 +30,19 @@ from pathlib import Path
 from investigator import budget as budget_mod
 from investigator import catalog as catalog_mod
 from investigator import config, graph as graph_mod, render, store
-from investigator.passes import check, extract, search
+from investigator.passes import attack, check, contradict, extract, search
 from investigator.schema import PassResult, RunContext
 
 log = logging.getLogger(__name__)
 
-# Order matters; see the module docstring. Phase 1 ships three of the five —
-# contradict and attack land on Day 3.
+# Order matters; see the module docstring. `attack` is last because it reads
+# the store the others just wrote.
 PASSES = (
     (extract.PASS_NAME, extract.run, None),
     (search.PASS_NAME, search.run, "search_offline"),
     (check.PASS_NAME, check.run, None),
+    (contradict.PASS_NAME, contradict.run, "contradict"),
+    (attack.PASS_NAME, attack.run, "attack"),
 )
 
 

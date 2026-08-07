@@ -462,6 +462,58 @@ llm-capstone_lex-clair/
 
 ---
 
+## Plane V — the investigator (ADR #70)
+
+RAG is reactive: it answers what you type. It cannot surface an obligation
+nobody asked about, and in a professional-liability dossier that is most of
+them. Plane V inverts the direction — it **generates the questions**, by
+comparing what *should* be in the documents (per statute, contract and
+deontology) against what *is*. Its primary signal is absence.
+
+```bash
+uv run python -m investigator.orchestrator --case-id vitrine   # one cycle
+uv run python -m investigator.watch --case-id vitrine          # run continuously
+cat data/dossier/vitrine/investigation/DIGEST.md
+```
+
+A full cycle over the 235-fact `vitrine` case runs **five passes in ~0.5s for
+$0.00** — no LLM call, no network. Every model tier is an additive adjudication
+layer over a pass that already works deterministically, so nothing here can fail
+because a model is down or wrong.
+
+| Pass | What it does |
+|---|---|
+| `graph` | substrate integrity — you may not claim "absent" over a corrupt graph |
+| `search` | validates the catalog's own citations against `data/chunks.csv` |
+| `check` | obligation × graph → `satisfied` / `gap` / `unverifiable` / `window_breach` |
+| `contradict` | deterministic candidate incompatibilities (amounts, dates, action polarity) |
+| `attack` | attaches the authored counter-argument to every strong finding |
+
+**What makes it honest.** Three properties, each of which cost a bug to learn:
+
+- **`gap` is not `unverifiable`.** A gap says the obligation was not performed;
+  `unverifiable` says the record needed to test it is not in the dossier. The
+  engine cannot silently upgrade "we didn't look" into "it didn't happen". The
+  public `vitrine` case has no `coverage.jsonl`, so every gap there caps at T5 —
+  and it says so rather than assuming the best case.
+- **Evidence of performance means conduct by the bearer.** Before that default
+  existed, one well-worded sentence from an unrelated party reported a duty
+  performed — a false `satisfied`, the one direction no later layer can repair.
+- **No deadline is computed from an ambiguous trigger.** This dossier recites
+  three different deaths across 45 dated facts. Taking the earliest produced a
+  6,593-day "breach" at `critical` severity from a 1981 recital. The engine now
+  refuses to assert lateness it cannot ground, and records why.
+
+Findings are tiered T1–T5 by a single derivation function, never asserted; they
+carry evidence pointers, an append-only calibration log, and confounders that a
+re-check cannot erase. One gate function is the only path to a shareable
+extract, and a real case is not on its allowlist.
+
+`docs/investigator-spec.md` is the contract; ADR #70 is the rationale. The local
+qwen3 adjudication layers are Phase 2 (`investigator/PLAN.md`).
+
+---
+
 ## Known issues
 
 - **6 tests in `tests/test_anonymize_smoke.py` currently fail**. These cover the date-shift logic in the anonymization pipeline (`ingestion/dossier/anonymize.py`). The shipped `vitrine` case was produced with an earlier pass and its content is stable; the failures indicate a regression in the date-shift assertion that surfaces if you re-run anonymization on a new case. The remaining **210 tests pass**, including all persons, compliance, retrieval, and RAG flow tests. Fix scheduled for Attempt 3.

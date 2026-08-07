@@ -13,7 +13,7 @@ the committed `vitrine`/`demo` cases and `data/chunks.csv`.
 from __future__ import annotations
 
 import json
-import os
+from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -771,6 +771,67 @@ def test_a_deadline_breach_needs_both_dates_known():
     assert check.evaluate(ob, undated).status == "satisfied"
 
 
+def test_no_deadline_is_computed_from_an_ambiguous_trigger():
+    """Regression: the corpus recites three different deaths.
+
+    Taking the earliest match measured a six-month deadline from a 1981 recital
+    and reported a 6593-day breach at `critical`. Where the dossier disagrees
+    about when the triggering event happened, the deadline is not testable and
+    the engine must say so instead of choosing.
+    """
+    from investigator.passes import check
+
+    ob = _obligation(
+        evidence_scope={"doc_id_patterns": ["*"]},
+        window={
+            "from_event": {"kind": "fact_match", "any_actor": True, "any_terms_fr": ["décès"]},
+            "deadline_days": 183,
+        },
+        expected_evidence={
+            "all_of": [{"kind": "fact_match", "any_terms_fr": ["extrait"], "after_trigger": True}]
+        },
+    )
+    ambiguous = _synthetic_graph(
+        [
+            ("d-f001", "defunt", "1981-02-05", "constate le décès"),
+            ("d-f002", "defunt", "2026-01-09", "constate le décès"),
+            ("d-f003", "notaire_redacteur", "2026-03-01", "transmet un extrait"),
+        ],
+        coverage={"d": "ok"},
+    )
+    ev = check.evaluate(ob, ambiguous)
+    assert ev.trigger_ambiguous is True
+    assert ev.status == "satisfied"
+    assert ev.window_breach_days is None
+
+    unambiguous = _synthetic_graph(
+        [
+            ("d-f002", "defunt", "2026-01-09", "constate le décès"),
+            ("d-f003", "notaire_redacteur", "2026-12-01", "transmet un extrait"),
+        ],
+        coverage={"d": "ok"},
+    )
+    later = check.evaluate(ob, unambiguous)
+    assert later.trigger_ambiguous is False
+    assert later.status == "window_breach"
+
+
+def test_trigger_select_picks_the_operative_end_of_the_range():
+    from investigator.passes import check
+
+    facts = [
+        ("d-f001", "defunt", "2020-01-01", "constate le décès"),
+        ("d-f002", "defunt", "2026-01-09", "constate le décès"),
+    ]
+    g = _synthetic_graph(facts, coverage={"d": "ok"})
+    event = {"kind": "fact_match", "any_actor": True, "any_terms_fr": ["décès"]}
+
+    earliest = _obligation(window={"from_event": event})
+    latest = _obligation(window={"from_event": event, "trigger_select": "latest"})
+    assert check._find_trigger(earliest, g)[1] == "d-f001"
+    assert check._find_trigger(latest, g)[1] == "d-f002"
+
+
 def test_scope_falls_back_to_where_the_bearer_appears():
     """Not "every document": 8 of 55 real documents have an unparsed gate verdict,
     so an all-documents scope would make every obligation unverifiable."""
@@ -974,6 +1035,220 @@ def test_claims_carry_no_volatile_numbers(vitrine_graph):
             # Whatever numbers survive must come from the citation, never from
             # the case: identical claims must render identically on any dossier.
             assert f["claim"] == f["claim"].format(), f["claim"]
+
+
+# ========== group 8b: contradict determinism ==========
+
+
+def test_contradict_pairs_are_stable_across_runs(vitrine_graph):
+    from investigator.passes import contradict
+
+    first = contradict.candidate_pairs(vitrine_graph)
+    second = contradict.candidate_pairs(vitrine_graph)
+    assert first == second
+
+
+def test_contradict_cap_truncates_a_stable_order(vitrine_graph):
+    """An unstable cap re-mints finding ids every cycle and destroys
+    resolve-on-fix — the easiest way to get this pass wrong."""
+    from investigator.passes import contradict
+
+    full = contradict.candidate_pairs(vitrine_graph, max_pairs=10**9)
+    capped = contradict.candidate_pairs(vitrine_graph, max_pairs=5)
+    assert capped == full[:5]
+
+
+def test_contradict_reports_incomplete_when_capped(vitrine_graph):
+    """A truncated sweep must not reconcile: the pairs beyond the cap were
+    never examined, and resolving them would report deletion as progress."""
+    from investigator.passes import contradict
+
+    result = contradict.run(_search_ctx([_obligation()], vitrine_graph))
+    if len(contradict.candidate_pairs(vitrine_graph, max_pairs=10**9)) > config.CONTRADICT_MAX_PAIRS:
+        assert result.complete is False
+
+
+def test_contradict_finds_a_planted_amount_collision():
+    from investigator.passes import contradict
+
+    g = _synthetic_graph(
+        [
+            ("a-f001", "notaire_redacteur", "2026-01-01", "prélève 23 477,34 € sur le compte"),
+            ("b-f001", "etablissement_bancaire", "2026-03-01", "vire 23477 euros à l'étude"),
+        ]
+    )
+    pairs = contradict.candidate_pairs(g)
+    assert any(p.bucket == "montant" and p.bucket_key == "23477" for p in pairs)
+
+
+def test_same_actor_same_day_is_corroboration_not_a_candidate():
+    from investigator.passes import contradict
+
+    g = _synthetic_graph(
+        [
+            ("a-f001", "notaire_redacteur", "2026-01-01", "prélève 1 000 €"),
+            ("a-f002", "notaire_redacteur", "2026-01-01", "confirme 1 000 €"),
+        ]
+    )
+    assert [p for p in contradict.candidate_pairs(g) if p.bucket == "montant"] == []
+
+
+def test_contradict_finds_opposite_polarity_on_the_same_target():
+    from investigator.passes import contradict
+
+    g = _synthetic_graph(
+        [
+            ("a-f001", "heritier", "2026-01-01", "accepte la baisse de prix"),
+            ("b-f001", "heritier", "2026-02-01", "refuse la baisse de prix"),
+        ]
+    )
+    assert any(p.bucket == "sens_action" for p in contradict.candidate_pairs(g))
+
+
+# ========== group 6b: attack seeds and preserves ==========
+
+
+def test_attack_seeds_catalog_confounders_onto_strong_findings(paths, vitrine_graph):
+    from investigator.passes import attack
+
+    ob = _obligation(confounders_seed=["La remise a pu être verbale."])
+    store.upsert_many(paths, [_finding(tier="T2")])
+    ctx = _search_ctx([ob], vitrine_graph)
+    ctx = schema.RunContext(**{**ctx.__dict__, "paths": paths})
+
+    attack.run(ctx)
+    stored = next(iter(store.load_all(paths).values()))
+    assert [c["text_fr"] for c in stored["confounders"]] == ["La remise a pu être verbale."]
+    assert stored["confounders"][0]["dispositive"] is False
+
+
+def test_attack_leaves_t5_findings_alone(paths, vitrine_graph):
+    """A T5 hypothesis is already flagged unreliable; a confounder would only
+    dress it up."""
+    from investigator.passes import attack
+
+    ob = _obligation(confounders_seed=["Contre-argument."])
+    store.upsert_many(paths, [_finding(tier="T5")])
+    ctx = _search_ctx([ob], vitrine_graph)
+    attack.run(schema.RunContext(**{**ctx.__dict__, "paths": paths}))
+    assert next(iter(store.load_all(paths).values()))["confounders"] == []
+
+
+def test_attack_is_idempotent_across_cycles(paths, vitrine_graph):
+    from investigator.passes import attack
+
+    ob = _obligation(confounders_seed=["Contre-argument."])
+    store.upsert_many(paths, [_finding(tier="T2")])
+    ctx = schema.RunContext(**{**_search_ctx([ob], vitrine_graph).__dict__, "paths": paths})
+    attack.run(ctx)
+    attack.run(ctx)
+    stored = next(iter(store.load_all(paths).values()))
+    assert len(stored["confounders"]) == 1
+    assert len(stored["calibration"]) == 1
+
+
+# ========== group 7c: the watch loop ==========
+
+
+def test_artifact_hashes_record_absence_as_a_value(tmp_path):
+    """A file appearing or disappearing must itself trigger a cycle."""
+    from investigator import watch
+
+    p = config.CasePaths.for_case("vitrine", dossier_dir=tmp_path)
+    hashes = watch.artifact_hashes(p)
+    assert hashes["facts.jsonl"] == "missing"
+    assert hashes["corpus:chunks.csv"] != "missing"
+
+
+def test_watch_records_incomplete_passes_for_the_next_cycle(tmp_path, monkeypatch):
+    """Backlog mode: an incomplete pass is what keeps the loop from sleeping."""
+    from investigator import watch
+
+    p = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    p.investigation_dir.mkdir(parents=True)
+    fake = orchestrator_report_stub()
+    monkeypatch.setattr(watch.orchestrator, "run_cycle", lambda *a, **k: fake)
+    watch.loop("demo", dossier_dir=tmp_path, once=True)
+    state = json.loads(p.watch_state.read_text(encoding="utf-8"))
+    assert state["incomplete_passes"] == ["contradict"]
+    assert state["cycle_seq"] == 1
+
+
+def orchestrator_report_stub():
+    from investigator.orchestrator import CycleReport
+
+    return CycleReport(
+        case_id="demo",
+        per_pass={"check": (3, True), "contradict": (40, False)},
+        open_findings=5,
+    )
+
+
+# ========== end-to-end ==========
+
+
+def test_a_full_cycle_is_idempotent(tmp_path):
+    """Two cycles with no input change: no new ids, nothing reconciled."""
+    import shutil
+
+    from investigator import orchestrator
+
+    src = config.DOSSIER_DIR / "demo"
+    dst = tmp_path / "demo"
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns("investigation"))
+
+    orchestrator.run_cycle("demo", dossier_dir=tmp_path)
+    p = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    first = store.load_all(p)
+    orchestrator.run_cycle("demo", dossier_dir=tmp_path)
+    second = store.load_all(p)
+
+    assert set(first) == set(second)
+    assert {f["status"] for f in second.values()} == {"open"}
+    assert all(second[k]["first_seen"] == first[k]["first_seen"] for k in first)
+
+
+def test_render_outbound_refuses_a_real_case(tmp_path):
+    from investigator import render
+
+    p = config.CasePaths.for_case("private", dossier_dir=tmp_path)
+    with pytest.raises(ValueError):
+        render.render_outbound(p, "private", {})
+    assert not p.outbound_dir.exists(), "a refused case must leave no partial output"
+
+
+def test_render_outbound_sources_only_through_the_gate(tmp_path, monkeypatch):
+    """Sentinel proof that there is no second path to an outbound artifact."""
+    from investigator import render
+
+    sentinel = [
+        {
+            "id": "sentinel0001",
+            "pass": "check",
+            "subject": "s",
+            "claim": "SENTINEL",
+            "tier": "T1",
+            "evidence": "",
+            "confounders": [],
+        }
+    ]
+    monkeypatch.setattr(schema, "externalisable_findings", lambda *a, **k: sentinel)
+    p = config.CasePaths.for_case("vitrine", dossier_dir=tmp_path)
+    target = render.render_outbound(p, "vitrine", {"real": {"claim": "NOT THE SENTINEL"}})
+    body = Path(target).read_text(encoding="utf-8")
+    assert "SENTINEL" in body and "NOT THE SENTINEL" not in body
+
+
+def test_only_render_writes_to_the_outbound_directory():
+    """Source scan: one writer, so the property is inspectable, not aspirational."""
+    root = config.PROJECT_ROOT / "investigator"
+    offenders = [
+        path.relative_to(root)
+        for path in root.rglob("*.py")
+        if path.name not in {"render.py", "config.py"}
+        and "outbound_dir" in path.read_text(encoding="utf-8")
+    ]
+    assert offenders == [], f"outbound_dir referenced outside render.py: {offenders}"
 
 
 def test_investigation_state_stays_inside_the_case_directory():

@@ -150,7 +150,19 @@ class Bearer(BaseModel):
 
 
 class Window(BaseModel):
+    """When the obligation starts running, and by when it must be performed.
+
+    `trigger_select` has no safe default across obligation kinds, so it is
+    explicit. A duty triggered by a *request* runs from the first request —
+    `earliest`. A duty triggered by a *state change* (an extinction, a death,
+    an opening of a succession) runs from the most recent one — `latest` —
+    because a corpus routinely recites earlier, unrelated instances of the same
+    event. Getting this wrong does not produce a missing finding; it produces a
+    confident one with an absurd delay attached.
+    """
+
     from_event: FactMatch | None = None
+    trigger_select: Literal["earliest", "latest"] = "earliest"
     deadline_days: int | None = None
     deadline_note_fr: str = ""
 
@@ -294,6 +306,9 @@ class Evaluation:
     scope_doc_ids: tuple[str, ...] = ()
     scope_covered: bool = False
     trigger_fact_id: str | None = None
+    # True when the corpus disagrees about when the triggering event
+    # happened. No deadline may be computed from an ambiguous trigger.
+    trigger_ambiguous: bool = False
     window_breach_days: int | None = None
     foreach_key: str | None = None
     foreach_role: str | None = None

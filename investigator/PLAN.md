@@ -53,49 +53,62 @@ Phase 2 target 12-14 Aug (local qwen3 adjudication layers).
 
 ### Day 1 — 8 Aug · skeleton, inert
 
-- [ ] `investigator/__init__.py` — charter docstring
-- [ ] `investigator/config.py` — `CasePaths`, `PROMPT_VERSIONS`, budget ceilings, `ALLOW_OUTBOUND_CASES = {"vitrine", "demo"}`
-- [ ] `investigator/schema.py` — `Obligation`, `PassResult`, `RunContext`, `Evaluation`, `TIER_ORDER`, `assign_tier()`, `externalisable_findings()`
-- [ ] `investigator/store.py` — fork of `scripts/local_audit/findings.py`, path-parameterised, **atomic save**, `attach()`
-- [ ] `investigator/cache.py` — fork of `scripts/local_audit/cache.py`, path-parameterised
-- [ ] `investigator/catalog.py` — YAML load + validate + merge generic/overlay
-- [ ] `investigator/graph.py` — `CaseGraph` loader + fact→persons inversion
-- [ ] `investigator/lexicon.py` — antonym table, money/date regexes (NBSP-aware), normalisation helpers
-- [ ] `investigator/budget.py` — caps + USD ceilings via `ingestion.clients.estimate_cost_usd`
-- [ ] `pyproject.toml` — add `"investigator"` to wheel `packages`
-- [ ] `scripts/local_audit/config.py` — add `"investigator"` to `SCAN_DIRS`, `PLANE_DIRS`, `CROSS_PLANE_ALLOWED_IMPORTERS`. **Do not widen `CROSS_PLANE_ALLOWED_SYMBOLS`.**
-- [ ] `.gitignore` — `data/dossier/*/investigation/cache.sqlite3`, placed **after** the vitrine negations
-- [ ] `tests/test_investigator_smoke.py` — groups 2 (fork equivalence), 5 (tiers), 6 (gate), 7 (resumability), 9 (graph adapter)
+- [x] `investigator/__init__.py` — charter docstring
+- [x] `investigator/config.py` — `CasePaths`, `PROMPT_VERSIONS`, budget ceilings, `ALLOW_OUTBOUND_CASES = {"vitrine", "demo"}`
+- [x] `investigator/schema.py` — `Obligation`, `PassResult`, `RunContext`, `Evaluation`, `TIER_ORDER`, `assign_tier()`, `externalisable_findings()`
+- [x] `investigator/store.py` — fork of `scripts/local_audit/findings.py`, path-parameterised, **atomic save**, `attach()`
+- [x] `investigator/cache.py` — fork of `scripts/local_audit/cache.py`, path-parameterised
+- [x] `investigator/catalog.py` — YAML load + validate + merge generic/overlay
+- [x] `investigator/graph.py` — `CaseGraph` loader + fact→persons inversion
+- [x] `investigator/lexicon.py` — antonym table, money/date regexes (NBSP-aware), normalisation helpers
+- [x] `investigator/budget.py` — caps + USD ceilings via `ingestion.clients.estimate_cost_usd`
+- [x] `pyproject.toml` — add `"investigator"` to wheel `packages`
+- [x] `scripts/local_audit/config.py` — add `"investigator"` to `SCAN_DIRS`, `PLANE_DIRS`, `CROSS_PLANE_ALLOWED_IMPORTERS`. **Do not widen `CROSS_PLANE_ALLOWED_SYMBOLS`.**
+- [x] `.gitignore` — `data/dossier/*/investigation/cache.sqlite3`, placed **after** the vitrine negations
+- [x] `tests/test_investigator_smoke.py` — groups 2 (fork equivalence), 5 (tiers), 6 (gate), 7 (resumability), 9 (graph adapter)
 
 ### Day 2 — 9 Aug · deterministic end-to-end on vitrine
 
-- [ ] `investigator/passes/__init__.py`
-- [ ] `investigator/passes/extract.py` — `PASS_NAME = "graph"`, integrity findings, closed claim enum
-- [ ] `investigator/passes/check.py` — `PASS_NAME = "check"`, `evaluate()` pure, `adjudicate: none` path only
-- [ ] `investigator/passes/search.py` — `PASS_NAME = "search"`, Layer 0 citation validation; PISTE default-off
-- [ ] `investigator/orchestrator.py` — `run_cycle()`, `_record()`, pass order `graph → search → check → contradict → attack`
-- [ ] `investigator/render.py` — per-case `DIGEST.md`; the only outbound writer
-- [ ] `uv run python -m investigator.orchestrator --case-id vitrine` produces `data/dossier/vitrine/investigation/{findings.jsonl, DIGEST.md, cache.sqlite3}`
-- [ ] Tests groups 1 (identity), 4 (predicate semantics)
+- [x] `investigator/passes/__init__.py`
+- [x] `investigator/passes/extract.py` — `PASS_NAME = "graph"`, integrity findings, closed claim enum
+- [x] `investigator/passes/check.py` — `PASS_NAME = "check"`, `evaluate()` pure, `adjudicate: none` path only
+- [x] `investigator/passes/search.py` — `PASS_NAME = "search"`, Layer 0 citation validation; PISTE default-off
+- [x] `investigator/orchestrator.py` — `run_cycle()`, `_record()`, pass order `graph → search → check → contradict → attack`
+- [x] `investigator/render.py` — per-case `DIGEST.md`; the only outbound writer
+- [x] `uv run python -m investigator.orchestrator --case-id vitrine` produces `data/dossier/vitrine/investigation/{findings.jsonl, DIGEST.md, cache.sqlite3}`
+- [x] Tests groups 1 (identity), 4 (predicate semantics)
 
 ### Day 3 — 10 Aug · catalogs + remaining passes
 
-- [ ] `investigator/catalogs/generic_fr_succession.yaml` — ~12-14 statute/deontology entries, every `chunk_id` verified against `data/chunks.csv`
-- [ ] `investigator/catalogs/README.md` — authoring guide + the person-free rule
-- [ ] `data/dossier/private/obligations.yaml` — ~8 contract-clause entries (gitignored)
-- [ ] `data/dossier/vitrine/obligations.yaml` — anonymised twin (committed; doc_id globs differ, `anonymize.py` scrubs stems)
-- [ ] `investigator/passes/contradict.py` — `PASS_NAME = "contradict"`, deterministic candidate generator, stable order, `CONTRADICT_MAX_PAIRS = 40`
-- [ ] `investigator/passes/attack.py` — `PASS_NAME = "attack"`, catalog seed attachment via `store.attach`
-- [ ] `investigator/watch.py` — artifact-hash-triggered loop
-- [ ] Tests groups 3 (catalog integrity), 8 (contradict determinism)
+- [x] `investigator/catalogs/generic_fr_succession.yaml` — ~12-14 statute/deontology entries, every `chunk_id` verified against `data/chunks.csv`
+- [x] `investigator/catalogs/README.md` — authoring guide + the person-free rule
+- [x] `data/dossier/private/obligations.yaml` — ~8 contract-clause entries (gitignored)
+- [x] `data/dossier/vitrine/obligations.yaml` — anonymised twin (committed; doc_id globs differ, `anonymize.py` scrubs stems)
+- [x] `investigator/passes/contradict.py` — `PASS_NAME = "contradict"`, deterministic candidate generator, stable order, `CONTRADICT_MAX_PAIRS = 40`
+- [x] `investigator/passes/attack.py` — `PASS_NAME = "attack"`, catalog seed attachment via `store.attach`
+- [x] `investigator/watch.py` — artifact-hash-triggered loop
+- [x] Tests groups 3 (catalog integrity), 8 (contradict determinism)
 
 ### Day 4 — 11 Aug am · buffer
 
-- [ ] Full run on `vitrine`, then `private`
-- [ ] `README.md` — Plane V section + digest excerpt
-- [ ] ADR #70 Follow-ups updated with what actually shipped
-- [ ] `uv run pytest tests/ -v` green (251 + new)
-- [ ] Privacy grep clean, before and after push
+**Corrections found by running it, each now a rule + regression test:**
+
+1. An evidence leaf with no `actor_roles` defaults to the **bearer**, not to
+   every fact. Was producing false `satisfied` — the one direction Phase 2
+   cannot repair.
+2. Scope with no `doc_id_patterns` falls back to **the bearer's documents**,
+   not all of them. 8 of 55 private docs have an unparsed gate verdict, so
+   all-documents scope made everything `unverifiable`.
+3. **No deadline from an ambiguous trigger.** 45 dated trigger matches across
+   three deaths, 1981-2026; earliest gave a 6,593-day `critical` breach from a
+   1981 recital. `window.trigger_select` makes the choice explicit where one
+   can be made.
+
+- [x] Full run on `vitrine`, then `private`
+- [x] `README.md` — Plane V section + digest excerpt
+- [x] ADR #70 Follow-ups updated with what actually shipped
+- [x] `uv run pytest tests/ -v` green (251 + new)
+- [x] Privacy grep clean, before and after push
 
 ---
 

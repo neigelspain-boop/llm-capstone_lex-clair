@@ -3947,6 +3947,45 @@ Contracts live in `docs/investigator-spec.md`, per ADR #69.
   on `vitrine`: 212 edges, 172 of 235 facts covered, 0 dangling. ADR #53
   follow-up (d) remains open; it is worked around, not closed.
 
+### What Phase 1 actually shipped, and what running it corrected
+
+All five passes ship, none calls a model. A full cycle over `vitrine` (235
+facts, 21 obligations) runs in ~0.5 s for $0.00. Twelve statute and deontology
+obligations are committed person-free; nine convention clauses live in per-case
+overlays. Every one of the 21 citations verifies verbatim — on **both** the real
+and the anonymised case, which independently confirms `anonymize.py` leaves
+operative text intact.
+
+Three corrections came from running the thing, not from reviewing it. Each was a
+confidently wrong output, and each is now a named rule with a regression test:
+
+1. **An evidence leaf naming no `actor_roles` defaults to the obligation's
+   bearer**, not to every fact. Before that, one well-worded sentence from an
+   unrelated party reported a duty performed. That is a false `satisfied`, and
+   it is the one direction no later adjudication can repair — follow-up (a)
+   only ever flips `gap → satisfied`. `any_actor: true` widens deliberately.
+2. **Scope with no `doc_id_patterns` falls back to the documents where the
+   bearer appears**, not to every document. Eight of the real case's 55
+   documents have an unparsed gate verdict, so an all-documents scope was never
+   fully covered and degraded every obligation to `unverifiable`.
+3. **No deadline is computed from an ambiguous trigger.** The extinction
+   trigger matches 45 dated facts spanning 1981-2026 and recites three
+   different deaths. Taking the earliest measured a six-month deadline from a
+   1981 recital and reported a 6,593-day breach at `critical`; taking the
+   latest merely picks a different wrong one. Term matching cannot resolve
+   which event is operative, so the engine now declines to assert lateness and
+   records why. `window.trigger_select` (`earliest`/`latest`) makes the choice
+   explicit where it *can* be made.
+
+The third correction also demonstrated resolve-on-fix on real data: the false
+`critical` finding flipped to `resolved` and the accurate one opened, with no
+manual edit and no loss of history.
+
+Deliberate consequence: the gated outbound extract for `vitrine` is currently
+**empty**. Presence-of-compliance is not externalisable, and every gap on that
+case caps at T5 because it has no `coverage.jsonl`. An empty gated extract over
+64 local findings is the gate working, not a defect.
+
 ### Follow-ups
 
 - (a) `check` LLM rescue tier — qwen3:14b, self-consistency, can only flip

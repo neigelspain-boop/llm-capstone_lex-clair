@@ -151,25 +151,41 @@ def _leaf_matches(
 
 def _find_trigger(
     obligation: Obligation, graph: CaseGraph
-) -> tuple[bool, str | None, date | None]:
+) -> tuple[bool, str | None, date | None, bool]:
     """`(triggered, fact_id, trigger_date)`.
 
-    A standing duty (`window.from_event is null`) is always triggered. The
-    trigger is the earliest dated matching fact, falling back to the first by
-    id so the choice is deterministic even on an entirely undated corpus.
+    A standing duty (`window.from_event is null`) is always triggered.
+    Otherwise the trigger is the earliest or latest dated matching fact per
+    `window.trigger_select`, falling back to the first by id so the choice
+    stays deterministic on an entirely undated corpus.
+
+    The fourth element is `ambiguous`: whether the matched facts disagree about
+    *when* the triggering event happened. This corpus makes the problem
+    concrete — the extinction trigger matches 45 dated facts spanning 1981 to
+    2026 and recites three different deaths, because a dossier discusses
+    earlier successions as background. Taking the earliest measured a deadline
+    from a 1981 recital and produced a six-thousand-day "breach" at critical
+    severity; taking the latest merely picks a different wrong one.
+
+    Term matching cannot resolve which event is operative, so the honest move
+    is to say so rather than choose. A trigger is still returned — the
+    obligation is triggered, and its evidence can be evaluated — but callers
+    must not compute a deadline from an ambiguous one.
     """
     event = obligation.window.from_event
     if event is None:
-        return True, None, None
+        return True, None, None, False
     matches = _leaf_matches(event, graph, trigger_date=None, bound_fact_ids=None)
     if not matches:
-        return False, None, None
+        return False, None, None, False
     dated = sorted(
         (d, fid) for fid in matches if (d := _as_date(graph.facts[fid].date)) is not None
     )
-    if dated:
-        return True, dated[0][1], dated[0][0]
-    return True, matches[0], None
+    if not dated:
+        return True, matches[0], None, False
+    ambiguous = len({d for d, _ in dated}) > 1
+    chosen = dated[-1] if obligation.window.trigger_select == "latest" else dated[0]
+    return True, chosen[1], chosen[0], ambiguous
 
 
 def _scope(
@@ -249,7 +265,9 @@ def evaluate(
     if foreach_key is not None:
         bound = graph.person_facts.get(foreach_key, frozenset())
 
-    triggered, trigger_fact_id, trigger_date = _find_trigger(obligation, graph)
+    triggered, trigger_fact_id, trigger_date, trigger_ambiguous = _find_trigger(
+        obligation, graph
+    )
     scope_docs, scope_covered = _scope(obligation, graph, trigger_fact_id)
 
     if not triggered:
@@ -302,7 +320,12 @@ def evaluate(
     if satisfied:
         status = "satisfied"
         deadline = obligation.window.deadline_days
-        if deadline is not None and trigger_date is not None:
+        # A deadline is only testable against an unambiguous trigger. Where the
+        # corpus disagrees about when the triggering event happened, the
+        # obligation stays `satisfied` and the untested deadline is reported in
+        # `evidence` — a claim of lateness resting on the wrong start date is
+        # worse than no claim at all.
+        if deadline is not None and trigger_date is not None and not trigger_ambiguous:
             dates = [d for f in matched_ids if (d := _as_date(graph.facts[f].date))]
             if dates:
                 due = trigger_date + timedelta(days=deadline)
@@ -322,6 +345,7 @@ def evaluate(
         scope_doc_ids=scope_docs,
         scope_covered=scope_covered,
         trigger_fact_id=trigger_fact_id,
+        trigger_ambiguous=trigger_ambiguous,
         window_breach_days=breach_days,
         foreach_key=foreach_key,
         foreach_role=foreach_role,
@@ -377,6 +401,8 @@ def _evidence(ev: Evaluation, graph: CaseGraph) -> str:
         bits.append(f"déclencheur={ev.trigger_fact_id} ({graph.facts[ev.trigger_fact_id].date})")
     if ev.window_breach_days is not None:
         bits.append(f"retard={ev.window_breach_days} jour(s)")
+    elif ev.trigger_ambiguous:
+        bits.append("échéance non testée : date du fait déclencheur ambiguë dans le dossier")
     if ev.matched_fact_ids:
         bits.append("faits=" + ", ".join(ev.matched_fact_ids[:6]))
     elif ev.candidate_fact_ids:

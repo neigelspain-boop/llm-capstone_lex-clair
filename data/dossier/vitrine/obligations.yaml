@@ -1,0 +1,377 @@
+# Case overlay — convention de quasi-usufruit clauses.
+#
+# Contract clauses live here rather than in investigator/catalogs/ because they
+# cannot be citation-verified without a case: the `search` pass checks each
+# excerpt_fr verbatim against this case's extracted documents.
+#
+# This file is the anonymised twin of the private overlay. The clause wording is
+# boilerplate and survives anonymisation unchanged, so the two files are
+# identical apart from nothing — `anonymize.py` scrubs party names, not the
+# operative text. That is also a check: if an excerpt verifies on one case and
+# not the other, the anonymiser altered something it should not have.
+#
+# Every case directory is ignored by default (ADR #66); vitrine is whitelisted.
+
+catalog_id: convention_quasi_usufruit
+catalog_version: v1
+jurisdiction: FR
+person_free: true
+
+obligations:
+
+  # ========== article 3 — le compte spécial ==========
+
+  - obligation_id: conv-compte-special-titres
+    rule_version: v1
+    title_fr: "Maintien des sommes et titres démembrés sur un compte spécial"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit, art. 3 — Compte des valeurs soumises au quasi-usufruit"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        s'oblige à maintenir sur un compte spécial, les sommes et titres soumis au quasi-usufruit
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier]
+      bearer_note_fr: >
+        Obligation de résultat sans délai : le compte doit exister, faute de
+        quoi l'établissement du compte de fin d'usufruit est impossible.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          any_terms_fr:
+            - "compte spécial"
+            - "compte dédié"
+            - "compte-titres"
+            - "compte ouvert au nom"
+            - "inscription en compte"
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      la constitution du compte spécial destiné à recevoir les sommes et titres
+      soumis au quasi-usufruit.
+    confounders_seed:
+      - "Le compte a pu être ouvert par acte séparé non versé au dossier."
+      - "L'établissement teneur de compte a pu opérer la ségrégation sans acte notarié distinct."
+      - "La clause peut être lue comme une obligation de moyens, ce qui déplacerait le débat sur la diligence plutôt que sur le résultat."
+
+  - obligation_id: conv-notification-changement-de-compte
+    rule_version: v1
+    title_fr: "Notification au nu-propriétaire de tout changement dans la désignation du compte"
+    severity: high
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit, art. 3 in fine"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        Il notifiera sans tarder au NU-PROPRIETAIRE tout changement dans la désignation du compte.
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier]
+      bearer_note_fr: "Obligation d'information continue, distincte de l'article 4."
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          any_terms_fr: ["changement de compte", "nouveau compte", "notification au nu-propriétaire", "désignation du compte"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      une notification de changement dans la désignation du compte.
+    confounders_seed:
+      - "L'obligation ne se déclenche qu'en cas de changement effectif : son silence peut signifier qu'il n'y en a pas eu."
+
+  # ========== article 4 — information du nu-propriétaire ==========
+
+  - obligation_id: conv-information-operations-sur-titres
+    rule_version: v1
+    title_fr: "Information du nu-propriétaire de toute opération réalisée sur les titres"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit, art. 4 — Information du NU-PROPRIETAIRE"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        sera informé de toute opération réalisée sur les titres figurant au compte
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier, notaire_redacteur]
+      bearer_note_fr: >
+        L'information conditionne la détermination même de l'objet de la
+        restitution : sans elle le nu-propriétaire ne peut chiffrer sa créance.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          any_terms_fr:
+            - "information du nu-propriétaire"
+            - "relevé de compte"
+            - "avis d'opéré"
+            - "informe le nu-propriétaire"
+            - "compte rendu de gestion"
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      l'information périodique du nu-propriétaire sur les opérations réalisées sur
+      les titres démembrés.
+    confounders_seed:
+      - "L'information a pu être délivrée verbalement ou par un canal non archivé."
+      - "L'obligation ne se déclenche qu'en présence d'une opération sur les titres."
+
+  - obligation_id: conv-instructions-a-l-etablissement
+    rule_version: v1
+    title_fr: "Instructions données à la banque aux fins d'information du nu-propriétaire"
+    severity: high
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit, art. 4 in fine"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        s'engage à donner toutes instructions utiles à cette fin à la banque
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier]
+      bearer_note_fr: >
+        Obligation de faire, autonome : elle est violée par la seule abstention
+        d'instruire l'établissement, indépendamment du résultat.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          any_terms_fr: ["instruction à la banque", "instructions données", "mandat à l'établissement", "consigne à la banque"]
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      les instructions qui devaient être données à l'établissement teneur du compte.
+    confounders_seed:
+      - "Des instructions verbales à un conseiller peuvent n'avoir laissé aucune trace écrite."
+
+  # ========== article 5 — remploi ==========
+
+  - obligation_id: conv-remploi-prix-de-cession
+    rule_version: v1
+    title_fr: "Remploi intégral du prix de cession des valeurs aliénées"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit, art. 5 — Remploi du prix de cession des titres aliénés"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        s'oblige à remployer intégralement le prix de cession des valeurs aliénées en titres nouveaux de son choix
+    bearer:
+      actor_roles: [quasi_usufruitier, defunt_quasi_usufruitier]
+      bearer_note_fr: >
+        Le remploi est ce qui rend la restitution en nature possible ; à défaut,
+        la créance devient une simple contre-valeur chirographaire.
+    window:
+      from_event:
+        kind: fact_match
+        any_actor: true
+        any_terms_fr: ["cession", "aliénation", "vente des parts", "vente des titres"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          any_terms_fr: ["remploi", "réinvestissement", "titres nouveaux", "subrogation réelle"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : une cession de titres est attestée
+      sans qu'aucun fait n'établisse le remploi intégral du prix.
+    confounders_seed:
+      - "La clause précise elle-même qu'elle n'impose rien à l'établissement teneur du compte : le manquement ne peut lui être imputé."
+      - "Le remploi a pu être opéré au sein du même compte sans écriture distincte visible au dossier."
+
+  # ========== mentions ==========
+
+  - obligation_id: conv-mention-passif-declaration
+    rule_version: v1
+    title_fr: "Mention de la créance de restitution au passif de la déclaration de succession"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit — Mention de la créance de restitution"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        Il sera fait mention du montant de la créance de restitution au passif de la déclaration de succession
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, notaire_associe]
+      bearer_note_fr: >
+        Rédaction de la déclaration de succession : l'omission de la créance au
+        passif fausse la liquidation au détriment du nu-propriétaire.
+    window:
+      from_event:
+        kind: fact_match
+        any_actor: true
+        any_terms_fr: ["déclaration de succession", "extinction", "décès"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+      trigger_select: latest
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["passif de la déclaration", "inscription au passif", "créance de restitution au passif", "dette de restitution"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      l'inscription de la créance de restitution au passif de la déclaration de
+      succession du quasi-usufruitier.
+    confounders_seed:
+      - "La déclaration peut avoir été déposée sans que son contenu ait été communiqué aux nus-propriétaires."
+      - "Une dispense de déclaration régulièrement applicable rendrait la mention sans objet."
+
+  - obligation_id: conv-remise-extrait-au-gestionnaire
+    rule_version: v1
+    title_fr: "Remise d'un extrait de la convention à l'établissement gestionnaire, par les soins du notaire"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit — Mention (remise d'un extrait)"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        Un extrait des présentes sera remis par les soins du notaire soussigné à l'établissement gestionnaire du compte.
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire]
+      bearer_note_fr: >
+        Obligation textuelle personnelle du notaire soussigné, non déléguée et
+        non subordonnée à une demande du nu-propriétaire.
+    foreach:
+      kind: role_instances
+      actor_roles: [gestionnaire_scpi, societe_de_gestion_scpi, etablissement_bancaire]
+      key: person_id
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_actor: true
+          bind_to_foreach: true
+          any_terms_fr:
+            - "extrait de la convention"
+            - "extrait des présentes"
+            - "remise de l'extrait"
+            - "notification de la convention"
+            - "copie de la convention"
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      la remise de l'extrait de convention au détenteur d'actifs
+      {foreach_role}/{foreach_key}.
+    confounders_seed:
+      - "La remise a pu être opérée par un canal non archivé au dossier."
+      - "L'établissement a pu être informé par le quasi-usufruitier lui-même, ce qui n'exonère pas le rédacteur de son obligation propre."
+
+  # ========== restitution ==========
+
+  - obligation_id: conv-prelevement-avant-devolution
+    rule_version: v1
+    title_fr: "Prélèvement de la créance de restitution sur la succession avant toute dévolution"
+    severity: critical
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit — Paiement de la créance de restitution"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        sera rétabli dans sa propriété par prélèvement de la créance de restitution sur la succession
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire, notaire_associe]
+      bearer_note_fr: >
+        Le prélèvement prime la dévolution : régler les héritiers avant le
+        nu-propriétaire inverse l'ordre stipulé.
+    window:
+      from_event:
+        kind: fact_match
+        any_actor: true
+        any_terms_fr: ["extinction", "décès", "ouverture de la succession"]
+        match_fields: [action, target, verbatim_quote, distilled_context]
+      # State change, not a request: the dossier recites earlier deaths as
+      # background, and the earliest match measured this deadline from a 1981
+      # recital.
+      trigger_select: latest
+      deadline_days: 183
+      deadline_note_fr: >
+        La convention stipule un prélèvement dans les six mois suivant
+        l'extinction de l'usufruit, l'intérêt au taux légal courant de plein
+        droit au-delà.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr: ["prélèvement", "restitution", "règlement de la créance", "rétablissement dans la propriété"]
+          after_trigger: true
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T1
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
+      le prélèvement de la créance de restitution avant dévolution successorale.
+    confounders_seed:
+      - "Le délai conventionnel de six mois peut n'être pas expiré à la date de l'extraction."
+      - "Un projet de partage réservant le prélèvement peut exister sans figurer au dossier."
+
+  - obligation_id: conv-conseil-sur-absence-de-surete
+    rule_version: v1
+    title_fr: "Devoir de conseil sur la portée de la renonciation à toute sûreté"
+    severity: high
+    externalisable: true
+    source:
+      kind: contract_clause
+      ref: "Convention de quasi-usufruit — Garantie de paiement"
+      doc_id_pattern: "*convention_de_quasi_usufruit*"
+      excerpt_fr: |
+        ne demande pas au QUASI-USUFRUITIER de fournir une sûreté garantissant le règlement à terme de sa créance de restitution
+    bearer:
+      actor_roles: [notaire_redacteur, notaire_instrumentaire]
+      bearer_note_fr: >
+        La renonciation à toute sûreté écarte le droit d'emploi de l'article 602
+        du Code civil et transforme un droit garanti en créance chirographaire.
+        Une clause aussi lourde de conséquence appelle un conseil tracé, a
+        fortiori envers des parties représentées par un collaborateur de l'étude
+        rédactrice.
+    expected_evidence:
+      all_of:
+        - kind: fact_match
+          any_terms_fr:
+            - "conseil donné"
+            - "information sur les conséquences"
+            - "mise en garde"
+            - "attestation de conseil"
+            - "options écrites"
+          min_count: 1
+    absence_tier_cap: T3
+    presence_tier_cap: T2
+    adjudicate: none
+    claim_template_fr: >
+      Obligation {obligation_id} ({source_ref}) : la convention écarte toute sûreté
+      sans qu'aucun fait du dossier n'atteste le conseil délivré sur la portée de
+      cette renonciation.
+    confounders_seed:
+      - "Le conseil a pu être délivré oralement lors d'un rendez-vous non archivé."
+      - "La renonciation à sûreté est licite et courante : son existence n'est pas en soi fautive, seule l'absence de conseil tracé l'est."
+      - "Les parties ont pu être conseillées par un tiers indépendant hors dossier."
