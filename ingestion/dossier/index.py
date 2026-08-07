@@ -54,7 +54,7 @@ from pydantic import BaseModel
 from ingestion.dossier.facts import Fact
 from ingestion.index import (
     CHROMA_DIR,
-    CHUNKS_CSV,
+    CHUNKS_CSV,  # noqa: F401 — unused here, but tests monkeypatch it on this module
     COLLECTION,
     EMBED_MODEL_ID,
     _validate_chunk_schema,

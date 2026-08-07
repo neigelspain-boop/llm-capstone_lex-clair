@@ -20,7 +20,7 @@ from typing import Callable
 import pandas as pd
 from tqdm.auto import tqdm
 
-from ingestion.load import load_index, HybridRetriever, DEFAULT_BM25_BOOST
+from ingestion.load import load_index, HybridRetriever
 
 
 # ============================================================================
