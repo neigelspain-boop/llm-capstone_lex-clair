@@ -140,6 +140,48 @@ class PisteClient:
         """Fetch one article object from PISTE by its LEGIARTI id."""
         return self.post("/consult/getArticle", {"id": legiarti_id})
 
+    def get_juri(self, text_id: str) -> dict[str, Any]:
+        """Fetch one court decision by its JURITEXT id."""
+        return self.post("/consult/juri", {"textId": text_id})
+
+    def find_juri(self, numero_affaire: str) -> str | None:
+        """JURITEXT id for a pourvoi number, or None.
+
+        None rather than a guess: a decision cited by a number that resolves to
+        nothing is a citation that must be checked by a human, not invented by
+        this function.
+        """
+        payload = {
+            "fond": "JURI",
+            "recherche": {
+                "champs": [{
+                    "typeChamp": "NUM_AFFAIRE",
+                    "criteres": [{
+                        "typeRecherche": "EXACTE",
+                        "valeur": numero_affaire,
+                        "operateur": "ET",
+                    }],
+                    "operateur": "ET",
+                }],
+                "pageNumber": 1,
+                "pageSize": 5,
+                "operateur": "ET",
+                "sort": "PERTINENCE",
+                "typePagination": "DEFAUT",
+            },
+        }
+        try:
+            data = self.post("/search", payload)
+        except Exception as exc:
+            log.warning("find_juri(%s) failed: %s", numero_affaire, exc)
+            return None
+        for result in data.get("results", []):
+            for title in result.get("titles", []):
+                cid = title.get("cid") or title.get("id")
+                if cid and cid.startswith("JURITEXT"):
+                    return cid
+        return None
+
     def resolve_article(self, code_name: str, number: str) -> str | None:
         """LEGIARTI id for an article number within a named code, or None.
 

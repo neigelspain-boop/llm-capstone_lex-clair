@@ -86,6 +86,25 @@ sources:
     note: "Non consolidé dans un code — via /consult/jorf"
 
 
+  # ---------- Jurisprudence ----------
+  # Decisions, not codes. Added because the catalog could cite no case law at
+  # all: 792 chunks across 9 sources, every one a code or regulation, while the
+  # case analysis treats Cass. Com. 27/11/2024 as controlling on whether the
+  # creance de restitution is even certain.
+  #
+  # `numero_affaire` is resolved to a JURITEXT id at fetch time and an
+  # unresolvable number is skipped with a warning, never guessed.
+  juri_quasi_usufruit:
+    label: "Cour de cassation"
+    fetch_strategy: juri
+    text_id: JURITEXT000050704198
+    numero_affaire: "23-12.151"
+    note: >
+      Cass. com., 27 novembre 2024, n° 23-12.151, publié au bulletin — cassation.
+      Certitude de la créance de restitution sur valeurs mobilières ; exige une
+      convention notariée ou enregistrée. Autorité de référence sur le point
+      central du dossier.
+
 # TODO Phase 1b — CGI additional sections (add when time permits):
 #   art. 641 (délai déclaration), art. 1133 (exonération extinction usufruit),
 #   art. 1727 (intérêts de retard) — grab LEGISCTA of each parent section

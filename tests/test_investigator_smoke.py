@@ -1989,3 +1989,58 @@ def test_no_scrub_level_ever_touches_raw(tmp_path):
     for clear in (main_mod._clear_analysis, main_mod._clear_derived, main_mod._clear_extracted):
         clear(paths)
     assert (paths.case_dir / "raw" / "a.pdf").exists()
+
+
+# ========== the report says what it did not check ==========
+
+
+def test_the_report_states_its_own_coverage(tmp_path, vitrine_graph):
+    """The likeliest harm is being read as complete.
+
+    The report lists what was found; without this section nothing distinguishes
+    "checked and clean" from "never looked", and an obligation absent from the
+    catalog produces silence indistinguishable from compliance.
+    """
+    from investigator import report as report_mod
+    from investigator.catalog import Catalog
+
+    ob = _obligation()
+    cat = Catalog(obligations={ob.obligation_id: ob}, origin={}, files=())
+    section = "\n".join(report_mod._coverage_section({}, vitrine_graph, cat))
+
+    assert "n'établit pas" in section
+    assert "invisible" in section, "must say an unencoded obligation cannot be found"
+    assert "jurisprudence" in section.lower()
+    # vitrine has no coverage.jsonl at all — the section must say so.
+    assert "fidélité" in section
+
+
+def test_the_coverage_section_names_untriggered_obligations(vitrine_graph):
+    from investigator import report as report_mod
+    from investigator.catalog import Catalog
+
+    ob = _obligation(obligation_id="jamais-declenchee")
+    cat = Catalog(obligations={ob.obligation_id: ob}, origin={}, files=())
+    section = "\n".join(report_mod._coverage_section({}, vitrine_graph, cat))
+    assert "jamais-declenchee" in section
+
+
+def test_collisions_and_integrity_reach_the_report(tmp_path, vitrine_graph):
+    """Both were computed and then never shown to the reader."""
+    from investigator import report as report_mod
+
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    store_ = {}
+    for pass_name, claim in (("contradict", "Collision montant."), ("graph", "Défaut.")):
+        f = store.normalize(store.finding(
+            pass_name, subject=f"s-{pass_name}", claim=claim, case_id="demo",
+            evidence="détail", tier="T5",
+        ))
+        store_[f["id"]] = f
+
+    body = Path(report_mod.render_brief(paths, store_, vitrine_graph, None)).read_text(
+        encoding="utf-8"
+    )
+    assert "Rapprochements à examiner" in body
+    assert "Collision montant." in body
+    assert "Intégrité du dossier" in body

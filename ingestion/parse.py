@@ -34,6 +34,7 @@ CHUNK_ID_PREFIX = {
     "decret_73_609": "d73-609",
     "decret_74_737": "d74-737",
     "decret_2023_1297": "d2023-1297",
+    "juri_quasi_usufruit": "juri",
 }
 
 
@@ -102,8 +103,52 @@ def _titre(article: dict) -> str:
 
 # article parsing helpers
 
+def _parse_juri(decision: dict, source_key: str, source_label: str) -> dict | None:
+    """Normalise a court decision into the same row shape as an article.
+
+    Decisions carry no `etat`, no `num` and no `LEGIARTI` id, so they cannot go
+    through the article path — but everything downstream (chunking, BM25, the
+    catalog's `chunk_id` anchors, `search`'s verbatim check) works on one row
+    shape, and giving decisions their own would fork all of it.
+    """
+    texte = _strip_html(decision.get("texte") or decision.get("texteHtml") or "")
+    if not texte:
+        return None
+    # The id is in `id`; `cid` comes back null on this endpoint. `numeroAffaire`
+    # is a LIST — a decision can dispose of several pourvois at once — so the
+    # first entry names the row and the rest ride along in the title.
+    cid = decision.get("id") or decision.get("cid") or ""
+    numeros = decision.get("numeroAffaire") or []
+    if isinstance(numeros, str):
+        numeros = [numeros]
+    num = str(numeros[0]).strip() if numeros else ""
+    prefix = CHUNK_ID_PREFIX.get(source_key, source_key)
+    return {
+        "chunk_id": f"{prefix}-{_slugify_num(num)}" if num else f"{prefix}-{cid[-10:].lower()}",
+        "source": source_key,
+        "source_label": source_label,
+        "num": num,
+        "section_path": str(decision.get("formation") or ""),
+        "titre": str(decision.get("titre") or ""),
+        "texte": texte,
+        # A decision is not "in force"; it is rendered. VIGUEUR keeps one
+        # vocabulary downstream, and `solution` carries what actually matters.
+        "etat": "VIGUEUR",
+        "date_debut": _ms_to_iso(decision.get("dateTexte")),
+        "date_fin": "",
+        "legiarti_id": cid,
+        "url": f"https://www.legifrance.gouv.fr/juri/id/{cid}" if cid else "",
+    }
+
+
 def parse_one(raw: dict, source_key: str, source_label: str) -> dict | None:
     """Parse one raw JSON object into a normalized article row, or skip it."""
+    text = raw.get("text")
+    if isinstance(text, dict) and (
+        str(text.get("id", "")).startswith("JURITEXT") or text.get("numeroAffaire")
+    ):
+        return _parse_juri(text, source_key, source_label)
+
     article = raw.get("article") or raw
     if not isinstance(article, dict):
         return None

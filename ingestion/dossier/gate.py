@@ -48,7 +48,8 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from ingestion.clients import get_anthropic_client, strip_json_fences
+from ingestion.clients import (get_anthropic_client, recover_json_objects,
+                               strip_json_fences)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -89,7 +90,7 @@ class CoverageReport:
     doc_id: str
     missing_facts: list[str]
     mistranscriptions: list[dict]
-    status: str  # "ok" | "parse_failed" | "source_missing"
+    status: str  # "ok" | "parse_recovered" | "parse_failed" | "source_missing"
 
 
 # ========== source rasterization ==========
@@ -121,6 +122,19 @@ def _rasterize_source_pages(source_path: Path) -> list[bytes]:
 
 # ========== verifier call + response parsing ==========
 
+class _PartialVerdict(Exception):
+    """A verdict recovered from a truncated response — real, but incomplete.
+
+    Carried as an exception rather than a return value so no caller can mistake
+    it for a clean parse. A fidelity gate that under-reports is worse than one
+    that admits it does not know.
+    """
+
+    def __init__(self, data: dict):
+        super().__init__("verifier response truncated; recovered partial verdict")
+        self.data = data
+
+
 def _parse_verifier_response(raw: str) -> dict:
     """Parse the verifier's raw JSON text into {missing_facts, mistranscriptions}.
 
@@ -129,12 +143,25 @@ def _parse_verifier_response(raw: str) -> dict:
     """
     text = strip_json_fences(raw)
 
-    # strip ```json ... ``` fences if the model ignores the "JSON only" instruction
-
     try:
         data = json.loads(text)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"JSON parse failed: {e}") from e
+    except json.JSONDecodeError:
+        # Tolerate trailing prose after valid JSON, as compliance does.
+        try:
+            data, _ = json.JSONDecoder().raw_decode(text)
+        except json.JSONDecodeError as e:
+            # Truncated. Recover the mistranscription objects that closed, but
+            # NEVER present the result as a complete verdict: `missing_facts`
+            # is a list of strings, so a cut-off list silently *shortens* the
+            # list of problems and would make the document look more faithful
+            # than it is. The caller records `parse_recovered`, which does not
+            # satisfy `require_gate_status: ok`.
+            recovered = recover_json_objects(text)
+            if not recovered:
+                raise ValueError(f"JSON parse failed: {e}") from e
+            raise _PartialVerdict(
+                {"missing_facts": [], "mistranscriptions": recovered}
+            ) from e
 
     missing_facts = data.get("missing_facts", [])
     mistranscriptions = data.get("mistranscriptions", [])
@@ -237,6 +264,15 @@ def verify_extraction(source_path: Path, md_path: Path) -> CoverageReport:
         missing_facts = parsed["missing_facts"]
         mistranscriptions = parsed["mistranscriptions"]
         status = "ok"
+    except _PartialVerdict as partial:
+        log.warning(
+            "gate: verifier response truncated for doc_id=%s — recovered %d "
+            "mistranscription(s); fidelity recorded as unverified, not ok",
+            doc_id, len(partial.data["mistranscriptions"]),
+        )
+        missing_facts = partial.data["missing_facts"]
+        mistranscriptions = partial.data["mistranscriptions"]
+        status = "parse_recovered"
     except ValueError as e:
         log.error(
             "gate parse failed for doc_id=%s: %s\nraw response: %s", doc_id, e, raw

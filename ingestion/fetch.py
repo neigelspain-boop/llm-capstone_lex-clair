@@ -42,6 +42,20 @@ def enumerate_ids(client: PisteClient, source_key: str, spec: dict) -> list[str]
         ids = client.list_articles_in_jorf(spec["text_id"])
     elif strategy == "article":
         ids = [spec["article_id"]]
+    elif strategy == "juri":
+        # One decision per entry. A pourvoi number may be given instead of a
+        # JURITEXT id, in which case it is resolved here — and an unresolvable
+        # number is reported, never guessed at.
+        text_id = spec.get("text_id")
+        if not text_id and spec.get("numero_affaire"):
+            text_id = client.find_juri(spec["numero_affaire"])
+            if not text_id:
+                log.warning(
+                    "  %s: no decision found for pourvoi %s — skipping",
+                    source_key, spec["numero_affaire"],
+                )
+                return []
+        ids = [text_id] if text_id else []
     else:
         raise ValueError(f"unknown fetch_strategy: {strategy}")
     log.info("  %s: %d article(s)", source_key, len(ids))
@@ -64,7 +78,7 @@ def fetch_source(
         if dest.exists():
             continue
         try:
-            body = client.get_article(aid)
+            body = client.get_juri(aid) if aid.startswith("JURITEXT") else client.get_article(aid)
         except Exception as e:
             log.warning("  failed %s: %s", aid, e)
             continue

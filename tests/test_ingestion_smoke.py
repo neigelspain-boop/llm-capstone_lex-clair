@@ -1038,3 +1038,96 @@ def test_mentions_is_not_wired_into_the_build():
     from ingestion.dossier import build
 
     assert not hasattr(build, "mentions")
+
+
+# ========== gate: a truncated verdict must not read as a clean one ==========
+
+
+def test_gate_tolerates_trailing_prose():
+    from ingestion.dossier import gate
+
+    out = gate._parse_verifier_response(
+        '{"missing_facts": [], "mistranscriptions": []}\n\nVoilà mon analyse.'
+    )
+    assert out == {"missing_facts": [], "mistranscriptions": []}
+
+
+def test_gate_recovers_a_truncated_verdict_without_calling_it_ok():
+    """A fidelity gate that under-reports is worse than one admitting ignorance.
+
+    `missing_facts` is a list of strings, so a truncated list silently SHORTENS
+    the list of problems and would make a document look more faithful than it
+    is. Recovery therefore raises _PartialVerdict, the caller records
+    `parse_recovered`, and that does not satisfy `require_gate_status: ok`.
+    """
+    from ingestion.dossier import gate
+
+    truncated = (
+        '{"missing_facts": ["date manquante"], "mistranscriptions": ['
+        '{"claimed": "195 572", "actual": "195 512"}, {"claimed": "coupé'
+    )
+    with pytest.raises(gate._PartialVerdict) as excinfo:
+        gate._parse_verifier_response(truncated)
+    assert len(excinfo.value.data["mistranscriptions"]) == 1
+    assert excinfo.value.data["missing_facts"] == [], "a truncated list must not be reported"
+
+
+def test_gate_still_fails_when_nothing_is_recoverable():
+    from ingestion.dossier import gate
+
+    with pytest.raises(ValueError):
+        gate._parse_verifier_response("je ne peux pas répondre")
+
+
+# ========== jurisprudence in the corpus ==========
+
+
+def test_a_decision_parses_into_the_same_row_shape_as_an_article():
+    """Everything downstream — chunking, BM25, catalog anchors, the verbatim
+    check — works on one row shape. Decisions must not fork it."""
+    from ingestion import parse
+
+    raw = {"text": {
+        "id": "JURITEXT000050704198",
+        "cid": None,
+        "numeroAffaire": ["23-12.151"],
+        "titre": "Cour de cassation, civile, Chambre commerciale, 27 novembre 2024",
+        "formation": "CHAMBRE_COMMERCIALE",
+        "dateTexte": 1732665600000,
+        "texte": "<p>LA COUR DE CASSATION a rendu l'arrêt suivant</p>",
+    }}
+    row = parse.parse_one(raw, "juri_quasi_usufruit", "Cour de cassation")
+    assert row["chunk_id"] == "juri-23-12151"
+    assert row["num"] == "23-12.151"
+    assert row["legiarti_id"] == "JURITEXT000050704198"
+    assert row["url"].endswith("JURITEXT000050704198")
+    assert row["etat"] == "VIGUEUR"
+    assert "<p>" not in row["texte"]
+    assert set(row) == set(parse.parse_one(
+        {"article": {"id": "LEGIARTI000006429324", "num": "587", "texte": "x", "etat": "VIGUEUR"}},
+        "cc_usufruit", "Code civil",
+    )), "a decision row must carry exactly the article row's fields"
+
+
+def test_numero_affaire_is_a_list_because_one_decision_can_dispose_of_several():
+    from ingestion import parse
+
+    row = parse.parse_one(
+        {"text": {"id": "JURITEXT1", "numeroAffaire": ["23-12.151", "23-12.152"],
+                  "texte": "arrêt", "dateTexte": 1732665600000}},
+        "juri_quasi_usufruit", "Cour de cassation",
+    )
+    assert row["num"] == "23-12.151"
+
+
+def test_an_unresolvable_pourvoi_is_skipped_not_invented():
+    from ingestion import fetch
+
+    class Client:
+        def find_juri(self, num):
+            return None
+
+    ids = fetch.enumerate_ids(
+        Client(), "juri_x", {"fetch_strategy": "juri", "numero_affaire": "99-99.999"}
+    )
+    assert ids == []

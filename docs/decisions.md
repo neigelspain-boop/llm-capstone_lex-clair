@@ -4371,3 +4371,101 @@ makes "first time" mean it.
 - The fixture for the recovery test is the real truncated payload from this run.
 - 406 tests. The pre-existing compliance recovery test now exercises the shared
   function, which is what demonstrates behaviour was preserved by the move.
+
+---
+
+## ADR #76 — Say what was not checked; recover honestly; admit case law
+
+**Date:** 2026-08-08 · **Branch:** v2-persons · **Status:** Accepted
+
+**Amends:** ADR #70 (the corpus was statute-only by omission, not by design).
+
+### Context
+
+An assessment of the architecture against its actual purpose — defending three
+heirs against possible fraud — found the engine sound and three specific things
+wrong with what it produces.
+
+**The report read as more complete than it is.** It lists what was found. It
+never said what it did not look for, and an obligation absent from the catalog
+produces *silence*, which in the output is indistinguishable from compliance.
+Handed to counsel or an insurer, its gaps are invisible to anyone who did not
+build it. This is the likeliest way the system causes harm.
+
+**Two passes computed findings nobody could read.** `render_brief` filtered on
+`pass == "check"`, so every contradiction collision and every graph-integrity
+defect was computed and discarded at the last step. Collisions are the closest
+thing this system produces to a pattern signal, and an integrity defect is the
+reason a neighbouring absence cannot be trusted.
+
+**The corpus contained no case law.** 792 chunks across 9 sources, every one a
+code or regulation, while the case analysis treats
+`Cass. com., 27 nov. 2024, n° 23-12.151` as controlling on whether the créance
+de restitution is even certain. The system could not cite, check, or reason
+about the authority the dispute turns on.
+
+Separately, the 8 documents whose gate verdict failed to parse are not a random
+8: they are the précontentieux core — the Yousign procuration template, all
+three revocations, the UNOFI confirmation that no succession file was opened,
+and the Chambre saisine. Their fidelity being unknown caps every finding drawn
+from them, and the cause was the same truncation bug fixed in ADR #75, in a
+different pass.
+
+### Decision
+
+**1. The report states its own coverage.** A "Ce que ce rapport n'établit pas"
+section, derived from the run rather than asserted: obligations whose trigger
+never fired, documents of unknown fidelity by name, the undated-fact count, the
+role-ambiguous count, and — stated plainly — that an obligation absent from the
+catalog is invisible and that no jurisprudence is mobilised beyond the texts
+cited.
+
+**2. Collisions and integrity defects reach the report**, below the argued
+findings and marked as weaker: a rapprochement may be a coincidence of
+vocabulary, and it is shown because a real incompatibility hides in that list or
+nowhere.
+
+**3. The gate recovers truncation, and refuses to call it `ok`.** It now
+tolerates trailing prose (`raw_decode`) and recovers complete objects from a
+truncated verdict — but raises `_PartialVerdict`, and the caller records
+`parse_recovered`, a status that does **not** satisfy `require_gate_status: ok`.
+
+The asymmetry is the point and it is opposite to discovery's. `missing_facts` is
+a list of *strings*, so a truncated list silently **shortens** the list of
+problems: naively recovering it would report a document as more faithful than it
+is. A fidelity gate that under-reports is worse than one that admits it does not
+know, so the recovered `missing_facts` is deliberately emptied and the status
+carries the doubt.
+
+**4. Jurisprudence enters the corpus.** A `juri` fetch strategy across
+`piste.get_juri` / `find_juri` → `fetch.enumerate_ids` → `parse._parse_juri`,
+with `Cass. com. 27/11/2024 n° 23-12.151` as the first entry
+(`juri-23-12151`, 7 287 chars, Légifrance-linked).
+
+A decision is normalised into **the article row shape**, not its own: chunking,
+BM25, the catalog's `chunk_id` anchors and `search`'s verbatim check all work on
+one shape, and forking it would fork all of them. Two shape surprises, both
+found by running it: the endpoint returns `cid: null` and the id lives in `id`,
+and `numeroAffaire` is a **list**, because one decision can dispose of several
+pourvois. A pourvoi number may be given instead of an id and is resolved at
+fetch time; an unresolvable number is skipped with a warning and **never
+guessed**.
+
+### Consequences
+
+- The corpus is 793 chunks across 10 sources. An obligation may now anchor to a
+  decision, and `search` will verify its excerpt every cycle exactly as it does
+  for an article.
+- A decision is one chunk rather than many. For anchoring and verbatim
+  verification that is right; for semantic retrieval a 7 k chunk is coarse, and
+  splitting it is a separate decision that should be made on retrieval evidence.
+- `parse_recovered` is a third coverage status. `check` treats it as
+  not-covered, so findings drawn from such a document stay capped — which is
+  the intended conservatism.
+
+### Follow-ups
+
+- More decisions: `CA Versailles 12/05/2026 n° 24/03976` (adverse on
+  perte-de-chance causation) is the next most load-bearing.
+- Obligations that anchor to jurisprudence — none does yet.
+- Chain representation, still the largest ceiling on what can be found at all.

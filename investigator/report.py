@@ -139,6 +139,70 @@ def _quote_line(graph: CaseGraph, fact_id: str, verdict: dict | None = None) -> 
     return line
 
 
+def _coverage_section(
+    store_: dict[str, dict], graph: CaseGraph, catalog: Catalog | None
+) -> list[str]:
+    """What the run did **not** examine.
+
+    The most likely way this report causes harm is being read as complete. It
+    lists what was found; without this section nothing distinguishes "checked
+    and clean" from "never looked". An obligation absent from the catalog
+    produces silence, and silence here is indistinguishable from compliance.
+
+    Everything below is derived from the run itself, not asserted.
+    """
+    out = ["## Ce que ce rapport n'établit pas", ""]
+
+    checked = {f.get("obligation_id") for f in store_.values() if f.get("pass") == "check"}
+    if catalog is not None:
+        never = sorted(o.obligation_id for o in catalog.ordered() if o.obligation_id not in checked)
+        out.append(
+            f"- **{len(catalog)} obligation(s) au catalogue**, dont **{len(never)}** "
+            "dont le fait déclencheur n'apparaît pas au dossier : elles n'ont donc "
+            "pas été contrôlées, ni dans un sens ni dans l'autre."
+        )
+        if never:
+            out.append(f"  - {', '.join(never[:8])}{' …' if len(never) > 8 else ''}")
+        out.append(
+            "- **Toute obligation absente du catalogue est invisible.** Le moteur ne "
+            "contrôle que ce qui y est écrit ; un manquement que personne n'a encodé "
+            "ne produit aucune ligne, ce qui ne se distingue pas d'une conformité."
+        )
+
+    unknown = sorted(d for d, s in graph.coverage.items() if s != "ok")
+    if not graph.coverage_known:
+        out.append(
+            f"- **Aucune donnée de fidélité** pour les {len(graph.doc_ids)} document(s) : "
+            "toute absence est plafonnée, faute de pouvoir distinguer une pièce "
+            "manquante d'une pièce non collectée."
+        )
+    elif unknown:
+        out.append(
+            f"- **{len(unknown)} document(s) de fidélité inconnue** — leur transcription "
+            "n'a pas pu être vérifiée contre la source, ce qui plafonne toute "
+            "constatation qui s'y adosse :"
+        )
+        out += [f"  - `{d}`" for d in unknown[:10]]
+
+    undated = sum(1 for f in graph.facts.values() if not f.date)
+    if undated:
+        out.append(
+            f"- **{undated} fait(s) sur {len(graph.facts)} sans date** : aucun calcul "
+            "d'échéance ne peut les concerner."
+        )
+    if graph.ambiguous_fact_ids:
+        out.append(
+            f"- **{len(graph.ambiguous_fact_ids)} fait(s) à rôle non résolu**, écartés "
+            "des prédicats portant sur un rôle."
+        )
+    out.append(
+        "- **Aucune jurisprudence n'est mobilisée** au-delà des textes cités : le "
+        "corpus local ne contient que des codes et règlements."
+    )
+    out.append("")
+    return out
+
+
 # ========== the brief ==========
 
 
@@ -304,6 +368,21 @@ def render_brief(
         and f.get("pass") == "check"
         and _status_of(f) in ACTIONABLE
     ]
+    # Collisions and substrate defects were computed and then never shown. A
+    # same-amount-different-actor collision is the closest thing this system
+    # produces to a pattern signal, and an integrity defect is the reason a
+    # neighbouring absence finding cannot be trusted. Both belong in front of
+    # the reader, below the argued findings and clearly marked as weaker.
+    collisions = sorted(
+        (f for f in store_.values()
+         if f.get("status") == "open" and f.get("pass") == "contradict"),
+        key=lambda f: f["subject"],
+    )
+    integrity = sorted(
+        (f for f in store_.values()
+         if f.get("status") == "open" and f.get("pass") == "graph"),
+        key=lambda f: f["subject"],
+    )
     actionable.sort(
         key=lambda f: (
             SEVERITY_ORDER.get(f.get("severity", "info"), 99),
@@ -339,6 +418,34 @@ def render_brief(
 
     if not actionable:
         out += ["Aucun constat à instruire.", ""]
+
+    out += _coverage_section(store_, graph, catalog)
+
+    if collisions:
+        out += [
+            "## Rapprochements à examiner",
+            "",
+            "Faits du dossier que le moteur a rapprochés de façon déterministe — même "
+            "montant, même instrument daté différemment, sens d'action opposé. Ce ne "
+            "sont pas des constats : un rapprochement peut n'être qu'une coïncidence "
+            "de vocabulaire. Ils figurent ici parce qu'une incompatibilité réelle se "
+            "cache dans cette liste ou nulle part.",
+            "",
+        ]
+        for f in collisions:
+            out += [f"- {f['claim']}", f"  - {f.get('evidence', '')}", ""]
+
+    if integrity:
+        out += [
+            "## Intégrité du dossier",
+            "",
+            "Défauts du substrat. Ils importent parce qu'une constatation d'absence "
+            "adossée à un fait défectueux ne vaut rien, et le moteur la plafonne en "
+            "conséquence.",
+            "",
+        ]
+        for f in integrity:
+            out += [f"- {f['claim']}", f"  - {f.get('evidence', '')}", ""]
 
     target = paths.investigation_dir / "RAPPORT.md"
     target.write_text("\n".join(out), encoding="utf-8")
