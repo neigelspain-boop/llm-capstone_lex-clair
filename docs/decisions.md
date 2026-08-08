@@ -4204,3 +4204,90 @@ to Q3_K_M against a risk of CUDA OOM. Neither applies:
 
 Its thermal assessment was accurate and required no action: measured 48 °C and
 101 W against a 170 W TDP.
+
+---
+
+## ADR #74 — The catalog is data, and a stranger's case has none of it
+
+**Date:** 2026-08-08 · **Branch:** v2-persons · **Status:** Accepted
+
+### Context
+
+Plane V's engine is generic and finished. Its catalog is not code — it is 21
+hand-typed YAML entries, and `investigator/catalog.py` is a pure YAML loader
+with no derivation anywhere in the repo. The engine finds **only what a catalog
+entry encodes**.
+
+That is fine for one case and impossible as a product. A stranger uploads PDFs,
+gets facts extracted, and hits a wall: the duties their own convention creates
+were never authored, so `check` runs against generic statute obligations and
+says almost nothing about them.
+
+Mapping the upload path found two further gaps, both already-written code that
+was simply never called. `ingestion/dossier/build.py` imported only
+`anonymize, extract, gate, facts, index`:
+
+- **`distill` outside `all`** → `distilled_context` null on every fact, so
+  `check` matched on raw quotes alone and lost recall on every obligation.
+- **`resolve` outside `all`** → no `persons.jsonl`, so `foreach` obligations
+  produced **nothing**. The live case's per-institution findings exist only
+  because those stages had been run by hand.
+
+### Decision
+
+**1. `--step all` becomes extract → gate → facts → distill → index → resolve.**
+
+The order is a dependency chain, not a preference: `distill` rewrites
+`facts.jsonl` in place and `index`'s `source_chunk_id` backfill rewrites the
+same rows, so `index` must follow it or `distilled_context` is dropped;
+`resolve` clusters persons from `distilled_context` per role (ADR #55) and goes
+last. `mentions` stays out — ADR #55 supersedes it and it is documented dormant.
+
+**2. `investigator/discover.py` proposes obligations from a case's own acts.**
+
+Three mechanisms, only one of which is the model:
+
+- A **deterministic pre-filter** on obligation language
+  (`lexicon.OBLIGATION_MARKERS`) separates instruments from correspondence. On
+  the live case: 8 documents of 55, the convention ranked first by marker count,
+  47 with none. Running a model over all 55 to find 3 contracts is waste.
+- The **model** reads one page window at a time — pages because `extract.py`
+  already writes `## Page N` dividers — and is given the case's real
+  `actor_roles.jsonl`, so it names a bearer that exists rather than inventing
+  one. Prompt shape follows `facts.py`, including its load-bearing rule: no
+  verbatim quote, no record.
+- The **verbatim check** is where correctness is enforced. An `excerpt_fr` that
+  does not appear in its own source document is dropped before it is written,
+  and `passes/search.py::_validate_document` re-applies the same predicate on
+  every later cycle. This guard already existed; it is what makes attempting
+  machine-written obligations defensible at all.
+
+**3. Discovery proposes and never installs.** Output is
+`obligations.proposed.yaml`; the rename to `obligations.yaml` is the trust
+boundary. Not ceremony: the verbatim check catches invented text but cannot
+catch a real clause with the wrong bearer, the wrong deadline, or over-broad
+match terms — and the resulting finding names a professional and is aimed at an
+insurer. Discovered ids are prefixed `dec-` so machine-proposed and
+hand-authored entries are distinguishable on sight.
+
+Caching follows `extract.py` (content hash per document window) rather than
+`facts.py`, which re-calls the model on every run; a long contract is expensive
+to re-read.
+
+### Consequences
+
+- A new case is three commands: build, discover-and-review, investigate.
+- The Streamlit per-document estimate rises from $0.12 to $0.20: `--step all`
+  now calls a model at five stages, not two.
+- Statute grounding for discovered obligations is **deferred**. ADR #70
+  deliberately keeps `rag.retrieve` out of Plane V, and reversing that deserves
+  its own decision. Contract clauses are verified against their document either
+  way, which is the stronger check.
+
+### Follow-ups
+
+- Ground discovered obligations in statute via retrieval, if ADR #70's
+  exclusion is revisited.
+- A Streamlit surface for Plane V; there is currently none.
+- Promote reviewed `dec-` obligations into the generic catalog where they are
+  not case-specific.

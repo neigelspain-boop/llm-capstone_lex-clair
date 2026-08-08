@@ -476,6 +476,32 @@ uv run python -m investigator.watch --case-id vitrine          # run continuousl
 cat data/dossier/vitrine/investigation/DIGEST.md
 ```
 
+**From a folder of PDFs to a report, in three commands.** The obligation catalog
+is *data*, not code — the engine finds only what a catalog entry encodes — so a
+new case needs the duties its own instruments create. `discover` reads the acts
+that actually stipulate something and proposes them:
+
+```bash
+# 1. build the case: extract -> gate -> facts -> distill -> index -> resolve
+uv run python -m ingestion.dossier.build --case-id mycase \
+    --raw-dir data/dossier/mycase/raw --step all
+
+# 2. propose obligations from the case's own acts
+uv run python -m investigator.discover --case-id mycase
+#    review data/dossier/mycase/obligations.proposed.yaml, edit, then:
+#    mv obligations.proposed.yaml obligations.yaml
+
+# 3. investigate
+uv run python -m investigator.orchestrator --case-id mycase --local-llm
+less data/dossier/mycase/investigation/RAPPORT.md
+```
+
+Discovery **proposes and never installs**. Every excerpt is verified word for
+word against its own source document before it is written — an invented clause
+is dropped deterministically — but the bearer, the deadline and the match terms
+are the model's reading and nobody has checked them. The rename is the review,
+and it matters because these findings name a professional.
+
 A full cycle over the 235-fact `vitrine` case runs **five passes in ~0.5s for
 $0.00** — no LLM call, no network. Every model tier is an additive adjudication
 layer over a pass that already works deterministically, so nothing here can fail

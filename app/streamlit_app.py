@@ -600,7 +600,9 @@ _CASE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
 # Rough per-document extraction estimate (Opus 4.7 vision). Deliberately an
 # over-estimate: the number exists to make the user pause, and quoting low
 # would defeat that.
-_EXTRACT_COST_PER_DOC_USD = 0.12
+# Covers the whole `--step all` chain, not extraction alone: gate, facts,
+# distill and resolve each call a model too (ADR #74).
+_EXTRACT_COST_PER_DOC_USD = 0.20
 
 
 def _valid_case_id(name: str) -> bool:
