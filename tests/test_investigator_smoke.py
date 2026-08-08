@@ -1508,3 +1508,61 @@ def test_every_cached_verdict_key_carries_its_model():
     ):
         src = inspect.getsource(module)
         assert needle in src, f"{module.__name__} builds a cache subject without the model"
+
+
+# ========== judging: one judge, several judges, and disagreement ==========
+
+
+def _stub_classify(monkeypatch, labels_by_model):
+    """Make `_classify_one` return a fixed label per model, calling nothing."""
+    from investigator.passes import check as check_mod
+
+    def fake(ctx, obligation, fact_id, model, threshold):
+        role = labels_by_model.get(model)
+        return None if role is None else {"role": role, "_model": model}
+
+    monkeypatch.setattr(check_mod, "_classify_one", fake)
+
+
+def test_a_single_judge_is_not_reported_as_unanimous(monkeypatch):
+    """Saying "unanime" of one opinion dresses a lone verdict as corroboration."""
+    from investigator.passes import check as check_mod
+
+    monkeypatch.setattr(config, "JUDGE_MODELS", ("qwen3:30b",))
+    _stub_classify(monkeypatch, {"qwen3:30b": "stipulation"})
+    out = check_mod._classify(None, None, "f-1", 3)
+    assert out["role"] == "stipulation"
+    assert out["agreement"] == "juge_unique"
+
+
+def test_two_agreeing_judges_are_unanimous(monkeypatch):
+    from investigator.passes import check as check_mod
+
+    monkeypatch.setattr(config, "JUDGE_MODELS", ("qwen3:14b", "qwen3:30b"))
+    _stub_classify(monkeypatch, {"qwen3:14b": "demande", "qwen3:30b": "demande"})
+    out = check_mod._classify(None, None, "f-1", 3)
+    assert (out["role"], out["agreement"]) == ("demande", "unanime")
+
+
+def test_split_judges_yield_no_label_and_a_divergence(monkeypatch):
+    """A split reading is not settled by preferring the larger model."""
+    from investigator.passes import check as check_mod
+
+    monkeypatch.setattr(config, "JUDGE_MODELS", ("qwen3:14b", "qwen3:30b"))
+    _stub_classify(monkeypatch, {"qwen3:14b": "execution", "qwen3:30b": "stipulation"})
+    out = check_mod._classify(None, None, "f-1", 3)
+    assert out["role"] is None
+    assert out["agreement"] == "divergence"
+    assert set(out["per_model"]) == {"qwen3:14b", "qwen3:30b"}
+
+
+def test_the_configured_judge_is_the_larger_local_model():
+    """Guards the decision, not the value: a same-family second judge is
+    confirmation bias, so the tuple holds one entry until a genuinely
+    independent model is available."""
+    assert config.JUDGE_MODELS == ("qwen3:30b",)
+
+
+def test_overturning_still_demands_unanimity_within_the_judge():
+    assert config.SELF_CONSISTENCY_OVERTURN_THRESHOLD == config.SELF_CONSISTENCY_RUNS
+    assert config.SELF_CONSISTENCY_AGREE_THRESHOLD < config.SELF_CONSISTENCY_RUNS

@@ -561,10 +561,21 @@ def _classify(
     labels = {v.get("role") for v in per_model.values()}
     if not per_model:
         return {"role": None, "agreement": "aucun_verdict", "per_model": {}}
-    if len(labels) == 1:
-        agreement = "unanime" if len(per_model) == len(config.JUDGE_MODELS) else "partiel"
-        return {"role": next(iter(labels)), "agreement": agreement, "per_model": per_model}
-    return {"role": None, "agreement": "divergence", "per_model": per_model}
+    if len(labels) > 1:
+        # Two judges reading one quote differently is not something to settle by
+        # preferring the larger model. Reported, not resolved.
+        return {"role": None, "agreement": "divergence", "per_model": per_model}
+
+    label = next(iter(labels))
+    if len(config.JUDGE_MODELS) == 1:
+        # One judge is one judge. Saying "unanime" of a single opinion would
+        # dress a lone verdict as corroboration.
+        agreement = "juge_unique"
+    elif len(per_model) == len(config.JUDGE_MODELS):
+        agreement = "unanime"
+    else:
+        agreement = "partiel"
+    return {"role": label, "agreement": agreement, "per_model": per_model}
 
 
 def _adjudicate(

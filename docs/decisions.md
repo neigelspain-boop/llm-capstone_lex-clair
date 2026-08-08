@@ -4123,3 +4123,84 @@ Two further problems surfaced while fixing this:
 - Extend the catalog toward the documented anomalies now that `cc-1204`,
   `cc-1344`, `cc-494-12` and `cgi-641` are reachable through the top-up.
 - `--auto-corpus` on `watch.py`: propose on new gaps, never apply.
+
+---
+
+## ADR #73 — Model diversity means different failure modes, not different sizes
+
+**Date:** 2026-08-08 · **Branch:** v2-persons · **Status:** Accepted
+
+**Amends:** ADR #72.
+
+### Context
+
+ADR #72 put every classification to two local models on the grounds that
+`rag/compliance.py` pairs Opus with Kimi and `eval/llm_eval.py` uses three
+provider-diverse judges, and that a verdict two independent models reach is more
+defensible. The form was copied; the substance was not.
+
+That doctrine rests on **different failure modes**. Every model available on this
+machine is Qwen: `qwen3moe` 30B, `qwen3` 14B, `qwen3` 8B, `qwen2` coder 7B. Two
+sizes of one family share a tokenizer and a training corpus, so they agree for
+the same reasons and are wrong for the same reasons. The evidence was already in
+this project's own history and went unread:
+
+- Under the v1 classifier prompt, **both** the 14B and the 30B labelled "les
+  parts ont été cédées … sans remploi documenté" as `execution`. The second
+  judge caught nothing. Prompt precision fixed it (ADR #72).
+- In the live dual-judge run, the two models agreed on **3 of 3** facts.
+
+The cost was not small. Only one model fits in 12 GB of VRAM, so each 14B→30B
+alternation evicted and reloaded — roughly **196 model loads** across 98
+fact-classifications. Measured from the running job's cache: **264 s mean
+between verdicts**, with a **584 s** gap immediately after a 14B verdict, which
+is the 30B loading 18.6 GB. Projected, `check` alone would have taken **14.4
+hours**.
+
+A correction on the record: the 6.5 h estimate given for that run was wrong. It
+was derived from a smoke test in which both models happened to be warm, and it
+omitted load time entirely.
+
+### Decision
+
+`JUDGE_MODELS = ("qwen3:30b",)` — the better judge, alone.
+
+The combiner keeps handling two or more judges and still reports divergence, and
+gains a `juge_unique` state so a lone verdict is never rendered as
+corroboration. Adding a genuinely independent judge later — a cloud model
+through the OpenRouter path `budget.may_escalate` already gates — is an entry in
+the tuple, not a rewrite.
+
+Unchanged: `think=True`, `num_ctx=8192`, self-consistency 3, confirm at 2-of-3,
+and **unanimity still required to overturn** a deterministic verdict.
+
+**Rejected: sampling 5 times instead of 3** with the freed budget. Extra samples
+from one model reduce sampling noise, not systematic bias — when qwen3 misreads
+a clause it misreads it consistently, which is precisely what the v1 failure
+showed. Prompt precision was the lever that moved accuracy on this task.
+
+### Consequences
+
+- `check`, `contradict` and `attack` all run on `qwen3:30b`, so the model loads
+  once and stays resident for the whole cycle. The model-major pre-warm designed
+  to mitigate thrash is unnecessary and was not built.
+- Roughly half the calls and ~196 fewer model loads, with no loss of independent
+  verification, because there was none to lose.
+- Cached 14B verdicts orphan themselves via the model-keyed cache subject
+  introduced in ADR #72's follow-up; no manual cleanup.
+
+### Also assessed and rejected
+
+An external hardware review recommended capping `num_ctx` and quantising the 30B
+to Q3_K_M against a risk of CUDA OOM. Neither applies:
+
+- Ollama **pre-allocates** the KV cache from `num_ctx` at load, and every prompt
+  here is truncated in code before it is sent (`MAX_QUOTE_CHARS = 400`,
+  `MAX_CLAUSE_CHARS = 200`), so input size cannot spike. The `num_ctx` cap was
+  already in place at 8192.
+- The 30B is 18.6 GB against a 12 GB card and overflows to system RAM **by
+  design** (51 GB free). Reclaiming 1.5 GB does not change that, and quantising
+  down the model chosen for its judgment contradicts ADR #72.
+
+Its thermal assessment was accurate and required no action: measured 48 °C and
+101 W against a 170 W TDP.

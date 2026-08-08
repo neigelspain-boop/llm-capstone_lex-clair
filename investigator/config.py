@@ -141,14 +141,24 @@ OLLAMA_URL = "http://localhost:11434/api/chat"
 # one. The classifier itself now consults BOTH models — see JUDGE_MODELS.
 OLLAMA_MODEL_RESCUE = "qwen3:14b"
 
-# Every model that judges a classification. The call deciding whether a quote
-# evidences performance is the most consequential in the plane, so it is put to
-# both local models independently and their disagreement is reported rather
-# than averaged away. This mirrors rag/compliance.py's
-# COMPLIANCE_MODEL_ALTERNATIVES + DIVERGENCE_MODEL_ID, and eval/llm_eval.py's
-# judge diversity: a verdict two independent models reach is more defensible,
-# and divergence is itself a finding.
-JUDGE_MODELS = ("qwen3:14b", "qwen3:30b")
+# Every model that judges a classification.
+#
+# One entry, deliberately. The dual-judge form was borrowed from
+# rag/compliance.py (Opus + Kimi) and eval/llm_eval.py (GPT + Claude + Mistral),
+# but that doctrine rests on *different failure modes*, not on different
+# parameter counts — and every model available locally is Qwen. Two sizes of one
+# family share a tokenizer and a training corpus, so they agree for the same
+# reasons and they are wrong for the same reasons: under the v1 prompt both the
+# 14B and the 30B labelled a sale into an ordinary account `execution`, and it
+# was prompt precision, not the second opinion, that fixed it. In the live run
+# they agreed on 3 of 3 facts. A same-family second judge is confirmation bias
+# with a compute bill — and it cost roughly 196 model loads, because only one
+# model fits in 12 GB.
+#
+# The combiner still handles two or more judges and still reports divergence, so
+# adding a genuinely independent one (a cloud model through the OpenRouter path
+# budget.may_escalate already gates) is an entry in this tuple, not a rewrite.
+JUDGE_MODELS = ("qwen3:30b",)
 
 # Genuine comparative judgment. qwen3:30b is Qwen's MoE variant: ~19 GB at Q4
 # does not fit a 12 GB card, but Ollama splits it (as many layers on GPU as

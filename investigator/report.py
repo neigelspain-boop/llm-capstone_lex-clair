@@ -45,6 +45,14 @@ SEVERITY_FR = {
     "info": "information",
 }
 
+AGREEMENT_FR = {
+    "juge_unique": "juge unique",
+    "unanime": "les deux juges concordent",
+    "partiel": "un seul juge a rendu un verdict",
+    "divergence": "lecture divergente entre juges",
+    "aucun_verdict": "aucun verdict",
+}
+
 ROLE_FR = {
     "execution": "exécution",
     "stipulation": "énoncé de l'obligation",
@@ -116,7 +124,17 @@ def _quote_line(graph: CaseGraph, fact_id: str, verdict: dict | None = None) -> 
     if verdict is not None:
         role = ROLE_FR.get(verdict.get("role", ""), verdict.get("role", ""))
         motif = " ".join(str(verdict.get("motif", "")).split())
-        line.append(f"  - qualification : **{role}**" + (f" — {motif}" if motif else ""))
+        # Name the judge and its vote. A lone verdict must read as a lone
+        # verdict, not as corroboration.
+        sc = verdict.get("_self_consistency") or {}
+        votes = sc.get("votes")
+        who = str(verdict.get("_model", "")).split(":")[-1]
+        stamp = f" *({who}"
+        stamp += f", {sc['agree']}/{sc['runs']}" if sc.get("runs") else ""
+        stamp += ")*"
+        line.append(
+            f"  - qualification : **{role}**{stamp}" + (f" — {motif}" if motif else "")
+        )
     line.append(f"  - pièce : `{fact.source_doc_id}`")
     return line
 
