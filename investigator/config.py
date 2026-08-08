@@ -27,6 +27,11 @@ GENERIC_CATALOG = CATALOG_DIR / "generic_fr_succession.yaml"
 # clause excerpts and doc_id globs out of git without a new rule.
 CASE_CATALOG_FILENAME = "obligations.yaml"
 
+# Discovery writes here and never to CASE_CATALOG_FILENAME. The rename is the
+# trust boundary: a machine-written duty must pass a human before it can produce
+# a finding that names a professional to an insurer.
+CASE_CATALOG_PROPOSAL_FILENAME = "obligations.proposed.yaml"
+
 INVESTIGATION_DIRNAME = "investigation"
 
 
@@ -51,6 +56,7 @@ class CasePaths:
     watch_state: Path
     outbound_dir: Path
     case_catalog: Path
+    case_catalog_proposal: Path
 
     @classmethod
     def for_case(cls, case_id: str, dossier_dir: Path | None = None) -> "CasePaths":
@@ -68,6 +74,7 @@ class CasePaths:
             watch_state=inv / ".watch_state.json",
             outbound_dir=inv / "outbound",
             case_catalog=base / CASE_CATALOG_FILENAME,
+            case_catalog_proposal=base / CASE_CATALOG_PROPOSAL_FILENAME,
         )
 
 
@@ -111,6 +118,9 @@ PROMPT_VERSIONS = {
     "check_performance": "v3",
     "contradict": "v1",         # Phase 2 — qwen3:30b, one pair of quotes
     "attack": "v1",             # Phase 2 — qwen3:30b, confounder prose
+    # Reads a clause-bearing document and proposes obligations. Cached per
+    # (document, page window) so re-running a case is nearly free.
+    "discover": "v1",
 }
 
 

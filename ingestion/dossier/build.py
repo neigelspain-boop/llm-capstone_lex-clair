@@ -35,7 +35,7 @@ import time
 from pathlib import Path
 
 from ingestion import build as statute_build
-from ingestion.dossier import anonymize, extract, gate, facts, index
+from ingestion.dossier import anonymize, distill, extract, gate, facts, index, resolve
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
@@ -173,6 +173,29 @@ def run_pipeline(
 
         return {"case_id": case_id, "step": step, **summary}
 
+    if step == "distill":
+        summary = _run_stage("DISTILL", distill.distill_case, case_id)
+
+        print(
+            f"distill summary · case_id={case_id} total_facts={summary['total_facts']} "
+            f"distilled={summary['facts_distilled']} cache_hits={summary['cache_hits']} "
+            f"cost=${summary['total_cost']:.4f}"
+        )
+
+        return {"case_id": case_id, "step": step, **summary}
+
+    if step == "resolve":
+        summary = _run_stage("RESOLVE", resolve.resolve_case, case_id)
+
+        print(
+            f"resolve summary · case_id={case_id} "
+            f"roles_processed={summary['total_roles_processed']} "
+            f"persons={summary['total_persons_resolved']} "
+            f"cache_hits={summary['cache_hits']} cost=${summary['total_cost']:.4f}"
+        )
+
+        return {"case_id": case_id, "step": step, **summary}
+
     if step == "index":
         result = _run_stage("INDEX", index.index_dossier, case_id)
 
@@ -185,18 +208,33 @@ def run_pipeline(
         return {"case_id": case_id, "step": step, **result.model_dump()}
 
     if step == "all":
+        # Order is load-bearing, not alphabetical:
+        #   distill after facts, because it rewrites facts.jsonl in place;
+        #   index after distill, because its source_chunk_id backfill rewrites
+        #     the same rows and would otherwise drop distilled_context;
+        #   resolve last, because it clusters persons from distilled_context
+        #     per role (ADR #55).
+        # distill and resolve were outside `all` until now, which meant a case
+        # built through this pipeline had null distilled_context — weakening
+        # every downstream term match — and no persons.jsonl at all, so Plane
+        # V's `foreach` obligations produced nothing. mentions.py stays out:
+        # ADR #55 supersedes it.
         extract_summary = run_pipeline(case_id, raw_dir=raw_dir, step="extract", limit=limit)
         gate_summary = run_pipeline(case_id, step="gate")
         facts_summary = run_pipeline(case_id, step="facts")
+        distill_summary = run_pipeline(case_id, step="distill")
         index_summary = run_pipeline(case_id, step="index")
+        resolve_summary = run_pipeline(case_id, step="resolve")
 
         print(
             f"all summary · case_id={case_id} "
             f"docs_extracted={extract_summary['doc_count']} "
             f"gate_ok={gate_summary['ok']} gate_warnings={gate_summary['warnings']} "
             f"facts={facts_summary['facts_extracted']} "
+            f"distilled={distill_summary['facts_distilled']} "
             f"chunks_created={index_summary['chunks_created']} "
-            f"facts_backfilled={index_summary['facts_backfilled']}"
+            f"facts_backfilled={index_summary['facts_backfilled']} "
+            f"persons={resolve_summary['total_persons_resolved']}"
         )
 
         return {
@@ -205,11 +243,14 @@ def run_pipeline(
             "extract": extract_summary,
             "gate": gate_summary,
             "facts": facts_summary,
+            "distill": distill_summary,
             "index": index_summary,
+            "resolve": resolve_summary,
         }
 
     raise ValueError(
-        f"unknown --step {step!r}; expected 'extract', 'gate', 'facts', 'index', or 'all'"
+        f"unknown --step {step!r}; expected 'extract', 'gate', 'facts', "
+        f"'distill', 'index', 'resolve', or 'all'"
     )
 
 
@@ -232,7 +273,9 @@ def main() -> None:
              "(required for --step extract/all; optional for --step gate/facts/index)",
     )
     parser.add_argument(
-        "--step", choices=["anonymize", "extract", "gate", "facts", "index", "all"], default="all",
+        "--step",
+        choices=["anonymize", "extract", "gate", "facts", "distill", "index", "resolve", "all"],
+        default="all",
         help="which pipeline step(s) to run (default: all)",
     )
     parser.add_argument(

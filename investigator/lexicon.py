@@ -79,6 +79,33 @@ def parse_party_counts(text_folded: str) -> set[tuple[int, str]]:
     return {(int(n), noun) for n, noun in _COUNT_RE.findall(text_folded)}
 
 
+# ========== obligation language ==========
+
+# Markers that a passage *creates a duty* rather than recounting an event. Used
+# to pick which documents obligation discovery reads: a case is mostly letters,
+# statements and acts, and only a few instruments actually stipulate anything.
+# Running a model over all of them to find the three contracts is waste, and a
+# deterministic pre-filter costs nothing.
+#
+# Deliberately conservative. A missed contract is a silent hole in the catalog,
+# so the list favours recall — a letter that happens to quote a clause is cheap
+# to process and gets dropped later when its excerpt fails the verbatim check
+# against its own document.
+OBLIGATION_MARKERS = (
+    "s'oblige", "s'engage", "sera tenu", "est tenu de", "seront tenus",
+    "devra", "devront", "il sera fait", "remettra", "notifiera",
+    "s'interdit", "a la charge de", "aux termes de la presente",
+    "sous reserve de", "s'obligent",
+)
+
+
+def obligation_marker_hits(text: str | None) -> list[str]:
+    """Obligation-creating markers present in `text`, folded so accents and
+    apostrophe variants cannot hide one."""
+    folded = fold(text)
+    return [m for m in OBLIGATION_MARKERS if m in folded]
+
+
 # ========== outbound vocabulary discipline ==========
 
 # Terms that characterise conduct as intentional. These may appear freely in

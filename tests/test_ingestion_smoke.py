@@ -993,3 +993,48 @@ def test_chroma_scope_filter_on_a_statute_only_corpus() -> None:
     # rather than send an empty $in, which some backends read as match-all.
     assert r._chroma_scope_filter("dossier") is None
     assert r._chroma_scope_filter("blended") is None
+
+
+# ========== dossier build: stage order ==========
+
+
+def test_build_all_runs_six_stages_in_the_dependency_order(monkeypatch):
+    """Order is load-bearing, not alphabetical.
+
+    distill rewrites facts.jsonl in place, and index's source_chunk_id backfill
+    rewrites the same rows — so index must follow distill or distilled_context
+    is dropped. resolve clusters persons from distilled_context per role
+    (ADR #55), so it must come last. distill and resolve were outside `all`
+    entirely until this was wired: a case built through the pipeline had null
+    distilled_context and no persons.jsonl, which left Plane V's `foreach`
+    obligations producing nothing.
+    """
+    from ingestion.dossier import build
+
+    called: list[str] = []
+    _EMPTY = {
+        "doc_count": 0, "ok": 0, "warnings": 0, "facts_extracted": 0,
+        "facts_distilled": 0, "total_persons_resolved": 0,
+        "chunks_created": 0, "facts_backfilled": 0,
+    }
+    real = build.run_pipeline
+
+    def fake(case_id, raw_dir=None, step="all", **kw):
+        # Only `all` runs for real; each sub-step it dispatches is recorded and
+        # stubbed, so no model is invoked and the order is what is under test.
+        if step == "all":
+            return real(case_id, raw_dir=raw_dir, step=step, **kw)
+        called.append(step)
+        return dict(_EMPTY)
+
+    monkeypatch.setattr(build, "run_pipeline", fake)
+    fake("anycase", raw_dir=None, step="all")
+
+    assert called == ["extract", "gate", "facts", "distill", "index", "resolve"]
+
+
+def test_mentions_is_not_wired_into_the_build():
+    """ADR #55 supersedes mentions.py; resolve reads distilled_context instead."""
+    from ingestion.dossier import build
+
+    assert not hasattr(build, "mentions")

@@ -1566,3 +1566,151 @@ def test_the_configured_judge_is_the_larger_local_model():
 def test_overturning_still_demands_unanimity_within_the_judge():
     assert config.SELF_CONSISTENCY_OVERTURN_THRESHOLD == config.SELF_CONSISTENCY_RUNS
     assert config.SELF_CONSISTENCY_AGREE_THRESHOLD < config.SELF_CONSISTENCY_RUNS
+
+
+# ========== obligation discovery ==========
+
+
+def _discovery_doc(tmp_path, case_id="demo", text=None):
+    """A case directory with one clause-bearing document."""
+    body = text or (
+        "## Page 1\n\n"
+        "Le QUASI-USUFRUITIER s'oblige à maintenir sur un compte spécial les titres.\n"
+    )
+    d = tmp_path / case_id / "extracted"
+    d.mkdir(parents=True)
+    (d / "acte.md").write_text(body, encoding="utf-8")
+    return tmp_path
+
+
+def test_an_excerpt_absent_from_its_own_document_is_dropped(tmp_path):
+    """The guard. An invented clause is caught deterministically, for free."""
+    from investigator import discover
+
+    report = discover.DiscoveryReport(case_id="demo")
+    out = discover._to_obligation(
+        {
+            "titre": "Obligation inventée",
+            "extrait_verbatim": "Le notaire versera mille euros par jour de retard.",
+            "debiteur_role_id": "notaire_redacteur",
+            "termes_preuve": ["versement"],
+        },
+        "acte",
+        lexicon.fold("Le quasi-usufruitier s'oblige à maintenir un compte spécial."),
+        {"notaire_redacteur"},
+        report,
+    )
+    assert out is None
+    assert len(report.dropped_not_verbatim) == 1
+
+
+def test_a_bearer_the_case_does_not_have_is_dropped(tmp_path):
+    """A duty owed by a role that does not exist in this dossier is unusable."""
+    from investigator import discover
+
+    report = discover.DiscoveryReport(case_id="demo")
+    source = "Le notaire remettra un extrait de la présente convention."
+    out = discover._to_obligation(
+        {
+            "titre": "Remise d'un extrait",
+            "extrait_verbatim": source,
+            "debiteur_role_id": "role_inexistant",
+            "termes_preuve": ["remise"],
+        },
+        "acte",
+        lexicon.fold(source),
+        {"notaire_redacteur"},
+        report,
+    )
+    assert out is None
+    assert len(report.dropped_unknown_role) == 1
+
+
+def test_a_verbatim_proposal_with_a_known_role_becomes_a_valid_obligation():
+    from investigator import discover
+
+    report = discover.DiscoveryReport(case_id="demo")
+    source = "Le notaire soussigné remettra un extrait de la présente convention."
+    out = discover._to_obligation(
+        {
+            "titre": "Remise d'un extrait aux gestionnaires",
+            "extrait_verbatim": source,
+            "debiteur_role_id": "notaire_redacteur",
+            "termes_preuve": ["remise", "extrait"],
+            "delai_jours": 30,
+            "gravite": "critical",
+        },
+        "convention",
+        lexicon.fold(f"préambule. {source} suite."),
+        {"notaire_redacteur"},
+        report,
+    )
+    assert out is not None
+    assert out.source.kind == "contract_clause"
+    assert out.window.deadline_days == 30
+    assert out.severity == "critical"
+    assert out.obligation_id.startswith("dec-")
+
+
+def test_discovered_obligation_ids_are_deterministic_and_marked():
+    """Stable across runs, so re-discovery does not re-mint every finding; and
+    prefixed so a reader can tell machine-proposed from hand-authored."""
+    from investigator import discover
+
+    a = discover.obligation_id_for("convention_du_2024", "Remise d'un extrait")
+    b = discover.obligation_id_for("convention_du_2024", "Remise d'un extrait")
+    c = discover.obligation_id_for("convention_du_2024", "Remploi du prix")
+    assert a == b and a != c
+    assert a.startswith("dec-")
+    assert schema.OBLIGATION_ID_PATTERN.match(a)
+
+
+def test_the_prefilter_reads_instruments_and_skips_correspondence(tmp_path):
+    from investigator import discover
+
+    class G:
+        doc_text_folded = {
+            "convention": lexicon.fold("Le débiteur s'oblige à maintenir un compte."),
+            "lettre": lexicon.fold("Nous accusons réception de votre courrier du 12 mai."),
+            "mandat": lexicon.fold("Le mandant devra régler les honoraires."),
+        }
+
+    picked = [d for d, _ in discover.select_documents(G())]
+    assert "lettre" not in picked
+    assert set(picked) == {"convention", "mandat"}
+
+
+def test_discovery_writes_a_proposal_and_never_the_live_catalog(tmp_path):
+    """The rename is the trust boundary; discovery must not cross it."""
+    from investigator import discover
+
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    paths.case_dir.mkdir(parents=True)
+    report = discover.DiscoveryReport(case_id="demo", proposed=[_obligation()])
+    written = discover.write_proposal(paths, report)
+
+    assert written.endswith("obligations.proposed.yaml")
+    assert paths.case_catalog_proposal.exists()
+    assert not paths.case_catalog.exists(), "discovery wrote the live catalog"
+
+
+def test_a_proposal_loads_back_as_a_catalog(tmp_path):
+    """A proposal that cannot be loaded is not a proposal."""
+    from investigator import discover
+
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    paths.case_dir.mkdir(parents=True)
+    discover.write_proposal(
+        paths, discover.DiscoveryReport(case_id="demo", proposed=[_obligation()])
+    )
+    parsed = catalog.load_file(paths.case_catalog_proposal)
+    assert len(parsed.obligations) == 1
+    assert parsed.obligations[0].obligation_id == "test-obligation"
+
+
+def test_pages_are_the_discovery_window():
+    from investigator import discover
+
+    assert len(discover._windows("## Page 1\n\nun\n\n## Page 2\n\ndeux\n")) == 2
+    assert len(discover._windows("pas de pagination")) == 1
+    assert discover._windows("") == []
