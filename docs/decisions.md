@@ -4030,3 +4030,96 @@ case caps at T5 because it has no `coverage.jsonl`. An empty gated extract over
   prose and look like investigative work without being auditable. Output is
   structured findings plus a rendered digest; the render is a template step, not
   a model's job.
+
+---
+
+## ADR #71 — Two registers: the analysis says what the conduct is, the gate keeps it in
+
+**Date:** 2026-08-08 · **Branch:** v2-persons · **Status:** Accepted
+
+**Amends:** ADR #70. Does not repeal it.
+
+### Context
+
+Plane V shipped with every claim, note and confounder phrased as *manquement* /
+*défaut d'exécution* / *défaut de vérification*. That vocabulary is not a style
+choice: `art. L.113-1 al. 2 C. assur.` excludes faute intentionnelle ou dolosive
+from cover, so characterising conduct as deliberate in a letter to a professional
+or her insurer voids the very guarantee a claim is aimed at.
+
+The discipline was correct. Its **placement** was wrong. It was applied in the
+catalog, which is the analysis layer, so the operator's own working notes were
+written to protect an insurer — and an operator who cannot see what the conduct
+is cannot judge what leverage exists.
+
+The corpus already supported characterisations the analysis was refusing to make.
+Read out of `data/chunks.csv`, not recalled: `cp-314-1` is `VIGUEUR` and defines
+abus de confiance as *"le fait par une personne de détourner, au préjudice
+d'autrui, des fonds, des valeurs ou un bien quelconque qui lui ont été remis"*;
+`cp-314-2 2°` raises the penalty to seven years for *"toute autre personne qui,
+de manière habituelle, se livre ou prête son concours, même à titre accessoire,
+à des opérations portant sur les biens des tiers pour le compte desquels elle
+recouvre des fonds ou des valeurs"* — which describes a notaire.
+
+Two further problems surfaced while fixing this:
+
+- **The gate had never enforced any vocabulary rule.** `externalisable_findings()`
+  filtered tier, the externalisable flag, dispositive confounders and person ids,
+  and had never once looked at wording. Adding an internal register without
+  enforcement would have pushed penal language straight into outbound artifacts.
+- **The output did not explain itself.** `findings.jsonl` is machine state and
+  `DIGEST.md` is an index. Neither carried the article text, the Légifrance link,
+  the quotes, the document names, or what the classifier decided — so a reader
+  could not tell what had been found or check it.
+
+### Decision
+
+1. **Two registers.** `Obligation` gains `qualification_interne_fr` and
+   `gravite_interne`, deliberately free of the outbound discipline. Findings
+   carry them plus `penal_refs`.
+2. **Penal naming is gated on a verified anchor.** `gravite_interne:
+   susceptible_qualification_penale` without a `penal_anchors` entry is a
+   validation error, and `search.py` re-verifies those anchors every cycle for
+   every obligation whatever its source kind — a contract clause can carry a
+   penal characterisation. An offence named without a citable in-force article
+   is the fabricated-citation failure this project has a documented history of.
+3. **The gate enforces the discipline and raises.** It strips
+   `INTERNAL_ONLY_FIELDS` and scans every remaining outbound string against
+   `lexicon.OUTBOUND_FORBIDDEN_TERMS`, raising and naming the term. Raising
+   rather than redacting is deliberate: a hit means a catalog entry is phrased
+   in the wrong register, and silently rewriting it would hide the authoring bug
+   while putting unreviewed prose in front of an insurer.
+4. **`investigator/report.py` renders the argument.** Per finding: the constat,
+   the internal qualification with any penal article verbatim and its Légifrance
+   link, the founding clause or article, the debtor, the dated quotes with their
+   document names, the scope examined, the legal significance of the absence,
+   and the predictable objections. Under `--local-llm` each near-miss quote
+   carries the classifier's verdict, so "no evidence of performance" is shown
+   rather than asserted.
+5. **Corpus top-up goes through the manifest.** `investigator/corpus.py` detects
+   unresolved anchors and proposes `data/corpus_manifest.yaml` entries;
+   `--apply` merges and re-runs `ingestion.build` for the new keys. It must
+   never append to `data/chunks.csv`: that file feeds BM25 and Chroma through
+   `load_index()`, and `ingestion/load.py` already carries a desync detector for
+   exactly that. Plane I stays the only writer of statute data.
+
+### Consequences
+
+- The internal brief and the outbound extract diverge by construction, and the
+  divergence is tested in both directions.
+- `PisteClient.resolve_article` was written twice. The first `/search` payload
+  was a guess and returned 500 on every call; probing found that `CODE_DATE`
+  needs both a `NOM_CODE` filter and a `DATE_VERSION` singleDate, and that the
+  id lives at `results[].sections[].extracts[].id` while result-level `titleId`
+  is null. Verified live: `cc-1204` → `LEGIARTI000032041353`, plus `cc-1344`,
+  `cc-494-12` and `cgi-641`; a nonexistent article returns `None`. The probe
+  also caught that the manifest's short label "CGI" matches nothing in the
+  `NOM_CODE` facet.
+- Stored findings from before this change were wiped: claims changed, so ids
+  changed, and stale rows would have lingered as resolved noise.
+
+### Follow-ups
+
+- Extend the catalog toward the documented anomalies now that `cc-1204`,
+  `cc-1344`, `cc-494-12` and `cgi-641` are reachable through the top-up.
+- `--auto-corpus` on `watch.py`: propose on new gaps, never apply.
