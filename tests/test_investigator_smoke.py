@@ -1714,3 +1714,84 @@ def test_pages_are_the_discovery_window():
     assert len(discover._windows("## Page 1\n\nun\n\n## Page 2\n\ndeux\n")) == 2
     assert len(discover._windows("pas de pagination")) == 1
     assert discover._windows("") == []
+
+
+# ========== the end-to-end runner ==========
+
+
+def _stub_stages(monkeypatch):
+    """Record stage invocations without running any of them."""
+    from investigator import run_case as rc
+
+    calls: list[str] = []
+
+    def fake(argv, label):
+        calls.append(argv[argv.index("-m") + 1])
+        return 0.0
+
+    monkeypatch.setattr(rc, "_run", fake)
+    return calls
+
+
+def test_run_case_runs_the_three_stages_in_order(tmp_path, monkeypatch):
+    from investigator import run_case as rc
+
+    calls = _stub_stages(monkeypatch)
+    paths = config.CasePaths.for_case("demo")
+    monkeypatch.setattr(rc.config.CasePaths, "for_case", classmethod(lambda cls, *a, **k: paths))
+    monkeypatch.setattr(type(paths.case_catalog_proposal), "exists", lambda self: False)
+
+    rc.run_case("demo", raw_dir=tmp_path, skip_discover=False)
+    assert calls == [
+        "ingestion.dossier.build",
+        "investigator.discover",
+        "investigator.orchestrator",
+    ]
+
+
+def test_run_case_stops_at_the_review_gate(tmp_path, monkeypatch):
+    """A proposed catalog must not drive an investigation unreviewed.
+
+    The verbatim check makes invented clauses impossible, but a real clause with
+    the wrong bearer produces a confident accusation against the wrong party —
+    in a report aimed at an insurer.
+    """
+    from investigator import run_case as rc
+
+    calls = _stub_stages(monkeypatch)
+    case_dir = tmp_path / "demo"
+    case_dir.mkdir()
+    (case_dir / config.CASE_CATALOG_PROPOSAL_FILENAME).write_text("obligations: []", encoding="utf-8")
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    monkeypatch.setattr(rc.config.CasePaths, "for_case", classmethod(lambda cls, *a, **k: paths))
+
+    out = rc.run_case("demo", skip_build=True)
+    assert out["stopped_at"] == "review"
+    assert "investigator.orchestrator" not in calls
+    assert paths.case_catalog_proposal.exists(), "the proposal must survive the pause"
+    assert not paths.case_catalog.exists(), "nothing may install it but a human"
+
+
+def test_accept_proposed_installs_and_continues(tmp_path, monkeypatch):
+    from investigator import run_case as rc
+
+    calls = _stub_stages(monkeypatch)
+    case_dir = tmp_path / "demo"
+    case_dir.mkdir()
+    (case_dir / config.CASE_CATALOG_PROPOSAL_FILENAME).write_text("obligations: []", encoding="utf-8")
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    monkeypatch.setattr(rc.config.CasePaths, "for_case", classmethod(lambda cls, *a, **k: paths))
+
+    out = rc.run_case("demo", skip_build=True, accept_proposed=True)
+    assert out["stopped_at"] is None
+    assert "investigator.orchestrator" in calls
+    assert paths.case_catalog.exists()
+    assert not paths.case_catalog_proposal.exists()
+
+
+def test_build_without_a_raw_dir_is_refused(monkeypatch):
+    from investigator import run_case as rc
+
+    _stub_stages(monkeypatch)
+    with pytest.raises(ValueError, match="raw-dir"):
+        rc.run_case("demo", raw_dir=None, skip_build=False)

@@ -482,18 +482,24 @@ new case needs the duties its own instruments create. `discover` reads the acts
 that actually stipulate something and proposes them:
 
 ```bash
-# 1. build the case: extract -> gate -> facts -> distill -> index -> resolve
+# everything, in sequence
+uv run python -m investigator.run_case --case-id mycase --raw-dir data/dossier/mycase/raw
+
+#   → builds, discovers, then STOPS at the review gate
+#   → review data/dossier/mycase/obligations.proposed.yaml, then:
+mv data/dossier/mycase/obligations{.proposed,}.yaml
+uv run python -m investigator.run_case --case-id mycase --skip-build --skip-discover --local-llm
+
+less data/dossier/mycase/investigation/RAPPORT.md
+```
+
+Or the three stages by hand, if you want to inspect between them:
+
+```bash
 uv run python -m ingestion.dossier.build --case-id mycase \
     --raw-dir data/dossier/mycase/raw --step all
-
-# 2. propose obligations from the case's own acts
 uv run python -m investigator.discover --case-id mycase
-#    review data/dossier/mycase/obligations.proposed.yaml, edit, then:
-#    mv obligations.proposed.yaml obligations.yaml
-
-# 3. investigate
 uv run python -m investigator.orchestrator --case-id mycase --local-llm
-less data/dossier/mycase/investigation/RAPPORT.md
 ```
 
 Discovery **proposes and never installs**. Every excerpt is verified word for
