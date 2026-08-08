@@ -67,7 +67,11 @@ def _generate(ctx: RunContext, finding: dict) -> list[str]:
     the clause, the model sees the finding as rendered. A `None` verdict simply
     means the seeds stand alone.
     """
-    subject = f"attack|{ctx.case_id}|{finding['id']}"
+    # Model in the key: confounder prose from one model must not be replayed
+    # as another's. Same reason as contradict, same precedent in
+    # rag/compliance.py.
+    model = ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT)
+    subject = f"attack|{model}|{ctx.case_id}|{finding['id']}"
     content_hash = cache.content_hash_for_text(finding["claim"] + "||" + finding.get("evidence", ""))
     version = config.PROMPT_VERSIONS["attack"]
 
@@ -78,7 +82,7 @@ def _generate(ctx: RunContext, finding: dict) -> list[str]:
         out = ollama.call_json(
             GENERATE_SYSTEM_PROMPT,
             f"Constat : {finding['claim']}\n\nÉléments : {finding.get('evidence', '')[:600]}",
-            model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT),
+            model=model,
             think=True,
         )
         if not isinstance(out, dict) or "contre_arguments" not in out:

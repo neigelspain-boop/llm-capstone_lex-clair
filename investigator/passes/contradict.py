@@ -162,11 +162,18 @@ def _adjudicate(ctx: RunContext, pair: "FactPair") -> tuple[dict | None, dict | 
     fa, fb = ctx.graph.facts[pair.fact_id_a], ctx.graph.facts[pair.fact_id_b]
     qa = fa.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
     qb = fb.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
+    model = ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT)
     result = ollama.cached_verdict(
         ctx.paths,
         PASS_NAME,
         config.PROMPT_VERSIONS["contradict"],
-        subject=f"contradict|{ctx.case_id}|{pair.fact_id_a}|{pair.fact_id_b}",
+        # The model belongs in the key. Without it, verdicts produced by one
+        # model are served to a run using another — rag/compliance.py folds its
+        # model ids into the comparative hash for exactly this reason. It is
+        # not hypothetical here: seven pairs were adjudicated by qwen3:14b
+        # under a --model override and would have been replayed as though the
+        # 30B had decided them.
+        subject=f"contradict|{model}|{ctx.case_id}|{pair.fact_id_a}|{pair.fact_id_b}",
         content_hash=cache.content_hash_for_text(f"{qa}||{qb}"),
         system_prompt=ADJUDICATE_SYSTEM_PROMPT,
         user_prompt=(
@@ -174,7 +181,7 @@ def _adjudicate(ctx: RunContext, pair: "FactPair") -> tuple[dict | None, dict | 
             f"Citation A :\n« {qa} »\n\nCitation B :\n« {qb} »"
         ),
         verdict_key="incompatible",
-        model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT),
+        model=model,
         budget=ctx.budget,
     )
     return result, (result or {}).get("_self_consistency")

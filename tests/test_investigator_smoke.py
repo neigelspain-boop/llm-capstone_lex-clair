@@ -1487,3 +1487,24 @@ def test_adjudicate_returns_what_run_unpacks():
 
     ret = inspect.signature(check._adjudicate).return_annotation
     assert "list[dict]" in str(ret), ret
+
+
+def test_every_cached_verdict_key_carries_its_model():
+    """A verdict is only reusable for the model that produced it.
+
+    Seven contradiction pairs were once adjudicated by qwen3:14b under a
+    --model override; with no model in the key they would have been replayed to
+    a run routing that pass to the 30B. rag/compliance.py folds its model ids
+    into the comparative hash for the same reason.
+    """
+    import inspect
+
+    from investigator.passes import attack, check, contradict
+
+    for module, needle in (
+        (check, "{model}|"),
+        (contradict, "contradict|{model}|"),
+        (attack, "attack|{model}|"),
+    ):
+        src = inspect.getsource(module)
+        assert needle in src, f"{module.__name__} builds a cache subject without the model"
