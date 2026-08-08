@@ -140,6 +140,64 @@ class PisteClient:
         """Fetch one article object from PISTE by its LEGIARTI id."""
         return self.post("/consult/getArticle", {"id": legiarti_id})
 
+    def resolve_article(self, code_name: str, number: str) -> str | None:
+        """LEGIARTI id for an article number within a named code, or None.
+
+        Turns a human citation ("Code civil, art. 1204") into something
+        fetchable, so the corpus top-up can cover an article the local corpus
+        lacks.
+
+        The payload shape is not guesswork: `/search` on `CODE_DATE` returns 500
+        without both a `NOM_CODE` filter and a `DATE_VERSION` singleDate, and
+        the id lives at `results[].sections[].extracts[].id` — `titleId` at the
+        result level is null, so filtering on it silently matches nothing.
+
+        Returns None rather than raising or guessing when nothing matches
+        exactly. A synthesised identifier looks verified, which makes it worse
+        than a missing one.
+        """
+        payload = {
+            "fond": "CODE_DATE",
+            "recherche": {
+                "champs": [{
+                    "typeChamp": "NUM_ARTICLE",
+                    "criteres": [{
+                        "typeRecherche": "EXACTE",
+                        "valeur": number,
+                        "operateur": "ET",
+                    }],
+                    "operateur": "ET",
+                }],
+                "filtres": [
+                    {"facette": "NOM_CODE", "valeurs": [code_name]},
+                    {"facette": "DATE_VERSION", "singleDate": _today_ms()},
+                ],
+                "pageNumber": 1,
+                "pageSize": 10,
+                "operateur": "ET",
+                "sort": "PERTINENCE",
+                "typePagination": "ARTICLE",
+            },
+        }
+        try:
+            data = self.post("/search", payload)
+        except Exception as exc:
+            log.warning("resolve_article(%s, %s) failed: %s", code_name, number, exc)
+            return None
+
+        for result in data.get("results", []):
+            for section in result.get("sections", []):
+                for extract in section.get("extracts", []):
+                    aid = extract.get("id")
+                    if (
+                        aid
+                        and _VALID_ARTI.match(aid)
+                        and str(extract.get("num")) == str(number)
+                        and str(extract.get("legalStatus", "")).upper() == "VIGUEUR"
+                    ):
+                        return aid
+        return None
+
     def list_articles_in_section(
         self,
         section_id: str,

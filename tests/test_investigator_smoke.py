@@ -1290,3 +1290,162 @@ def test_investigation_state_stays_inside_the_case_directory():
     p = config.CasePaths.for_case("vitrine")
     for path in (p.findings_jsonl, p.cache_db, p.digest_md, p.watch_state, p.outbound_dir):
         assert p.case_dir in path.parents
+
+
+# ========== registers: internal vs outbound ==========
+
+
+def test_the_gate_strips_the_internal_register():
+    """The operator's characterisation must never leave the machine."""
+    f = _stored(
+        tier="T1",
+        qualification_interne="Le prélèvement présente les éléments matériels de…",
+        gravite_interne="susceptible_qualification_penale",
+        penal_refs=["cp-314-1"],
+    )
+    kept = schema.externalisable_findings([f], case_id="vitrine")
+    assert kept, "the finding itself should still pass the gate"
+    for field in schema.INTERNAL_ONLY_FIELDS:
+        assert field not in kept[0], f"{field} leaked to an outbound artifact"
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Obligation o : détournement de fonds successoraux.",
+        "Le notaire s'est rendu coupable d'un abus de confiance.",
+        "Manoeuvre frauduleuse caractérisée.",
+        "Faute intentionnelle du rédacteur.",
+    ],
+)
+def test_the_gate_refuses_intentional_characterisation(text):
+    """art. L.113-1 al. 2 C. assur. excludes faute intentionnelle from cover.
+
+    A dolosive framing in outbound text voids the guarantee the whole claim is
+    aimed at, so the gate raises rather than redacting: a term reaching here
+    means a catalog entry is phrased in the wrong register, and rewriting it
+    silently would hide the bug behind prose nobody reviewed.
+    """
+    with pytest.raises(ValueError, match="L.113-1"):
+        schema.externalisable_findings([_stored(tier="T1", claim=text)], case_id="vitrine")
+
+
+def test_the_gate_checks_confounders_too():
+    f = _stored(
+        tier="T1",
+        confounders=[{"text_fr": "Il ne s'agit pas d'une appropriation.", "dispositive": False}],
+    )
+    with pytest.raises(ValueError):
+        schema.externalisable_findings([f], case_id="vitrine")
+
+
+def test_neutral_outbound_wording_passes():
+    f = _stored(tier="T1", claim="Obligation o : défaut de vérification du titre d'autorisation.")
+    assert len(schema.externalisable_findings([f], case_id="vitrine")) == 1
+
+
+def test_a_penal_qualification_requires_a_verified_anchor():
+    """An offence named without a citable article is the fabricated-citation
+    failure this catalog exists to prevent."""
+    with pytest.raises(ValidationError):
+        _obligation(gravite_interne="susceptible_qualification_penale")
+    ok = _obligation(
+        gravite_interne="susceptible_qualification_penale",
+        penal_anchors=[{"chunk_id": "cp-314-1"}],
+    )
+    assert ok.penal_anchors[0].chunk_id == "cp-314-1"
+
+
+def test_shipped_penal_anchors_all_resolve_in_force(vitrine_graph):
+    """No penal label in any shipped catalog may rest on my recall."""
+    for path in (config.GENERIC_CATALOG, config.DOSSIER_DIR / "vitrine" / "obligations.yaml"):
+        if not path.exists():
+            continue
+        for ob in catalog.load_file(path).obligations:
+            for anchor in ob.penal_anchors:
+                row = vitrine_graph.statute.get(anchor.chunk_id)
+                assert row is not None, f"{ob.obligation_id}: {anchor.chunk_id} absent du corpus"
+                assert row["etat"] == "VIGUEUR", f"{ob.obligation_id}: {anchor.chunk_id} abrogé"
+
+
+# ========== corpus top-up ==========
+
+
+def test_detect_gaps_finds_an_unanchored_article_and_nothing_else():
+    from investigator import corpus
+    from investigator.catalog import Catalog
+
+    present = _obligation(
+        obligation_id="anchored-ok",
+        source={"kind": "statute", "ref": "CC art. 587", "chunk_id": "cc-587",
+                "excerpt_fr": "x"},
+    )
+    missing = _obligation(
+        obligation_id="anchored-missing",
+        source={"kind": "statute", "ref": "CC art. 1204", "chunk_id": "cc-1204",
+                "excerpt_fr": "x"},
+    )
+    cat = Catalog(
+        obligations={o.obligation_id: o for o in (present, missing)},
+        origin={}, files=(),
+    )
+    gaps = corpus.detect_gaps(cat, statute={"cc-587": {"etat": "VIGUEUR"}})
+    assert [g.chunk_id for g in gaps] == ["cc-1204"]
+
+
+def test_an_unresolvable_anchor_is_never_given_a_synthesised_id():
+    from investigator import corpus
+
+    gap = corpus.AnchorGap("o", "cc-1204", None, "CC art. 1204", "source")
+    assert corpus.resolve(gap, client=None) is None          # no client, no guess
+
+    class Failing:
+        def resolve_article(self, *_):
+            raise RuntimeError("network down")
+
+    assert corpus.resolve(gap, client=Failing()) is None
+    fragment, unresolved = corpus.build_proposal([gap], client=Failing())
+    assert fragment["sources"] == {}
+    assert [g.chunk_id for g in unresolved] == ["cc-1204"]
+
+
+def test_a_proposal_is_valid_manifest_yaml(tmp_path):
+    import yaml
+
+    from investigator import corpus
+
+    class Stub:
+        def resolve_article(self, code, number):
+            return "LEGIARTI000032041353"
+
+    gap = corpus.AnchorGap("o", "cc-1204", None, "CC art. 1204", "source")
+    fragment, unresolved = corpus.build_proposal([gap], client=Stub())
+    assert not unresolved
+    path = tmp_path / "proposed.yaml"
+    corpus.write_proposal(fragment, path)
+    parsed = yaml.safe_load(path.read_text(encoding="utf-8"))
+    spec = next(iter(parsed["sources"].values()))
+    assert spec["fetch_strategy"] == "article"
+    assert spec["article_id"] == "LEGIARTI000032041353"
+
+
+def test_apply_is_refused_without_a_reviewed_proposal(tmp_path):
+    from investigator import corpus
+
+    with pytest.raises(FileNotFoundError):
+        corpus.apply_proposal(proposal_path=tmp_path / "absent.yaml")
+
+
+def test_search_and_corpus_agree_on_what_an_anchor_is():
+    """One definition, imported — so the two cannot drift."""
+    from investigator import corpus
+    from investigator.passes import search
+
+    assert search.anchors_of is corpus.anchors_of
+    ob = _obligation(
+        source={"kind": "statute", "ref": "r", "chunk_id": "cc-587", "excerpt_fr": "x"},
+        also_anchored=[{"chunk_id": "cc-815-3"}],
+        penal_anchors=[{"chunk_id": "cp-314-1"}],
+    )
+    kinds = {kind for kind, _, _ in corpus.anchors_of(ob)}
+    assert kinds == {"source", "also_anchored", "penal"}

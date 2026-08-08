@@ -27,6 +27,7 @@ import logging
 from fnmatch import fnmatch
 
 from investigator import store
+from investigator.corpus import anchors_of  # one definition of "anchor"
 from investigator.graph import CaseGraph
 from investigator.lexicon import fold
 from investigator.schema import Obligation, PassResult, RunContext
