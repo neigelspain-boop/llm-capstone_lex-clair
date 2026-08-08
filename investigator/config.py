@@ -97,7 +97,14 @@ OUTBOUND_MIN_TIER = "T2"
 PROMPT_VERSIONS = {
     "search_offline": "v1",
     "search_piste": "v1",
-    "check_rescue": "v1",       # Phase 2 — qwen3:14b, one quote vs one clause
+    # Phase 2 — classifies one quote against one clause into
+    # execution/stipulation/demande/manquement/autre. Used in BOTH
+    # directions: it can withdraw a gap, and it can overturn a
+    # satisfaction that rested on a mere mention.
+    # v2: the prompt now requires the act to be the act the clause demands,
+    # for the designated beneficiary. Under v1 both model sizes read a sale of
+    # the assets into an ordinary account as performance of a restitution duty.
+    "check_performance": "v2",
     "contradict": "v1",         # Phase 2 — qwen3:30b, one pair of quotes
     "attack": "v1",             # Phase 2 — qwen3:30b, confounder prose
 }

@@ -404,7 +404,12 @@ def _claim(obligation: Obligation, ev: Evaluation) -> str:
     return frame.format(**fields)
 
 
-def _evidence(ev: Evaluation, graph: CaseGraph) -> str:
+def _evidence(
+    ev: Evaluation,
+    graph: CaseGraph,
+    obligation: Obligation | None = None,
+    adjudication_note: str = "",
+) -> str:
     """Everything volatile. Never let any of this reach the claim."""
     bits = [
         f"statut={ev.status}",
@@ -421,87 +426,149 @@ def _evidence(ev: Evaluation, graph: CaseGraph) -> str:
         bits.append("faits=" + ", ".join(ev.matched_fact_ids[:6]))
     elif ev.candidate_fact_ids:
         bits.append("candidats=" + ", ".join(ev.candidate_fact_ids[:6]))
+    if adjudication_note:
+        bits.append(adjudication_note)
+    if (
+        obligation is not None
+        and obligation.absence_significance_fr
+        and ev.status in ("gap", "unverifiable")
+    ):
+        bits.append("portée : " + obligation.absence_significance_fr.strip())
     return " · ".join(bits)
 
 
 # ========== the rescue tier (Phase 2, local model) ==========
 
-RESCUE_SYSTEM_PROMPT = """Tu es un vérificateur juridique. On te donne UNE clause \
+CLASSIFY_SYSTEM_PROMPT = """Tu es un vérificateur juridique. On te donne UNE clause \
 d'obligation et UNE citation extraite d'un dossier.
 
-Question unique : cette citation atteste-t-elle l'exécution de cette obligation précise ?
+Classe le rôle de cette citation par rapport à cette obligation précise :
 
-Règles :
-- Réponds uniquement sur ce que la citation dit explicitement.
-- Une mention de l'obligation, une promesse, ou une demande ne sont PAS une exécution.
-- Dans le doute, réponds false.
+- "execution"   : la citation atteste que l'obligation A ÉTÉ EXÉCUTÉE (acte accompli,
+                  pièce remise, compte ouvert, somme versée, information délivrée).
+- "stipulation" : la citation ÉNONCE l'obligation (texte de la convention, rappel de la
+                  règle). Énoncer n'est pas exécuter.
+- "demande"     : la citation RÉCLAME l'exécution, la relance ou s'en enquiert.
+- "manquement"  : la citation indique que l'obligation N'A PAS été exécutée.
+- "autre"       : sans rapport avec l'exécution de cette obligation.
 
-Réponds en JSON strict : {"atteste": true|false, "motif": "<une phrase>"}"""
+ATTENTION : "execution" exige que l'acte décrit SOIT L'ACTE EXIGÉ PAR LA CLAUSE,
+au profit du bénéficiaire désigné. Un acte quelconque accompli sur les mêmes biens
+(vente, virement vers un autre compte, encaissement) N'EST PAS l'exécution de la
+clause : c'est souvent l'inverse. Vérifie : qui reçoit ? est-ce ce qu'exige la clause ?
+
+Seul "execution" vaut exécution. Dans le doute, ne réponds jamais "execution".
+
+Réponds en JSON strict : {"role": "<une des cinq valeurs>", "motif": "<une phrase>"}"""
 
 
-def _rescue_gap(
-    ctx: RunContext, obligation: Obligation, ev: Evaluation
-) -> tuple[Evaluation, dict | None]:
-    """Ask the local model whether any candidate fact actually attests the duty.
+def _classify(ctx: RunContext, obligation: Obligation, fact_id: str) -> dict | None:
+    """What role does one quote play with respect to one obligation?
 
-    A false negative — the obligation was performed, but phrased outside the
-    catalog's term list — is the failure a deterministic predicate cannot avoid.
-    This is the repair, and it is deliberately one-directional: **a rescue can
-    only turn `gap` into `satisfied`, never the reverse**. The model is never
-    able to manufacture a breach, only to withdraw one the terms invented.
+    The whole reason this exists: a document *stipulating* a duty, one
+    *demanding* it, one *reporting its breach* and one *evidencing performance*
+    all share the same vocabulary. A term-matching predicate cannot tell them
+    apart, and on the real corpus it read the sentence "les parts ont été cédées
+    ... sans remploi documenté" — evidence of the breach — as evidence that
+    restitution had been performed.
 
-    Each call sees one clause and one quote. It never sees the obligation set,
-    the corpus, or the other candidates — `scripts/local_audit/passes/slimming.py`
-    documents whole-unit judgment failing 3/3 on both model sizes, and the fix
-    there was the same: shrink the unit until the question is answerable.
+    One clause, one quote, five labels, cached per pair. `None` means no
+    verdict, and leaves the deterministic result standing.
+
+    The prompt's insistence that the act be *the act the clause requires, for
+    the designated beneficiary* is load-bearing and was measured, not guessed:
+    without it both qwen3:14b and qwen3:30b read "les parts ont été cédées et
+    leur produit versé sur un compte ordinaire, sans remploi documenté" as
+    `execution`, because an act had been performed on the right assets. With
+    it, both return `manquement`. Model size did not decide that case; the
+    question's precision did.
     """
+    fact = ctx.graph.facts.get(fact_id)
+    if fact is None:
+        return None
     clause = obligation.source.excerpt_fr.strip()[: config.MAX_CLAUSE_CHARS]
-    prompt_version = config.PROMPT_VERSIONS["check_rescue"]
+    quote = fact.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
+    subject = f"{obligation.obligation_id}@{obligation.rule_version}|{ctx.case_id}|{fact_id}"
+    content_hash = cache.content_hash_for_text(f"{quote}||{clause}")
+    version = config.PROMPT_VERSIONS["check_performance"]
 
-    for fact_id in ev.candidate_fact_ids:
-        fact = ctx.graph.facts.get(fact_id)
-        if fact is None:
-            continue
-        quote = fact.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
-        subject = f"{obligation.obligation_id}@{obligation.rule_version}|{ctx.case_id}|{fact_id}"
-        content_hash = cache.content_hash_for_text(f"{quote}||{clause}")
+    cached = cache.get(ctx.paths, PASS_NAME, version, subject, content_hash)
+    if cached is not None:
+        return cached
+    if not ctx.budget.take_local():
+        return None
+    verdict, meta = ollama.call_self_consistency(
+        CLASSIFY_SYSTEM_PROMPT,
+        f"Clause d'obligation :\n« {clause} »\n\nCitation du dossier :\n« {quote} »",
+        verdict_key="role",
+        model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_RESCUE),
+    )
+    if verdict is None:
+        return None  # never cached: no verdict is not a negative verdict
+    result = dict(verdict)
+    result["_self_consistency"] = meta
+    cache.set(ctx.paths, PASS_NAME, version, subject, content_hash, result)
+    return result
 
-        cached = cache.get(ctx.paths, PASS_NAME, prompt_version, subject, content_hash)
-        if cached is None:
-            if not ctx.budget.take_local():
-                return ev, None  # budget exhausted; caller marks the pass partial
-            verdict, meta = ollama.call_self_consistency(
-                RESCUE_SYSTEM_PROMPT,
-                f"Clause d'obligation :\n« {clause} »\n\nCitation du dossier :\n« {quote} »",
-                verdict_key="atteste",
-                model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_RESCUE),
-            )
+
+def _adjudicate(
+    ctx: RunContext, obligation: Obligation, ev: Evaluation
+) -> tuple[Evaluation, dict | None, str]:
+    """Confirm or overturn a deterministic verdict. Both directions.
+
+    The asymmetry that matters for this plane's purpose: a **false `satisfied`
+    hides a breach**, which defeats the tool entirely, while a false `gap` costs
+    the reader one check. So satisfaction is what gets verified hardest — an
+    obligation counts as performed only if some quote is classified `execution`.
+
+    A model-created gap is capped at T4 by `assign_tier` and carries the
+    classifier's reason, so "never confidently invent a breach" survives while
+    the dominant error is the one actually being corrected.
+    """
+    if obligation.adjudicate == "none":
+        return ev, None, ""
+
+    if ev.status in ("satisfied", "window_breach"):
+        reasons = []
+        for fact_id in ev.matched_fact_ids[: config.CHECK_MAX_CANDIDATES]:
+            verdict = _classify(ctx, obligation, fact_id)
             if verdict is None:
-                # No verdict is not a negative verdict, and is never cached.
                 continue
-            cached = dict(verdict)
-            cached["_self_consistency"] = meta
-            cache.set(ctx.paths, PASS_NAME, prompt_version, subject, content_hash, cached)
+            if verdict.get("role") == "execution":
+                return ev, verdict.get("_self_consistency"), ""
+            reasons.append(f"{fact_id}={verdict.get('role')}")
+        if reasons:
+            # Nothing in the matched set actually evidences performance.
+            downgraded = replace(ev, status="gap", matched_fact_ids=(), matched_doc_ids=())
+            return downgraded, None, "aucune pièce n'atteste l'exécution — " + ", ".join(reasons[:6])
+        return ev, None, ""
 
-        if cached.get("atteste") is True:
-            rescued = replace(
-                ev,
-                status="satisfied",
-                matched_fact_ids=(fact_id,),
-                matched_doc_ids=(fact.source_doc_id,),
-                matched_docs_all_gate_ok=ctx.graph.gate_ok(fact.source_doc_id),
-            )
-            return rescued, cached.get("_self_consistency")
-    return ev, None
+    if ev.status == "gap":
+        for fact_id in ev.candidate_fact_ids:
+            verdict = _classify(ctx, obligation, fact_id)
+            if verdict is None:
+                continue
+            if verdict.get("role") == "execution":
+                fact = ctx.graph.facts[fact_id]
+                rescued = replace(
+                    ev,
+                    status="satisfied",
+                    matched_fact_ids=(fact_id,),
+                    matched_doc_ids=(fact.source_doc_id,),
+                    matched_docs_all_gate_ok=ctx.graph.gate_ok(fact.source_doc_id),
+                )
+                return rescued, verdict.get("_self_consistency"), ""
+    return ev, None, ""
 
 
 def run(ctx: RunContext) -> PassResult:
     """Evaluate every obligation, every instance.
 
-    Deterministic by default. With `--local-llm`, a `gap` whose obligation opts
-    into adjudication additionally gets the rescue pass above. `complete` goes
-    False if the call budget ran out mid-sweep — a cutoff that reconciled would
-    resolve real gaps and report the deletion as progress.
+    Deterministic by default. With `--local-llm`, every verdict whose obligation
+    opts in is additionally adjudicated — satisfaction hardest, since a false
+    `satisfied` hides a breach. `complete` goes False if the call budget ran out
+    mid-sweep; a cutoff that reconciled would resolve real gaps and report the
+    deletion as progress.
     """
     findings: list[dict] = []
     graph = ctx.graph
@@ -517,11 +584,10 @@ def run(ctx: RunContext) -> PassResult:
             if ev.status == "not_triggered":
                 continue
 
-            sc_meta = None
-            if adjudicating and ev.status == "gap" and obligation.adjudicate != "none":
-                before = ev.status
-                ev, sc_meta = _rescue_gap(ctx, obligation, ev)
-                if ev.status == before and ctx.budget.local_exhausted():
+            sc_meta, adjudication_note = None, ""
+            if adjudicating:
+                ev, sc_meta, adjudication_note = _adjudicate(ctx, obligation, ev)
+                if ctx.budget.local_exhausted():
                     complete = False
 
             tier, basis = assign_tier(ev, ctx.health, obligation, sc_meta=sc_meta)
@@ -535,7 +601,7 @@ def run(ctx: RunContext) -> PassResult:
                     subject=subject,
                     claim=_claim(obligation, ev),
                     case_id=ctx.case_id,
-                    evidence=_evidence(ev, graph),
+                    evidence=_evidence(ev, graph, obligation, adjudication_note),
                     severity="info" if ev.status == "satisfied" else obligation.severity,
                     confidence="high" if tier in ("T1", "T2", "T3") else "low",
                     tier=tier,

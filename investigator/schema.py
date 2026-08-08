@@ -208,6 +208,11 @@ class Obligation(BaseModel):
     presence_tier_cap: Tier = "T1"
     adjudicate: Literal["none", "llm_local", "llm_judgment", "cloud"] = "none"
     claim_template_fr: str
+    # Why an absence matters legally — rendered into the finding. For duties
+    # where the burden of proof is reversed (the professional must prove he
+    # performed), "nothing in the file attests it" is not a weak finding, it is
+    # the finding.
+    absence_significance_fr: str = ""
     confounders_seed: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
