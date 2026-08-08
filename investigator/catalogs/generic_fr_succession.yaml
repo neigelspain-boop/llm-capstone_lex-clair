@@ -100,6 +100,9 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la fourniture d'une caution ni une dispense expresse à l'acte constitutif.
+    absence_significance_fr: >
+      Sans caution ni dispense tracée à l'acte, la garantie du nu-propriétaire est absente
+      et le droit d'emploi de l'article 602 est inopérant.
     confounders_seed:
       - "La dispense peut figurer à l'acte constitutif sans avoir été reprise dans les faits extraits."
       - "Une dispense de caution est licite : son existence n'est pas en soi un manquement, seule son absence de trace l'est."
@@ -462,6 +465,9 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une demande de pièces est attestée
       sans qu'aucun fait n'établisse la délivrance correspondante.
+    absence_significance_fr: >
+      La délivrance d'expéditions est une attribution statutaire de l'officier public, non
+      un service discrétionnaire : le refus ou le silence est un manquement en soi.
     confounders_seed:
       - "Les pièces ont pu être délivrées par un canal non archivé au dossier."
       - "Une demande imprécise peut n'avoir pas fait courir l'obligation de délivrance."
@@ -501,5 +507,8 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : une mise en cause est attestée sans
       qu'aucun fait n'établisse la mobilisation de la garantie de responsabilité
       civile professionnelle.
+    absence_significance_fr: >
+      La garantie existe de droit : sa mobilisation ne dépend pas du bon vouloir de
+      l'étude mise en cause.
     confounders_seed:
       - "La déclaration à l'assureur relève de l'assuré et peut n'avoir laissé aucune trace au dossier des tiers."

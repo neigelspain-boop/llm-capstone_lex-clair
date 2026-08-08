@@ -55,6 +55,10 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la constitution du compte spécial destiné à recevoir les sommes et titres
       soumis au quasi-usufruit.
+    absence_significance_fr: >
+      Obligation de résultat : le compte doit exister. Son absence de trace rend
+      impossible l'établissement du compte de fin d'usufruit, et prive le nu-propriétaire
+      du moyen de chiffrer sa créance.
     confounders_seed:
       - "Le compte a pu être ouvert par acte séparé non versé au dossier."
       - "L'établissement teneur de compte a pu opérer la ségrégation sans acte notarié distinct."
@@ -86,6 +90,9 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       une notification de changement dans la désignation du compte.
+    absence_significance_fr: >
+      L'absence de notification prive le nu-propriétaire du suivi de l'assiette de sa
+      créance pendant toute la durée concernée.
     confounders_seed:
       - "L'obligation ne se déclenche qu'en cas de changement effectif : son silence peut signifier qu'il n'y en a pas eu."
 
@@ -125,6 +132,9 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'information périodique du nu-propriétaire sur les opérations réalisées sur
       les titres démembrés.
+    absence_significance_fr: >
+      Le devoir d'information se prouve par celui qui en est tenu : il lui appartient
+      d'établir qu'il l'a exécuté, non au nu-propriétaire d'établir qu'il ne l'a pas reçu.
     confounders_seed:
       - "L'information a pu être délivrée verbalement ou par un canal non archivé."
       - "L'obligation ne se déclenche qu'en présence d'une opération sur les titres."
@@ -157,6 +167,9 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       les instructions qui devaient être données à l'établissement teneur du compte.
+    absence_significance_fr: >
+      Obligation de faire autonome : elle est violée par la seule abstention d'instruire
+      l'établissement, indépendamment du résultat obtenu.
     confounders_seed:
       - "Des instructions verbales à un conseiller peuvent n'avoir laissé aucune trace écrite."
 
@@ -197,6 +210,10 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une cession de titres est attestée
       sans qu'aucun fait n'établisse le remploi intégral du prix.
+    absence_significance_fr: >
+      À défaut de remploi, la restitution en nature devient impossible et la créance se
+      réduit à une contre-valeur chirographaire : le préjudice naît du manquement lui-
+      même.
     confounders_seed:
       - "La clause précise elle-même qu'elle n'impose rien à l'établissement teneur du compte : le manquement ne peut lui être imputé."
       - "Le remploi a pu être opéré au sein du même compte sans écriture distincte visible au dossier."
@@ -239,6 +256,9 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'inscription de la créance de restitution au passif de la déclaration de
       succession du quasi-usufruitier.
+    absence_significance_fr: >
+      L'omission au passif fausse la liquidation au détriment du nu-propriétaire et
+      profite aux cohéritiers : le manquement est chiffrable.
     confounders_seed:
       - "La déclaration peut avoir été déposée sans que son contenu ait été communiqué aux nus-propriétaires."
       - "Une dispense de déclaration régulièrement applicable rendrait la mention sans objet."
@@ -282,6 +302,10 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la remise de l'extrait de convention au détenteur d'actifs
       {foreach_role}/{foreach_key}.
+    absence_significance_fr: >
+      Obligation textuelle personnelle du notaire soussigné. Son inexécution explique
+      l'ignorance du démembrement par le tiers détenteur, et donc les opérations
+      accomplies en méconnaissance de la convention.
     confounders_seed:
       - "La remise a pu être opérée par un canal non archivé au dossier."
       - "L'établissement a pu être informé par le quasi-usufruitier lui-même, ce qui n'exonère pas le rédacteur de son obligation propre."
@@ -331,6 +355,9 @@ obligations:
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       le prélèvement de la créance de restitution avant dévolution successorale.
+    absence_significance_fr: >
+      Le prélèvement prime la dévolution : régler les héritiers avant le nu-propriétaire
+      inverse l'ordre stipulé et engage celui qui a conduit les opérations.
     confounders_seed:
       - "Le délai conventionnel de six mois peut n'être pas expiré à la date de l'extraction."
       - "Un projet de partage réservant le prélèvement peut exister sans figurer au dossier."
@@ -371,6 +398,10 @@ obligations:
       Obligation {obligation_id} ({source_ref}) : la convention écarte toute sûreté
       sans qu'aucun fait du dossier n'atteste le conseil délivré sur la portée de
       cette renonciation.
+    absence_significance_fr: >
+      Le devoir de conseil du notaire se prouve par le notaire lui-même : il lui incombe
+      d'établir qu'il a informé les parties de la portée de la renonciation à toute
+      sûreté. L'absence de trace écrite vaut, à elle seule, défaut de conseil.
     confounders_seed:
       - "Le conseil a pu être délivré oralement lors d'un rendez-vous non archivé."
       - "La renonciation à sûreté est licite et courante : son existence n'est pas en soi fautive, seule l'absence de conseil tracé l'est."
