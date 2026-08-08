@@ -4469,3 +4469,36 @@ guessed**.
   perte-de-chance causation) is the next most load-bearing.
 - Obligations that anchor to jurisprudence — none does yet.
 - Chain representation, still the largest ceiling on what can be found at all.
+
+## ADR #77 — A role designation is not an identifier
+
+**Statut** : accepté · 2026-08-08
+
+**Contexte.** Le rebuild complet du dossier `private` a régénéré `persons.jsonl`
+via `resolve` (ADR #55), qui a rattaché l'alias générique « notaire
+instrumentaire » à Maître MENA. `_load_known_entities` prend chaque
+`canonical_name` et chaque alias pour une aiguille de vérification, donc
+`verify_anonymization` a cherché ce libellé de rôle dans le cas public et l'a
+trouvé — dix « fuites » dans des fichiers qui n'en contenaient aucune, et le
+test de garde du dépôt au rouge.
+
+La conséquence sérieuse n'est pas le test. `_distinctive_tokens` aurait retenu
+« instrumentaire » comme jeton distinctif : une régénération de `vitrine`
+aurait remplacé le mot français ordinaire par un patronyme de persona partout
+où il apparaît, dans le corpus destiné à la publication.
+
+**Décision.** Un nom dont *tous* les jetons sont structurels n'entre pas dans
+l'ensemble des aiguilles. Le vocabulaire de rôle rejoint `_GENERIC_NAME_TOKENS`,
+qui portait déjà exactement cette notion pour les clés de la table de
+pseudonymisation.
+
+Le prédicat est « tous les jetons sont génériques », et non « aucun jeton
+distinctif » : le second passe par `_distinctive_tokens`, qui écarte aussi tout
+jeton de moins de quatre caractères et supprimerait « EDF », une entité réelle
+du corpus. Les deux cas sont couverts par un test.
+
+**Ce que cela ne fait pas.** La garde ne relâche rien : une chaîne dont chaque
+mot est un terme de fonction n'identifie personne, par construction. Elle ne
+corrige pas non plus la cause — `resolve` continue de produire des alias de
+rôle. Le traiter à la source supposerait de contraindre un clustering LLM ;
+la garde est ici posée à l'endroit où la conséquence se produit.

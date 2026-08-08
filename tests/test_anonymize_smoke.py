@@ -159,6 +159,54 @@ def test_aliases_of_one_person_collapse_to_one_pseudonym(dossier, extras) -> Non
     assert "duchemin" not in anonymize._fold(out)
 
 
+def test_a_role_alias_is_not_treated_as_an_identifier(dossier, extras) -> None:
+    """The resolver puts role designations in `aliases` — the real corpus grew
+    "notaire instrumentaire" on a named notaire. A role is worn by whoever
+    holds the office, so it identifies nobody.
+
+    Two things break when it is taken for a name. "instrumentaire" becomes a
+    distinctive token and rewrites the ordinary French word wherever it
+    appears, and the verifier then hunts that word through the public case and
+    reports ten leaks that are not leaks.
+    """
+    persons = [*_PERSONS, {
+        "person_id": "p-mena", "canonical_name": "Ariane VOLTAIRE",
+        "aliases": ["notaire instrumentaire", "notaire rédacteur"],
+        "person_type": "natural_person",
+    }]
+    (dossier / "src" / "persons.jsonl").write_text(
+        "\n".join(json.dumps(r, ensure_ascii=False) for r in persons) + "\n",
+        encoding="utf-8",
+    )
+    (dossier / "src" / "_anonymization_map.json").unlink(missing_ok=True)
+
+    names = [n for n, _type, _pid in anonymize._load_known_entities("src")]
+    assert "notaire instrumentaire" not in names
+    assert "notaire rédacteur" not in names
+    assert "Ariane VOLTAIRE" in names          # the real name still is one
+
+    mapping = anonymize.load_or_build_mapping("src")
+    out = anonymize.anonymize_text(
+        "Le notaire instrumentaire a reçu l'acte.", mapping, "d1", extras, use_llm=False,
+    )
+    assert "instrumentaire" in out
+
+
+def test_a_short_name_is_still_an_identifier(dossier) -> None:
+    """The guard is "every token is structural", not "no distinctive token" —
+    the latter also drops anything under four characters, which would discard
+    EDF, a real entity in the corpus."""
+    persons = [*_PERSONS, {
+        "person_id": "p-edf", "canonical_name": "EDF",
+        "aliases": [], "person_type": "legal_person",
+    }]
+    (dossier / "src" / "persons.jsonl").write_text(
+        "\n".join(json.dumps(r, ensure_ascii=False) for r in persons) + "\n",
+        encoding="utf-8",
+    )
+    assert "EDF" in [n for n, _t, _p in anonymize._load_known_entities("src")]
+
+
 def test_replacement_is_accent_and_case_insensitive(dossier, extras) -> None:
     mapping = anonymize.load_or_build_mapping("src")
     for spelling in ("VOLTAIRE", "voltaire", "Voltaire", "VOLTAÏRE"):

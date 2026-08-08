@@ -372,7 +372,7 @@ def _load_known_entities(source_case_id: str) -> list[tuple[str, str, str]]:
         person_id = record.get("person_id") or record.get("canonical_name", "")
         names = [record.get("canonical_name")] + list(record.get("aliases") or [])
         for name in names:
-            if name and len(name) >= MIN_ENTITY_LEN:
+            if name and len(name) >= MIN_ENTITY_LEN and not _is_pure_role_phrase(name):
                 triples.append((name, person_type, person_id))
     return triples
 
@@ -386,7 +386,28 @@ _GENERIC_NAME_TOKENS = {
     "generale", "general", "depots", "consignations", "retraite", "gestion",
     "france", "francaise", "groupe", "compagnie", "credit", "agricole",
     "monsieur", "madame", "maitre", "veuve", "epouse",
+    # Role designations. The resolver attaches these to people as aliases —
+    # the real corpus put "notaire instrumentaire" on Maître MENA — and a role
+    # is worn by whoever holds the office, so it identifies nobody. Left out,
+    # "instrumentaire" became a distinctive token and would have rewritten the
+    # ordinary French word wherever it appeared in the public case.
+    "instrumentaire", "redacteur", "redactrice", "stagiaire", "associe",
+    "associee", "collaborateur", "collaboratrice", "clerc", "mandataire",
+    "mandant", "usufruitier", "usufruitiere", "proprietaire", "heritier",
+    "heritiere", "heritiers", "defunt", "defunte", "gestionnaire",
+    "succession", "successions", "charge", "chargee",
 }
+
+
+def _is_pure_role_phrase(name: str) -> bool:
+    """True when every word of `name` is structural, so it identifies nobody.
+
+    Distinct from having no *distinctive* token: `_distinctive_tokens` also
+    drops anything shorter than four characters, which would discard "EDF" —
+    a real needle. The test here is that nothing identifying remains at all.
+    """
+    tokens = [t for t in re.split(r"[^a-zA-Z0-9À-ÿ]+", _fold(name)) if t]
+    return bool(tokens) and all(t in _GENERIC_NAME_TOKENS for t in tokens)
 
 
 def _distinctive_tokens(name: str) -> set[str]:
