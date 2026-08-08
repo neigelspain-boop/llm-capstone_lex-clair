@@ -104,7 +104,11 @@ PROMPT_VERSIONS = {
     # v2: the prompt now requires the act to be the act the clause demands,
     # for the designated beneficiary. Under v1 both model sizes read a sale of
     # the assets into an ordinary account as performance of a restitution duty.
-    "check_performance": "v2",
+    # v3: OLLAMA_THINK is on and the call goes to both JUDGE_MODELS. A verdict
+    # reached without reasoning is not the same computation, so v2 entries must
+    # miss rather than be served — the cache key's model prefix already orphans
+    # them, and the bump makes the reason explicit rather than incidental.
+    "check_performance": "v3",
     "contradict": "v1",         # Phase 2 — qwen3:30b, one pair of quotes
     "attack": "v1",             # Phase 2 — qwen3:30b, confounder prose
 }
