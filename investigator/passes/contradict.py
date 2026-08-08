@@ -162,29 +162,22 @@ def _adjudicate(ctx: RunContext, pair: "FactPair") -> tuple[dict | None, dict | 
     fa, fb = ctx.graph.facts[pair.fact_id_a], ctx.graph.facts[pair.fact_id_b]
     qa = fa.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
     qb = fb.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
-    subject = f"contradict|{ctx.case_id}|{pair.fact_id_a}|{pair.fact_id_b}"
-    content_hash = cache.content_hash_for_text(f"{qa}||{qb}")
-    version = config.PROMPT_VERSIONS["contradict"]
-
-    cached = cache.get(ctx.paths, PASS_NAME, version, subject, content_hash)
-    if cached is not None:
-        return cached, cached.get("_self_consistency")
-    if not ctx.budget.take_local():
-        return None, None
-    verdict, meta = ollama.call_self_consistency(
-        ADJUDICATE_SYSTEM_PROMPT,
-        f"Rapprochement : {BUCKET_LABELS[pair.bucket]} ({pair.bucket_key})\n\n"
-        f"Citation A :\n« {qa} »\n\nCitation B :\n« {qb} »",
+    result = ollama.cached_verdict(
+        ctx.paths,
+        PASS_NAME,
+        config.PROMPT_VERSIONS["contradict"],
+        subject=f"contradict|{ctx.case_id}|{pair.fact_id_a}|{pair.fact_id_b}",
+        content_hash=cache.content_hash_for_text(f"{qa}||{qb}"),
+        system_prompt=ADJUDICATE_SYSTEM_PROMPT,
+        user_prompt=(
+            f"Rapprochement : {BUCKET_LABELS[pair.bucket]} ({pair.bucket_key})\n\n"
+            f"Citation A :\n« {qa} »\n\nCitation B :\n« {qb} »"
+        ),
         verdict_key="incompatible",
-        think=True,
         model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_JUDGMENT),
+        budget=ctx.budget,
     )
-    if verdict is None:
-        return None, None
-    result = dict(verdict)
-    result["_self_consistency"] = meta
-    cache.set(ctx.paths, PASS_NAME, version, subject, content_hash, result)
-    return result, meta
+    return result, (result or {}).get("_self_consistency")
 
 
 def run(ctx: RunContext) -> PassResult:

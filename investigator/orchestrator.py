@@ -158,10 +158,17 @@ def run_cycle(
         )
         report.per_pass[pass_name] = (len(result.findings), result.complete)
 
+        # Re-render after every pass, not once at the end. An accurate run is a
+        # long run, and the check results were previously finished and
+        # unreadable behind an hour of contradiction adjudication. Costs a few
+        # hundred milliseconds against this store.
+        so_far = store.load_all(paths)
+        report.digest_path = render.render_digest(paths, so_far, case_catalog)
+        report.brief_path = render_brief(paths, so_far, case_graph, case_catalog)
+        log.info("orchestrator: %s done — rapport rewritten", pass_name)
+
     final = store.load_all(paths)
     report.open_findings = sum(1 for f in final.values() if f.get("status") == "open")
-    report.digest_path = render.render_digest(paths, final, case_catalog)
-    report.brief_path = render_brief(paths, final, case_graph, case_catalog)
     report.brief_path = report_mod_render(paths, final, case_graph, case_catalog)
     if write_outbound:
         render.render_outbound(paths, case_id, final, case_catalog)

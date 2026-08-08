@@ -133,9 +133,18 @@ MAX_CLAUSE_CHARS = 200
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 
-# Rescue is high-volume and narrow — one short quote against one short clause —
-# so it defaults to the 14B, which is fully GPU-resident on a 12 GB card.
+# The classification tier's default single model, kept for callers that ask for
+# one. The classifier itself now consults BOTH models — see JUDGE_MODELS.
 OLLAMA_MODEL_RESCUE = "qwen3:14b"
+
+# Every model that judges a classification. The call deciding whether a quote
+# evidences performance is the most consequential in the plane, so it is put to
+# both local models independently and their disagreement is reported rather
+# than averaged away. This mirrors rag/compliance.py's
+# COMPLIANCE_MODEL_ALTERNATIVES + DIVERGENCE_MODEL_ID, and eval/llm_eval.py's
+# judge diversity: a verdict two independent models reach is more defensible,
+# and divergence is itself a finding.
+JUDGE_MODELS = ("qwen3:14b", "qwen3:30b")
 
 # Genuine comparative judgment. qwen3:30b is Qwen's MoE variant: ~19 GB at Q4
 # does not fit a 12 GB card, but Ollama splits it (as many layers on GPU as
@@ -144,12 +153,22 @@ OLLAMA_MODEL_RESCUE = "qwen3:14b"
 # pairs and findings these passes actually judge.
 OLLAMA_MODEL_JUDGMENT = "qwen3:30b"
 
-OLLAMA_TIMEOUT = 600  # split inference on a 30B is minutes, not seconds
-OLLAMA_NUM_CTX = 32768
-# Thinking plus format="json" can burn the whole budget on a hidden trace
-# before emitting any JSON. Self-consistency compensates for what a
-# single-shot non-thinking answer gives up.
-OLLAMA_THINK = False
+# Local inference costs nothing per call and has no deadline, so the timeout is
+# sized for the slowest honest answer rather than to bound wall-clock.
+OLLAMA_TIMEOUT = 900
+# Sized for a reasoning trace, not for residency. Measured on this card:
+# qwen3:14b totals 20.5 GB at 32768 and 10.3 GB at 4096, so the KV cache runs
+# ~0.3 MB/token. 8192 lands near 11.8 GB against 12,288 MB — tight, and the
+# right trade now that thinking is on: a trace truncated by a small window
+# produces malformed JSON, which the client correctly reads as "no verdict",
+# which silently costs a judgment. Do not lower this for throughput.
+OLLAMA_NUM_CTX = 8192
+# On, deliberately. local_audit sets this False because a hidden trace can burn
+# a request budget before any JSON appears — but that hazard is a *timeout*,
+# and the timeout above is generous. These are legal judgments on which a real
+# claim rests; reasoning before answering is worth the tokens, and latency is
+# not a cost that matters on local hardware.
+OLLAMA_THINK = True
 # The 12 GB card is shared with this project's own BGE-M3 embedder and
 # reranker. A short keep_alive means the model unloads between bursts instead
 # of permanently occupying the card; it costs a reload on the next call.
@@ -157,7 +176,13 @@ OLLAMA_KEEP_ALIVE = "2m"
 
 SELF_CONSISTENCY_RUNS = 3
 SELF_CONSISTENCY_TEMPERATURE = 0.4
+# Confirming a deterministic verdict and overturning one are not symmetric
+# evidentiary acts, so they do not share a threshold. The deterministic result
+# is the prior: a bare majority may uphold it, but reversing it requires every
+# sample of every model to agree. Passed explicitly at the call site so the
+# asymmetry is visible where the decision is made.
 SELF_CONSISTENCY_AGREE_THRESHOLD = 2
+SELF_CONSISTENCY_OVERTURN_THRESHOLD = SELF_CONSISTENCY_RUNS
 
 
 # ========== budget ==========
@@ -165,7 +190,11 @@ SELF_CONSISTENCY_AGREE_THRESHOLD = 2
 # Local calls are free in USD but seconds each, so their cap is what makes a
 # cycle terminate. The USD ceilings mirror rag/compliance.py's dry-run/real-run
 # pair; rates themselves live only in ingestion/clients.py (ADR #68).
-LOCAL_CALLS_PER_CYCLE = 400
+# The cap exists so a cycle terminates, not so it finishes quickly. Local calls
+# are free; a tight cap silently drops judgments, and a truncated sweep is
+# already safe (complete=False never reconciles) and resumable (watch.py's
+# backlog mode). Bound a run deliberately with --local-calls when you mean to.
+LOCAL_CALLS_PER_CYCLE = 5000
 CLOUD_CALLS_PER_CYCLE = 20
 PISTE_CALLS_PER_CYCLE = 20
 USD_CYCLE_CEILING = 1.00

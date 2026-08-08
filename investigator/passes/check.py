@@ -366,6 +366,54 @@ def evaluate(
     )
 
 
+DIVERGENCE_CLAIM = (
+    "Obligation {obligation_id} ({source_ref}) : lecture divergente entre les deux "
+    "modèles sur la portée d'une pièce du dossier."
+)
+
+
+def _divergence_finding(ctx: RunContext, obligation: Obligation, div: dict) -> dict:
+    """The two judges read one quote differently — reported, not resolved.
+
+    This asserts nothing about the obligation, only that the reading is
+    contested, so it is T5 and never externalisable. It exists because
+    interpretive uncertainty on a legal question is worth an operator's
+    attention, and because preferring the larger model would hide exactly the
+    cases where a human should look.
+    """
+    labels = ", ".join(
+        f"{model.split(':')[-1]}={v.get('role')}" for model, v in sorted(div["per_model"].items())
+    )
+    motifs = " ‖ ".join(
+        f"{model.split(':')[-1]} : {' '.join(str(v.get('motif', '')).split())[:160]}"
+        for model, v in sorted(div["per_model"].items())
+    )
+    return store.finding(
+        PASS_NAME,
+        subject=f"divergence|{obligation.obligation_id}|{div['fact_id']}",
+        claim=DIVERGENCE_CLAIM.format(
+            obligation_id=obligation.obligation_id, source_ref=obligation.source.ref
+        ),
+        case_id=ctx.case_id,
+        evidence=f"fait={div['fact_id']} · {labels} · {motifs}",
+        severity="info",
+        confidence="low",
+        tier="T5",
+        tier_basis="lecture_divergente_entre_modeles",
+        externalisable=False,
+        obligation_id=obligation.obligation_id,
+        evidence_pointers={
+            "fact_ids": [div["fact_id"]],
+            "doc_ids": [ctx.graph.facts[div["fact_id"]].source_doc_id]
+            if div["fact_id"] in ctx.graph.facts
+            else [],
+            "chunk_ids": [],
+            "statute_refs": [obligation.source.ref],
+            "person_ids": [],
+        },
+    )
+
+
 # ========== instances ==========
 
 
@@ -462,93 +510,114 @@ Seul "execution" vaut exécution. Dans le doute, ne réponds jamais "execution".
 Réponds en JSON strict : {"role": "<une des cinq valeurs>", "motif": "<une phrase>"}"""
 
 
-def _classify(ctx: RunContext, obligation: Obligation, fact_id: str) -> dict | None:
-    """What role does one quote play with respect to one obligation?
+def _classify_one(
+    ctx: RunContext, obligation: Obligation, fact_id: str, model: str, threshold: int
+) -> dict | None:
+    """One model's reading of one quote against one clause, or None.
 
-    The whole reason this exists: a document *stipulating* a duty, one
-    *demanding* it, one *reporting its breach* and one *evidencing performance*
-    all share the same vocabulary. A term-matching predicate cannot tell them
-    apart, and on the real corpus it read the sentence "les parts ont été cédées
-    ... sans remploi documenté" — evidence of the breach — as evidence that
-    restitution had been performed.
-
-    One clause, one quote, five labels, cached per pair. `None` means no
-    verdict, and leaves the deterministic result standing.
-
-    The prompt's insistence that the act be *the act the clause requires, for
-    the designated beneficiary* is load-bearing and was measured, not guessed:
-    without it both qwen3:14b and qwen3:30b read "les parts ont été cédées et
-    leur produit versé sur un compte ordinaire, sans remploi documenté" as
-    `execution`, because an act had been performed on the right assets. With
-    it, both return `manquement`. Model size did not decide that case; the
-    question's precision did.
+    Cached per model, so adding a judge re-uses what the other already decided
+    rather than reprocessing the whole case.
     """
     fact = ctx.graph.facts.get(fact_id)
     if fact is None:
         return None
     clause = obligation.source.excerpt_fr.strip()[: config.MAX_CLAUSE_CHARS]
     quote = fact.verbatim_quote.strip()[: config.MAX_QUOTE_CHARS]
-    subject = f"{obligation.obligation_id}@{obligation.rule_version}|{ctx.case_id}|{fact_id}"
-    content_hash = cache.content_hash_for_text(f"{quote}||{clause}")
-    version = config.PROMPT_VERSIONS["check_performance"]
-
-    cached = cache.get(ctx.paths, PASS_NAME, version, subject, content_hash)
-    if cached is not None:
-        return cached
-    if not ctx.budget.take_local():
-        return None
-    verdict, meta = ollama.call_self_consistency(
-        CLASSIFY_SYSTEM_PROMPT,
-        f"Clause d'obligation :\n« {clause} »\n\nCitation du dossier :\n« {quote} »",
+    return ollama.cached_verdict(
+        ctx.paths,
+        PASS_NAME,
+        config.PROMPT_VERSIONS["check_performance"],
+        subject=(
+            f"{model}|{obligation.obligation_id}@{obligation.rule_version}"
+            f"|{ctx.case_id}|{fact_id}"
+        ),
+        content_hash=cache.content_hash_for_text(f"{quote}||{clause}"),
+        system_prompt=CLASSIFY_SYSTEM_PROMPT,
+        user_prompt=f"Clause d'obligation :\n« {clause} »\n\nCitation du dossier :\n« {quote} »",
         verdict_key="role",
-        model=ollama.resolve_model(ctx.local_model, config.OLLAMA_MODEL_RESCUE),
+        model=model,
+        budget=ctx.budget,
+        agree_threshold=threshold,
     )
-    if verdict is None:
-        return None  # never cached: no verdict is not a negative verdict
-    result = dict(verdict)
-    result["_self_consistency"] = meta
-    cache.set(ctx.paths, PASS_NAME, version, subject, content_hash, result)
-    return result
+
+
+def _classify(
+    ctx: RunContext, obligation: Obligation, fact_id: str, threshold: int
+) -> dict:
+    """Both judges' readings, and whether they agree.
+
+    Returns `{"role", "agreement", "per_model"}`. `role` is None unless every
+    model that produced a verdict returned the same label — a legal reading two
+    independent models reach is defensible, and one they split on is not
+    something to settle by preferring the larger model. Divergence is reported,
+    not resolved.
+    """
+    per_model: dict[str, dict] = {}
+    for model in config.JUDGE_MODELS:
+        verdict = _classify_one(ctx, obligation, fact_id, model, threshold)
+        if verdict is not None:
+            per_model[model] = verdict
+
+    labels = {v.get("role") for v in per_model.values()}
+    if not per_model:
+        return {"role": None, "agreement": "aucun_verdict", "per_model": {}}
+    if len(labels) == 1:
+        agreement = "unanime" if len(per_model) == len(config.JUDGE_MODELS) else "partiel"
+        return {"role": next(iter(labels)), "agreement": agreement, "per_model": per_model}
+    return {"role": None, "agreement": "divergence", "per_model": per_model}
 
 
 def _adjudicate(
     ctx: RunContext, obligation: Obligation, ev: Evaluation
-) -> tuple[Evaluation, dict | None, str]:
-    """Confirm or overturn a deterministic verdict. Both directions.
+) -> tuple[Evaluation, dict | None, str, list[dict]]:
+    """Confirm or overturn a deterministic verdict. Both directions, both judges.
 
-    The asymmetry that matters for this plane's purpose: a **false `satisfied`
-    hides a breach**, which defeats the tool entirely, while a false `gap` costs
-    the reader one check. So satisfaction is what gets verified hardest — an
-    obligation counts as performed only if some quote is classified `execution`.
+    The asymmetry that matters: a **false `satisfied` hides a breach**, which
+    defeats the plane's purpose, while a false `gap` costs the reader one check.
+    So satisfaction is verified hardest — an obligation counts as performed only
+    if a quote is classified `execution`.
 
-    A model-created gap is capped at T4 by `assign_tier` and carries the
-    classifier's reason, so "never confidently invent a breach" survives while
-    the dominant error is the one actually being corrected.
+    Overturning the deterministic verdict requires unanimity *within* each model
+    and agreement *between* them. The deterministic result is the prior; a bare
+    majority may uphold it, but reversing it needs every sample to concur.
+    Divergences are returned for reporting rather than resolved.
     """
+    divergences: list[dict] = []
     if obligation.adjudicate == "none":
-        return ev, None, ""
+        return ev, None, "", divergences
+
+    overturn = config.SELF_CONSISTENCY_OVERTURN_THRESHOLD
 
     if ev.status in ("satisfied", "window_breach"):
         reasons = []
         for fact_id in ev.matched_fact_ids[: config.CHECK_MAX_CANDIDATES]:
-            verdict = _classify(ctx, obligation, fact_id)
-            if verdict is None:
+            combined = _classify(ctx, obligation, fact_id, overturn)
+            if combined["agreement"] == "divergence":
+                divergences.append({"fact_id": fact_id, **combined})
+                return ev, None, "", divergences  # split reading: keep the prior
+            if combined["role"] is None:
                 continue
-            if verdict.get("role") == "execution":
-                return ev, verdict.get("_self_consistency"), ""
-            reasons.append(f"{fact_id}={verdict.get('role')}")
+            if combined["role"] == "execution":
+                sc = next(iter(combined["per_model"].values())).get("_self_consistency")
+                return ev, sc, "", divergences
+            reasons.append(f"{fact_id}={combined['role']}")
         if reasons:
-            # Nothing in the matched set actually evidences performance.
             downgraded = replace(ev, status="gap", matched_fact_ids=(), matched_doc_ids=())
-            return downgraded, None, "aucune pièce n'atteste l'exécution — " + ", ".join(reasons[:6])
-        return ev, None, ""
+            return (
+                downgraded,
+                None,
+                "aucune pièce n'atteste l'exécution — " + ", ".join(reasons[:6]),
+                divergences,
+            )
+        return ev, None, "", divergences
 
     if ev.status == "gap":
         for fact_id in ev.candidate_fact_ids:
-            verdict = _classify(ctx, obligation, fact_id)
-            if verdict is None:
+            combined = _classify(ctx, obligation, fact_id, overturn)
+            if combined["agreement"] == "divergence":
+                divergences.append({"fact_id": fact_id, **combined})
                 continue
-            if verdict.get("role") == "execution":
+            if combined["role"] == "execution":
                 fact = ctx.graph.facts[fact_id]
                 rescued = replace(
                     ev,
@@ -557,8 +626,9 @@ def _adjudicate(
                     matched_doc_ids=(fact.source_doc_id,),
                     matched_docs_all_gate_ok=ctx.graph.gate_ok(fact.source_doc_id),
                 )
-                return rescued, verdict.get("_self_consistency"), ""
-    return ev, None, ""
+                sc = next(iter(combined["per_model"].values())).get("_self_consistency")
+                return rescued, sc, "", divergences
+    return ev, None, "", divergences
 
 
 def run(ctx: RunContext) -> PassResult:
@@ -584,11 +654,13 @@ def run(ctx: RunContext) -> PassResult:
             if ev.status == "not_triggered":
                 continue
 
-            sc_meta, adjudication_note = None, ""
+            sc_meta, adjudication_note, divergences = None, "", []
             if adjudicating:
-                ev, sc_meta, adjudication_note = _adjudicate(ctx, obligation, ev)
+                ev, sc_meta, adjudication_note, divergences = _adjudicate(ctx, obligation, ev)
                 if ctx.budget.local_exhausted():
                     complete = False
+            for div in divergences:
+                findings.append(_divergence_finding(ctx, obligation, div))
 
             tier, basis = assign_tier(ev, ctx.health, obligation, sc_meta=sc_meta)
             subject = obligation.obligation_id

@@ -118,6 +118,63 @@ def call_self_consistency(
     return next(r for r in results if str(r[verdict_key]) == top), meta
 
 
+# ========== cached adjudication ==========
+
+
+def cached_verdict(
+    paths,
+    pass_name: str,
+    prompt_version: str,
+    subject: str,
+    content_hash: str,
+    system_prompt: str,
+    user_prompt: str,
+    verdict_key: str,
+    model: str,
+    budget,
+    think: bool | None = None,
+    agree_threshold: int = config.SELF_CONSISTENCY_AGREE_THRESHOLD,
+) -> dict | None:
+    """Look up, else spend a call, else give up — the one adjudication path.
+
+    Every pass that asks a model to judge something needs the identical dance:
+    check the cache, claim a call from the budget, sample with self-consistency,
+    refuse to cache a non-verdict, store, return. Written out per pass it was
+    three near-identical copies, which the slimming audit duly flagged.
+
+    Returns None for a cache miss that could not be filled — budget exhausted,
+    transport failure, or no consensus. **The caller must read None as "not
+    adjudicated" and leave its deterministic result standing**, never as a
+    negative verdict.
+    """
+    from investigator import cache  # local: cache imports config, config does not import this
+
+    cached = cache.get(paths, pass_name, prompt_version, subject, content_hash)
+    if cached is not None:
+        return cached
+    if not budget.take_local():
+        return None
+
+    verdict, meta = call_self_consistency(
+        system_prompt,
+        user_prompt,
+        verdict_key=verdict_key,
+        agree_threshold=agree_threshold,
+        think=think,
+        model=model,
+    )
+    if verdict is None:
+        # Never cached: a failed or split sample is not a decided "no", and
+        # caching it would turn a transient into a permanent wrong answer.
+        return None
+
+    result = dict(verdict)
+    result["_self_consistency"] = meta
+    result["_model"] = model
+    cache.set(paths, pass_name, prompt_version, subject, content_hash, result)
+    return result
+
+
 # ========== model selection ==========
 
 # Sentinel meaning "each pass picks its own default". `--local-llm` sets this,

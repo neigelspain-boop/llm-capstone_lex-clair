@@ -1449,3 +1449,41 @@ def test_search_and_corpus_agree_on_what_an_anchor_is():
     )
     kinds = {kind for kind, _, _ in corpus.anchors_of(ob)}
     assert kinds == {"source", "also_anchored", "penal"}
+
+
+# ========== structural integrity of the plane's own source ==========
+
+
+def test_no_module_defines_the_same_name_twice():
+    """A duplicate definition is invisible to imports and to these tests.
+
+    This is not hypothetical. A scripted edit once left two copies of seven
+    functions in passes/check.py; Python bound the later, stale copy, whose
+    `_adjudicate` returned a 3-tuple while `run` unpacked four. Every offline
+    test passed, because no offline test enters the adjudication path — the
+    break would only have surfaced on a real --local-llm run.
+    """
+    import ast
+
+    offenders = {}
+    for path in sorted((config.PROJECT_ROOT / "investigator").rglob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        names = [
+            n.name
+            for n in tree.body
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+        ]
+        dupes = {n for n in names if names.count(n) > 1}
+        if dupes:
+            offenders[str(path.relative_to(config.PROJECT_ROOT))] = sorted(dupes)
+    assert not offenders, f"duplicate top-level definitions: {offenders}"
+
+
+def test_adjudicate_returns_what_run_unpacks():
+    """Guards the exact shape mismatch the duplicate block hid."""
+    import inspect
+
+    from investigator.passes import check
+
+    ret = inspect.signature(check._adjudicate).return_annotation
+    assert "list[dict]" in str(ret), ret
