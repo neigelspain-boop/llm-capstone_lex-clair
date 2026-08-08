@@ -4291,3 +4291,83 @@ to re-read.
 - A Streamlit surface for Plane V; there is currently none.
 - Promote reviewed `dec-` obligations into the generic catalog where they are
   not case-specific.
+
+---
+
+## ADR #75 — One truncation repair, shared; and three honest scrub levels
+
+**Date:** 2026-08-08 · **Branch:** v2-persons · **Status:** Accepted
+
+**Amends:** ADR #74.
+
+### Context
+
+Discovery failed twice on the live case, in two different ways, and both were
+mine.
+
+**First, a timeout.** `OLLAMA_THINK` was a single global set to True for
+judgment, and discovery inherited it. On a 3.4k-char page the 30B spent the
+entire 900 s budget on a reasoning trace and returned nothing. Measured on that
+window: `think=True` timed out; `think=False` answered in 38 s with the same six
+clauses. Discovery is *extraction* — spot a sentence that stipulates a duty and
+copy it verbatim — and `facts.py` does that class of work with no trace. The
+verbatim check verifies the result deterministically either way.
+
+**Then, truncation.** `num_ctx` is shared between prompt and generation, so a
+dense page overran 8192 and the response was cut mid-string. `json.loads` then
+discarded the *whole* answer, including the obligations that had closed.
+
+The repair already existed: `rag/compliance.py::_recover_partial_entries`, built
+for the same failure when reasoning and output shared one `max_tokens` budget
+(ADR #49). Plane V must not carry a second copy — the slimming audit would flag
+it, correctly.
+
+### Decision
+
+**1. `recover_json_objects` moves to `ingestion/clients.py`.** That module
+already hosts `strip_json_fences` and `parse_json_list` for the same reason and
+is the one module every plane may import (ADR #67). `rag/compliance.py` keeps a
+thin wrapper for its own logging; `investigator/ollama.py::call_json` uses it on
+the parse-failure path.
+
+**A generalisation was required, and it exposed a real bug.** The original
+scanned for objects closing at depth 0, which is correct for compliance's
+top-level list `[{…}, {…}]` — and finds *nothing* for discovery's
+`{"obligations": [{…}, {…}` , where the wrapper never closes and the objects sit
+at depth 1. The shared version groups completed objects by depth and returns the
+**shallowest depth that yielded any**, which covers both shapes without the
+caller declaring which it has.
+
+The `None`-is-not-a-verdict contract is unchanged: if nothing closed, the call
+still returns `None` and is still never cached.
+
+**2. `num_ctx` and `think` are per call site, not global.** Judgment sends one
+clause against one quote and wants 8192, a value measured against GPU residency.
+Extraction reads a whole page and emits structured output for all of it, and
+gets `DISCOVER_NUM_CTX = 16384`. One global could not serve both — that is the
+same lesson twice, and both are now passed explicitly where the decision is
+made. Discovery's prompt also caps output at 8 obligations per window.
+
+**3. `main.py` gains three scrub levels**, ordered by what it costs to put back,
+because that is the only distinction that matters when choosing how far to go:
+
+| Flag | Also removes | Regeneration cost |
+|---|---|---|
+| `--fresh` | analysis: findings, cache, digest, report, proposals | local models — free |
+| `--rebuild` | the derived layer: facts, roles, ambiguities, coverage, distill cache, persons, chunks | cloud: gate + facts on every document |
+| `--reextract` | `extracted/` | cloud: + the vision pass |
+
+`raw/` is in none of them and is never touched, asserted by a test that runs all
+three levels in sequence.
+
+`--rebuild` previously regenerated the derived layer *without clearing it*.
+`_write_case_jsonl` merges by document rather than truncating, so a row for a
+document that no longer existed survived every rebuild. Clearing first is what
+makes "first time" mean it.
+
+### Consequences
+
+- A truncated model response now yields what it produced instead of nothing.
+- The fixture for the recovery test is the real truncated payload from this run.
+- 406 tests. The pre-existing compliance recovery test now exercises the shared
+  function, which is what demonstrates behaviour was preserved by the move.

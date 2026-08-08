@@ -47,7 +47,8 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ValidationError
 
 from ingestion.clients import (estimate_cost_usd, extract_usage,
-                               get_openrouter_client, strip_json_fences)
+                               get_openrouter_client, recover_json_objects,
+                               strip_json_fences)
 from ingestion.dossier.facts import ActorRole, DOSSIER_DIR, Fact, RoleAmbiguity
 from rag.compliance_prompts import COMPLIANCE_SYSTEM_PROMPT, DIVERGENCE_ANALYSIS_SYSTEM_PROMPT
 from rag.retrieve import retrieve
@@ -441,62 +442,20 @@ def _build_user_message(
 # ========== defensive JSON parsing ==========
 
 def _recover_partial_entries(text: str, role_id: str) -> list[dict]:
-    """Recover complete top-level {...} objects from text that failed a
-    straight raw_decode() — used when max_tokens truncation cuts a response
-    off mid-object. Scans left to right tracking brace depth and string
-    state (honoring \\ escapes so a quote inside a string doesn't end it
-    early); each span where depth returns to 0 is a candidate object,
-    parsed independently. Logs a warning naming role_id with recovered vs.
-    discarded counts when at least one entry is recovered; returns [] (with
-    no warning here — the caller logs the outright-failure warning) if
-    nothing could be recovered.
+    """Recover complete entries from a truncated response.
+
+    The scan itself lives in `ingestion.clients.recover_json_objects` — Plane V's
+    discovery hits the same failure and must not carry a second copy. This wraps
+    it with the accounting this pass wants: the discarded count and the role it
+    happened on.
     """
-    objects: list[str] = []
-    depth = 0
-    start: int | None = None
-    in_string = False
-    escape = False
-
-    for i, ch in enumerate(text):
-        if in_string:
-            if escape:
-                escape = False
-            elif ch == "\\":
-                escape = True
-            elif ch == '"':
-                in_string = False
-            continue
-
-        if ch == '"':
-            in_string = True
-        elif ch == "{":
-            if depth == 0:
-                start = i
-            depth += 1
-        elif ch == "}":
-            depth = max(0, depth - 1)
-            if depth == 0 and start is not None:
-                objects.append(text[start:i + 1])
-                start = None
-
-    total = len(objects) + (1 if depth > 0 else 0)
-
-    recovered: list[dict] = []
-    for candidate in objects:
-        try:
-            parsed = json.loads(candidate)
-        except json.JSONDecodeError:
-            continue
-        if isinstance(parsed, dict):
-            recovered.append(parsed)
-
+    recovered = recover_json_objects(text)
     if recovered:
         log.warning(
-            "compliance: partial parse recovered %d complete entries, discarded %d "
-            "incomplete/malformed for role_id=%s",
-            len(recovered), total - len(recovered), role_id,
+            "compliance: partial parse recovered %d complete entries, discarded at "
+            "least 1 incomplete/malformed for role_id=%s",
+            len(recovered), role_id,
         )
-
     return recovered
 
 

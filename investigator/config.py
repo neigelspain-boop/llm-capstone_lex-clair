@@ -122,7 +122,8 @@ PROMPT_VERSIONS = {
     # (document, page window) so re-running a case is nearly free.
     # v2: think=False. Windows cached under v1 were produced with a reasoning
     # trace and must miss rather than be mixed with the rest.
-    "discover": "v2",
+    # v3: output ceiling in the prompt, and its own context window.
+    "discover": "v3",
 }
 
 
@@ -189,6 +190,13 @@ OLLAMA_TIMEOUT = 900
 # produces malformed JSON, which the client correctly reads as "no verdict",
 # which silently costs a judgment. Do not lower this for throughput.
 OLLAMA_NUM_CTX = 8192
+
+# Discovery reads a whole page and emits structured output covering all of it,
+# so it needs more room than a judgment call that sees one clause and one quote.
+# At 8192 a dense page of the convention overran the window and the response was
+# cut mid-string; the recovery parser now salvages what closed, but the right
+# fix is not to truncate in the first place.
+DISCOVER_NUM_CTX = 16384
 # On, deliberately. local_audit sets this False because a hidden trace can burn
 # a request budget before any JSON appears — but that hazard is a *timeout*,
 # and the timeout above is generous. These are legal judgments on which a real

@@ -27,6 +27,7 @@ from collections import Counter
 
 import requests
 
+from ingestion.clients import recover_json_objects
 from investigator import config
 
 log = logging.getLogger(__name__)
@@ -42,8 +43,15 @@ def call_json(
     think: bool | None = None,
     model: str | None = None,
     timeout: int | None = None,
+    num_ctx: int | None = None,
 ) -> dict | list | None:
-    """One structured call. Returns None on any failure — never raises."""
+    """One structured call. Returns None on any failure — never raises.
+
+    `num_ctx` is per call because one value cannot serve both kinds of work.
+    Judgment sends one clause against one quote and wants the default, sized
+    against GPU residency; extraction reads a whole page and emits structured
+    output for all of it, and a window too small there truncates the response.
+    """
     body = {
         "model": model or config.OLLAMA_MODEL_RESCUE,
         "messages": [
@@ -54,7 +62,7 @@ def call_json(
         "format": "json",
         "think": config.OLLAMA_THINK if think is None else think,
         "keep_alive": config.OLLAMA_KEEP_ALIVE,
-        "options": {"temperature": temperature, "num_ctx": config.OLLAMA_NUM_CTX},
+        "options": {"temperature": temperature, "num_ctx": num_ctx or config.OLLAMA_NUM_CTX},
     }
     try:
         response = requests.post(
@@ -74,12 +82,27 @@ def call_json(
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        try:
-            obj, _ = json.JSONDecoder().raw_decode(text)
-            return obj
-        except json.JSONDecodeError:
-            log.warning("ollama: unparseable response — no verdict: %s", text[:200])
-            return None
+        pass
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(text)
+        return obj
+    except json.JSONDecodeError:
+        pass
+
+    # Truncated: the context ran out mid-response. Salvage the objects that
+    # closed rather than discarding the whole answer — that was throwing away
+    # real extractions because the last one was cut off.
+    recovered = recover_json_objects(text)
+    if recovered:
+        log.warning(
+            "ollama: response truncated — recovered %d complete object(s), "
+            "discarded the incomplete tail",
+            len(recovered),
+        )
+        return {"obligations": recovered} if "obligations" in text[:200] else recovered
+
+    log.warning("ollama: unparseable response — no verdict: %s", text[:200])
+    return None
 
 
 # ========== self-consistency ==========

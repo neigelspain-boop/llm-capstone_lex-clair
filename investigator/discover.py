@@ -87,6 +87,8 @@ notaire remettra un extrait », la preuve serait « remise », « extrait », \
 « accusé de réception », non « remettra ».
 4. Un délai n'est renseigné que s'il est écrit dans la clause. Sinon : null.
 5. N'invente rien. N'infère pas d'intention. Ne qualifie pas de faute.
+6. Au plus 8 obligations par extrait. Une page qui semble en créer davantage \
+signale que tu reformules au lieu d'extraire : retiens les plus nettes.
 
 Si le passage ne crée aucune obligation, retourne {"obligations": []}.
 
@@ -321,6 +323,7 @@ def discover(
                     # clauses. Across 77 windows that is the difference between
                     # a working stage and a stalled one.
                     think=False,
+                    num_ctx=config.DISCOVER_NUM_CTX,
                 )
                 if not isinstance(out, dict) or "obligations" not in out:
                     # No verdict is not an empty document; never cached.

@@ -162,6 +162,71 @@ def strip_json_fences(raw: str | None) -> str:
     return text
 
 
+def recover_json_objects(text: str) -> list[dict]:
+    """Complete JSON objects from a response that failed to decode.
+
+    A model whose output is cut off — by a token ceiling or by exhausting the
+    context window — leaves valid objects followed by one truncated fragment.
+    A straight `json.loads` discards all of them, including the ones that
+    closed. This walks the text tracking brace depth and string state
+    (honouring `\\` escapes, so a quote inside a string does not end it early)
+    and collects every object that opened and closed.
+
+    Objects are grouped by nesting depth and the **shallowest depth that yielded
+    any** is returned. That single rule covers both shapes this codebase
+    produces without the caller having to know which it is asking about:
+    a top-level list `[{...}, {...}]` closes its objects at depth 0, while a
+    wrapper `{"obligations": [{...}, {...}` — truncated, so the wrapper never
+    closes — has its objects at depth 1. Scanning only depth 0 finds nothing in
+    the second case, which is precisely the bug this replaced.
+
+    Lives here rather than in a pass because two planes need it: Plane II's
+    compliance call shares one budget between reasoning and output, and Plane
+    V's discovery reads a whole page and emits structured output for all of it.
+    `ingestion/clients.py` is the one module every plane may import (ADR #67).
+
+    Returns `[]` when nothing closed. The caller decides what that means: for a
+    model verdict it is "no verdict", never "no".
+    """
+    by_depth: dict[int, list[str]] = {}
+    depth = 0
+    starts: dict[int, int] = {}
+    in_string = False
+    escape = False
+
+    for i, ch in enumerate(text):
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            starts[depth] = i
+            depth += 1
+        elif ch == "}":
+            depth = max(0, depth - 1)
+            if depth in starts:
+                by_depth.setdefault(depth, []).append(text[starts.pop(depth):i + 1])
+
+    for level in sorted(by_depth):
+        recovered = []
+        for candidate in by_depth[level]:
+            try:
+                parsed = json.loads(candidate)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed, dict):
+                recovered.append(parsed)
+        if recovered:
+            return recovered
+    return []
+
+
 def parse_json_list(raw: str, context: str, source: str,
                     log_target=None) -> list[dict] | None:
     """Parse an LLM response expected to hold a JSON array.

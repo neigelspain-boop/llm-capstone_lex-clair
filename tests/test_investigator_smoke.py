@@ -1837,3 +1837,155 @@ def test_fresh_clears_analysis_but_never_the_expensive_layer(tmp_path):
         assert (paths.case_dir / name).exists(), f"--fresh deleted {name}"
     assert (paths.case_dir / "extracted" / "a.md").exists()
     assert (paths.case_dir / "raw" / "a.pdf").exists(), "--fresh touched the source documents"
+
+
+# ========== truncated responses ==========
+
+
+# The real payload from a live discovery run: the context ran out mid-string on
+# the third object. Two had already closed and were being thrown away with it.
+_TRUNCATED = (
+    '{"obligations": [\n'
+    '  {"titre": "Maintien sur un compte spécial", "debiteur_role_id": "quasi_usufruitier"},\n'
+    '  {"titre": "Remise d\'un extrait", "debiteur_role_id": "notaire_redacteur"},\n'
+    '  {"titre": "Déclaration fiscale à l\'administration fiscale",\n'
+    '   "extrait_verbatim": "Le requérant déclare être averti de l\'obligation de déclarer '
+    "à l'administration fiscale le"
+)
+
+
+def test_recovery_salvages_what_closed_before_the_cut():
+    from ingestion.clients import recover_json_objects
+
+    out = recover_json_objects(_TRUNCATED)
+    assert [o["titre"] for o in out] == [
+        "Maintien sur un compte spécial",
+        "Remise d'un extrait",
+    ]
+
+
+def test_recovery_handles_both_response_shapes():
+    """One rule — shallowest depth that yields objects — covers both.
+
+    compliance returns a top-level list, whose objects close at depth 0.
+    discovery returns {"obligations": [...]}, whose objects are at depth 1 when
+    the wrapper never closes. A depth-0-only scan finds nothing in the second
+    case, which is the bug this replaced.
+    """
+    from ingestion.clients import recover_json_objects
+
+    assert [o["e"] for o in recover_json_objects('[{"e":1},{"e":2},{"e":3,"x":"cut')] == [1, 2]
+    assert [o["e"] for o in recover_json_objects('{"w":[{"e":1},{"e":2},{"e":3,"x":"cut')] == [1, 2]
+
+
+def test_recovery_respects_escaped_quotes():
+    from ingestion.clients import recover_json_objects
+
+    out = recover_json_objects('{"w":[{"t":"il a dit \\"oui\\" ici"},{"t":"B"},{"t":"cut')
+    assert [o["t"] for o in out] == ['il a dit "oui" ici', "B"]
+
+
+def test_recovery_returns_empty_when_nothing_closed():
+    """Then the caller still sees "no verdict" — never "no"."""
+    from ingestion.clients import recover_json_objects
+
+    assert recover_json_objects('{"a": "unterminated') == []
+    assert recover_json_objects("") == []
+
+
+def test_both_planes_share_one_recovery_definition():
+    import inspect
+
+    from ingestion import clients
+    from investigator import ollama as inv_ollama
+    from rag import compliance
+
+    assert "recover_json_objects" in inspect.getsource(compliance._recover_partial_entries)
+    assert "recover_json_objects" in inspect.getsource(inv_ollama.call_json)
+    assert callable(clients.recover_json_objects)
+
+
+def test_call_json_recovers_a_truncated_response(monkeypatch):
+    from investigator import ollama as inv_ollama
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self): return {"message": {"content": _TRUNCATED}}
+
+    monkeypatch.setattr(inv_ollama.requests, "post", lambda *a, **k: R())
+    out = inv_ollama.call_json("sys", "user", model="m")
+    assert isinstance(out, dict)
+    assert len(out["obligations"]) == 2
+
+
+def test_call_json_still_returns_none_when_nothing_is_recoverable(monkeypatch):
+    from investigator import ollama as inv_ollama
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self): return {"message": {"content": "je ne peux pas répondre"}}
+
+    monkeypatch.setattr(inv_ollama.requests, "post", lambda *a, **k: R())
+    assert inv_ollama.call_json("sys", "user", model="m") is None
+
+
+# ========== the three scrub levels ==========
+
+
+def _populated_case(tmp_path):
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    paths.investigation_dir.mkdir(parents=True)
+    (paths.investigation_dir / "findings.jsonl").write_text("{}", encoding="utf-8")
+    for name in ("facts.jsonl", "actor_roles.jsonl", "role_ambiguities.jsonl",
+                 "coverage.jsonl", "distill_cache.jsonl", "persons.jsonl", "chunks.csv"):
+        (paths.case_dir / name).write_text("x", encoding="utf-8")
+    (paths.case_dir / "_persons_cache").mkdir()
+    (paths.case_dir / "extracted").mkdir()
+    (paths.case_dir / "extracted" / "a.md").write_text("texte", encoding="utf-8")
+    (paths.case_dir / "raw").mkdir()
+    (paths.case_dir / "raw" / "a.pdf").write_bytes(b"%PDF")
+    return paths
+
+
+def test_fresh_keeps_everything_that_costs_money(tmp_path):
+    import main as main_mod
+
+    paths = _populated_case(tmp_path)
+    main_mod._clear_analysis(paths)
+    assert not paths.investigation_dir.exists()
+    assert (paths.case_dir / "facts.jsonl").exists()
+    assert (paths.case_dir / "extracted" / "a.md").exists()
+
+
+def test_rebuild_clears_the_derived_layer_but_not_extracted_or_raw(tmp_path):
+    """Clearing rather than overwriting is what makes "first time" mean it:
+    _write_case_jsonl merges by document, so a stale row survives otherwise."""
+    import main as main_mod
+
+    paths = _populated_case(tmp_path)
+    main_mod._clear_analysis(paths)
+    main_mod._clear_derived(paths)
+    for name in main_mod._DERIVED:
+        assert not (paths.case_dir / name).exists(), f"{name} survived --rebuild"
+    assert (paths.case_dir / "extracted" / "a.md").exists()
+    assert (paths.case_dir / "raw" / "a.pdf").exists()
+
+
+def test_reextract_clears_extracted_and_still_spares_raw(tmp_path):
+    import main as main_mod
+
+    paths = _populated_case(tmp_path)
+    main_mod._clear_extracted(paths)
+    assert not (paths.case_dir / "extracted").exists()
+    assert (paths.case_dir / "raw" / "a.pdf").exists(), "raw is never touched, at any level"
+
+
+def test_no_scrub_level_ever_touches_raw(tmp_path):
+    import main as main_mod
+
+    paths = _populated_case(tmp_path)
+    for clear in (main_mod._clear_analysis, main_mod._clear_derived, main_mod._clear_extracted):
+        clear(paths)
+    assert (paths.case_dir / "raw" / "a.pdf").exists()
