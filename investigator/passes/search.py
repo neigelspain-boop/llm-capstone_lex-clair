@@ -57,6 +57,14 @@ CLAIMS = {
         "Citation {obligation_id} : l'identifiant LEGIARTI cité ne correspond pas à "
         "celui du corpus pour {source_ref}."
     ),
+    "ancre_penale_absente": (
+        "Citation {obligation_id} : une ancre pénale de {source_ref} est absente du "
+        "corpus — la qualification pénale ne peut pas être étayée."
+    ),
+    "ancre_penale_abrogee": (
+        "Citation {obligation_id} : une ancre pénale de {source_ref} n'est pas en "
+        "vigueur dans le corpus."
+    ),
     "ancre_secondaire_absente": (
         "Citation {obligation_id} : une ancre secondaire de {source_ref} est absente "
         "du corpus."
@@ -206,6 +214,33 @@ def _validate_document(ctx: RunContext, obligation: Obligation, graph: CaseGraph
 # ========== the pass ==========
 
 
+def _validate_penal_anchors(
+    ctx: RunContext, obligation: Obligation, graph: CaseGraph
+) -> list[dict]:
+    """Penal anchors are checked for every obligation, whatever its source kind.
+
+    A contract-clause obligation may carry a penal characterisation — the
+    prelevement clause does — so this cannot live inside the statute branch.
+    The point is that naming an offence requires a citable, in-force article:
+    without this check, `gravite_interne: susceptible_qualification_penale`
+    would be an assertion rather than a citation.
+    """
+    out: list[dict] = []
+    for anchor in obligation.penal_anchors:
+        row = graph.statute.get(anchor.chunk_id)
+        if row is None:
+            out.append(
+                _finding(ctx, obligation, "ancre_penale_absente",
+                         f"chunk_id={anchor.chunk_id}", "high")
+            )
+        elif str(row.get("etat", "")).upper() != "VIGUEUR":
+            out.append(
+                _finding(ctx, obligation, "ancre_penale_abrogee",
+                         f"chunk_id={anchor.chunk_id} etat={row.get('etat')}", "critical")
+            )
+    return out
+
+
 def run(ctx: RunContext) -> PassResult:
     """Validate every citation in the merged catalog.
 
@@ -220,4 +255,5 @@ def run(ctx: RunContext) -> PassResult:
             findings.extend(_validate_statute(ctx, obligation, ctx.graph))
         else:
             findings.extend(_validate_document(ctx, obligation, ctx.graph))
+        findings.extend(_validate_penal_anchors(ctx, obligation, ctx.graph))
     return PassResult(findings=findings, complete=True)

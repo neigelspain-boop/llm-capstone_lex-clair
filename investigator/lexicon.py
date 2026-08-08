@@ -79,6 +79,34 @@ def parse_party_counts(text_folded: str) -> set[tuple[int, str]]:
     return {(int(n), noun) for n, noun in _COUNT_RE.findall(text_folded)}
 
 
+# ========== outbound vocabulary discipline ==========
+
+# Terms that characterise conduct as intentional. These may appear freely in
+# internal analysis and must NEVER appear in outbound text.
+#
+# The reason is not squeamishness, it is coverage. Art. L.113-1 al. 2 of the
+# Code des assurances excludes faute intentionnelle ou dolosive from cover, so
+# a dolosive framing in a letter to the professional or her insurer voids the
+# very pocket the claim is aimed at. The internal register exists precisely so
+# the operator can name the conduct without that cost; the gate is what keeps
+# the two apart.
+OUTBOUND_FORBIDDEN_TERMS = (
+    "detournement", "detourne", "detourner",
+    "dissimulation", "dissimule",
+    "appropriation", "approprie",
+    "abus de confiance", "escroquerie", "malversation",
+    "soustraction frauduleuse", "frauduleux", "frauduleuse",
+    "intentionnel", "intentionnelle", "dolosif", "dolosive",
+    "faux et usage de faux",
+)
+
+
+def forbidden_outbound_terms(text: str | None) -> list[str]:
+    """Forbidden terms present in `text`, folded so accents cannot hide one."""
+    folded = fold(text)
+    return [term for term in OUTBOUND_FORBIDDEN_TERMS if term in folded]
+
+
 # ========== action polarity ==========
 
 # Authored antonym table for the `sens_action` contradiction bucket. Each pair

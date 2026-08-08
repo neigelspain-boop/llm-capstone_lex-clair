@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING, Iterable, Literal, NamedTuple
 from pydantic import BaseModel, Field, model_validator
 
 from investigator import config
+from investigator.lexicon import forbidden_outbound_terms
 
 if TYPE_CHECKING:  # pragma: no cover - typing only, avoids an import cycle
     from investigator.budget import Budget
@@ -208,6 +209,22 @@ class Obligation(BaseModel):
     presence_tier_cap: Tier = "T1"
     adjudicate: Literal["none", "llm_local", "llm_judgment", "cloud"] = "none"
     claim_template_fr: str
+    # ---- internal register ----
+    # What the conduct actually is, said plainly. Deliberately free of the
+    # outbound vocabulary discipline: the operator cannot judge leverage from
+    # prose written to protect an insurer's cover. The gate is what keeps this
+    # off any outbound path.
+    qualification_interne_fr: str = ""
+    gravite_interne: Literal[
+        "faute_simple",
+        "faute_caracterisee",
+        "faute_lourde",
+        "susceptible_qualification_penale",
+    ] = "faute_simple"
+    # Penal characterisation is gated on a verified in-force anchor: `search`
+    # validates these exactly like `also_anchored`, so an offence cannot be
+    # named without a citable article behind it.
+    penal_anchors: list[Anchor] = Field(default_factory=list)
     # Why an absence matters legally — rendered into the finding. For duties
     # where the burden of proof is reversed (the professional must prove he
     # performed), "nothing in the file attests it" is not a weak finding, it is
@@ -232,6 +249,12 @@ class Obligation(BaseModel):
             raise ValueError(
                 f"{self.obligation_id}: claim_template_fr uses non-stable "
                 f"placeholders {sorted(unknown)}; volatile values belong in evidence"
+            )
+        if self.gravite_interne == "susceptible_qualification_penale" and not self.penal_anchors:
+            raise ValueError(
+                f"{self.obligation_id}: a penal qualification requires at least one "
+                "penal_anchor — an offence named without a citable article is the "
+                "fabricated-citation failure this catalog exists to prevent"
             )
         if self.foreach is None:
             bound = [leaf for leaf in self.expected_evidence.leaves() if leaf.bind_to_foreach]
@@ -405,6 +428,14 @@ def assign_tier(
 
 # ========== the externalisation gate ==========
 
+# The internal register. Present on every finding, stripped by the gate — the
+# operator needs these to judge leverage; an insurer must never read them.
+INTERNAL_ONLY_FIELDS = ("qualification_interne", "gravite_interne", "penal_refs")
+
+# Outbound strings the vocabulary check must clear. `subject` is included
+# because it is rendered as the finding's handle.
+_OUTBOUND_TEXT_FIELDS = ("claim", "evidence", "subject")
+
 
 def _person_redaction_map(findings: Iterable[dict]) -> dict[str, str]:
     seen = sorted(
@@ -477,7 +508,40 @@ def externalisable_findings(
         kept.append(f)
 
     kept.sort(key=lambda f: (TIER_ORDER[f["tier"]], f["pass"], f["id"]))
-    if case_id in config.CASE_IS_ANONYMISED:
-        return kept
-    mapping = _person_redaction_map(kept)
-    return [_redact(f, mapping) for f in kept]
+    kept = [_strip_internal(f) for f in kept]
+
+    if case_id not in config.CASE_IS_ANONYMISED:
+        mapping = _person_redaction_map(kept)
+        kept = [_redact(f, mapping) for f in kept]
+
+    _assert_outbound_vocabulary(kept)
+    return kept
+
+
+def _strip_internal(finding: dict) -> dict:
+    """Drop the internal register from a copy of the finding."""
+    return {k: v for k, v in finding.items() if k not in INTERNAL_ONLY_FIELDS}
+
+
+def _assert_outbound_vocabulary(findings: Iterable[dict]) -> None:
+    """Refuse to emit text that characterises conduct as intentional.
+
+    Raising rather than redacting is deliberate. A forbidden term reaching this
+    point means a catalog entry is phrased in the wrong register, and silently
+    rewriting it would hide the authoring bug while putting prose nobody
+    reviewed in front of an insurer. The failure names the finding and the term
+    so the entry can be fixed at source.
+    """
+    for f in findings:
+        texts = [f.get(k) for k in _OUTBOUND_TEXT_FIELDS]
+        texts += [c.get("text_fr") for c in f.get("confounders", [])]
+        for text in texts:
+            hits = forbidden_outbound_terms(text if isinstance(text, str) else None)
+            if hits:
+                raise ValueError(
+                    f"finding {f.get('id')} ({f.get('obligation_id')}) carries "
+                    f"outbound-forbidden term(s) {hits}: art. L.113-1 al. 2 "
+                    "C. assur. excludes faute intentionnelle from cover, so this "
+                    "wording would void the guarantee being pursued. Rephrase the "
+                    "catalog entry — the internal register is where it belongs."
+                )

@@ -44,6 +44,9 @@ _VOLATILE_FIELDS = (
     "externalisable",
     "evidence_pointers",
     "obligation_id",
+    "qualification_interne",
+    "gravite_interne",
+    "penal_refs",
 )
 
 
@@ -81,6 +84,9 @@ def finding(
     tier_basis: str = "",
     externalisable: bool = False,
     obligation_id: str | None = None,
+    qualification_interne: str = "",
+    gravite_interne: str = "faute_simple",
+    penal_refs: list[str] | None = None,
     evidence_pointers: dict | None = None,
     related_files: tuple[str, ...] | list[str] = (),
     line: int = 0,
@@ -104,6 +110,9 @@ def finding(
         "tier_basis": tier_basis,
         "externalisable": externalisable,
         "obligation_id": obligation_id,
+        "qualification_interne": qualification_interne,
+        "gravite_interne": gravite_interne,
+        "penal_refs": list(penal_refs or []),
         "evidence_pointers": evidence_pointers
         or {"fact_ids": [], "doc_ids": [], "chunk_ids": [], "statute_refs": [], "person_ids": []},
         "related_files": list(related_files),
@@ -168,6 +177,9 @@ def normalize(
         "claim": raw["claim"],
         "case_id": raw["case_id"],
         "obligation_id": raw.get("obligation_id"),
+        "qualification_interne": raw.get("qualification_interne", ""),
+        "gravite_interne": raw.get("gravite_interne", "faute_simple"),
+        "penal_refs": raw.get("penal_refs", []),
         "severity": raw.get("severity", "info"),
         "confidence": raw.get("confidence", "low"),
         "tier": raw.get("tier", "T5"),

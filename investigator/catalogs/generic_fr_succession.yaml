@@ -61,6 +61,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      La restitution due à l'extinction n'est pas attestée. La créance est née, son
+      assiette a disparu, et rien n'établit un règlement.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la restitution due à l'extinction du quasi-usufruit.
@@ -97,6 +101,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Ni caution ni dispense tracée. La garantie du nu-propriétaire est absente et le
+      droit d'emploi de l'article 602 est inopérant.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la fourniture d'une caution ni une dispense expresse à l'acte constitutif.
@@ -138,6 +146,9 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Aucun placement ni remploi des sommes soumises à l'usufruit.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       le placement ou le remploi des sommes soumises à l'usufruit.
@@ -191,6 +202,16 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Des fonds successoraux ont été libérés sans que la proportion opposable ni
+      l'accord de l'ensemble des ayants droit ne soient établis. Le tiers détenteur
+      n'est déchargé que dans la proportion indiquée à l'acte ; au-delà, il opère hors
+      du champ du texte, et celui qui a provoqué l'opération répond de l'irrégularité du
+      titre.
+    gravite_interne: susceptible_qualification_penale
+    penal_anchors:
+      - chunk_id: cp-314-1
+      - chunk_id: cp-314-2
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une libération de fonds successoraux
       est attestée sans qu'aucun fait n'établisse la proportion opposable ni l'accord
@@ -223,6 +244,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      L'étendue des droits de chaque indivisaire n'est pas établie par un acte
+      opposable, ce qui laisse indéterminée la base de toute répartition.
+    gravite_interne: faute_simple
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'établissement de l'acte fixant l'étendue des droits de chaque indivisaire.
@@ -260,6 +285,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Une opération de partage ou de dévolution est attestée sans prélèvement préalable
+      au profit du créancier de l'indivision, dont la créance prime.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : un partage ou une dévolution est
       attesté sans qu'aucun fait n'établisse le prélèvement préalable dû aux créanciers
@@ -301,6 +330,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      La dette du défunt n'apparaît pas au passif alors que son existence au jour de
+      l'ouverture était justifiable.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une opération de liquidation est
       attestée sans qu'aucun fait n'établisse l'inscription au passif de la dette
@@ -343,6 +376,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Un manquement est attesté sans régularisation ni réparation subséquente, malgré
+      des réclamations écrites.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : un manquement est attesté sans
       qu'aucun fait n'établisse une régularisation ou une réparation subséquente.
@@ -383,6 +420,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Condition de mise en jeu de la garantie, à la charge du tiers lésé : son
+      inaccomplissement n'est pas un manquement du professionnel.
+    gravite_interne: faute_simple
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la réclamation adressée à l'assuré qui conditionne la garantie.
@@ -421,6 +462,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Voie ouverte au nu-propriétaire lésé, indépendante de toute action contre le
+      responsable. Faculté, non obligation.
+    gravite_interne: faute_simple
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : la voie de l'action directe contre
       l'assureur n'est attestée par aucun fait du dossier.
@@ -462,6 +507,12 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Des demandes de pièces sont attestées sans délivrance correspondante. La
+      conservation du dépôt et la délivrance d'expéditions sont des attributions
+      statutaires de l'officier public, non des services discrétionnaires : le refus ou
+      le silence prolongé prive l'ayant droit du moyen même d'établir ses droits.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une demande de pièces est attestée
       sans qu'aucun fait n'établisse la délivrance correspondante.
@@ -503,6 +554,9 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Une mise en cause est attestée sans trace de mobilisation de la garantie.
+    gravite_interne: faute_simple
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une mise en cause est attestée sans
       qu'aucun fait n'établisse la mobilisation de la garantie de responsabilité

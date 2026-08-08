@@ -51,6 +51,13 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Le compte spécial n'a jamais été constitué. L'obligation est de résultat et sans
+      délai : le débiteur ne peut invoquer ni diligence ni circonstance. Son inexécution
+      rend impossible l'établissement du compte de fin d'usufruit, et prive le nu-
+      propriétaire du seul instrument permettant de chiffrer sa créance. C'est le
+      manquement structurant : tous les autres en découlent.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la constitution du compte spécial destiné à recevoir les sommes et titres
@@ -87,6 +94,10 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Aucune notification de changement de compte. Combinée à l'absence de compte
+      spécial, la clause a été traitée comme inexistante dès l'origine.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       une notification de changement dans la désignation du compte.
@@ -128,6 +139,13 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Silence prolongé envers les nus-propriétaires alors que des opérations étaient
+      réalisées sur les titres démembrés. L'information n'est pas une courtoisie : elle
+      conditionne la détermination même de l'objet de la restitution. Son absence a
+      laissé les créanciers dans l'ignorance de la disparition de l'assiette de leur
+      créance.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'information périodique du nu-propriétaire sur les opérations réalisées sur
@@ -164,6 +182,11 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Aucune instruction donnée à l'établissement teneur du compte. Obligation de faire
+      purement abstentionniste : elle est violée par le seul fait de n'avoir rien
+      demandé, indépendamment du résultat.
+    gravite_interne: faute_caracterisee
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       les instructions qui devaient être données à l'établissement teneur du compte.
@@ -207,6 +230,12 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Les titres ont été cédés et le prix n'a pas été remployé. Le remploi est ce qui
+      rendait la restitution en nature possible ; à défaut, un droit réel garanti se
+      transforme en créance chirographaire sur une succession. Le préjudice naît du
+      manquement lui-même, sans qu'il soit besoin d'établir autre chose.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : une cession de titres est attestée
       sans qu'aucun fait n'établisse le remploi intégral du prix.
@@ -252,6 +281,12 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      La créance de restitution n'apparaît pas au passif. L'omission fausse la
+      liquidation au détriment exact des nus-propriétaires et au profit exact des
+      cohéritiers : le déplacement de valeur est chiffrable et l'intérêt de l'omission
+      est identifiable.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       l'inscription de la créance de restitution au passif de la déclaration de
@@ -298,6 +333,13 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Obligation textuelle personnelle du notaire soussigné, non déléguée et non
+      subordonnée à une demande. Son inexécution explique directement l'ignorance du
+      démembrement par les tiers détenteurs, et donc les opérations accomplies en
+      méconnaissance de la convention. C'est le lien de causalité entre le manquement du
+      rédacteur et la perte de l'assiette.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       la remise de l'extrait de convention au détenteur d'actifs
@@ -352,6 +394,19 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T1
     adjudicate: llm_local
+    qualification_interne_fr: >
+      Des fonds successoraux ont été appréhendés alors que la convention réservait
+      expressément le prélèvement de la créance de restitution avant toute dévolution.
+      Un prélèvement opéré sur des fonds reçus pour le compte d'autrui, en violation de
+      l'affectation stipulée, présente les éléments matériels de l'article 314-1 du Code
+      pénal ; la circonstance du 2° de l'article 314-2 vise la personne qui, de manière
+      habituelle, prête son concours à des opérations portant sur les biens de tiers
+      dont elle recouvre des fonds. Qualification interne : à étayer par la traçabilité
+      bancaire et la base tarifaire, non à externaliser.
+    gravite_interne: susceptible_qualification_penale
+    penal_anchors:
+      - chunk_id: cp-314-1
+      - chunk_id: cp-314-2
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : aucun fait du dossier n'atteste
       le prélèvement de la créance de restitution avant dévolution successorale.
@@ -394,6 +449,14 @@ obligations:
     absence_tier_cap: T3
     presence_tier_cap: T2
     adjudicate: llm_local
+    qualification_interne_fr: >
+      La convention écarte toute sûreté, ce qui neutralise le droit d'emploi de
+      l'article 602 et transforme un droit garanti en créance chirographaire. Aucune
+      trace de conseil sur la portée de cette renonciation. Le devoir de conseil se
+      prouve par le notaire : l'absence de trace vaut défaut de conseil. Circonstance
+      aggravante : les parties étaient non-résidentes et représentées à l'acte par un
+      collaborateur de l'étude rédactrice, sans conseil indépendant.
+    gravite_interne: faute_lourde
     claim_template_fr: >
       Obligation {obligation_id} ({source_ref}) : la convention écarte toute sûreté
       sans qu'aucun fait du dossier n'atteste le conseil délivré sur la portée de
