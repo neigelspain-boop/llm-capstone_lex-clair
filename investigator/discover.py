@@ -307,6 +307,20 @@ def discover(
                     f"Rôles connus de ce dossier : {roles_block}\n\n"
                     f"Extrait de l'acte (doc_id={doc_id}) :\n\n{window}",
                     model=judge,
+                    # Extraction, not judgment — so no reasoning trace. The task
+                    # is to spot a sentence that stipulates a duty and copy it
+                    # verbatim; `facts.py` does the same class of work without
+                    # thinking, and the verbatim check verifies the result
+                    # deterministically afterwards. Thinking earns its cost in
+                    # the check classifier, where the question is whether a
+                    # quote *evidences performance*, and it stays on there.
+                    #
+                    # Measured on one 3.4k-char window of the convention:
+                    # think=True exceeded the 900 s timeout and returned
+                    # nothing; think=False answered in 38 s with the same six
+                    # clauses. Across 77 windows that is the difference between
+                    # a working stage and a stalled one.
+                    think=False,
                 )
                 if not isinstance(out, dict) or "obligations" not in out:
                     # No verdict is not an empty document; never cached.

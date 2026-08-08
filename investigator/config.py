@@ -120,7 +120,9 @@ PROMPT_VERSIONS = {
     "attack": "v1",             # Phase 2 — qwen3:30b, confounder prose
     # Reads a clause-bearing document and proposes obligations. Cached per
     # (document, page window) so re-running a case is nearly free.
-    "discover": "v1",
+    # v2: think=False. Windows cached under v1 were produced with a reasoning
+    # trace and must miss rather than be mixed with the rest.
+    "discover": "v2",
 }
 
 
