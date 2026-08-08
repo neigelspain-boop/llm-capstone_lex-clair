@@ -1795,3 +1795,45 @@ def test_build_without_a_raw_dir_is_refused(monkeypatch):
     _stub_stages(monkeypatch)
     with pytest.raises(ValueError, match="raw-dir"):
         rc.run_case("demo", raw_dir=None, skip_build=False)
+
+
+# ========== main.py: what "fresh" is allowed to delete ==========
+
+
+def test_fresh_clears_analysis_but_never_the_expensive_layer(tmp_path):
+    """`--fresh` must not destroy anything that costs money to regenerate.
+
+    Findings, the verification cache, the digest, the report and a pending
+    proposal are all rebuilt by local models. facts.jsonl, persons.jsonl and the
+    extracted markdown are cloud-extracted — deleting them turns a free re-run
+    into a billed one, silently.
+    """
+    import main as main_mod
+
+    paths = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    paths.investigation_dir.mkdir(parents=True)
+    (paths.investigation_dir / "findings.jsonl").write_text("{}", encoding="utf-8")
+    paths.case_catalog_proposal.write_text("obligations: []", encoding="utf-8")
+
+    keep = {
+        "facts.jsonl": "{}",
+        "persons.jsonl": "{}",
+        "actor_roles.jsonl": "{}",
+        "chunks.csv": "chunk_id\n",
+        config.CASE_CATALOG_FILENAME: "obligations: []",
+    }
+    for name, body in keep.items():
+        (paths.case_dir / name).write_text(body, encoding="utf-8")
+    (paths.case_dir / "extracted").mkdir()
+    (paths.case_dir / "extracted" / "a.md").write_text("texte", encoding="utf-8")
+    (paths.case_dir / "raw").mkdir()
+    (paths.case_dir / "raw" / "a.pdf").write_bytes(b"%PDF")
+
+    main_mod._clear_analysis(paths)
+
+    assert not paths.investigation_dir.exists()
+    assert not paths.case_catalog_proposal.exists()
+    for name in keep:
+        assert (paths.case_dir / name).exists(), f"--fresh deleted {name}"
+    assert (paths.case_dir / "extracted" / "a.md").exists()
+    assert (paths.case_dir / "raw" / "a.pdf").exists(), "--fresh touched the source documents"
