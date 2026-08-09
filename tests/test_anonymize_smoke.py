@@ -792,6 +792,66 @@ def test_committed_vitrine_artifacts_contain_no_private_identifier() -> None:
     )
 
 
+def test_committed_demo_investigation_contains_no_private_identifier() -> None:
+    """The same standing guard over the de-identified transcript (ADR #78).
+
+    demo/investigation/ is derived from a REAL case, unlike vitrine's, which
+    was produced by running the investigator over already-anonymous input.
+    Nothing else in the suite would notice if a hand-edit reintroduced a name,
+    and the role register makes that easy to do by accident: correcting one
+    binding is a two-character change with case-wide reach.
+    """
+    from ingestion.index import CHUNKS_CSV
+
+    root = CHUNKS_CSV.parent / "dossier"
+    if not (root / "demo" / "investigation" / "findings.jsonl").exists():
+        pytest.skip("demo investigation transcript not present in this checkout")
+    if not (root / "private" / "persons.jsonl").exists():
+        pytest.skip("private/persons.jsonl not present in this checkout")
+
+    import ingestion.dossier.anonymize as real_anon
+    from ingestion.dossier import roles
+
+    report = real_anon.verify_anonymization(
+        "demo", source_case_id="private", raise_on_leak=False,
+        roster=roles.load_roster("private"), extras=roles.load_identifiers("private"),
+    )
+    assert report.ok, (
+        "private identifiers found in the committed demo transcript: "
+        + "; ".join(f"{f}: {i}" for f, i in report.leaks[:10])
+    )
+
+
+def test_committed_demo_transcript_ids_verify_against_their_own_content() -> None:
+    """A published finding id must be a hash of the text published beside it.
+
+    The transcript is a translation: subject and claim are rewritten, and the
+    id is sha256(pass|subject|claim). Carrying the source case's ids across
+    would publish 95 identifiers that verify against nothing, and nobody
+    reading the file could tell.
+    """
+    from investigator.store import make_id
+
+    from ingestion.index import CHUNKS_CSV
+
+    path = CHUNKS_CSV.parent / "dossier" / "demo" / "investigation" / "findings.jsonl"
+    if not path.exists():
+        pytest.skip("demo investigation transcript not present in this checkout")
+
+    findings = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    mismatched = [
+        f["id"] for f in findings
+        if f["id"] != make_id(f["pass"], f["subject"], f["claim"])
+    ]
+    assert not mismatched, f"finding ids do not match their content: {mismatched[:5]}"
+
+    # ADR #71: the internal characterisation register never leaves, and a
+    # committed public artifact is as far out as it gets.
+    assert all(not f["qualification_interne"] for f in findings)
+    assert all(not f["penal_refs"] for f in findings)
+    assert {f["case_id"] for f in findings} == {"demo"}
+
+
 # --- structured-PII coverage for financial identifiers (ADR #65) -------------
 
 
@@ -843,3 +903,248 @@ def test_amounts_and_citations_are_not_mistaken_for_identifiers(text: str) -> No
     from ingestion.dossier.anonymize import _apply_structured_pii
 
     assert _apply_structured_pii(text) == text, f"over-redacted: {text!r}"
+
+
+# ========== role-designation register + investigation transcript (ADR #78) ==========
+
+
+def test_public_law_citation_survives_but_a_dossier_reference_does_not() -> None:
+    """The two have the same shape and opposite meanings.
+
+    "Ordonnance n° 45-2590" is the text the whole analysis reasons from;
+    redacting it deletes the authority a finding rests on. The instrument word
+    is the only thing telling it apart from a dossier reference, and the
+    transcript is full of both.
+    """
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    for citation in (
+        "Ordonnance n° 45-2590 du 2 novembre 1945, art. 6-2",
+        "Loi n° 2010-1615 du 23 décembre 2010",
+        "décret n° 2016-661 relatif aux tarifs",
+    ):
+        assert _apply_structured_pii(citation) == citation, f"redacted public law: {citation!r}"
+
+    assert "[réf.]" in _apply_structured_pii("dossier n° 433221100 déposé")
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Décédé à Aubagne (77590) (FRANCE), le 24 mars 2022.",   # parenthesised postcode
+        "PAYE FACT 1122334455667788 SUCCESSION",                 # unbroken account run
+        "Validateur 1 : 9988776655 GRANIMMO",
+    ],
+)
+def test_civil_status_postcode_and_long_digit_runs_are_redacted(text: str) -> None:
+    """Both shapes survived into a published case before ADR #78.
+
+    The postal rule needed a capitalised word AFTER the code and found a
+    closing bracket, so every place-of-birth and place-of-death line kept its
+    commune's code — the one line where a commune is guaranteed to appear.
+    The long runs survived because the address rule's 40-character tail bit
+    through the middle of them and left a still-identifying remainder.
+    """
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    assert _apply_structured_pii(text) != text, f"identifier survived: {text!r}"
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["le 20240308 la convention", "facture du 20260211", "acte 19991231"],
+)
+def test_datestamps_are_not_mistaken_for_reference_numbers(text: str) -> None:
+    """Dates pass through unchanged (ADR #62), including in stem form."""
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    assert _apply_structured_pii(text) == text, f"over-redacted a datestamp: {text!r}"
+
+
+def test_doc_id_keeps_a_datestamp_and_destroys_a_registration_number() -> None:
+    """The exemption is a calendar check, not a digit count.
+
+    The corpus names its correspondence by date, so scrubbing the stamp erased
+    the chronology from every citation in a transcript that reasons over
+    sequence. Its registration numbers are the same length and open with the
+    same two digits, so only a month/day test separates them.
+    """
+    from ingestion.dossier.anonymize import anonymize_doc_id
+
+    kept = anonymize_doc_id("courrier_du_20260624_relance", {}, {})
+    assert "20260624" in kept
+
+    for registration in ("20447731", "20441277", "19883299", "433221100", "88112233445"):
+        out = anonymize_doc_id(f"acte_n_{registration}", {}, {})
+        assert registration not in out, f"registration number survived: {registration}"
+        assert "ref" in out
+
+
+def test_doc_id_replacement_is_word_anchored() -> None:
+    """The bug that published "..._relsophie_des_parts_...".
+
+    An unanchored replace matched a three-letter given name inside "releve"
+    and a four-letter token inside "courante". Both are ordinary French words
+    carrying the document's meaning, and both were corrupted in the committed
+    showcase case.
+    """
+    from ingestion.dossier.anonymize import anonymize_doc_id
+
+    mapping = {"eve": "Sophie", "cour": "CHAMBRE"}
+    out = anonymize_doc_id("etude_releve_des_parts_correspondance_courante", mapping, {})
+    assert "releve" in out
+    assert "courante" in out
+    assert "sophie" not in out
+
+    # …while the same token standing alone between separators is still replaced.
+    assert "sophie" in anonymize_doc_id("note_de_eve_2026", mapping, {})
+
+
+def test_a_token_inside_a_replacement_is_never_scrubbed() -> None:
+    """Blanking a word inside our own output deletes the designation.
+
+    "gestionnaire_scpi" published as "gestionnaire_x", because "scpi" is a
+    distinctive token of an unrelated identifier key and the filename scrubber
+    ran after the substitution that placed it.
+    """
+    from ingestion.dossier.anonymize import _identifier_tokens
+
+    tokens = _identifier_tokens(
+        {"granimmo patrimoine": "gestionnaire_scpi"}, {"SCPI PIERRAVENIR": "scpi_1"},
+    )
+    # "scpi" occurs inside two replacements, so scrubbing it would blank part
+    # of this pipeline's own output.
+    assert "scpi" not in tokens
+    # The identifiers themselves are still scrubbed — the exclusion is about
+    # replacements, not about going easy on keys.
+    assert "granimmo" in tokens
+    assert "pierravenir" in tokens
+
+
+def test_role_register_refuses_to_keep_real_legal_persons(tmp_path, monkeypatch) -> None:
+    """The persona convention's exemption is a leak in role mode.
+
+    Keeping a bank's real name is defensible when the parties carry invented
+    names — a national bank does not identify a private family. It is not
+    defensible when the transcript names nobody: the SCPI, the bank and the
+    étude together re-identify the case, and nothing in the analysis needs them.
+    """
+    from ingestion.dossier import roles
+
+    monkeypatch.setattr(roles, "DOSSIER_DIR", tmp_path)
+    case = tmp_path / "src"
+    case.mkdir()
+    (case / roles.ROLE_ROSTER_FILENAME).write_text(
+        json.dumps({"keep_real_legal_persons": True, "bindings": {}}), encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="keep_real_legal_persons"):
+        roles.load_roster("src")
+
+
+def test_role_mode_fallback_is_ordinal_not_lettered() -> None:
+    """An unrostered entity still gets a designation, shaped like the others.
+
+    "Personne A" among role slugs reads as a different kind of object than the
+    entities around it — which is the readability failure ADR #59 recorded,
+    reappearing from the other direction.
+    """
+    from ingestion.dossier import roles
+    from ingestion.dossier.anonymize import assign_personas
+
+    roster = personas.Roster(**roles.ROLE_VOCABULARY)
+    assigned = assign_personas(
+        [
+            ("BEAUMONT Hilaire", "natural_person", "p-1"),
+            ("GRANIMMO Patrimoine", "legal_person", "p-2"),
+        ],
+        roster,
+    )
+    assert assigned["p-1"] == "personne_1"
+    assert assigned["p-2"] == "organisme_1"
+
+
+def test_a_finding_field_with_no_policy_fails_the_build() -> None:
+    """The fail-closed guard, on the schema most likely to grow.
+
+    A finding is 26 fields of mixed structure and free prose, and the passes
+    add to it. Defaulting to KEEP publishes whatever the next field holds;
+    defaulting to TEXT corrupts the next structured one.
+    """
+    from ingestion.dossier.anonymize import FINDING_POLICY, _translate_record
+
+    record = {"pass": "check", "subject": "x", "claim": "y", "nouveau_champ": "DUCHEMIN"}
+    with pytest.raises(RuntimeError, match="nouveau_champ"):
+        _translate_record(record, FINDING_POLICY, {}, {}, "findings.jsonl[0]", {})
+
+
+def test_statute_refs_are_translated_because_they_are_not_always_statute() -> None:
+    """An obligation drawn from a deed carries its SOURCE document here.
+
+    Under a KEEP policy that published 87 document stems verbatim, inside a
+    field whose name says it holds public law.
+    """
+    from ingestion.dossier.anonymize import _POINTER_POLICY, _translate_record
+
+    ids = {"duchemin_s__02_successions__procuration": "dossier_02_successions_procuration"}
+    out = _translate_record(
+        {"statute_refs": ["Code civil, art. 730-4",
+                          "duchemin_s__02_successions__procuration — Signer"]},
+        {"statute_refs": _POINTER_POLICY["statute_refs"]},
+        {}, {}, "pointers", ids,
+    )
+    assert out["statute_refs"][0] == "Code civil, art. 730-4"
+    assert "duchemin" not in out["statute_refs"][1]
+    assert "dossier_02_successions_procuration" in out["statute_refs"][1]
+
+
+def test_scrub_is_idempotent_and_repairs_a_derived_case(tmp_path, monkeypatch) -> None:
+    """The repair path for a pattern strengthened after a case was built.
+
+    Re-deriving is the wrong remedy for a pattern fix: it rewrites every
+    doc_id and therefore every chunk_id and citation, to correct text a
+    targeted pass corrects exactly. Running it twice must be a no-op, or it is
+    not safe to re-run after the next pattern change.
+    """
+    from ingestion.dossier import anonymize as anon
+
+    monkeypatch.setattr(anon, "DOSSIER_DIR", tmp_path)
+    case = tmp_path / "pub"
+    (case / "extracted").mkdir(parents=True)
+    (case / "extracted" / "note.md").write_text(
+        "Décédé à Beaumont (77590) (FRANCE).\n", encoding="utf-8",
+    )
+    (case / "facts.jsonl").write_text(
+        json.dumps({"fact_id": "note-f001", "verbatim_quote": "PAYE 1122334455667788"},
+                   ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    first = anon.scrub_case_pii("pub")
+    assert set(first) == {"extracted/note.md", "facts.jsonl"}
+    assert "77590" not in (case / "extracted" / "note.md").read_text(encoding="utf-8")
+    assert "1122334455667788" not in (case / "facts.jsonl").read_text(encoding="utf-8")
+
+    assert anon.scrub_case_pii("pub") == {}
+
+
+def test_a_reference_quoted_back_inside_prose_is_redacted() -> None:
+    """No id table can reach a number a model wrote into a sentence.
+
+    The transcript's counter-arguments are generated text, and one of them
+    quoted a document's registration number back as prose — "référencé sous
+    <number>". There it is not a document stem, not a pointer and not a field:
+    it is a word in a sentence, reachable only by a structural rule. The
+    calendar test is what keeps that rule from eating the dates around it.
+    """
+    from ingestion.dossier.anonymize import _apply_structured_pii
+
+    out = _apply_structured_pii(
+        "Le document est intégré à l'acte notarié (référencé sous 20447731), "
+        "signé le 20240308 pour un montant de 195 572 €."
+    )
+    assert "20447731" not in out
+    assert "[réf.]" in out
+    # …and the neighbours it must not touch.
+    assert "20240308" in out
+    assert "195 572 €" in out

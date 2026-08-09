@@ -4502,3 +4502,124 @@ mot est un terme de fonction n'identifie personne, par construction. Elle ne
 corrige pas non plus la cause — `resolve` continue de produire des alias de
 rôle. Le traiter à la source supposerait de contraindre un clustering LLM ;
 la garde est ici posée à l'endroit où la conséquence se produit.
+
+## ADR #78 — Un second registre : la désignation fonctionnelle, et la barrière étendue au plan V
+
+**Statut** : accepté · 2026-08-09
+
+**Contexte.** `data/dossier/private/investigation/DIGEST.md` est l'artefact
+analytique le plus abouti du projet : 95 constatations ouvertes (87 `check`,
+6 `contradict`, 2 `graph`) contre un catalogue de 87 obligations, hiérarchisées
+T1-T5, avec 212 contre-arguments. Il est illisible par un relecteur : `private/`
+est gitignoré et le fichier est saturé d'identifiants réels.
+
+Rien dans le dépôt ne savait le traiter. `anonymize.py` ne parcourait que
+`extracted/*.md` et une liste blanche de six noms de fichiers ; **rien sous
+`investigation/` n'était anonymisé ni même scanné par la barrière**. Les
+transcriptions publiées de `vitrine` étaient propres par accident de
+construction — l'investigateur avait été lancé sur un cas déjà anonyme — et non
+parce qu'un contrôle l'avait vérifié.
+
+La mesure de la surface de fuite a orienté toute la suite. La prose analytique
+est **déjà** écrite en langage de rôle (« le notaire soussigné », « le
+nu-propriétaire », « l'établissement teneur du compte ») et publiable telle
+quelle. Les identifiants sont concentrés en trois endroits : les identifiants
+de documents (50 souches, `bossavit` ×1089), les `person_ids`, et les extraits
+verbatim des 6 constatations `contradict`.
+
+**Décision — un second registre, pas une seconde exception.** `roles.py`
+remplace chaque partie par la fonction qu'elle occupe
+(`notaire_instrumentaire`, `heritier_nu_proprietaire_1`,
+`etablissement_bancaire`), là où `personas.py` (ADR #59, #62) lui donne un nom
+français ordinaire. Les deux conventions répondent à deux questions
+différentes. Le *dossier* publié doit se lire comme un dossier de succession,
+et un dossier dont les parties portent des libellés de fonction ne s'y prête
+pas — c'est l'échec que l'ADR #59 a consigné pour « Personne A ». La
+*transcription* d'investigation est l'inverse : elle argumente déjà par
+fonction, et ses constatations en dépendent —
+`conv-remise-extrait-au-gestionnaire` produit deux constatations distinctes
+précisément parce qu'un détenteur est une banque et l'autre un gestionnaire de
+SCPI. Inventer des noms pour des parties que le texte ne nomme jamais y
+ajouterait une précision dont il n'a pas besoin, et inviterait le lecteur à
+croire une fiction. Une désignation de rôle n'identifie personne (ADR #77) :
+elle ne réclame donc aucun avertissement de fiction.
+
+Conséquences assumées : `keep_real_legal_persons` est **refusé** en mode rôle
+(la SCPI nommée, la banque nommée et l'étude nommée ré-identifient le cas à
+elles seules, et l'analyse n'en a aucun besoin) ; le repli est ordinal
+(`personne_1`) et non alphabétique.
+
+**Décision — traduire l'entrepôt, puis re-rendre.** `findings.jsonl` est
+traduit champ par champ, puis `render_digest` régénère le DIGEST à partir de
+l'entrepôt traduit. Éditer le markdown à la main aurait produit un fichier
+non régénérable, non testable, et en désaccord avec son propre
+`findings.jsonl`. Les identifiants sont traduits **une fois**, dans une table
+explicite ensuite rejouée littéralement : le sujet, la revendication, la prose
+de constat et les pointeurs de preuve dérivent alors d'une seule décision par
+document, au lieu de quatre réécritures qui divergent. La table est imprimable,
+ce dont la relecture humaine a besoin et qu'une expression régulière n'offre
+pas.
+
+L'`id` est re-dérivé (`sha256(pass|subject|claim)`). Conserver l'ancien aurait
+publié 95 identifiants ne vérifiant rien, sans que le lecteur puisse s'en
+apercevoir. Le registre interne (`qualification_interne`, `gravite_interne`,
+`penal_refs`) est vidé : l'ADR #71 le tient à l'écart de toute sortie, et un
+artefact public committé est la sortie la plus extérieure qui soit.
+
+**Le coût d'honnêteté, isolé et signalé.** Les 6 constatations `contradict`
+citent les documents entre « ». Ces extraits sont substitués **à l'intérieur
+des guillemets** : la contradiction reste lisible, mais une citation n'est plus
+littérale. L'alternative — supprimer les extraits — laissait six constatations
+invérifiables. `render_digest` reçoit donc un `notice` qui remplace
+l'avertissement « Ne pas diffuser », faux sur un cas publié, et déclare les
+trois choses qu'un lecteur ne peut pas deviner : les parties sont des
+fonctions, les extraits ont été modifiés, les dates et montants sont intacts.
+Le défaut reste l'avertissement : un appelant qui oublie l'argument obtient la
+version prudente.
+
+**Ce que la barrière a trouvé en s'étendant.** `_scan_targets` couvre désormais
+`obligations.yaml` et `investigation/`. Deux motifs ajoutés pour la
+transcription ont révélé **29 fuites réelles dans le cas public `vitrine` déjà
+committé et poussé** : 16 codes postaux sous la forme parenthésée de l'état
+civil (« Décédé à <commune> (77590) (FRANCE) » — la règle postale exigeait un
+mot capitalisé *après* le code et rencontrait une parenthèse fermante, sur la
+seule ligne où une commune est garantie de figurer) et 13 numéros de compte
+d'un seul tenant (la règle d'adresse, dont la queue est plafonnée à 40
+caractères, tranchait au milieu du nombre et laissait un reste identifiant).
+
+Le remède est `--step scrub` : ré-appliquer *uniquement* la couche 2 sur un cas
+déjà dérivé, sur place. Re-dériver depuis la source est la mauvaise réponse à
+la correction d'un motif — cela réécrit chaque `doc_id`, donc chaque `chunk_id`
+et chaque citation, et impose une ré-indexation, pour corriger un texte qu'une
+passe ciblée corrige exactement. La couche 1 n'est délibérément pas rejouée :
+un nom qu'elle attraperait désormais est un autre problème, dont la réponse est
+d'étendre le registre et de re-dériver.
+
+**Deux bogues corrigés au passage, tous deux visibles dans le cas committé.**
+`anonymize_doc_id` remplaçait par `str.replace` sans ancrage : un prénom de
+trois lettres a été substitué à l'intérieur de « releve », publiant
+`..._relsophie_des_parts_...`, et la même règle a transformé
+`correspondance_courante` en fragment du nom de la chambre. Les souches sont
+jointes par `_`, donc l'ancrage n'y coûte rien. Et `_identifier_tokens`
+effaçait tout jeton d'identifiant de quatre caractères ou plus — y compris
+lorsqu'il apparaissait dans un *remplacement* : `gestionnaire_scpi` était
+publié `gestionnaire_x`, supprimant la désignation même que la substitution
+venait de poser.
+
+**Le tampon de date, rétabli.** La règle `\d{5,}` → `ref` effaçait aussi les
+`YYYYMMDD` des noms de fichiers. Le corpus nomme sa correspondance par date, et
+la transcription raisonne sur la chronologie de bout en bout : la règle
+contredisait l'ADR #62 (dates inchangées) à l'endroit précis où cela coûtait le
+plus. L'exemption est un contrôle calendaire — mois 01-12, jour 01-31 — et non
+un décompte de chiffres, car les numéros d'enregistrement du dossier
+(`20447731`, `20441277`, `19883299`) font huit chiffres et commencent tous par
+« 20 ».
+
+**Ce que cela ne fait pas.** `RAPPORT.md` n'est pas publié : `render_brief`
+exige un `CaseGraph` vivant, et celui de `demo` est vide par construction.
+`coverage.jsonl` non plus : 32 Ko d'extraits OCR bruts dont les constatations
+portent déjà le verdict sous la forme `périmètre=N/N document(s) vérifié(s)`.
+Et la barrière ne prouve toujours pas ce qu'elle ne peut pas prouver : elle
+établit l'absence des identifiants *connus*. Le risque résiduel de cette
+transcription vit dans les 212 contre-arguments rédigés par un modèle, qui sont
+de la prose libre — ils se relisent, ils ne s'attestent pas.

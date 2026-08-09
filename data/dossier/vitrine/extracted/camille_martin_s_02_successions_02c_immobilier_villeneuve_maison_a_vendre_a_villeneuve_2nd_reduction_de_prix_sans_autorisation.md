@@ -1,7 +1,7 @@
 ## Page 1
 
 ACHAT - MAISON
-**Villeneuve (77590)**
+**Villeneuve ([code postal])**
 6 pièces    158 m²
 
 ← Retour
@@ -92,7 +92,7 @@ CENTRE VILLE    BUS    GARE    COMMERCES    ECOLE
 
 ## Descriptif
 
-### Maison à vendre à Villeneuve en Villeneuve (77590), ref : 1003295
+### Maison à vendre à Villeneuve en Villeneuve ([code postal]), ref : 1003295
 
 Villeneuve (Secteur rue Pasteur) - maison 111 m² + studio indépendant refait à neuf 47 m² - sous-sol 68 m² - terrain 523 m²
 Découvrez cet ensemble immobilier composé d'une maison mitoyenne et d'un studio indépendant refait à neuf, sur un terrain d'environ 523 m².

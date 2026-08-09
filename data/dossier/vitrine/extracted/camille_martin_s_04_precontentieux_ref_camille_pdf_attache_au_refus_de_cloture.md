@@ -22,8 +22,8 @@ Je fais suite au courriel transmis le 27 mai 2026 à 14h28 par Sarah GARNIER, No
 sein de votre Étude, sous votre autorité, en réponse à mon courrier électronique du 21 mai 2026 et aux
 courriers électroniques de mes cohéritiers nus-propriétaires Élodie MARTIN et Monsieur
 Lucas MARTIN en date du 20 mai 2026, relatifs aux successions de Jeanne MARTIN, née le
-27 septembre 1933 à LE LEMAIRE (18260) et décédée à Villeneuve (77850) le 1er juillet 2025, et de Monsieur
-Henri MARTIN, né le 28 août 1929 à Beaumont (18100) et décédé à Villeneuve (77850) le 9
+27 septembre 1933 à LE LEMAIRE ([code postal]) et décédée à Villeneuve ([code postal]) le 1er juillet 2025, et de Monsieur
+Henri MARTIN, né le 28 août 1929 à Beaumont ([code postal]) et décédé à Villeneuve ([code postal]) le 9
 janvier 2026.
 Le présent courrier vous est adressé en votre qualité de notaire associé de la SCP Alain LEROY et Sophie-
 [nom] Sophie DUBOIS, notaire instrumentaire de la convention sur les fonds et titres de succession reçue par
@@ -65,7 +65,7 @@ partagées par mes deux cohéritiers nus-propriétaires sous leurs propres signa
 échéant.
 2. ACTE DE NOTORIÉTÉ DU 27 JANVIER 2026 — PRISE D'ACTE ET OPTION SUCCESSORALE
 Nous prenons acte de la transmission, en pièces jointes à votre courriel du 27 mai 2026, de la copie de
-l'acte de notoriété reçu par votre Étude le 27 janvier 2026 (dossier 100327502) et de l'attestation
+l'acte de notoriété reçu par votre Étude le 27 janvier 2026 (dossier [réf.]) et de l'attestation
 dévolutive correspondante datée du 3 février 2026, signée de votre main.
 Nous relevons que ledit acte de notoriété a été signé par Gérard MARTIN, seul présent à l'acte,
 les cinq autres héritiers — Bernard MARTIN, Madame Nicole Camille MARTIN, Madame Élodie
@@ -137,14 +137,14 @@ funéraires, les charges courantes restées à régler, en ce compris la créanc
 ## Page 4
 
 trop-versé de retraite complémentaire sur la succession de Madame BLANC (réf. AG2R n° RC
-58455728, dossier 4333829, procédure 103200962/2), et l'inscription de la créance de restitution due
+[réf.], dossier 4333829, procédure [réf.]/2), et l'inscription de la créance de restitution due
 aux trois nus-propriétaires au titre de la convention du 8 mars 2024, conformément à la stipulation
 conventionnelle prévoyant que « Il sera fait mention du montant de la créance de restitution au passif
 de la déclaration de succession du QUASI-USUFRUITIER » ;
 — les opérations intervenues depuis l'ouverture de chaque succession, incluant les débits et crédits sur
 les comptes du défunt ou de la défunte, et toute opération conduite par votre Étude ou par tout tiers
 pour le compte de la succession, en ce compris le virement de 100,00 € débité le 11 mai 2026 du
-compte [réf.] du défunt en faveur d'AMUNDI IMMOBILIER (facture F202600310), dont la facture a
+compte [réf.] du défunt en faveur d'AMUNDI IMMOBILIER (facture F[réf.]), dont la facture a
 depuis fait l'objet d'un avoir et d'un remboursement annoncé par AMUNDI le 19 mai 2026 ;
 — le compte d'administration inter-successionnel entre la succession de Jeanne MARTIN et
 celle de Henri MARTIN, retraçant les flux financiers et les droits respectifs entre les deux
@@ -188,7 +188,7 @@ option sera désormais ouverte à ses propres héritiers, et le calendrier dans 
 exercée ;
 — les conséquences patrimoniales attendues, suivant les modalités d'option retenues, sur la composition
 de l'actif de la succession de Henri MARTIN, en particulier sur ses droits éventuels dans
-l'immeuble sis à Villeneuve (77590) [adresse]r dépendant de la
+l'immeuble sis à Villeneuve ([code postal]) [adresse]r dépendant de la
 succession de Jeanne MARTIN ;
 — l'incidence de cette option et des droits qui en résultent sur l'évaluation du seuil d'actif brut de 50
 000 € visé par votre courriel du 27 mai 2026 et sur la qualification d'éventuel dépassement du seuil
@@ -247,14 +247,14 @@ La créance de restitution éventuellement ouverte au titre de l'hypothèse (c),
 nature au titre des hypothèses (a) et (b), bénéficient aux trois nus-propriétaires signataires de la
 convention du 8 mars 2024, à raison d'un tiers chacun, et la position formelle attendue de votre Étude
 vaudra à l'égard des trois nus-propriétaires.
-7. SITUATION DE L'IMMEUBLE SIS À Villeneuve (77590) [adresse]
+7. SITUATION DE L'IMMEUBLE SIS À Villeneuve ([code postal]) [adresse]
 Votre courriel du 27 mai 2026 indique « l'absence de biens immobiliers dépendant des successions ». Le
 même courriel mentionne, dans la phrase suivante, la demande formulée par Gérard MARTIN
 de remboursement des fonds qu'il aurait avancés « concernant le bien immobilier », à répartir «
 proportionnellement à sa quote-part du bien immobilier ». Ces deux indications, figurant dans le même
 courriel, sont en apparente contradiction et appellent clarification.
 À notre connaissance documentaire, votre Étude a été constituée mandataire exclusif de la vente d'un
-ensemble immobilier sis à Villeneuve (77590) [adresse], par mandat
+ensemble immobilier sis à Villeneuve ([code postal]) [adresse], par mandat
 signé par les six héritiers de Henri MARTIN, en qualité d'ayants droit à sa succession, dont la
 rédaction émane de votre Étude (dossier 1002986). Les correspondances de votre Étude attestent que ce
 bien était, postérieurement au décès de Henri MARTIN, en cours de commercialisation par
@@ -278,7 +278,7 @@ Jeanne MARTIN », établissant que le titre porte conjointement les deux noms ;
 
 — la convention sur les fonds et titres de succession reçue par votre Étude le 8 mars 2024 mentionne en
 page 1, au titre de l'identification du quasi-usufruitier et de son épouse, que ceux-ci étaient « mariés à
-la mairie de Beaumont (18000) le 10 avril 1953 sous le régime de la communauté de biens meubles et
+la mairie de Beaumont ([code postal]) le 10 avril 1953 sous le régime de la communauté de biens meubles et
 acquêts à défaut de contrat de mariage préalable », régime dont il est expressément précisé qu'il « n'a
 pas fait l'objet de modification ». Cette même mention figure, en termes identiques, dans le projet de
 procuration relatif au règlement de la succession de Madame BLANC adressé à chacun des nus-
@@ -296,7 +296,7 @@ qualité d'époux commun en biens de Jeanne MARTIN ».
 Sous réserve de la production du titre d'acquisition de l'immeuble dont nous demandons ci-après
 communication, il résulte de la combinaison des éléments établis par votre Étude elle-même que, sauf
 disposition contraire documentairement justifiée :
-— l'immeuble sis à Villeneuve (77590) [adresse], dont le titre de propriété est rédigé au nom des
+— l'immeuble sis à Villeneuve ([code postal]) [adresse], dont le titre de propriété est rédigé au nom des
 deux époux et dont aucune disposition particulière contraire n'a été à ce jour portée à notre
 connaissance, est présumé avoir été acquis pendant le mariage à titre onéreux, et constituer à ce titre
 un bien commun aux époux Camille MARTIN-BLANC en application du régime de la communauté de biens
@@ -496,7 +496,7 @@ les héritiers ayant accepté purement et simplement la succession et à l'égar
 qualité de créanciers personnels.
 La présente opposition vaut pour l'ensemble des fonds et avoirs dépendant des deux successions, et
 notamment, sans s'y limiter, pour le produit éventuel de la vente de l'immeuble sis à Villeneuve
-(77590) [adresse]
+([code postal]) [adresse]
 10. SIGNATURE ÉLECTRONIQUE
 Votre courriel du 27 mai 2026 indique que votre Étude « ne peut pas signer d'actes authentique par
 l'intermédiaire de la plateforme Yousign ».

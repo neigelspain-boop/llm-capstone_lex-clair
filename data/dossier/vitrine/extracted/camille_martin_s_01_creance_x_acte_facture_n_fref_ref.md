@@ -15,13 +15,13 @@ Informations
 Responsable : GAUTIER Peggy Date de création : 11/05/2026 à 17:27
 Préparateur : PERRIN Sophie Date d’effet : 11/05/2026 à 17:25
 Signataires : Type de virement : [8] Virement SEPA
-Validateur 1 : 3770060001 Alain LEROY
+Validateur 1 : [réf.] Alain LEROY
 Donneur d’ordre
 Domiciliation
 N° de compte bancaire Montant
 Titulaire
 CDC
-40031 00001 0000112683F 75 100.00
+40031 00001 [réf.]F 75 100.00
 SCP B. Alain LEROY ET E.M. Sophie DUBOIS
 Total 100.00
 Bénéficaire(s)

@@ -86,7 +86,7 @@ Société de courtage d’assurances immatriculée au Registre des
 Intermédiaires en Assurances sous le n° 07 022 607. Titulaire de la
 carte professionnelle Transaction sur Immeubles et fonds de
 commerce et Gestion Immobilière numéro CPI
-80012021000000016 délivrée par la CCI d’Beaumont, bénéficiant de
+[réf.] délivrée par la CCI d’Beaumont, bénéficiant de
 Garantie financière et Assurance Responsabilité Civile
 
 ## Page 5
@@ -231,7 +231,7 @@ Société de courtage d’assurances immatriculée au Registre des
 Intermédiaires en Assurances sous le n° 07 022 607. Titulaire de la  
 carte professionnelle Transaction sur Immeubles et fonds de  
 commerce et Gestion Immobilière numéro CPI  
-80012021000000016 délivrée par la CCI d’Beaumont, bénéficiant de  
+[réf.] délivrée par la CCI d’Beaumont, bénéficiant de  
 Garantie financière et Assurance Responsabilité Civile  
 Professionnelle délivrées par CAMCA [adresse]
 Beaumont.

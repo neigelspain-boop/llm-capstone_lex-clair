@@ -4,8 +4,8 @@ Beaumont, le 11/02/2026
 MAÎTRE Sophie DUBOIS
 [adresse]
 [code postal] [ville]
-0000000011016424 SUCCESSION Henri MARTIN
-Facture F202600310
+[réf.] SUCCESSION Henri MARTIN
+Facture F[réf.]
 Libellé de la prestation Montant
 Frais de dossier : Succession 100,00 EUR
 Produit(s) :
@@ -24,7 +24,7 @@ Account owner FRAIS SUCCESSION EUR
 91 [adresse]
 [code postal] [ville] national de compte bancaire — RIB
 Code Banque Code Guichet N° de Compte Clé RIB Domiciliation
-31489 00010 00263692657. 47 CREDIT AGRICOLE CIB Beaumont
+31489 00010 [réf.]. 47 CREDIT AGRICOLE CIB Beaumont
 Identifiant international de compte bancaire IBAN
 IBAN (International Bank Account Number)
 [IBAN] 747

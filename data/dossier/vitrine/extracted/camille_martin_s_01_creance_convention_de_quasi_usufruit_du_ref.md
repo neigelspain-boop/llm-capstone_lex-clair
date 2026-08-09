@@ -1,10 +1,10 @@
 ## Page 1
 
-100202701
+[réf.]
 CJ/DJ/
 L'AN DE U X MILLE VINGT QUATRE,
 LE H U I T MARS
-A Beaumont (77000) [adresse], au siège de l'Office
+A Beaumont ([code postal]) [adresse], au siège de l'Office
 Notarial ci-après nommé,
 Sophie DUBOIS, Notaire associée de la Société Civile
 Professionnelle « Alain LEROY et Sophie DUBOIS, Notaires », titulaire d’un
@@ -14,10 +14,10 @@ TITRES DE SUCCESSION
 A LA REQUETE DE :
 « Quasi-usufruitier »
 Henri MARTIN, Retraité, et Madame Jeanne
-Jeanne BLANC, Retraitée, demeurant ensemble à Villeneuve (77590) [adresse]
-Monsieur est né à Beaumont (18100) le 28 août 1929,
-Madame est née à LE LEMAIRE (18260) le 10 mars 1929.
-Mariés à la mairie de Beaumont (18000) le 10 avril 1953 sous le régime de la
+Jeanne BLANC, Retraitée, demeurant ensemble à Villeneuve ([code postal]) [adresse]
+Monsieur est né à Beaumont ([code postal]) le 28 août 1929,
+Madame est née à LE LEMAIRE ([code postal]) le 10 mars 1929.
+Mariés à la mairie de Beaumont ([code postal]) le 10 avril 1953 sous le régime de la
 communauté de biens meubles et acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 Monsieur est de nationalité Française.
@@ -28,17 +28,17 @@ DE PREMIERE PART
 ET :
 « Nu-propriétaire »
 1°) Élodie MARTIN, secrétaire, demeurant à
-Port-Louis (98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+Port-Louis ([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 De nationalité française.
 Résidente en Port-Louis au sens de la réglementation fiscale.
 Non présente à l'acte.
 2°) Camille MARTIN, service à la clientèle, épouse de Monsieur
-Karim RENARD, demeurant à Port-Louis (77723) (Port-Louis) Circuito punta
+Karim RENARD, demeurant à Port-Louis ([code postal]) (Port-Louis) Circuito punta
 Colonet 24b punta Estrella, playa del Carmen.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de
 la communauté d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
@@ -46,12 +46,12 @@ De nationalité française.
 Non résidente au sens de la réglementation fiscale.
 Non présente à l’acte.
 3°) Monsieur Lucas Lucas Camille MARTIN, étudiant, demeurant à Port-Louis
-ROUSSEAU (98810) [adresse]
+ROUSSEAU ([code postal]) [adresse]
 
 ## Page 2
 
 2
-Né à Port-Louis (98735) le 6 octobre 2003.
+Né à Port-Louis ([code postal]) le 6 octobre 2003.
 Célibataire.
 Non lié par un pacte civil de solidarité.
 De nationalité française.
@@ -103,14 +103,14 @@ est demeurée annexée.
 I - E X P O S E
 PERSONNE DECEDEE
 Paul MARTIN, en son vivant Photographe, demeurant à
-Port-Louis (98730) [adresse]
+Port-Louis ([code postal]) [adresse]
 Né à Beaumont, (Beaumont) le 2 novembre 1956.
 Divorcé de Madame [nom] Suzanne Louise Villeneuve, suivant jugement rendu
-par le tribunal judiciaire de Port-Louis (98800) le 24 juin 2002, et non remarié.
+par le tribunal judiciaire de Port-Louis ([code postal]) le 24 juin 2002, et non remarié.
 Non lié par un pacte civil de solidarité.
 De nationalité Française.
 Résident au sens de la réglementation fiscale.
-Décédé à Port-Louis (98730) (FRANCE), le 24 mars 2022.
+Décédé à Port-Louis ([code postal]) (FRANCE), le 24 mars 2022.
 Absence de disposition de dernières volontés
 Il n’est pas connu de disposition testamentaire ou autre à cause de mort
 émanant de la personne décédée.
@@ -118,17 +118,17 @@ DEVOLUTION SUCCESSORALE
 La dévolution successorale s'établit comme suit :
 Héritiers
 Élodie MARTIN, secrétaire, demeurant à
-Port-Louis (98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+Port-Louis ([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
 Sa fille.
 Camille MARTIN, service à la clientèle, épouse de Monsieur
-Karim RENARD, demeurant à Port-Louis (77723) (Port-Louis) Circuito punta
+Karim RENARD, demeurant à Port-Louis ([code postal]) (Port-Louis) Circuito punta
 Colonet 24b punta Estrella, playa del Carmen.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de
 la communauté d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
@@ -136,8 +136,8 @@ De nationalité française.
 Non résidente au sens de la réglementation fiscale.
 Sa fille.
 Monsieur Lucas Lucas Camille MARTIN, étudiant, demeurant à Port-Louis
-(98810) [adresse]
-Né à Port-Louis (98735) le 6 octobre 2003.
+([code postal]) [adresse]
+Né à Port-Louis ([code postal]) le 6 octobre 2003.
 Célibataire.
 Non lié par un pacte civil de solidarité.
 De nationalité française.

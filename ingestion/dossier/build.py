@@ -70,6 +70,17 @@ def run_pipeline(
     step="all": it is a one-off derivation from a DIFFERENT case, not a stage
     of this case's own build.
 
+    step="anonymize-investigation" does the same for the Plane V transcript —
+    investigation/findings.jsonl and DIGEST.md — through the ROLE register
+    rather than the persona roster (ADR #78). Excluded from step="all" for
+    the same reason, and separate from step="anonymize" because it derives a
+    different plane's artifacts from a different vocabulary: publishing the
+    dossier and publishing the investigation over it are two decisions.
+
+    step="scrub" re-applies the structured-PII regexes to an already-derived
+    case in place, for when a pattern is strengthened after the case was
+    built. It takes no source case: it repairs, it does not re-derive.
+
     use_llm gates the anonymiser's residual sweep and defaults OFF, which is
     the opposite of anonymize_case's own default. Two reasons, both learned
     from the first showcase build. The sweep rewrites the markdown but cannot
@@ -117,6 +128,36 @@ def run_pipeline(
             print("  unrecognised proper nouns to review: " + ", ".join(f"{t}({n})" for t, n in top))
 
         return {"case_id": case_id, "step": step, **summary}
+
+    if step == "anonymize-investigation":
+        summary = _run_stage(
+            "ANONYMIZE-INVESTIGATION", anonymize.anonymize_investigation, case_id,
+            source_case_id=source_case_id,
+        )
+        residual = summary["residual_proper_nouns"]
+        top = sorted(residual.items(), key=lambda kv: -kv[1])[:15]
+        print(
+            f"anonymize-investigation summary · case_id={case_id} "
+            f"source={summary['source_case_id']} "
+            f"findings={summary['findings_translated']} ids_mapped={summary['ids_mapped']} "
+            f"files_verified={summary['files_scanned']} "
+            f"residual_proper_nouns={len(residual)} elapsed={summary['elapsed']:.1f}s"
+        )
+        if top:
+            print("  unrecognised proper nouns to review: " + ", ".join(f"{t}({n})" for t, n in top))
+        return {"case_id": case_id, "step": step, **summary}
+
+    if step == "scrub":
+        changed = _run_stage("SCRUB", anonymize.scrub_case_pii, case_id)
+        total = sum(changed.values())
+        print(
+            f"scrub summary · case_id={case_id} files_changed={len(changed)} "
+            f"records_changed={total}"
+        )
+        for name, count in sorted(changed.items()):
+            print(f"  {name}: {count}")
+        return {"case_id": case_id, "step": step, "files_changed": len(changed),
+                "records_changed": total, "changed": changed}
 
     if step == "extract":
         results = _run_stage("EXTRACT", extract.extract_case, case_id, raw_dir, limit=limit)
@@ -274,7 +315,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--step",
-        choices=["anonymize", "extract", "gate", "facts", "distill", "index", "resolve", "all"],
+        choices=["anonymize", "anonymize-investigation", "scrub", "extract", "gate",
+                 "facts", "distill", "index", "resolve", "all"],
         default="all",
         help="which pipeline step(s) to run (default: all)",
     )

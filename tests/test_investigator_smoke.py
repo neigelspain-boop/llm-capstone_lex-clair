@@ -2044,3 +2044,55 @@ def test_collisions_and_integrity_reach_the_report(tmp_path, vitrine_graph):
     assert "Rapprochements à examiner" in body
     assert "Collision montant." in body
     assert "Intégrité du dossier" in body
+
+
+# ========== the de-identified transcript's header (ADR #78) ==========
+
+
+def _one_open_finding() -> dict:
+    return {
+        "id": "abc123def456", "pass": "check", "subject": "oblig-x",
+        "claim": "Obligation oblig-x : aucun fait n'atteste l'exécution.",
+        "tier": "T3", "severity": "high", "status": "open",
+        "evidence": "statut=gap", "confounders": [],
+    }
+
+
+def test_digest_warns_against_diffusion_by_default(tmp_path):
+    """The default must stay the safe one.
+
+    A caller that forgets the argument gets the warning, not a document that
+    reads as publishable. Getting that backwards would make the mistake
+    silent and the artifact wrong in the dangerous direction.
+    """
+    from investigator import render
+
+    p = config.CasePaths.for_case("private", dossier_dir=tmp_path)
+    render.render_digest(p, {"abc123def456": _one_open_finding()})
+
+    text = p.digest_md.read_text(encoding="utf-8")
+    assert "Ne pas diffuser" in text
+
+
+def test_digest_notice_replaces_the_warning_for_a_published_transcript(tmp_path):
+    """"Ne pas diffuser" is simply false on the derived case.
+
+    What the reader of a transcript needs instead is what was substituted and
+    what was edited — in particular that the excerpts between « » are no
+    longer literal, which is the one honesty cost of deriving it.
+    """
+    from investigator import render
+
+    p = config.CasePaths.for_case("demo", dossier_dir=tmp_path)
+    render.render_digest(
+        p, {"abc123def456": _one_open_finding()},
+        notice="Transcription dés-identifiée. Les extraits entre « » ont été modifiés.",
+    )
+
+    text = p.digest_md.read_text(encoding="utf-8")
+    assert "Ne pas diffuser" not in text
+    assert "dés-identifiée" in text
+    assert "« » ont été modifiés" in text
+    # The body is unaffected: only the header line is swapped.
+    assert "**[T3]**" in text
+    assert "abc123def456" in text

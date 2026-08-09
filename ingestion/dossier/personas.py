@@ -54,6 +54,13 @@ Three things the roster must get right, all learned from the real corpus:
 Note that no civility title is ever baked into a name here. The source
 documents supply their own "Maître" / "Madame", and a title inside the
 replacement prints twice ("Maître Maître DUBOIS" — observed 13 times).
+
+This module owns ONE convention. `roles.py` owns a second one — role
+designations rather than names — for the investigation transcript (ADR #78).
+The vocabulary a run uses therefore travels on the Roster rather than being
+read from this module's constants: `Roster` carries its own fallback pools,
+labels and placeholders, defaulting to the persona vocabulary below so every
+existing caller is unchanged.
 """
 from __future__ import annotations
 
@@ -192,12 +199,27 @@ class Roster:
     it is why the geography in the roster is fictional even when the brand is
     not — otherwise "SIP <commune>" would re-publish the exact locality the
     address redaction just removed.
+
+    The last six fields are the substitution VOCABULARY, carried here rather
+    than read from module constants so a second convention can exist without
+    forking anonymize.py (ADR #78). `ordinal_fallback` picks the shape of a
+    generated name once a pool is exhausted: the lettered "Personne A" scheme
+    for personas, "personne_1" for role designations, which is the shape the
+    rest of the role register already uses.
     """
 
     bindings: dict[str, str] = field(default_factory=dict)
     canonical: dict[str, str] = field(default_factory=dict)
     token_overrides: dict[str, str] = field(default_factory=dict)
     keep_real_legal_persons: bool = False
+
+    natural_pool: tuple[str, ...] = FALLBACK_NATURAL_POOL
+    legal_pool: tuple[str, ...] = FALLBACK_LEGAL_POOL
+    natural_label: str = "Personne"
+    legal_label: str = "Organisme"
+    natural_placeholder: str = "[nom]"
+    legal_placeholder: str = "[organisme]"
+    ordinal_fallback: bool = False
 
     def character_for(self, person_id: str) -> str | None:
         return self.bindings.get(person_id)
@@ -214,17 +236,26 @@ def load_roster(source_case_id: str) -> Roster:
     still anonymises everything. A roster is a readability upgrade, never a
     privacy prerequisite — which is why this loader is permissive where
     load_extra_identifiers is strict.
-
-    Raises on a roster that exists but is unusable: a value that would fail
-    the gate, or one character bound to two people who are not declared to be
-    the same person (which would silently merge a notaire with an heir in the
-    published case).
     """
     path = roster_path(source_case_id)
     if not path.exists():
         return Roster()
+    return parse_roster(json.loads(path.read_text(encoding="utf-8")))
 
-    raw = json.loads(path.read_text(encoding="utf-8"))
+
+def parse_roster(raw: dict, **vocabulary) -> Roster:
+    """Build a Roster from a decoded roster file.
+
+    Separate from load_roster so a second convention can reuse the merging,
+    expansion and collision rules without reimplementing them — roles.py
+    passes its own `vocabulary` (pools, labels, placeholders) and gets the
+    same guarantees. See ADR #78.
+
+    Raises on a roster that is unusable: a value that would fail the gate, or
+    one character bound to two people who are not declared to be the same
+    person (which would silently merge a notaire with an heir in the
+    published case).
+    """
     bindings: dict[str, str] = {
         k: v for k, v in (raw.get("bindings") or {}).items() if not k.startswith("_")
     }
@@ -270,4 +301,5 @@ def load_roster(source_case_id: str) -> Roster:
         canonical=canonical,
         token_overrides=token_overrides,
         keep_real_legal_persons=bool(raw.get("keep_real_legal_persons", False)),
+        **vocabulary,
     )

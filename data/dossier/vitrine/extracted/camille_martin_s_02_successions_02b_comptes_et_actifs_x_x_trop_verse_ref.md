@@ -30,9 +30,9 @@ BP81
 Le 29 octobre 2025
 
 **Références à rappeler**
-**N° RC : 58455728**
+**N° RC : [réf.]**
 **N° dossier : 4333829**
-**N° procédure : 103200962 / 2**
+**N° procédure : [réf.] / 2**
 
 Objet : **Réclamation de trop-versé concernant la succession de Jeanne MARTIN**
 
@@ -71,9 +71,9 @@ AG2R LA MONDIALE
 agirc-arrco
 
 **Références à rappeler**
-**N° RC : 58455728**
+**N° RC : [réf.]**
 **N° dossier : 4333829**
-**N° procédure : 103200962 / 2**
+**N° procédure : [réf.] / 2**
 
 **Par conséquent, nous vous remercions de nous rembourser la somme de 116,05 euros** par virement sur notre compte bancaire :
 IBAN : [IBAN] 558 BIC : [BIC], en rappelant les références : 4333829.

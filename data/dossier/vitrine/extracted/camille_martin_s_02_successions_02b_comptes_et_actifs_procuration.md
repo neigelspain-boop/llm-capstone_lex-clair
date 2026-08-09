@@ -1,13 +1,13 @@
 ## Page 1
 
-100298616
+[réf.]
 EMM/SP
 PROCURATION
 LA SOUSSIGNEE :
 Camille MARTIN, service à la clientèle, épouse de Monsieur
 Karim RENARD, demeurant à Port-Louis (Port-Louis) Avenida Central 38,
 esc. 1, piso 1, vivienda 93 Port-Louis del Mar.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de
 la communauté d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
@@ -19,14 +19,14 @@ Agissant en qualité d’ayant droit à la succession ci-après relatée.
 Désigne, par les présentes, pour mandataire spécial :
 MANDATAIRE
 Élodie MARTIN, secrétaire, demeurant à
-Port-Louis (98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+Port-Louis ([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
 Ou Tout collaborateur de l’Office Notarial P&M NOTAIRES sis à Beaumont
-(77000) [adresse]
+([code postal]) [adresse]
 A L’EFFET :
 
 ## Page 2
@@ -40,15 +40,15 @@ Le mandant expose au préalable ce qui suit :
 EXPOSE
 PERSONNE DECEDEE
 Jeanne MARTIN, en son vivant retraitée, épouse de
-Henri MARTIN, demeurant à Villeneuve (77850) EHPAD
+Henri MARTIN, demeurant à Villeneuve ([code postal]) EHPAD
 Sainte Geneviève [adresse]
-Née à LE LEMAIRE (18260), le 10 mars 1929.
-Mariée à la mairie de Beaumont (18000) le 10 avril 1953 sous le régime de la
+Née à LE LEMAIRE ([code postal]), le 10 mars 1929.
+Mariée à la mairie de Beaumont ([code postal]) le 10 avril 1953 sous le régime de la
 communauté de biens meubles et acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
-Décédée à Villeneuve (77850) (FRANCE), le 1er juillet 2025.
+Décédée à Villeneuve ([code postal]) (FRANCE), le 1er juillet 2025.
 Donation entre époux
 Aux termes d'un acte reçu par Julien LAURENT,
 notaire à Beaumont, le 5 février 1981, et conformément aux dispositions de l’article
@@ -62,8 +62,8 @@ DÉVOLUTION SUCCESSORALE
 La dévolution successorale s'établit comme suit :
 Conjoint survivant
 Henri MARTIN, retraité, demeurant à Villeneuve
-(77850) EHPAD Sainte Geneviève [adresse]
-Né à Beaumont (18100) le 28 août 1929.
+([code postal]) EHPAD Sainte Geneviève [adresse]
+Né à Beaumont ([code postal]) le 28 août 1929.
 Veuf de Jeanne MARTIN.
 De nationalité française.
 Résident au sens de la réglementation fiscale.
@@ -71,21 +71,21 @@ Commun en biens ainsi qu'il est indiqué ci-dessus.
 Donataire en vertu de l'acte sus-énoncé.
 Héritiers
 1°/ Bernard MARTIN, retraité, époux de Madame Véronique
-Catherine MULLER, demeurant à Villeneuve (17320) [adresse]
+Catherine MULLER, demeurant à Villeneuve ([code postal]) [adresse]
 Né à Beaumont (Beaumont) le 30 janvier 1954.
 
 ## Page 3
 
 3
-[nom] à la mairie de Villeneuve (77590) le 1er septembre 1990 sous le
+[nom] à la mairie de Villeneuve ([code postal]) le 1er septembre 1990 sous le
 régime de la séparation de biens pure et simple défini par les articles 1536 et suivants
 du Code civil aux termes du contrat de mariage reçu par Maître Denis MERCIER, notaire
-à Beaumont (75016), le 24 août 1990.
+à Beaumont ([code postal]), le 24 août 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Résident au sens de la réglementation fiscale.
 Son fils.
-2°/ Gérard MARTIN, retraité, demeurant à Villeneuve (77590)
+2°/ Gérard MARTIN, retraité, demeurant à Villeneuve ([code postal])
 [adresse]
 Né à Beaumont/Beaumont (Beaumont) le 26 avril 1958.
 Divorcé de Madame Odile [nom]-Pierre DUPUIS suivant jugement rendu
@@ -97,27 +97,27 @@ Son fils.
 3°/ Nicole MARTIN, architecte d'intérieur, épouse de
 Monsieur Christophe André Charles GIRARD, demeurant à Port-Louis (Port-Louis)
 [adresse]
-Née à Beaumont (67000) le 25 février 1964.
-Mariée à la mairie de Villeneuve (77590) le 22 décembre 1990 sous le
+Née à Beaumont ([code postal]) le 25 février 1964.
+Mariée à la mairie de Villeneuve ([code postal]) le 22 décembre 1990 sous le
 régime de la séparation de biens pure et simple défini par les articles 1536 et suivants
 du Code civil aux termes du contrat de mariage reçu par Maître Antoine MARCHAND,
-notaire à Beaumont 8ÈME ARRONDISSEMENT (75008), le 10 décembre 1990.
+notaire à Beaumont 8ÈME ARRONDISSEMENT ([code postal]), le 10 décembre 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Non résidente au sens de la réglementation fiscale.
 Sa fille.
 4°/ Élodie MARTIN, secrétaire, demeurant à
-Port-Louis (98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+Port-Louis ([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
 Sa petite-fille venant par représentation de Paul MARTIN.
 5°/ Camille MARTIN, service à la clientèle, épouse de Monsieur
-Karim RENARD, demeurant à Port-Louis (77723) (Port-Louis) Circuito punta
+Karim RENARD, demeurant à Port-Louis ([code postal]) (Port-Louis) Circuito punta
 Colonet 24b punta Estrella, playa del Carmen.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de
 la communauté d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
@@ -129,8 +129,8 @@ Sa petite-fille venant par représentation de Paul MARTIN.
 
 4
 6°/ Lucas MARTIN, étudiant, demeurant à Port-Louis
-ROUSSEAU (98810) [adresse]
-Né à Port-Louis (98735) le 6 octobre 2003.
+ROUSSEAU ([code postal]) [adresse]
+Né à Port-Louis ([code postal]) le 6 octobre 2003.
 Célibataire.
 Non lié par un pacte civil de solidarité.
 De nationalité française.
@@ -146,7 +146,7 @@ survivant.
 Enfant prédécédé
 Prédécès avec postérité
 Paul MARTIN, enfant de la personne décédée, est
-prédécédé à Port-Louis (Port-Louis) (98730) (Port-Louis) le 24 mars
+prédécédé à Port-Louis (Port-Louis) ([code postal]) (Port-Louis) le 24 mars
 2022 laissant Élodie MARTIN, Camille MARTIN et Monsieur
 Lucas MARTIN, ses trois enfants, venant à la succession par représentation.
 Élodie MARTIN et Camille MARTIN, nés de son
@@ -440,7 +440,7 @@ qui s'applique dans ses relations avec le ou les tiers au contrat objet des pré
 RÉMUNÉRATION
 En rémunération du travail effectué pour la rédaction de la présente
 procuration, il est dû à la SCP Alain LEROY et Sophie DUBOIS, titulaire d’un office
-notarial à Beaumont (77000) , conformément aux dispositions de l’article L 444-1 du
+notarial à Beaumont ([code postal]) , conformément aux dispositions de l’article L 444-1 du
 Code de commerce, des honoraires d’un montant de QUATRE-VINGT-QUINZE
 EUROS (95,00 EUR) toutes taxes comprises et TRENTE-SIX EUROS (36,00 EUR)
 de frais Yousign.

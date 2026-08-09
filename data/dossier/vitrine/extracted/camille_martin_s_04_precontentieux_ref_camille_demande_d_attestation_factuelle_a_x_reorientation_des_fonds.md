@@ -2,7 +2,7 @@
 
 Camille MARTIN <[email]>
 SCPI EDISSIMMO — Demande d'attestation factuelle — Succession Henri MARTIN (décès 09/01/2026) —
-Dossier 0000000011016424 — Convention sur les fonds et titres de succession du 8 mars 2024 (étude
+Dossier [réf.] — Convention sur les fonds et titres de succession du 8 mars 2024 (étude
 Alain LEROY/Sophie DUBOIS, Beaumont)
 2 messages
 Camille MARTIN <[email]> 8 June 2026 at 08:00
@@ -20,12 +20,12 @@ Office : SCP Alain LEROY et Sophie DUBOIS, notaires
 Adresse : 33, boulevard des Tilleuls — [code postal] [ville] (Villeneuve), France
 Téléphone : [telephone]
 Courriel : [email]
-Dossier : 100202701
+Dossier : [réf.]
 J'ai pris connaissance des échanges intervenus entre votre service et l'office notarial rédacteur, notamment du courriel de Madame
 Sarah GARNIER en date du 12 mai 2026 sollicitant la requalification des parts au motif que :
 « Les titres ne sont pas à vendre mais à attribuer aux propriétaires selon la convention de quasi-usufruit. »
 ainsi que du courriel subséquent du 20 mai 2026 confirmant la qualification hors-succession des 377 parts. Je relève en outre que le
-relevé de succession AMUNDI du 11 février 2026 (dossier 0000000011016424) a qualifié l'intégralité des 377 parts en pleine-
+relevé de succession AMUNDI du 11 février 2026 (dossier [réf.]) a qualifié l'intégralité des 377 parts en pleine-
 propriété au défunt, sans mention du démembrement.
 
 ## Page 2
@@ -37,7 +37,7 @@ qualité de gestionnaire du dossier, les éléments factuels suivants :
 1. La SCP Alain LEROY et Sophie DUBOIS vous a-t-elle transmis, à une quelconque date entre le 8 mars 2024 et la date de la
 présente, un extrait de la convention sur les fonds et titres de succession en date du 8 mars 2024 instituant un démembrement de
 propriété sur les 377 parts de SCPI EDISSIMMO désignées ?
-2. Concernant le relevé de succession AMUNDI du 11 février 2026 (dossier 0000000011016424) qualifiant les 377 parts en pleine-
+2. Concernant le relevé de succession AMUNDI du 11 février 2026 (dossier [réf.]) qualifiant les 377 parts en pleine-
 propriété au défunt : sur quels éléments documentaires précis cette qualification a-t-elle été établie ? L'état du dossier d'AMUNDI
 IMMOBILIER, à cette date du 11 février 2026, reflétait-il un démembrement de propriété quelconque sur lesdites parts — soit au
 titre de la dévolution successorale de Paul MARTIN survenue en 2022, soit au titre de la convention notariée du 8
@@ -61,7 +61,7 @@ Pièces jointes :
 2. Copie intégrale de la convention sur les fonds et titres de succession en date du 8 mars 2024.
 3. Copie du courriel de Sarah GARNIER à AMUNDI IMMOBILIER en date du 12 mai 2026.
 4. Copie du courriel de Sarah GARNIER aux nus-propriétaires (copie Sophie DUBOIS) en date du 20 mai 2026.
-5. Copie du relevé de succession AMUNDI du 11 février 2026 (dossier 0000000011016424).
+5. Copie du relevé de succession AMUNDI du 11 février 2026 (dossier [réf.]).
 
 ## Page 3
 
@@ -72,14 +72,14 @@ CONVENTION SUR LES FONDS ET TITRES DE SUCCESSION.pdf
 434K
 Chaine de courriel.pdf
 217K
-relevé de succession AMUNDI du 11 février 2026 (dossier 0000000011016424).pdf
+relevé de succession AMUNDI du 11 février 2026 (dossier [réf.]).pdf
 196K
 Camille MARTIN <[email]> 8 June 2026 at 09:00
 To: "N. RENARD" <[email]>
 ---------- Message transféré ---------
 De : Camille MARTIN <[email]>
 Date : lun. 8 juin 2026 à 8:00 AM
-Objet : SCPI EDISSIMMO — Demande d'attestation factuelle — Succession Henri MARTIN (décès 09/01/2026) — Dossier 0000000011016424 —
+Objet : SCPI EDISSIMMO — Demande d'attestation factuelle — Succession Henri MARTIN (décès 09/01/2026) — Dossier [réf.] —
 Convention sur les fonds et titres de succession du 8 mars 2024 (étude Alain LEROY/Sophie DUBOIS, Beaumont)
 À : <[email]>, <[email]>
 CC : Sophie DUBOIS <[email]>
@@ -91,5 +91,5 @@ CONVENTION SUR LES FONDS ET TITRES DE SUCCESSION.pdf
 434K
 Chaine de courriel.pdf
 217K
-relevé de succession AMUNDI du 11 février 2026 (dossier 0000000011016424).pdf
+relevé de succession AMUNDI du 11 février 2026 (dossier [réf.]).pdf
 196K

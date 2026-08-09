@@ -34,9 +34,9 @@ adresser un lien internet sécurisé qui vous permettra, en toute
 confidentialité, de réaliser un entretien à distance à partir de votre propre
 équipement (ordinateur, tablette, téléphone) si celui-ci le permet.
 3 attachments
-PROCURATIONS SUCCESSION MME Élodie MARTIN modifié_20586076.pdf
+PROCURATIONS SUCCESSION MME Élodie MARTIN modifié_[réf.].pdf
 149K
-PROCURATIONS SUCCESSION MME Camille MARTIN modifiée_20586089.pdf
+PROCURATIONS SUCCESSION MME Camille MARTIN modifiée_[réf.].pdf
 150K
-PROCURATIONS SUCCESSION MONSIEUR Lucas MARTIN modifiée_20586100.pdf
+PROCURATIONS SUCCESSION MONSIEUR Lucas MARTIN modifiée_[réf.].pdf
 151K

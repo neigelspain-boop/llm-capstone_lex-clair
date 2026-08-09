@@ -37,7 +37,7 @@ Más información sobre Yousign y la firma electrónica
 ¿Tienes problemas para acceder a los enlaces de este correo electrónico? Pega las
 siguientes URL en tu navegador web:
 https://yousign.app/signatures/f1f8a4bf-1875-480f-b804-3eca3ec7d9c4?s=
-cce30859a544537c8cffda6523fc0665a55017861169bd70ed572c0ce03d
+cce30859a544537c8cffda6523fc0665a[réf.]bd70ed572c0ce03d
 deffe1b06feddaefbb7395e694799b083a980af46d7c0db4280e43daac6ef2d70301&r=
 bd94e3686de5bcdf8a011f36d812f6ca&source=email&lang=es&magic_link_id=7fc33a2b-0752-
 4838-ba0b-f8a00e3f6a61&domain_id=8e71d8d585&k=BUlbn1Zz5PDLbQP73F09SAAXc7P0o7

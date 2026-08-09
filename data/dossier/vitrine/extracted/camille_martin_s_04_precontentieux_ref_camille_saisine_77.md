@@ -123,7 +123,7 @@ Pièces jointes (8)
 Sophie DUBOIS.
 2. Acte de notoriété de Henri MARTIN, 27 janvier 2026 (étude Alain LEROY/Sophie DUBOIS)
 — attribuant à chaque nu-propriétaire une quotité d'un douzième.
-3. Attestation dévolutive — Acte 100327502_20564064, 3 février 2026 (étude Alain LEROY/Sophie DUBOIS).
+3. Attestation dévolutive — Acte [réf.]_[réf.], 3 février 2026 (étude Alain LEROY/Sophie DUBOIS).
 4. Attestation établie le 2 juin 2026 par Madame Anne-Nicole MORIN pour
 UNOFI-Gestion d'Actifs.
 5. Relevé du compte [réf.] (« DAV DÉDIÉ SUCCESSION », Crédit Agricole du Centre) —

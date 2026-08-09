@@ -82,7 +82,7 @@ Obligation textuelle personnelle du notaire soussigné. Son inexécution expliqu
 
 ## 3. Remise d'un extrait de la convention à l'établissement gestionnaire, par les soins du notaire
 
-**Gravité** critique · **Fiabilité** T5 — hypothèse de travail — périmètre non vérifié · `d21380089dc3`
+**Gravité** critique · **Fiabilité** T5 — hypothèse de travail — périmètre non vérifié · `d[réf.]dc3`
 
 **Constat.** Obligation conv-remise-extrait-au-gestionnaire (Convention de quasi-usufruit — Mention (remise d'un extrait)) : le périmètre documentaire nécessaire au contrôle n'est pas couvert par le dossier. — societe_de_gestion_scpi/vitrine-unofi-gestion
 
@@ -146,7 +146,7 @@ Pièces les plus proches, et ce qu'elles sont en réalité :
   - pièce : `camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref`
 - **2026-05-11** · *notaire_redacteur* — « Libellé : À AMUNDI IMMOBILIER PAYE FACT [réf.] SSION Henri MARTIN »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
-- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : 3770060001 Alain LEROY »
+- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : [réf.] Alain LEROY »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
 - **date non précisée** · *notaire_redacteur* — « Documents à fournir obligatoirement à la Société de Gestion aux fins de régularisation de la succession »
   - pièce : `camille_martin_s_01_creance_x_etude_relsophie_des_parts_x_ref`
@@ -265,7 +265,7 @@ Des demandes de pièces sont attestées sans délivrance correspondante. La cons
 
 > pour en assurer la date, en conserver le dépôt, en délivrer des grosses et expéditions
 
-— **Ordonnance n° 45-2590 du 2 novembre 1945, art. 1er** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006915175)
+— **Ordonnance n° 45-2590 du 2 novembre 1945, art. 1er** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI[réf.])
 
 **Débiteur de l'obligation** : notaire_redacteur, notaire_instrumentaire, notaire_associe.
 La conservation et la délivrance sont des attributions statutaires de l'officier public, non des services discrétionnaires.
@@ -291,7 +291,7 @@ Pièces les plus proches, et ce qu'elles sont en réalité :
   - pièce : `camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref`
 - **2026-05-11** · *notaire_redacteur* — « Libellé : À AMUNDI IMMOBILIER PAYE FACT [réf.] SSION Henri MARTIN »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
-- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : 3770060001 Alain LEROY »
+- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : [réf.] Alain LEROY »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
 
 ### Portée
@@ -316,7 +316,7 @@ Ni caution ni dispense tracée. La garantie du nu-propriétaire est absente et l
 
 > Il donne caution de jouir raisonnablement, s'il n'en est dispensé par l'acte constitutif de l'usufruit
 
-— **Code civil, art. 601** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000029336835)
+— **Code civil, art. 601** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI[réf.])
 
 **Débiteur de l'obligation** : quasi_usufruitier, notaire_redacteur, notaire_instrumentaire.
 La dispense n'est opposable que si elle figure à l'acte constitutif ; à défaut de caution comme de dispense, la garantie du nu-propriétaire est absente.
@@ -362,7 +362,7 @@ Une mise en cause est attestée sans trace de mobilisation de la garantie.
 
 > La responsabilité civile professionnelle des notaires est garantie par un contrat d'assurance souscrit par le Conseil supérieur du notariat.
 
-— **Ordonnance n° 45-2590 du 2 novembre 1945, art. 6-2** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000023777969)
+— **Ordonnance n° 45-2590 du 2 novembre 1945, art. 6-2** · [texte en vigueur sur Légifrance](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI[réf.])
 
 **Débiteur de l'obligation** : notaire_redacteur, notaire_associe, notaire_instrumentaire.
 La garantie existe de droit : sa mobilisation ne dépend pas du bon vouloir de l'étude mise en cause.
@@ -386,7 +386,7 @@ Pièces les plus proches, et ce qu'elles sont en réalité :
   - pièce : `camille_martin_s_01_creance_convention_de_quasi_usufruit_du_ref`
 - **2026-05-11** · *notaire_redacteur* — « Libellé : À AMUNDI IMMOBILIER PAYE FACT [réf.] SSION Henri MARTIN »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
-- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : 3770060001 Alain LEROY »
+- **2026-05-11** · *notaire_redacteur* — « Validateur 1 : [réf.] Alain LEROY »
   - pièce : `camille_martin_s_01_creance_x_acte_facture_n_fref_ref`
 - **date non précisée** · *notaire_redacteur* — « Documents à fournir obligatoirement à la Société de Gestion aux fins de régularisation de la succession »
   - pièce : `camille_martin_s_01_creance_x_etude_relsophie_des_parts_x_ref`

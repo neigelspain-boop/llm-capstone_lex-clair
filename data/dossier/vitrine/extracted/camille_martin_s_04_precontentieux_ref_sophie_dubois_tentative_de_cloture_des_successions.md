@@ -105,7 +105,7 @@ Camille MARTIN Avenida Central 38, esc. 1, piso 1, vivienda 93 [code postal] [vi
 IBAN: [IBAN]
 BIC: NTSBESM1XXX
 2 attachments
-Copie AAE avec annexes NOTORIETE M_ Camille MARTIN_pdf_20562040.pdf
+Copie AAE avec annexes NOTORIETE M_ Camille MARTIN_pdf_[réf.].pdf
 432 KB
-ATTESTATION DEVOLUTIVE - Acte 100327502_20564064.pdf
+ATTESTATION DEVOLUTIVE - Acte [réf.]_[réf.].pdf
 996 KB

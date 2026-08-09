@@ -1,7 +1,7 @@
 ## Page 1
 
 Camille MARTIN <[email]>
-Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve (77590)
+Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve ([code postal])
 3 messages
 Camille MARTIN <[email]> 18 June 2026 at 18:08
 To: Sophie DUBOIS <[email]>, Sarah GARNIER <[email]>
@@ -11,7 +11,7 @@ to me
 Maître,
 En application de l'article 2004 du Code civil, je révoque expressément, à compter de la date et de l'heure d'émission du présent courriel, tout mandat de vente, toute procuration, toute
 autorisation et tout pouvoir, sous quelque forme et à quelque titre que ce soit, qui aurait été ou serait invoqué en mon nom ou pour mon compte au titre de l'aliénation de l'immeuble sis à
-Villeneuve (77590), [adresse], en ce compris, mais sans s'y limiter, le « MANDAT EXCLUSIF DE VENTE AVEC FACULTÉ DE DÉLÉGATION » établi par votre Étude au dossier
+Villeneuve ([code postal]), [adresse], en ce compris, mais sans s'y limiter, le « MANDAT EXCLUSIF DE VENTE AVEC FACULTÉ DE DÉLÉGATION » établi par votre Étude au dossier
 1002986.
 En ma qualité de nue-propriétaire par représentation de Paul MARTIN, je m'oppose expressément, en application des articles 815-3 et 815-17 alinéa 1er du Code civil, à toute
 mise en vente, négociation, signature de promesse ou de compromis, signature d'acte authentique et tout autre acte d'aliénation portant sur l'immeuble susvisé.
@@ -57,7 +57,7 @@ De : Camille MARTIN <[email]>
 Envoyé : jeudi 18 juin 2026 18:08
 À : Sophie DUBOIS <[email]>; Sarah GARNIER <[email]>
 Cc : [email]; [email]
-Objet : Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve (77590)
+Objet : Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve ([code postal])
 [Quoted text hidden]
 image002.png
 9K
@@ -66,7 +66,7 @@ To: "N. RENARD" <[email]>
 ---------- Message transféré ---------
 De : Sophie DUBOIS <[email]>
 Date : ven. 19 juin 2026 à 9:59 AM
-Objet : RE: Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve (77590)
+Objet : RE: Successions Camille MARTIN-BLANC — Révocation expresse — Mandat exclusif de vente, immeuble sis à Villeneuve ([code postal])
 À : Camille MARTIN <[email]>
 CC : [email] <[email]>, [email] <[email]>, Sarah GARNIER <[email]>
 [Quoted text hidden]

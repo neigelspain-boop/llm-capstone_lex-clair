@@ -10,7 +10,7 @@ CADRE A REMPLIR PAR LE DEPOSANT (voir la notice [réf.])
 Service de l’enregistrement (SPFE, SDE) (1) du domicile du défunt : Beaumont
 Succession de : Mme M.
 Nom de naissance du défunt : BLANC Prénom(s) : Jeanne Jeanne
-Date de naissance : 10/03/1929 Commune de naissance : LE LEMAIRE (18260)
+Date de naissance : 10/03/1929 Commune de naissance : LE LEMAIRE ([code postal])
 Département de naissance CHER ou Pays :
 Situation familiale : Célibataire Partenaire lié par un PACS
 Epoux(se) de Henri MARTIN (Précisez : séparé(e) de biens ; séparé(e) de corps )
@@ -18,11 +18,11 @@ Divorcé(e) de
 Veuf(ve) de
 Cachet de l’étude
 Adresse du domicile : EHPAD Sainte Geneviève [adresse]
-Code postal : [code postal] [ville] : Villeneuve (77850)
+Code postal : [code postal] [ville] : Villeneuve ([code postal])
 Pays :
 Profession : retraitée
 Décédé(e) à Villeneuve Code postal : [code postal] [ville] 01/07/2025
-100298604 EMM SP
+[réf.] EMM SP
 CADRES RÉSERVÉS A L'ADMINISTRATION (à remplir par le SPFE, SDE (1) du domicile du défunt)
 Déclaration 2705-SD n° __________________________
 Référence comptable : __________________________
@@ -94,30 +94,30 @@ DÉCLARATION DE SUCCESSION
 (feuille de suite)
 DÉCLARANT
 1°/ Bernard MARTIN, retraité, époux de Madame Véronique Catherine MULLER, demeurant à
-Villeneuve (17320) [adresse]
-2°/ Gérard MARTIN, retraité, demeurant à Villeneuve (77590) [adresse]
+Villeneuve ([code postal]) [adresse]
+2°/ Gérard MARTIN, retraité, demeurant à Villeneuve ([code postal]) [adresse]
 3°/ Nicole MARTIN, architecte d'intérieur, épouse de Monsieur Christophe André Charles
 GIRARD, demeurant à Port-Louis (Port-Louis) [adresse]
-4°/ Élodie MARTIN, secrétaire, demeurant à Port-Louis (98730) BP 996 Port-Louis.
+4°/ Élodie MARTIN, secrétaire, demeurant à Port-Louis ([code postal]) BP 996 Port-Louis.
 5°/ Camille MARTIN, service à la clientèle, épouse de Monsieur Karim RENARD, demeurant à
-Port-Louis (77723) (Port-Louis) Circuito punta Colonet 24b punta Estrella, playa del Carmen.
-6°/ Lucas MARTIN, étudiant, demeurant à Port-Louis (98810) [adresse]
+Port-Louis ([code postal]) (Port-Louis) Circuito punta Colonet 24b punta Estrella, playa del Carmen.
+6°/ Lucas MARTIN, étudiant, demeurant à Port-Louis ([code postal]) [adresse]
 Qualité : Conjoint survivant Légataire Donataire Tuteur Curateur Mandataire
 Héritier, lien de parenté : ENFANTS ET PETITS ENFANTS
 Héritier, résidant en France depuis au moins 6 ans au cours des 10 dernières années :
 DÉVOLUTION SUCCESSORALE (1)
 PERSONNE DECEDEE
 Jeanne MARTIN, en son vivant retraitée, épouse de
-Henri MARTIN, demeurant à Villeneuve (77850)
+Henri MARTIN, demeurant à Villeneuve ([code postal])
 EHPAD Sainte Geneviève [adresse]
-Née à LE LEMAIRE (18260), le 10 mars 1929.
-Mariée à la mairie de Beaumont (18000) le 10 avril 1953 sous le régime de
+Née à LE LEMAIRE ([code postal]), le 10 mars 1929.
+Mariée à la mairie de Beaumont ([code postal]) le 10 avril 1953 sous le régime de
 la communauté de biens meubles et acquêts à défaut de contrat de mariage
 préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
-Décédée à Villeneuve (77850) (FRANCE), le 1er juillet 2025.
+Décédée à Villeneuve ([code postal]) (FRANCE), le 1er juillet 2025.
 Donation entre époux
 Aux termes d'un acte reçu par Julien LAURENT,
 notaire à Beaumont, le 5 février 1981, et conformément aux dispositions de
@@ -132,8 +132,8 @@ Dévolution Successorale
 La dévolution successorale s'établit comme suit :
 Conjoint survivant
 Henri MARTIN, retraité, demeurant à Villeneuve
-(77850) EHPAD Sainte Geneviève [adresse]
-Né à Beaumont (18100) le 28 août 1929.
+([code postal]) EHPAD Sainte Geneviève [adresse]
+Né à Beaumont ([code postal]) le 28 août 1929.
 (1) Énoncez les noms, prénoms, domicile du conjoint survivant, des héritiers, donataires et légataires, leur lien de parenté avec le défunt, leurs date et
 lieu de naissance.
 Page 3
@@ -161,19 +161,19 @@ Commun en biens ainsi qu'il est indiqué ci-dessus.
 Donataire en vertu de l'acte sus-énoncé.
 Héritiers
 1°/ Bernard MARTIN, retraité, époux de Madame Véronique
-Catherine MULLER, demeurant à Villeneuve (17320) [adresse]
+Catherine MULLER, demeurant à Villeneuve ([code postal]) [adresse]
 Né à Beaumont (Beaumont) le 30 janvier 1954.
-[nom] à la mairie de Villeneuve (77590) le 1er septembre 1990 sous le
+[nom] à la mairie de Villeneuve ([code postal]) le 1er septembre 1990 sous le
 régime de la séparation de biens pure et simple défini par les articles 1536
 et suivants du Code civil aux termes du contrat de mariage reçu par Maître
-Denis MERCIER, notaire à Beaumont (75016), le 24
+Denis MERCIER, notaire à Beaumont ([code postal]), le 24
 août 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Résident au sens de la réglementation fiscale.
 Son fils.
 2°/ Gérard MARTIN, retraité, demeurant à Villeneuve
-(77590) [adresse]
+([code postal]) [adresse]
 Né à Beaumont/Beaumont (Beaumont) le 26 avril 1958.
 Divorcé de Madame Odile [nom]-Pierre DUPUIS suivant jugement rendu
 par le tribunal judiciaire de Beaumont le 12 septembre 1986, et non
@@ -185,8 +185,8 @@ Son fils.
 3°/ Nicole MARTIN, architecte d'intérieur, épouse
 de Monsieur Christophe André Charles GIRARD, demeurant à Port-Louis
 (Port-Louis) [adresse]
-Née à Beaumont (67000) le 25 février 1964.
-Mariée à la mairie de Villeneuve (77590) le 22 décembre 1990 sous le
+Née à Beaumont ([code postal]) le 25 février 1964.
+Mariée à la mairie de Villeneuve ([code postal]) le 22 décembre 1990 sous le
 régime de la séparation de biens pure et simple défini par les articles 1536
 et suivants du Code civil aux termes du contrat de mariage reçu par Maître
 AFFIRMATION DE SINCÉRITÉ (article 802 du code général des impôts)
@@ -215,24 +215,24 @@ ATTENTION :
 A remplir Réservé à
 par le déclarant l'administration
 en euros
-Antoine MARCHAND, notaire à Beaumont 8ÈME ARRONDISSEMENT (75008),
+Antoine MARCHAND, notaire à Beaumont 8ÈME ARRONDISSEMENT ([code postal]),
 le 10 décembre 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 De nationalité française.
 Non résidente au sens de la réglementation fiscale.
 Sa fille.
 4°/ Élodie MARTIN, secrétaire, demeurant à
-Port-Louis (98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+Port-Louis ([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 De nationalité française.
 Résidente au sens de la réglementation fiscale.
 Sa petite-fille venant par représentation de Paul MARTIN.
 5°/ Camille MARTIN, service à la clientèle, épouse de Monsieur
-Karim RENARD, demeurant à Port-Louis (77723) (Port-Louis) Circuito
+Karim RENARD, demeurant à Port-Louis ([code postal]) (Port-Louis) Circuito
 punta Colonet 24b punta Estrella, playa del Carmen.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de
 la communauté d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.
@@ -240,8 +240,8 @@ De nationalité française.
 Non résidente au sens de la réglementation fiscale.
 Sa petite-fille venant par représentation de Paul MARTIN.
 6°/ Lucas MARTIN, étudiant, demeurant à Port-Louis
-ROUSSEAU (98810) [adresse]
-Né à Port-Louis (98735) le 6 octobre 2003.
+ROUSSEAU ([code postal]) [adresse]
+Né à Port-Louis ([code postal]) le 6 octobre 2003.
 Célibataire.
 Non lié par un pacte civil de solidarité.
 De nationalité française.
@@ -283,7 +283,7 @@ du conjoint survivant.
 Enfant prédécédé
 Prédécès avec postérité
 Paul MARTIN, enfant de la personne décédée, est
-prédécédé à Port-Louis (Port-Louis) (98730) (Port-Louis) le
+prédécédé à Port-Louis (Port-Louis) ([code postal]) (Port-Louis) le
 24 mars 2022 laissant Élodie MARTIN, Madame Camille
 Camille MARTIN et Lucas MARTIN, ses trois enfants, venant à la
 succession par représentation.
@@ -356,9 +356,9 @@ Camille MARTIN leur grand-mère susnommée.
 ,
 NOTORIETE
 L'acte de notoriété constatant cette dévolution successorale a été reçu
-Sophie DUBOIS, Notaire à Beaumont (77000) le 5 août 2025.
+Sophie DUBOIS, Notaire à Beaumont ([code postal]) le 5 août 2025.
 DECLARATION D’OPTION
-Henri MARTIN est décédé à Villeneuve (77850) le 9 janvier 2026
+Henri MARTIN est décédé à Villeneuve ([code postal]) le 9 janvier 2026
 avant d’avoir pu opter dans le succession de Madame Jeanne
 Camille MARTIN. Par conséquent, il est réputé avoir opté pour l'USUFRUIT des
 biens et droits mobiliers et immobiliers composant la succession de Madame

@@ -1,35 +1,35 @@
 ## Page 1
 
 LES SOUSSIGNES :
-1°) Gérard MARTIN, retraité, demeurant à Villeneuve (77590) [adresse]
+1°) Gérard MARTIN, retraité, demeurant à Villeneuve ([code postal]) [adresse]
 Né à Beaumont/Beaumont (Beaumont) le 26 avril 1958.
 Divorcé de Madame Odile [nom]-Pierre DUPUIS suivant jugement rendu par le tribunal
 judiciaire de Beaumont le 12 septembre 1986, et non remarié.
 Non lié par un pacte civil de solidarité.
 2°) Bernard MARTIN, retraité, époux de Madame Véronique Catherine MULLER,
-demeurant à Villeneuve (17320) [adresse]
+demeurant à Villeneuve ([code postal]) [adresse]
 Né à Beaumont (Beaumont) le 30 janvier 1954.
-[nom] à la mairie de Villeneuve (77590) le 1er septembre 1990 sous le régime de la
+[nom] à la mairie de Villeneuve ([code postal]) le 1er septembre 1990 sous le régime de la
 séparation de biens pure et simple défini par les articles 1536 et suivants du Code civil aux
 termes du contrat de mariage reçu par Maître Denis MERCIER, notaire à Beaumont 16ÈME
-ARRONDISSEMENT (75016), le 24 août 1990.
+ARRONDISSEMENT ([code postal]), le 24 août 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
 3°) Nicole MARTIN, architecte d'intérieur, épouse de Monsieur
 Christophe André Charles GIRARD, demeurant à Port-Louis (Port-Louis) [adresse]
-Née à Beaumont (67000) le 25 février 1964.
-Mariée à la mairie de Villeneuve (77590) le 22 décembre 1990 sous le régime de la
+Née à Beaumont ([code postal]) le 25 février 1964.
+Mariée à la mairie de Villeneuve ([code postal]) le 22 décembre 1990 sous le régime de la
 séparation de biens pure et simple défini par les articles 1536 et suivants du Code civil aux
 termes du contrat de mariage reçu par Maître Antoine MARCHAND, notaire à Beaumont 8ÈME
-ARRONDISSEMENT (75008), le 10 décembre 1990.
+ARRONDISSEMENT ([code postal]), le 10 décembre 1990.
 Ce régime matrimonial n'a pas fait l'objet de modification.
-4°) Lucas MARTIN, étudiant, demeurant à Port-Louis (98810) [adresse]
+4°) Lucas MARTIN, étudiant, demeurant à Port-Louis ([code postal]) [adresse]
 des Dattiers.
-Né à Port-Louis (98735) le 6 octobre 2003.
+Né à Port-Louis ([code postal]) le 6 octobre 2003.
 Célibataire.
 Non lié par un pacte civil de solidarité.
 5°) Élodie MARTIN, secrétaire, demeurant à Port-Louis
-(98730) BP 996 Port-Louis.
-Née à Port-Louis (98800) le 13 avril 1993.
+([code postal]) BP 996 Port-Louis.
+Née à Port-Louis ([code postal]) le 13 avril 1993.
 Célibataire.
 Non liée par un pacte civil de solidarité.
 
@@ -39,7 +39,7 @@ Non liée par un pacte civil de solidarité.
 6°) Camille MARTIN, service à la clientèle, épouse de Monsieur Karim
 RENARD, demeurant à Port-Louis (Port-Louis) Avenida Central 38, esc. 1, piso 1, vivienda 93
 Port-Louis del Mar.
-Née à Port-Louis (98800) le 12 janvier 1996.
+Née à Port-Louis ([code postal]) le 12 janvier 1996.
 Mariée à la mairie de Port-Louis (Port-Louis) le 10 août 2021 sous le régime de la communauté
 d’acquêts à défaut de contrat de mariage préalable.
 Ce régime matrimonial n'a pas fait l'objet de modification.

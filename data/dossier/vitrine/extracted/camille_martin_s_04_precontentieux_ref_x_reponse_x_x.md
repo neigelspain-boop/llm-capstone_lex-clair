@@ -163,7 +163,7 @@ Domicile / Residence (11)
 📎 CONVENTION SUR LES FONDS ET TITRES DE SUCCESSION (1).pdf
 434K
 
-📎 ATTESTATION DEVOLUTIVE - Acte 100327502_20564064 (1).pdf
+📎 ATTESTATION DEVOLUTIVE - Acte [réf.]_[réf.] (1).pdf
 974K
 
 Camille MARTIN <[email]>                                                                 Tue, Jun 2, 2026 at 2:23 PM

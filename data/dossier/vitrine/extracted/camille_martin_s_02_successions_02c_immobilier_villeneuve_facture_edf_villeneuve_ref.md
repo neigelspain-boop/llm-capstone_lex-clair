@@ -218,10 +218,10 @@ Origine 2024 de l'électricité vendue par EDF et Indicateurs d'impact environne
 
 Votre mode de consommation a peut être évolué. Assurez vous que votre consommation annuelle corresponde bien à l'option que vous ayez souscrite et si besoin, contactez nous !
 
-TRE04405701857962000000000819640
+TRE[réf.]
 
 ICS  [ICS]
-RUM  TIP05405701857962031834438696191904
+RUM  TIP[réf.]
 
 Flashez-moi pour
 
@@ -242,15 +242,15 @@ TIPS€PA
 Montant en euros
 81,96
 
-Identification     4  05     7018579620 31834438696
+Identification     4  05     [réf.] [réf.]
 règlement
 
 EDF
 [code postal] [ville] 09
 
-318344386966  Camille MARTIN  [nom]  MARI
+[réf.]  Camille MARTIN  [nom]  MARI
 
-001507190413  53405701857962031834438696615105          8196
+[réf.]  [réf.]          8196
 
 ## Page 4
 

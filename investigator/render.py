@@ -61,8 +61,27 @@ def _render_finding(f: dict) -> list[str]:
 # ========== the local digest ==========
 
 
-def render_digest(paths: CasePaths, store_: dict[str, dict], catalog: Catalog | None = None) -> str:
-    """Rewrite `investigation/DIGEST.md` from the store. Returns its path."""
+LOCAL_NOTICE = (
+    "Vue locale, complète : elle inclut les constatations de tier T4-T5 que la "
+    "barrière d'externalisation refuse. Ne pas diffuser."
+)
+
+
+def render_digest(
+    paths: CasePaths,
+    store_: dict[str, dict],
+    catalog: Catalog | None = None,
+    notice: str | None = None,
+) -> str:
+    """Rewrite `investigation/DIGEST.md` from the store. Returns its path.
+
+    `notice` replaces the default "ne pas diffuser" warning. It exists for the
+    de-identified transcript (ADR #78), where that warning is simply false and
+    the reader instead needs to be told what was substituted and what was
+    edited. Callers that render a real case pass nothing and are unaffected —
+    the default stays the safe one, so forgetting the argument cannot turn a
+    private digest into an apparently publishable document.
+    """
     paths.investigation_dir.mkdir(parents=True, exist_ok=True)
     open_findings = [f for f in store_.values() if f.get("status") == "open"]
     resolved = len(store_) - len(open_findings)
@@ -70,8 +89,7 @@ def render_digest(paths: CasePaths, store_: dict[str, dict], catalog: Catalog | 
     out = [
         f"# Investigation — {paths.case_id}",
         "",
-        f"Généré le {_now()}. Vue locale, complète : elle inclut les constatations "
-        "de tier T4-T5 que la barrière d'externalisation refuse. Ne pas diffuser.",
+        f"Généré le {_now()}. {notice or LOCAL_NOTICE}",
         "",
         f"Constatations ouvertes : {len(open_findings)} "
         f"(sur {len(store_)} au total, {resolved} résolue(s)).",

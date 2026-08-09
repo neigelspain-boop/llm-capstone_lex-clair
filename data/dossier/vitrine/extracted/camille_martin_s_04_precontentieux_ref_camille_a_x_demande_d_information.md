@@ -182,5 +182,5 @@ Date d'expiration/Date of expiry (8)
 **CONVENTION SUR LES FONDS ET TITRES DE SUCCESSION (1).pdf**
 443 KB
 
-**ATTESTATION DEVOLUTIVE - Acte 100327502_20564064 (1).pdf**
+**ATTESTATION DEVOLUTIVE - Acte [réf.]_[réf.] (1).pdf**
 996 KB

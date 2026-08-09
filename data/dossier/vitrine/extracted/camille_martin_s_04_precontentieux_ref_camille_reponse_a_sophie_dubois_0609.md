@@ -115,11 +115,11 @@ Henri MARTIN, la mention selon laquelle ce dernier « est décédé à
 Villeneuve le 1er juillet 2025, sans avoir opté dans la succession de son
 épouse prédécédée Jeanne MARTIN ».
 Cette mention appelle rectification. Monsieur [nom] [nom] Henri
-Camille MARTIN, né le 28 août 1929 à Beaumont (18100), est décédé à Villeneuve
-(77850) le 9 janvier 2026, ainsi qu'il résulte :
+Camille MARTIN, né le 28 août 1929 à Beaumont ([code postal]), est décédé à Villeneuve
+([code postal]) le 9 janvier 2026, ainsi qu'il résulte :
 — de l'acte de décès délivré par les services d'état civil ;
 — de l'acte de notoriété reçu par votre Étude le 27 janvier 2026
-(dossier 100327502) ;
+(dossier [réf.]) ;
 — de l'attestation dévolutive établie par votre Étude le 3 février
 2026 et signée de votre main.
 Le 1er juillet 2025 est, pour mémoire, la date de décès de Madame

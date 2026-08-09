@@ -33,5 +33,5 @@ permet d’effectuer des réunions à distance. Votre interlocuteur peut vous
 adresser un lien internet sécurisé qui vous permettra, en toute
 confidentialité, de réaliser un entretien à distance à partir de votre propre
 équipement (ordinateur, tablette, téléphone) si celui-ci le permet.
-Autorisation déblocage_Vente AMUNDI_20575357.pdf
+Autorisation déblocage_Vente AMUNDI_[réf.].pdf
 361K

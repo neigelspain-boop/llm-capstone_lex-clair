@@ -83,7 +83,7 @@ EDISSIMMO (11/02/2026)
 4 AMUNDI — Facture 100 € Frais de dossier succession — [réf.]
 (11/02/2026)
 5 AMUNDI — Acte / facture n° Document de facturation AMUNDI portant le même numéro
-F202600310 (11/05/2026)
+F[réf.] (11/05/2026)
 6 AMUNDI — Autorisation de Instruction signée des six ayants droit : vente des 377 parts
 déblocage EDISSIMMO, fonds à verser entre les mains de Sophie DUBOIS —
 réorientation ultérieure vers une restitution en nature
@@ -94,7 +94,7 @@ N° Pièce Objet
 8 Acte de notoriété Henri MARTIN (AAE Établissement de la dévolution successorale
 + annexes)
 9 Attestation dévolutive (acte n° Attestation immobilière / dévolution
-100327502)
+[réf.])
 10 Déclaration de succession de Mme Projet non signé (filigrane « PROJET ») — actif net de
 Jeanne MARTIN (PROJET) succession 34 473,15 € ; la créance de restitution (195 572 €)
 y est mentionnée comme non exigible au décès de Jeanne
@@ -178,7 +178,7 @@ déblocage du notaire et de l'historique des opérations
 46 10/06/2026 Camille » Sophie DUBOIS Réplique à la réponse du 09/06 et demande de
 changement de notaire
 47 18/06/2026 Camille Révocation expresse du mandat exclusif de vente —
-immeuble sis à Villeneuve (77590)
+immeuble sis à Villeneuve ([code postal])
 48 23/06/2026 Nicole Tentative de diffusion de l'annonce postérieure à la
 révocation du mandat de vente (pièce 47)
 49 24/06/2026 Camille » Conseil Saisine — Villeneuve (77)

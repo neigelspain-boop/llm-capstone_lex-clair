@@ -11,7 +11,7 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 ## Five-plane architecture — plane membership equals tree position
 
 - **Plane I — Statute ingestion** (offline): `ingestion/`, `data/chunks.csv`. Legal statute corpus via PISTE API (Légifrance). 792 chunks across 9 sources.
-- **Plane Ib — Dossier ingestion** (offline): `ingestion/dossier/`, `data/dossier/`. PDF → verbatim extraction (Opus 4.7 vision) → Haiku 4.5 faithfulness gate → facts + actor_roles + role_ambiguities JSONL → distill → mentions → resolve. Per-case chunks CSV; dossier chunks are merged into the corpus **at load time** (ADR #58) — `append_to_statute_chunks_csv` was retired and no longer exists. Also holds the anonymisation subsystem: `anonymize.py` (three-layer PII redaction + verification gate) and `personas.py` (pinned court-style persona roster), which produce the committed public `vitrine` case.
+- **Plane Ib — Dossier ingestion** (offline): `ingestion/dossier/`, `data/dossier/`. PDF → verbatim extraction (Opus 4.7 vision) → Haiku 4.5 faithfulness gate → facts + actor_roles + role_ambiguities JSONL → distill → mentions → resolve. Per-case chunks CSV; dossier chunks are merged into the corpus **at load time** (ADR #58) — `append_to_statute_chunks_csv` was retired and no longer exists. Also holds the anonymisation subsystem: `anonymize.py` (four-layer PII redaction + verification gate), `personas.py` (pinned court-style persona roster → the public `vitrine` case) and `roles.py` (role-designation register → the public `demo` investigation transcript, ADR #78).
 - **Plane II — RAG flow** (online): `rag/`. `flow.run(query, source_scope=None, active_case_id=None, answer_model="gpt-4o-mini")` for Q&A. `rag.compliance.generate_compliance_matrix(case_id)` for compliance-matrix mode.
 - **Plane III — Measurement**: `eval/`. Retrieval eval, LLM-as-judge harness with 3 provider-diverse judges (GPT-4o-mini + Haiku 4.5 + Mistral Small — all via OpenRouter as of D0).
 - **Plane IV — UI/Operations**: `app/`, `monitoring/`. Streamlit UI (multi-conversation + language toggle + answer-model toggle), Postgres persistence, Grafana dashboards.
@@ -99,7 +99,7 @@ French legal RAG helping non-lawyer heirs understand succession rights in quasi-
 
 ## Key docs
 
-- `docs/decisions.md` — ADRs #1-#70. Read before any architectural change. **Known bookkeeping gaps**: #47, #50, #51, #59, #60, #61, #62 have no entry. #59-#62 are the load-bearing ones — the anonymisation subsystem shipped under them and later ADRs cite them as if they exist. #65 is also filed out of order, before #64.
+- `docs/decisions.md` — ADRs #1-#78. Read before any architectural change. **Known bookkeeping gaps**: #47, #50, #51, #59, #60, #61, #62 have no entry. #59-#62 are the load-bearing ones — the anonymisation subsystem shipped under them and later ADRs cite them as if they exist. #65 is also filed out of order, before #64.
 - `docs/investigator-spec.md` — Plane V contracts: obligation catalog schema, the five pass contracts, finding/tier schema, the externalisation gate, resumability invariants. Rationale is ADR #70 (per ADR #69: spec carries the contract, ADR carries the why).
 - `docs/lex-clair-system-map.html` — rendered architecture map.
 - `README.md` — project entry point for reviewers.

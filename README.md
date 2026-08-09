@@ -334,7 +334,8 @@ Dashboard is auto-provisioned from `monitoring/grafana/dashboards/lexclair.json`
 - **Fact-level distillation**: each fact gets a `distilled_context` alongside `verbatim_quote`. Compliance reasons from distilled, verifies against verbatim before finalizing verdicts (fiability constraint). ADR #52, #53.
 - **Dual-model comparative** (`--compare`): Opus 4.7 max + Kimi K3 max on identical inputs, with Haiku 4.5 divergence meta-analysis. On-demand per role. ADR #56.
 - **Passphrase-gated dossier access** in Streamlit: private cases stay behind a passphrase; public reviewers see the anonymized `vitrine` case. ADR #58.
-- **Anonymization pipeline** (`ingestion/dossier/anonymize.py`): produces the shippable `vitrine` case by replacing real names with pinned personas and shifting dates deterministically. ADR #59, #62.
+- **Anonymization pipeline** (`ingestion/dossier/anonymize.py`): produces the shippable `vitrine` case by replacing real names with pinned personas. Dates and amounts pass through unchanged — deliberately, so the published figures still add up against the deed they quote. ADR #59, #62.
+- **Two substitution registers**: personas (ordinary French names) for the published dossier, role designations (`notaire_instrumentaire`) for the published investigation transcript, which already argues by function. `--step scrub` repairs an already-derived case in place when a PII pattern is strengthened. ADR #78.
 
 Full commit history: 32 commits on `v2-persons` beyond Attempt 1's baseline.
 
@@ -476,6 +477,20 @@ uv run python -m investigator.watch --case-id vitrine          # run continuousl
 cat data/dossier/vitrine/investigation/DIGEST.md
 ```
 
+**A worked transcript** is committed at `data/dossier/demo/investigation/DIGEST.md`:
+95 findings against an 87-obligation catalog, tiered T1–T5, de-identified from a
+real case. Parties appear as their function (`notaire_instrumentaire`,
+`heritier_nu_proprietaire_1`, `etablissement_bancaire`) — no name is used and none
+is invented. Excerpts between `« »` are substituted inside the quotation and are
+therefore no longer literal; the file's header says so. Dates and amounts are
+unchanged. ADR #78.
+
+> **Do not run the investigator against `--case-id demo`.** It would overwrite that
+> transcript with five findings from demo's deliberately empty graph. Regenerate it
+> instead with
+> `uv run python -m ingestion.dossier.build --case-id demo --source-case-id private --step anonymize-investigation`
+> (requires the private case, which is not distributed).
+
 **From a folder of PDFs to a report, in three commands.** The obligation catalog
 is *data*, not code — the engine finds only what a catalog entry encodes — so a
 new case needs the duties its own instruments create. `discover` reads the acts
@@ -550,7 +565,7 @@ qwen3 adjudication layers are Phase 2 (`investigator/PLAN.md`).
 
 ## Known issues
 
-- **6 tests in `tests/test_anonymize_smoke.py` currently fail**. These cover the date-shift logic in the anonymization pipeline (`ingestion/dossier/anonymize.py`). The shipped `vitrine` case was produced with an earlier pass and its content is stable; the failures indicate a regression in the date-shift assertion that surfaces if you re-run anonymization on a new case. The remaining **210 tests pass**, including all persons, compliance, retrieval, and RAG flow tests. Fix scheduled for Attempt 3.
+- **The anonymization gate proves less than it looks like it proves.** It establishes the absence of *known* identifiers — every name and alias in the source `persons.jsonl`, every key of the identifier table, and the structured-PII patterns. It cannot establish the absence of an identifier that was never in either. Measured against the real corpus, `persons.jsonl` covered 10 of 18 sampled identifiers. A clean report is a necessary condition for publishing, never a sufficient one, and the residual-proper-noun list it prints is a review aid for a human, not a second gate. The residual risk in the committed transcript sits in its 212 model-written counter-arguments, which are free prose. ADR #78.
 - **Retrieval eval synthetic ground truth** is de-lexicalized (ADR #20). Real user queries with lexical anchors may benefit more from hybrid than the eval numbers suggest. The hybrid path is preserved in the code for that reason.
 - **Compliance matrix cost** at Opus 4.7 max scales with fact-count-per-role. The 30-fact chronological cap (`_cap_facts_chronologically`) prevents unbounded spend on any single role. ADR #49 uncapped `max_tokens` after empirical verification (46/46 stop, ~$22 total for the private case at Attempt 1 close).
 - **French-only** for now. English UI toggle exists but citations remain in French.
