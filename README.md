@@ -1,4 +1,4 @@
-# lex-clair — a legal investigator for succession heirs
+U7# lex-clair — a legal investigator for succession heirs
 
 **A French legal RAG that decodes notaire correspondence, cites the applicable statutes verbatim, and turns a shoebox of documents into an evidence file.**
 
@@ -33,7 +33,7 @@ Three connected surfaces, one legal knowledge base:
 
 **2. Analyse comparative — dual-model verdict on a role's compliance.** For a role in the dossier (e.g., `notaire_redacteur`), lex-clair runs both Claude Opus 4.7 max and Kimi K3 max in parallel over the same facts + same statute chunks, then uses Haiku 4.5 as a meta-analyst to identify agreement, divergence, and the crux of any split. Legal verdicts that both frontier models agree on are more defensible; divergences flag interpretive uncertainty.
 
-**3. Conformité par personne — person-grouped compliance dashboard.** The compliance matrix is regrouped around real named individuals ("Maître MENA"), not opaque role identifiers ("notaire_redacteur"). Filterable by person, role, verdict, and date. Each entry shows the obligation, the responsible person, the dated evidence, the cited statute article, and the model's rationale — ready to hand a lawyer.
+**3. Conformité par personne — person-grouped compliance dashboard.** The compliance matrix is regrouped around real named individuals ("Maître CORBEAU"), not opaque role identifiers ("notaire_redacteur"). Filterable by person, role, verdict, and date. Each entry shows the obligation, the responsible person, the dated evidence, the cited statute article, and the model's rationale — ready to hand a lawyer.
 
 ---
 
@@ -617,4 +617,4 @@ MIT License. See `LICENSE`.
 
 ---
 
-*Built by Neigel Spain (@neigelspain-boop). Dedicated to the heirs who kept receipts.*
+*Built by Nedj (@neigelspain-boop). Dedicated to the heirs who kept receipts.*
