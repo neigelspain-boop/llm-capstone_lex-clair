@@ -59,3 +59,9 @@ tmp-chroma-test/
 # Local audit harness output (scripts/local_audit/ itself is tracked) —
 # machine-local findings/cache, regenerated every run.
 audit/
+
+# Local agent customization and documentation
+.agents/skills/
+.claude/skills/
+.notebook/
+CLAUDE.md
