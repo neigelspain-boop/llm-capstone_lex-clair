@@ -64,4 +64,5 @@ audit/
 .agents/skills/
 .claude/skills/
 .notebook/
+notebooks/
 CLAUDE.md
